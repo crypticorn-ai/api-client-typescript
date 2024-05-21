@@ -1,9 +1,10 @@
 {
   "name": "@crypticorn-ai/api-client",
   "type": "module",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Crypticorn API Client",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch src/dev.ts"

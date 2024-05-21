@@ -1,18 +1,198 @@
-import { EnvironmentType, getHosts } from "./config";
-import {
-  ApiKeysResponse,
-  DexProgress,
-  HistoricalSwapOrdersResponse,
-  Prediction,
-} from "./types";
-import { createSocket } from "./ws";
+export type Prediction = {
+  action: string;
+  symbol: string;
+  base_price: number;
+  course_change: number;
+  timestamp: number;
+  id: number;
+  version: string;
+  p10: number[];
+  p30: number[];
+  p50: number[];
+  p70: number[];
+  p90: number[];
+};
 
-export { EnvironmentType } from "./config";
-export * from "./types";
+export type DexProgress = {
+  status: string;
+  data: {
+    "Eth Tokens": number;
+    "Base Tokens": number;
+    "Solana Tokens": number;
+  };
+};
+
+export type ApiKeysResponse = {
+  id: string;
+  api_key: {
+    value: string;
+    nonce: string;
+    tag: string;
+  };
+  exchange: string;
+  label: string;
+  secret: {
+    value: string;
+    nonce: string;
+    tag: string;
+  };
+  created_at: number;
+  enabled: boolean;
+}[];
+
+export type HistoricalSwapOrdersResponse = {
+  code: number;
+  msg: string;
+  data: {
+    orders: HistoricalSwap[];
+  };
+};
+
+export type HistoricalSwap = {
+  symbol: string;
+  orderId: number;
+  side: string;
+  positionSide: string;
+  type: string;
+  origQty: string;
+  price: string;
+  executedQty: string;
+  avgPrice: string;
+  cumQuote: string;
+  stopPrice: string;
+  profit: string;
+  commission: string;
+  status: string;
+  time: number;
+  updateTime: number;
+  clientOrderId: string;
+  leverage: string;
+  takeProfit: {
+    type: string;
+    quantity: number;
+    stopPrice: number;
+    price: number;
+    workingType: string;
+  };
+  stopLoss: {
+    type: string;
+    quantity: number;
+    stopPrice: number;
+    price: number;
+    workingType: string;
+  };
+  advanceAttr: number;
+  positionID: number;
+  takeProfitEntrustPrice: number;
+  stopLossEntrustPrice: number;
+  orderType: string;
+  workingType: string;
+  onlyOnePosition: boolean;
+  reduceOnly: boolean;
+  stopGuaranteed: string;
+  triggerOrderId: number;
+};
+
+export type EnvironmentType = "local" | "dev" | "prod";
+
+export const environments: Record<EnvironmentType, string> = {
+  // local development
+  local: "localhost",
+  // development
+  dev: "api.crypticorn.dev",
+  // production
+  prod: "api.crypticorn.com",
+};
+
+export function getHosts({
+  environment,
+  host = environments[environment],
+  version,
+}: {
+  environment: EnvironmentType;
+  host?: string;
+  version?: string;
+}) {
+  let apiRoot = `https://${host}/${version}`;
+  let wsRoot = `wss://${host}/${version}/ws`;
+
+  if (host.includes("localhost")) {
+    apiRoot = `http://${host}/${version}`;
+    wsRoot = `ws://${host}/${version}/ws`;
+  }
+
+  return { apiRoot, wsRoot };
+}
+
+// Conditionally import the 'ws' package only in a Node.js environment
+let WebSocketImplementation: any;
+if (typeof window === "undefined") {
+  // Node.js environment
+  WebSocketImplementation = require("ws");
+} else {
+  // Browser environment
+  WebSocketImplementation = WebSocket;
+}
+
+export async function createSocket({
+  accessToken,
+  wsRoot,
+  environment = "prod",
+  version = "v1",
+  host,
+  onMessage,
+}: {
+  accessToken: string;
+  wsRoot?: string;
+  environment?: EnvironmentType;
+  version?: string;
+  host?: string;
+  onMessage: (data: Prediction) => void;
+}) {
+  if (!wsRoot) {
+    const result = getHosts({
+      environment,
+      version,
+      host,
+    });
+    wsRoot = result.wsRoot;
+  }
+  const websocket = new WebSocketImplementation(wsRoot) as WebSocket;
+
+  websocket.onopen = () => {
+    // Order is important
+    websocket.send(JSON.stringify({ type: "auth", token: accessToken }));
+    // websocket.send(JSON.stringify({ type: 'auth', api_key: "" }));
+    websocket.send(JSON.stringify({ type: "subscribe", topic: "predictions" }));
+  };
+
+  websocket.onmessage = (event) => {
+    try {
+      const decoded = JSON.parse(event.data);
+      if (decoded.type === "message" && decoded.topic === "predictions") {
+        onMessage(decoded.data);
+      } else if (decoded.type === "auth") {
+        // ignore
+        // console.log(decoded);
+      }
+    } catch (e) {
+      console.error("Error parsing message", e);
+    }
+  };
+
+  websocket.onerror = (event) => {
+    console.error("WebSocket error:", event);
+  };
+
+  websocket.onclose = (event) => {
+    console.log("WebSocket connection closed:", event);
+  };
+}
+
 export type ApiClient = ReturnType<typeof createClient>;
 export type SocketClient = ReturnType<typeof createSocket>;
 
-const createClient = ({
+export const createClient = ({
   accessToken,
   apiRoot,
   environment = "prod",
@@ -197,5 +377,3 @@ const createClient = ({
     getHistoricalPredictions,
   };
 };
-
-export { createClient, createSocket };
