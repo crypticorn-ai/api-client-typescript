@@ -1,9 +1,11 @@
 import { EnvironmentType, getHosts } from "./config";
 import { ApiKeysResponse, HistoricalSwapOrdersResponse } from "./types";
+import { createSocket } from "./ws";
 
 export { EnvironmentType } from "./config";
 export * from "./types";
 export type ApiClient = ReturnType<typeof createClient>;
+export type SocketClient = ReturnType<typeof createSocket>;
 
 const createClient = ({
   accessToken,
@@ -143,4 +145,4 @@ const createClient = ({
   };
 };
 
-export { createClient };
+export { createClient, createSocket };

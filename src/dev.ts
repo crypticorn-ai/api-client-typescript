@@ -1,6 +1,6 @@
 // test against dev
 
-import { createClient } from ".";
+import { createClient, createSocket } from ".";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -15,3 +15,11 @@ const client = createClient({
 client.getApiKeys().then((res) => {
   console.log(res);
 });
+
+const socketClient = createSocket({
+  accessToken,
+  onMessage: (data) => {
+    console.log(data);
+  },
+});
+

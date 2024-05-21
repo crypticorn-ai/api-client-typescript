@@ -1,3 +1,17 @@
+export type Prediction = {
+	action: string;
+	symbol: string;
+	course_change: number;
+	timestamp: number;
+	id: number;
+	version: string;
+	p10: number[];
+	p30: number[];
+	p50: number[];
+	p70: number[];
+	p90: number[];
+};
+
 export type ApiKeysResponse = {
 	id: string;
 	api_key: {
