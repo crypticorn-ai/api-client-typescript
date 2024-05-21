@@ -1,5 +1,10 @@
 import { EnvironmentType, getHosts } from "./config";
-import { ApiKeysResponse, HistoricalSwapOrdersResponse } from "./types";
+import {
+  ApiKeysResponse,
+  DexProgress,
+  HistoricalSwapOrdersResponse,
+  Prediction,
+} from "./types";
 import { createSocket } from "./ws";
 
 export { EnvironmentType } from "./config";
@@ -29,8 +34,10 @@ const createClient = ({
     apiRoot = result.apiRoot;
   }
 
-  // AI trading bot client
-  let root = apiRoot + "/trade";
+  const tradeRoot = apiRoot + "/trade";
+  const predRoot = apiRoot + "/predictions";
+  const dexRoot = apiRoot + "/dex";
+
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${accessToken}`,
@@ -47,7 +54,7 @@ const createClient = ({
     exchange: string;
     label: string;
   }) => {
-    return fetch(`${root}/api-key`, {
+    return fetch(`${tradeRoot}/api-key`, {
       method: "POST",
       headers,
       body: JSON.stringify({ api_key, secret, exchange, label }),
@@ -56,14 +63,14 @@ const createClient = ({
   };
 
   const getBalances = async () => {
-    return fetch(`${root}/balances`, { headers }).then((res) =>
+    return fetch(`${tradeRoot}/balances`, { headers }).then((res) =>
       res.json()
     ) as Promise<unknown>;
   };
 
   const queryHistoricalSwapOrders = async () => {
-    return fetch(`${root}/historical-swap-orders`, { headers }).then((res) =>
-      res.json()
+    return fetch(`${tradeRoot}/historical-swap-orders`, { headers }).then(
+      (res) => res.json()
     ) as Promise<HistoricalSwapOrdersResponse>;
   };
 
@@ -80,7 +87,7 @@ const createClient = ({
     symbol: string;
     type: string;
   }) => {
-    return fetch(`${root}/place-swap-order`, {
+    return fetch(`${tradeRoot}/place-swap-order`, {
       method: "POST",
       headers,
       body: JSON.stringify({ positionSide, quantity, side, symbol, type }),
@@ -95,7 +102,7 @@ const createClient = ({
     symbol: string;
   }) => {
     return fetch(
-      `${root}/cancel-swap-order?orderId=${orderId}&symbol=${symbol}`,
+      `${tradeRoot}/cancel-swap-order?orderId=${orderId}&symbol=${symbol}`,
       {
         method: "DELETE",
         headers,
@@ -104,13 +111,13 @@ const createClient = ({
   };
 
   const getApiKeys = async () => {
-    return fetch(`${root}/api-keys`, { headers }).then((res) =>
+    return fetch(`${tradeRoot}/api-keys`, { headers }).then((res) =>
       res.json()
     ) as Promise<ApiKeysResponse>;
   };
 
   const deleteApiKey = async ({ id }: { id: string }) => {
-    return fetch(`${root}/api-key`, {
+    return fetch(`${tradeRoot}/api-key`, {
       method: "DELETE",
       headers,
       body: JSON.stringify({ id }),
@@ -126,14 +133,56 @@ const createClient = ({
     label: string;
     enabled: boolean;
   }) => {
-    return fetch(`${root}/api-key`, {
+    return fetch(`${tradeRoot}/api-key`, {
       method: "PUT",
       headers,
       body: JSON.stringify({ id, label, enabled }),
     }).then((res) => res.json()) as Promise<{ status: string }>;
   };
 
+  const getLatestPredictions = async ({
+    version = 2,
+    klines = 20,
+  }: {
+    version?: number;
+    klines?: number;
+  } = {}) => {
+    return fetch(`${predRoot}/latest?version=${version}&klines=${klines}`, {
+      headers,
+    }).then((res) => res.json()) as Promise<Prediction[]>;
+  };
+
+  const getPrediction = async (predictionId: string) => {
+    return fetch(`${predRoot}/id/${predictionId}`, {
+      headers,
+    }).then((res) => res.json()) as Promise<Prediction | null>;
+  };
+
+  const getHistoricalPredictions = async ({
+    symbol,
+    records,
+    version = 2,
+  }: {
+    symbol: string;
+    records: number;
+    version?: number;
+  }) => {
+    return fetch(
+      `${predRoot}/symbol/${symbol}?version=${version}&limit=${records}`,
+      {
+        headers,
+      }
+    ).then((r) => r.json()) as Promise<Prediction[]>;
+  };
+
+  const getDexProgress = async () => {
+    return fetch(`${dexRoot}/progress`).then((res) =>
+      res.json()
+    ) as Promise<DexProgress>;
+  };
+
   return {
+    apiRoot,
     postApiKey,
     getBalances,
     queryHistoricalSwapOrders,
@@ -142,6 +191,10 @@ const createClient = ({
     getApiKeys,
     deleteApiKey,
     updateApiKey,
+    getLatestPredictions,
+    getPrediction,
+    getDexProgress,
+    getHistoricalPredictions,
   };
 };
 

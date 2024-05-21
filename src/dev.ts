@@ -12,14 +12,30 @@ const client = createClient({
   accessToken,
 });
 
-client.getApiKeys().then((res) => {
-  console.log(res);
-});
+const globalFetch = global.fetch;
+global.fetch = async (url, options) => {
+  console.log(url);
+  return globalFetch(url, options);
+};
 
-const socketClient = createSocket({
-  accessToken,
-  onMessage: (data) => {
-    console.log(data);
-  },
-});
+console.log("client", client);
+
+// client.getApiKeys().then((res) => {
+//   console.log(res);
+// });
+
+// const socketClient = createSocket({
+//   accessToken,
+//   onMessage: (data) => {
+//     console.log(data);
+//   },
+// });
+
+// client.getLatestPredictions().then((res) => {
+//   console.log(res);
+// });
+
+// client.queryHistoricalSwapOrders().then((res) => {
+//   console.log(res);
+// });
 

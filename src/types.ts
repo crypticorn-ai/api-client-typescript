@@ -1,6 +1,7 @@
 export type Prediction = {
 	action: string;
 	symbol: string;
+	base_price: number;
 	course_change: number;
 	timestamp: number;
 	id: number;
@@ -10,6 +11,15 @@ export type Prediction = {
 	p50: number[];
 	p70: number[];
 	p90: number[];
+};
+
+export type DexProgress = {
+	status: string;
+	data: {
+		'Eth Tokens': number;
+		'Base Tokens': number;
+		'Solana Tokens': number;
+	};
 };
 
 export type ApiKeysResponse = {
