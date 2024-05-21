@@ -1,12 +1,12 @@
 {
   "name": "@crypticorn-ai/api-client",
   "type": "module",
-  "version": "1.1.2",
+  "version": "1.1.5",
   "description": "Crypticorn API Client",
-  "main": "dist/index.js",
+  "main": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && mv dist/index.js dist/index.mjs",
     "dev": "tsx watch src/dev.ts"
   },
   "author": "Máté Homolya <mate.homolya@proton.me>",

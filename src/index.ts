@@ -124,16 +124,6 @@ export function getHosts({
   return { apiRoot, wsRoot };
 }
 
-// Conditionally import the 'ws' package only in a Node.js environment
-let WebSocketImplementation: any;
-if (typeof window === "undefined") {
-  // Node.js environment
-  WebSocketImplementation = require("ws");
-} else {
-  // Browser environment
-  WebSocketImplementation = WebSocket;
-}
-
 export async function createSocket({
   accessToken,
   wsRoot,
@@ -141,6 +131,7 @@ export async function createSocket({
   version = "v1",
   host,
   onMessage,
+  WebSocketImplementation = WebSocket,
 }: {
   accessToken: string;
   wsRoot?: string;
@@ -148,6 +139,7 @@ export async function createSocket({
   version?: string;
   host?: string;
   onMessage: (data: Prediction) => void;
+  WebSocketImplementation?: typeof WebSocket;
 }) {
   if (!wsRoot) {
     const result = getHosts({
