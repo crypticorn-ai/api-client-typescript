@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@crypticorn-ai/auth-service':
-        specifier: ^1.2.1
-        version: 1.2.1
+        specifier: ^1.2.2
+        version: 1.2.2
       '@crypticorn-ai/token-service':
-        specifier: ^0.3.5
-        version: 0.3.5
+        specifier: ^0.3.7
+        version: 0.3.7
     devDependencies:
       '@types/cookie-parser':
         specifier: ^1.4.7
@@ -57,11 +57,11 @@ packages:
   '@crypticorn-ai/api@1.1.6':
     resolution: {integrity: sha512-8IrqpqcHlCnA0Jz7DZkxOgjM8kMb/aMZi3m/Jn0XrsD9BJ0VmNPplLsCstiMWM66uC2aEcW8+jO1BS+0dMHHag==}
 
-  '@crypticorn-ai/auth-service@1.2.1':
-    resolution: {integrity: sha512-imyNn6qSah4HWCb/3QaS3XkogA/khLgc2cKGdua9C+S46UDCsrQ9nBx/6o6832rHRyAQq8pz6KIwWUucxEQlDQ==}
+  '@crypticorn-ai/auth-service@1.2.2':
+    resolution: {integrity: sha512-E8kLrEeMbjhXQ5JU2/b4JSW7xG506fMgO0mFY85TT9yv4mZmepqQ+K4haLMeJwnSLJTdksbYgCiwJ71xM+rVWQ==}
 
-  '@crypticorn-ai/token-service@0.3.5':
-    resolution: {integrity: sha512-HXU541i2X8oPtrnzr8oz1wL5b9pqOMoU1ZXkk9W1YWDEcNiseRnuWckSf4MiUhBCp1T8ZFETLbG4RZCxPaypWg==}
+  '@crypticorn-ai/token-service@0.3.7':
+    resolution: {integrity: sha512-Xn3fO2BYUi0yWujp53RZO3kWyUhHhrHdRPuiGlHWDW6HHbER4rZdzm7/9QsPvsZ+ggwtqY6Nv7lyN9jUbv05wQ==}
 
   '@esbuild/aix-ppc64@0.20.2':
     resolution: {integrity: sha512-D+EBOJHXdNZcLJRBkhENNG8Wji2kgc9AZ9KiPr1JuZjsNtyHzrsfLRrY0tk2H2aoFu6RANO1y1iPPUCDYWkb5g==}
@@ -650,9 +650,9 @@ snapshots:
 
   '@crypticorn-ai/api@1.1.6': {}
 
-  '@crypticorn-ai/auth-service@1.2.1': {}
+  '@crypticorn-ai/auth-service@1.2.2': {}
 
-  '@crypticorn-ai/token-service@0.3.5':
+  '@crypticorn-ai/token-service@0.3.7':
     dependencies:
       '@crypticorn-ai/api': 1.1.6
       '@trpc/client': 10.45.2(@trpc/server@10.45.2)

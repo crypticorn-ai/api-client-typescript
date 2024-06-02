@@ -93,12 +93,14 @@ export type SocketClient = ReturnType<typeof createSocket>;
 
 export const createClient = ({
   accessToken,
+  refreshToken,
   apiRoot,
   environment = "prod",
   version = "v1",
   host,
 }: {
   accessToken: string;
+  refreshToken: string;
   apiRoot?: string;
   environment?: EnvironmentType;
   version?: string;
@@ -116,8 +118,12 @@ export const createClient = ({
     });
     apiRoot = result.apiRoot;
   }
-  const token = createTokenService(apiRoot + "/token");
-  const auth = createAuthService(apiRoot + "/auth");
+  const token = createTokenService(apiRoot + "/token", {
+    cookie: `accessToken=${accessToken};`,
+  });
+  const auth = createAuthService(apiRoot + "/auth", {
+    cookie: `accessToken=${accessToken}; refreshToken=${refreshToken};`,
+  });
   const api = createApiService({ accessToken, apiRoot, environment, version, host });
   return {
     auth,
