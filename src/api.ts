@@ -122,7 +122,8 @@ export const createClient = ({
     cookie: `accessToken=${accessToken};`,
   });
   const auth = createAuthService(apiRoot + "/auth", {
-    cookie: `accessToken=${accessToken}; refreshToken=${refreshToken};`,
+    // avoid trailing semicolon
+    cookie: `accessToken=${accessToken}; refreshToken=${refreshToken}`,
   });
   const api = createApiService({ accessToken, apiRoot, environment, version, host });
   return {
