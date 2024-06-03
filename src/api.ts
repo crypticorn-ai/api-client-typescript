@@ -273,7 +273,10 @@ export const createApiService = ({
   } = {}) => {
     return fetch(`${predRoot}/latest?version=${version}&klines=${klines}`, {
       headers,
-    }).then((res) => res.json()) as Promise<Prediction[]>;
+    }).then((res) => res.json()) as Promise<{
+      predictions: Prediction[];
+      klines: [[number, number, number, number, number, number]];
+    }>;
   };
 
   const getPrediction = async (predictionId: string) => {
