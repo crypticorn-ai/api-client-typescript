@@ -15,6 +15,15 @@ export type Prediction = {
   p90: number[];
 };
 
+export type Kline = [
+  number, // open time
+  number, // open
+  number, // high
+  number, // low
+  number, // close
+  number // volume
+];
+
 export type DexProgress = {
   status: string;
   data: {

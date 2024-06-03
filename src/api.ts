@@ -1,4 +1,4 @@
-import { ApiKeysResponse, DexProgress, EnvironmentType, HistoricalSwapOrdersResponse, Prediction } from "./types";
+import { ApiKeysResponse, DexProgress, EnvironmentType, HistoricalSwapOrdersResponse, Kline, Prediction } from "./types";
 import { createClient as createAuthService } from "@crypticorn-ai/auth-service";
 import { createClient as createTokenService } from "@crypticorn-ai/token-service/dist/client";
 
@@ -92,15 +92,15 @@ export type ApiClient = ReturnType<typeof createClient>;
 export type SocketClient = ReturnType<typeof createSocket>;
 
 export const createClient = ({
-  accessToken,
-  refreshToken,
+  accessToken = "",
+  refreshToken = "",
   apiRoot,
   environment = "prod",
   version = "v1",
   host,
 }: {
-  accessToken: string;
-  refreshToken: string;
+  accessToken?: string;
+  refreshToken?: string;
   apiRoot?: string;
   environment?: EnvironmentType;
   version?: string;
@@ -275,7 +275,7 @@ export const createApiService = ({
       headers,
     }).then((res) => res.json()) as Promise<{
       predictions: Prediction[];
-      klines: [[number, number, number, number, number, number]];
+      klines: Record<string, Kline[]>;
     }>;
   };
 
