@@ -1,4 +1,4 @@
-import { ApiKeysResponse, DexProgress, EnvironmentType, HistoricalSwapOrdersResponse, Kline, Prediction } from "./types";
+import { ApiKeysResponse, DexProgress, EnvironmentType, HistoricalSwapOrdersResponse, Kline, Prediction, Trend } from "./types";
 import { createClient as createAuthService } from "@crypticorn-ai/auth-service";
 import { createClient as createTokenService } from "@crypticorn-ai/token-service/dist/client";
 
@@ -158,9 +158,7 @@ export const createApiService = ({
   const tradeRoot = apiRoot + "/trade";
   const predRoot = apiRoot + "/predictions";
   const dexRoot = apiRoot + "/dex";
-
-  const auth = createAuthService(apiRoot + "/auth");
-  const token = createTokenService(apiRoot + "/token");
+  const trendRoot = apiRoot + "/trends";
 
   const headers = {
     "Content-Type": "application/json",
@@ -302,6 +300,10 @@ export const createApiService = ({
     ).then((r) => r.json()) as Promise<Prediction[]>;
   };
 
+  const getLatestTrends = async () => {
+    return fetch(`${trendRoot}/latest`, { headers }).then((res) => res.json()) as Promise<Trend[]>;
+  };
+
   const getDexProgress = async () => {
     return fetch(`${dexRoot}/progress`).then((res) =>
       res.json()
@@ -322,5 +324,6 @@ export const createApiService = ({
     getPrediction,
     getDexProgress,
     getHistoricalPredictions,
+    getLatestTrends,
   };
 };

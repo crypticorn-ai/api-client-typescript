@@ -27,13 +27,13 @@ console.log("client", client);
 // Conditionally import the 'ws' package only in a Node.js environment
 const WebSocketImplementation = (await import("ws")).default as unknown as typeof WebSocket;
 
-const socketClient = createSocket({
-  accessToken,
-  WebSocketImplementation,
-  onMessage: (data) => {
-    console.log(data);
-  },
-});
+// const socketClient = createSocket({
+//   accessToken,
+//   WebSocketImplementation,
+//   onMessage: (data) => {
+//     console.log(data);
+//   },
+// });
 
 // client.getLatestPredictions().then((res) => {
 //   console.log(res);
@@ -43,3 +43,6 @@ const socketClient = createSocket({
 //   console.log(res);
 // });
 
+client.api.getLatestTrends().then((res) => {
+  console.log(res);
+});

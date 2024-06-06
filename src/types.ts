@@ -15,6 +15,14 @@ export type Prediction = {
   p90: number[];
 };
 
+export type Trend = {
+  version: string;
+  timestamp: number;
+  positive_prob: number;
+  id: number;
+  symbol: string;
+}
+
 export type Kline = [
   number, // open time
   number, // open

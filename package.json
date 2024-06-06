@@ -1,7 +1,7 @@
 {
   "name": "@crypticorn-ai/api-client",
   "type": "module",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "Crypticorn API Client",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
