@@ -118,8 +118,8 @@ export const createClient = ({
     });
     apiRoot = result.apiRoot;
   }
-  const token = createTokenService(apiRoot + "/token", {
-    cookie: `accessToken=${accessToken};`,
+  const token = createTokenService(apiRoot + "/tokens", {
+    cookie: `accessToken=${accessToken}`,
   });
   const auth = createAuthService(apiRoot + "/auth", {
     // avoid trailing semicolon
