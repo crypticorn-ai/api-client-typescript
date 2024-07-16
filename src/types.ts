@@ -18,7 +18,8 @@ export type Prediction = {
 export type Trend = {
   version: string;
   timestamp: number;
-  positive_prob: number;
+  timestamps: number[];
+  positive_prob: number[];
   id: number;
   symbol: string;
 }

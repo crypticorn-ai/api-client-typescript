@@ -2,6 +2,7 @@
 
 import { createClient, createSocket } from ".";
 import dotenv from "dotenv";
+import txData from "./tx.json";
 
 dotenv.config();
 
@@ -18,31 +19,71 @@ global.fetch = async (url, options) => {
   return globalFetch(url, options);
 };
 
-console.log("client", client);
+/**
+ * Create a websocket client
+ */
+export async function createWebSocket() {
+  // Conditionally import the 'ws' package only in a Node.js environment
+  const WebSocketImplementation = (await import("ws"))
+    .default as unknown as typeof WebSocket;
 
-// client.getApiKeys().then((res) => {
-//   console.log(res);
-// });
+  const socketClient = createSocket({
+    accessToken,
+    WebSocketImplementation,
+    onMessage: (data) => {
+      console.log(data);
+    },
+  });
+}
 
-// Conditionally import the 'ws' package only in a Node.js environment
-const WebSocketImplementation = (await import("ws")).default as unknown as typeof WebSocket;
+/**
+ * Run backfill for all tokens
+ */
+export async function runBackfill() {
+  for (const key of Object.keys(txData)) {
+    console.log(key);
+    for (const hash of txData[key]) {
+      try {
+        console.log(`${key}:${hash}`);
+        await client.token.transactions.post.mutate({
+          token: key as any,
+          hash,
+        });
+        console.log("done");
+      } catch (e) {
+        console.log("error");
+        console.log(e);
+      }
+    }
+    console.log("done all");
+  }
+}
 
-// const socketClient = createSocket({
-//   accessToken,
-//   WebSocketImplementation,
-//   onMessage: (data) => {
-//     console.log(data);
-//   },
-// });
+export async function runTests() {
+  client.api.getApiKeys().then((res) => {
+    console.log(res);
+  });
 
-// client.getLatestPredictions().then((res) => {
-//   console.log(res);
-// });
+  client.api.getLatestPredictions().then((res) => {
+    console.log(res);
+  });
 
-// client.queryHistoricalSwapOrders().then((res) => {
-//   console.log(res);
-// });
+  client.api.queryHistoricalSwapOrders().then((res) => {
+    console.log(res);
+  });
 
-client.api.getLatestTrends().then((res) => {
-  console.log(res);
-});
+  client.api.getLatestTrends().then((res) => {
+    console.log(res);
+  });
+
+  const result = await client.api.postApiKey({
+    api_key: "test",
+    secret: "test",
+    exchange: "bingx",
+    label: "test",
+  });
+}
+
+const result = await client.api.getLatestTrends();
+
+console.log("done", result);

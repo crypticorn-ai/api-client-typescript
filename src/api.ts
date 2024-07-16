@@ -301,7 +301,7 @@ export const createApiService = ({
   };
 
   const getLatestTrends = async () => {
-    return fetch(`${trendRoot}/latest`, { headers }).then((res) => res.json()) as Promise<Trend[]>;
+    return fetch(`${trendRoot}/`, { headers }).then((res) => res.json()) as Promise<Trend[]>;
   };
 
   const getDexProgress = async () => {
