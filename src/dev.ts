@@ -84,6 +84,6 @@ export async function runTests() {
   });
 }
 
-const result = await client.api.getLatestTrends();
+const result = await client.api.getLatestPredictions();
 
 console.log("done", result);

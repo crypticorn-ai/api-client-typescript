@@ -122,8 +122,8 @@ export const createClient = ({
     cookie: `accessToken=${accessToken}`,
   });
   const auth = createAuthService(apiRoot + "/auth", {
-    // avoid trailing semicolon
-    cookie: `accessToken=${accessToken}; refreshToken=${refreshToken}`,
+    'Authorization': `Bearer ${accessToken}`,
+    'X-Refresh-Token': refreshToken
   });
   const api = createApiService({ accessToken, apiRoot, environment, version, host });
   return {
@@ -170,18 +170,26 @@ export const createApiService = ({
     secret,
     exchange,
     label,
+    passphrase,
   }: {
     api_key: string;
     secret: string;
     exchange: string;
+    passphrase?: string;
     label: string;
   }) => {
     return fetch(`${tradeRoot}/api-key`, {
       method: "POST",
       headers,
-      body: JSON.stringify({ api_key, secret, exchange, label }),
+      body: JSON.stringify({ api_key, secret, exchange, label, passphrase }),
       credentials: "include",
     }).then((res) => res.json()) as Promise<{ status: string }>;
+  };
+
+  const listOrders = async () => {
+    return fetch(`${tradeRoot}/orders`, { headers }).then((res) =>
+      res.json()
+    ) as Promise<unknown>;
   };
 
   const getBalances = async () => {
@@ -317,6 +325,7 @@ export const createApiService = ({
     queryHistoricalSwapOrders,
     placeOrder,
     cancelOrder,
+    listOrders,
     getApiKeys,
     deleteApiKey,
     updateApiKey,
