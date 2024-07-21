@@ -1,6 +1,14 @@
-import { ApiKeysResponse, DexProgress, EnvironmentType, HistoricalSwapOrdersResponse, Kline, Prediction, Trend } from "./types";
-import { createClient as createAuthService } from "@crypticorn-ai/auth-service";
-import { createClient as createTokenService } from "@crypticorn-ai/token-service/dist/client";
+import {
+  ApiKeysResponse,
+  DexProgress,
+  EnvironmentType,
+  HistoricalSwapOrdersResponse,
+  Kline,
+  Prediction,
+  Trend,
+} from "./types";
+import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
+import { createClient as createTokenClient } from "@crypticorn-ai/token-service/dist/client";
 
 export const environments: Record<EnvironmentType, string> = {
   // local development
@@ -106,9 +114,9 @@ export const createClient = ({
   version?: string;
   host?: string;
 }): {
-  auth: ReturnType<typeof createAuthService>;
-  token: ReturnType<typeof createTokenService>;
-  api: ReturnType<typeof createApiService>;
+  auth: ReturnType<typeof createAuthClient>;
+  token: ReturnType<typeof createTokenClient>;
+  api: ReturnType<typeof createApiClient>;
 } => {
   if (!apiRoot) {
     const result = getHosts({
@@ -118,14 +126,22 @@ export const createClient = ({
     });
     apiRoot = result.apiRoot;
   }
-  const token = createTokenService(apiRoot + "/tokens", {
-    cookie: `accessToken=${accessToken}`,
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+    "X-Refresh-Token": refreshToken,
+    Cookie: refreshToken
+      ? `accessToken=${accessToken}; refreshToken=${refreshToken}`
+      : `accessToken=${accessToken}`,
+  }
+  const token = createTokenClient(apiRoot + "/tokens", headers);
+  const auth = createAuthClient(apiRoot + "/auth", headers);
+  const api = createApiClient({
+    accessToken,
+    apiRoot,
+    environment,
+    version,
+    host,
   });
-  const auth = createAuthService(apiRoot + "/auth", {
-    'Authorization': `Bearer ${accessToken}`,
-    'X-Refresh-Token': refreshToken
-  });
-  const api = createApiService({ accessToken, apiRoot, environment, version, host });
   return {
     auth,
     token,
@@ -133,7 +149,7 @@ export const createClient = ({
   };
 };
 
-export const createApiService = ({
+export const createApiClient = ({
   accessToken,
   apiRoot,
   environment = "prod",
@@ -309,7 +325,9 @@ export const createApiService = ({
   };
 
   const getLatestTrends = async () => {
-    return fetch(`${trendRoot}/`, { headers }).then((res) => res.json()) as Promise<Trend[]>;
+    return fetch(`${trendRoot}/`, { headers }).then((res) =>
+      res.json()
+    ) as Promise<Trend[]>;
   };
 
   const getDexProgress = async () => {
