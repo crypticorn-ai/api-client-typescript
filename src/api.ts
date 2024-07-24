@@ -9,6 +9,7 @@ import {
 } from "./types";
 import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
 import { createClient as createTokenClient } from "@crypticorn-ai/token-service/dist/client";
+import { createHiveClient } from "./hive";
 
 export const environments: Record<EnvironmentType, string> = {
   // local development
@@ -117,6 +118,7 @@ export const createClient = ({
   auth: ReturnType<typeof createAuthClient>;
   token: ReturnType<typeof createTokenClient>;
   api: ReturnType<typeof createApiClient>;
+  hive: ReturnType<typeof createHiveClient>;
 } => {
   if (!apiRoot) {
     const result = getHosts({
@@ -132,7 +134,7 @@ export const createClient = ({
     Cookie: refreshToken
       ? `accessToken=${accessToken}; refreshToken=${refreshToken}`
       : `accessToken=${accessToken}`,
-  }
+  };
   const token = createTokenClient(apiRoot + "/tokens", headers);
   const auth = createAuthClient(apiRoot + "/auth", headers);
   const api = createApiClient({
@@ -142,10 +144,12 @@ export const createClient = ({
     version,
     host,
   });
+  const hive = createHiveClient(apiRoot + "/hive", headers);
   return {
     auth,
     token,
     api,
+    hive,
   };
 };
 
@@ -206,6 +210,24 @@ export const createApiClient = ({
     return fetch(`${tradeRoot}/orders`, { headers }).then((res) =>
       res.json()
     ) as Promise<unknown>;
+  };
+
+  const listBots = async () => {
+    return fetch(`${tradeRoot}/bots`, { headers }).then((res) =>
+      res.json()
+    ) as Promise<unknown>;
+  };
+
+  const createBot = async (bot: {
+    strategy_name: string;
+    api_key_id: string;
+    allocation: number;
+  }) => {
+    return fetch(`${tradeRoot}/bots`, {
+      headers,
+      method: "POST",
+      body: JSON.stringify(bot),
+    }).then((res) => res.json()) as Promise<unknown>;
   };
 
   const getBalances = async () => {
@@ -344,6 +366,8 @@ export const createApiClient = ({
     placeOrder,
     cancelOrder,
     listOrders,
+    listBots,
+    createBot,
     getApiKeys,
     deleteApiKey,
     updateApiKey,

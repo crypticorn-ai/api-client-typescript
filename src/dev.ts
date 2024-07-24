@@ -9,7 +9,7 @@ dotenv.config();
 const accessToken = process.env.ACCESS_TOKEN_DEV as string;
 
 const client = createClient({
-  environment: "dev",
+  environment: "local",
   accessToken,
 });
 
@@ -84,6 +84,6 @@ export async function runTests() {
   });
 }
 
-const result = await client.api.getLatestPredictions();
+const result = await client.hive.getAccountInfo();
 
 console.log("done", result);
