@@ -219,7 +219,7 @@ export const createApiClient = ({
     ) as Promise<TradingBot[]>;
   };
 
-  const createBot = async (bot: TradingBot) => {
+  const createBot = async (bot: Omit<TradingBot, "id">) => {
     return fetch(`${tradeRoot}/bots`, {
       headers,
       method: "POST",

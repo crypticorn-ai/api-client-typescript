@@ -61,6 +61,7 @@ export type ApiKeysResponse = {
 }[];
 
 export type TradingBot = {
+  id: string;
   name: string;
   strategy_name: string;
   api_key_id: string;
