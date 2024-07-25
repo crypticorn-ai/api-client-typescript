@@ -60,6 +60,13 @@ export type ApiKeysResponse = {
   enabled: boolean;
 }[];
 
+export type TradingBot = {
+  name: string;
+  strategy_name: string;
+  api_key_id: string;
+  allocation: number;
+}
+
 export type HistoricalSwapOrdersResponse = {
   code: number;
   msg: string;

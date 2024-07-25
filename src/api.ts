@@ -5,6 +5,7 @@ import {
   HistoricalSwapOrdersResponse,
   Kline,
   Prediction,
+  TradingBot,
   Trend,
 } from "./types";
 import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
@@ -215,18 +216,21 @@ export const createApiClient = ({
   const listBots = async () => {
     return fetch(`${tradeRoot}/bots`, { headers }).then((res) =>
       res.json()
-    ) as Promise<unknown>;
+    ) as Promise<TradingBot[]>;
   };
 
-  const createBot = async (bot: {
-    strategy_name: string;
-    api_key_id: string;
-    allocation: number;
-  }) => {
+  const createBot = async (bot: TradingBot) => {
     return fetch(`${tradeRoot}/bots`, {
       headers,
       method: "POST",
       body: JSON.stringify(bot),
+    }).then((res) => res.json()) as Promise<unknown>;
+  };
+
+  const deleteBot = async (id: string) => {
+    return fetch(`${tradeRoot}/bots?id=${id}`, {
+      headers,
+      method: "DELETE",
     }).then((res) => res.json()) as Promise<unknown>;
   };
 
@@ -367,6 +371,7 @@ export const createApiClient = ({
     cancelOrder,
     listOrders,
     listBots,
+    deleteBot,
     createBot,
     getApiKeys,
     deleteApiKey,
