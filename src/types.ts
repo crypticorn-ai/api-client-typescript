@@ -66,6 +66,7 @@ export type TradingBot = {
   strategy_name: string;
   api_key_id: string;
   allocation: number;
+  enabled: boolean;
 }
 
 export type HistoricalSwapOrdersResponse = {

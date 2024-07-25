@@ -234,6 +234,14 @@ export const createApiClient = ({
     }).then((res) => res.json()) as Promise<unknown>;
   };
 
+  const updateBot = async (bot: TradingBot) => {
+    return fetch(`${tradeRoot}/bots`, {
+      headers,
+      method: "PUT",
+      body: JSON.stringify(bot),
+    }).then((res) => res.json()) as Promise<unknown>;
+  };
+
   const getBalances = async () => {
     return fetch(`${tradeRoot}/balances`, { headers }).then((res) =>
       res.json()
@@ -373,6 +381,7 @@ export const createApiClient = ({
     listBots,
     deleteBot,
     createBot,
+    updateBot,
     getApiKeys,
     deleteApiKey,
     updateApiKey,
