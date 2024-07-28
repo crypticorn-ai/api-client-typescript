@@ -1,16 +1,14 @@
 import {
-  ApiKeysResponse,
   DexProgress,
   EnvironmentType,
-  HistoricalSwapOrdersResponse,
   Kline,
   Prediction,
-  TradingBot,
   Trend,
 } from "./types";
 import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
 import { createClient as createTokenClient } from "@crypticorn-ai/token-service/dist/client";
 import { createHiveClient } from "./hive";
+import { createTradeClient } from "./trade";
 
 export const environments: Record<EnvironmentType, string> = {
   // local development
@@ -120,6 +118,7 @@ export const createClient = ({
   token: ReturnType<typeof createTokenClient>;
   api: ReturnType<typeof createApiClient>;
   hive: ReturnType<typeof createHiveClient>;
+  trade: ReturnType<typeof createTradeClient>;
 } => {
   if (!apiRoot) {
     const result = getHosts({
@@ -135,6 +134,7 @@ export const createClient = ({
     Cookie: refreshToken
       ? `accessToken=${accessToken}; refreshToken=${refreshToken}`
       : `accessToken=${accessToken}`,
+    "Content-Type": "application/json",
   };
   const token = createTokenClient(apiRoot + "/tokens", headers);
   const auth = createAuthClient(apiRoot + "/auth", headers);
@@ -145,12 +145,14 @@ export const createClient = ({
     version,
     host,
   });
+  const trade = createTradeClient(apiRoot + "/trade", headers);
   const hive = createHiveClient(apiRoot + "/hive", headers);
   return {
     auth,
     token,
     api,
     hive,
+    trade,
   };
 };
 
@@ -176,7 +178,6 @@ export const createApiClient = ({
     apiRoot = result.apiRoot;
   }
 
-  const tradeRoot = apiRoot + "/trade";
   const predRoot = apiRoot + "/predictions";
   const dexRoot = apiRoot + "/dex";
   const trendRoot = apiRoot + "/trends";
@@ -184,140 +185,6 @@ export const createApiClient = ({
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${accessToken}`,
-  };
-
-  const postApiKey = async ({
-    api_key,
-    secret,
-    exchange,
-    label,
-    passphrase,
-  }: {
-    api_key: string;
-    secret: string;
-    exchange: string;
-    passphrase?: string;
-    label: string;
-  }) => {
-    return fetch(`${tradeRoot}/api-key`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ api_key, secret, exchange, label, passphrase }),
-      credentials: "include",
-    }).then((res) => res.json()) as Promise<{ status: string }>;
-  };
-
-  const listOrders = async () => {
-    return fetch(`${tradeRoot}/orders`, { headers }).then((res) =>
-      res.json()
-    ) as Promise<unknown>;
-  };
-
-  const listBots = async () => {
-    return fetch(`${tradeRoot}/bots`, { headers }).then((res) =>
-      res.json()
-    ) as Promise<TradingBot[]>;
-  };
-
-  const createBot = async (bot: Omit<TradingBot, "id">) => {
-    return fetch(`${tradeRoot}/bots`, {
-      headers,
-      method: "POST",
-      body: JSON.stringify(bot),
-    }).then((res) => res.json()) as Promise<unknown>;
-  };
-
-  const deleteBot = async (id: string) => {
-    return fetch(`${tradeRoot}/bots?id=${id}`, {
-      headers,
-      method: "DELETE",
-    }).then((res) => res.json()) as Promise<unknown>;
-  };
-
-  const updateBot = async (bot: TradingBot) => {
-    return fetch(`${tradeRoot}/bots`, {
-      headers,
-      method: "PUT",
-      body: JSON.stringify(bot),
-    }).then((res) => res.json()) as Promise<unknown>;
-  };
-
-  const getBalances = async () => {
-    return fetch(`${tradeRoot}/balances`, { headers }).then((res) =>
-      res.json()
-    ) as Promise<unknown>;
-  };
-
-  const queryHistoricalSwapOrders = async () => {
-    return fetch(`${tradeRoot}/historical-swap-orders`, { headers }).then(
-      (res) => res.json()
-    ) as Promise<HistoricalSwapOrdersResponse>;
-  };
-
-  const placeOrder = async ({
-    positionSide,
-    quantity,
-    side,
-    symbol,
-    type,
-  }: {
-    positionSide: string;
-    quantity: number;
-    side: string;
-    symbol: string;
-    type: string;
-  }) => {
-    return fetch(`${tradeRoot}/place-swap-order`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ positionSide, quantity, side, symbol, type }),
-    }).then((res) => res.json()) as Promise<unknown>;
-  };
-
-  const cancelOrder = async ({
-    orderId,
-    symbol,
-  }: {
-    orderId: number;
-    symbol: string;
-  }) => {
-    return fetch(
-      `${tradeRoot}/cancel-swap-order?orderId=${orderId}&symbol=${symbol}`,
-      {
-        method: "DELETE",
-        headers,
-      }
-    ).then((res) => res.json()) as Promise<unknown>;
-  };
-
-  const getApiKeys = async () => {
-    return fetch(`${tradeRoot}/api-keys`, { headers }).then((res) =>
-      res.json()
-    ) as Promise<ApiKeysResponse>;
-  };
-
-  const deleteApiKey = async ({ id }: { id: string }) => {
-    return fetch(`${tradeRoot}/api-key`, {
-      method: "DELETE",
-      headers,
-      body: JSON.stringify({ id }),
-    }).then((res) => res.json()) as Promise<{ status: string }>;
-  };
-
-  const updateApiKey = async ({
-    id,
-    label,
-    enabled,
-  }: {
-    id: string;
-    label: string;
-    enabled: boolean;
-  }) => {
-    return fetch(`${tradeRoot}/api-key`, {
-      method: "PUT",
-      headers,
-      body: JSON.stringify({ id, label, enabled }),
-    }).then((res) => res.json()) as Promise<{ status: string }>;
   };
 
   const getLatestPredictions = async ({
@@ -372,19 +239,6 @@ export const createApiClient = ({
 
   return {
     apiRoot,
-    postApiKey,
-    getBalances,
-    queryHistoricalSwapOrders,
-    placeOrder,
-    cancelOrder,
-    listOrders,
-    listBots,
-    deleteBot,
-    createBot,
-    updateBot,
-    getApiKeys,
-    deleteApiKey,
-    updateApiKey,
     getLatestPredictions,
     getPrediction,
     getDexProgress,
