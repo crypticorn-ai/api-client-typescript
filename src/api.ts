@@ -8,7 +8,7 @@ import {
 import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
 import { createClient as createTokenClient } from "@crypticorn-ai/token-service/dist/client";
 import { createHiveClient } from "./hive";
-import { createTradeClient } from "./trade";
+import { createTradeClient } from "./trade/client";
 
 export const environments: Record<EnvironmentType, string> = {
   // local development

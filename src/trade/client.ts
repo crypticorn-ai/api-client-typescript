@@ -1,8 +1,9 @@
 import {
   ApiKey,
-  HistoricalSwapOrdersResponse,
   Order,
   TradingBot,
+  SwapBalanceResponse,
+  HistoricalSwapOrdersResponse,
 } from "./types";
 
 export function createTradeClient(tradeRoot: string, headers: any) {
@@ -93,34 +94,40 @@ export function createTradeClient(tradeRoot: string, headers: any) {
   };
 
   // exchange client endpoints
-  const getBalances = async (apiKeyId: string) => {
-    return fetch(`${tradeRoot}/balances?api_key_id=${apiKeyId}`, {
+  const getSwapBalance = async (key: string) => {
+    return fetch(`${tradeRoot}/swap/balance?key=${key}`, {
+      headers,
+    }).then((res) => res.json()) as Promise<SwapBalanceResponse>;
+  };
+
+  const getSpotBalance = async (key: string) => {
+    return fetch(`${tradeRoot}/spot/balance?key=${key}`, {
       headers,
     }).then((res) => res.json()) as Promise<unknown>;
   };
 
-  const queryHistoricalSwapOrders = async (apiKeyId: string) => {
-    return fetch(`${tradeRoot}/historical-swap-orders?api_key_id=${apiKeyId}`, {
+  const queryHistoricalSwapOrders = async (key: string) => {
+    return fetch(`${tradeRoot}/swap/historical-orders?key=${key}`, {
       headers,
     }).then((res) => res.json()) as Promise<HistoricalSwapOrdersResponse>;
   };
 
   const placeOrder = async ({
-    apiKeyId,
+    key,
     positionSide,
     quantity,
     side,
     symbol,
     type,
   }: {
-    apiKeyId: string;
+    key: string;
     positionSide: string;
     quantity: number;
     side: string;
     symbol: string;
     type: string;
   }) => {
-    return fetch(`${tradeRoot}/place-swap-order?api_key_id=${apiKeyId}`, {
+    return fetch(`${tradeRoot}/swap/place-order?key=${key}`, {
       method: "POST",
       headers,
       body: JSON.stringify({ positionSide, quantity, side, symbol, type }),
@@ -128,16 +135,16 @@ export function createTradeClient(tradeRoot: string, headers: any) {
   };
 
   const cancelOrder = async ({
-    apiKeyId,
+    key,
     orderId,
     symbol,
   }: {
-    apiKeyId: string;
+    key: string;
     orderId: number;
     symbol: string;
   }) => {
     return fetch(
-      `${tradeRoot}/cancel-swap-order?api_key_id=${apiKeyId}&orderId=${orderId}&symbol=${symbol}`,
+      `${tradeRoot}/swap/cancel-order?key=${key}&orderId=${orderId}&symbol=${symbol}`,
       {
         method: "DELETE",
         headers,
@@ -147,7 +154,8 @@ export function createTradeClient(tradeRoot: string, headers: any) {
 
   return {
     postApiKey,
-    getBalances,
+    getSwapBalance,
+    getSpotBalance,
     queryHistoricalSwapOrders,
     placeOrder,
     cancelOrder,

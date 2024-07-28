@@ -1,3 +1,6 @@
+import { Kucoin } from "./kucoin";
+import { BingX } from "./bingx";
+
 export type ApiKey = {
   id: string;
   api_key: {
@@ -27,14 +30,6 @@ export type TradingBot = {
   user_id: string;
 };
 
-export type HistoricalSwapOrdersResponse = {
-  code: number;
-  msg: string;
-  data: {
-    orders: HistoricalSwap[];
-  };
-};
-
 export type Order = {
   api_key_id: string;
   exchange: string;
@@ -48,47 +43,7 @@ export type Order = {
   user_id: string;
 }
 
-export type HistoricalSwap = {
-  symbol: string;
-  orderId: number;
-  side: string;
-  positionSide: string;
-  type: string;
-  origQty: string;
-  price: string;
-  executedQty: string;
-  avgPrice: string;
-  cumQuote: string;
-  stopPrice: string;
-  profit: string;
-  commission: string;
-  status: string;
-  time: number;
-  updateTime: number;
-  clientOrderId: string;
-  leverage: string;
-  takeProfit: {
-    type: string;
-    quantity: number;
-    stopPrice: number;
-    price: number;
-    workingType: string;
-  };
-  stopLoss: {
-    type: string;
-    quantity: number;
-    stopPrice: number;
-    price: number;
-    workingType: string;
-  };
-  advanceAttr: number;
-  positionID: number;
-  takeProfitEntrustPrice: number;
-  stopLossEntrustPrice: number;
-  orderType: string;
-  workingType: string;
-  onlyOnePosition: boolean;
-  reduceOnly: boolean;
-  stopGuaranteed: string;
-  triggerOrderId: number;
-};
+export { Kucoin, BingX };
+export type SwapBalanceResponse = Kucoin.SwapBalanceResponse | BingX.SwapBalanceResponse;
+export type HistoricalSwapOrdersResponse = Kucoin.HistoricalSwapOrdersResponse | BingX.HistoricalSwapOrdersResponse;
+export type SpotBalanceResponse = Kucoin.SpotBalanceResponse | BingX.SpotBalanceResponse;
