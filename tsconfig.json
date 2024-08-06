@@ -1,6 +1,6 @@
 {
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "src/dev.ts", "node_modules/.pnpm"],
+  "exclude": ["node_modules", "dist", "src/dev.ts"],
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
@@ -11,7 +11,8 @@
     "strict": true,
     "esModuleInterop": true,
     "declaration": true,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "skipLibCheck": true
   }
 }
 

@@ -1,4 +1,4 @@
-export function createHiveClient(apiRoot: string, headers: any) {
+export function createHiveClient(apiRoot: string, headers: any, fetch = globalThis.fetch) {
   return {
     createDevAccount: () => {
       return fetch(`${apiRoot}/create-dev-account`, {

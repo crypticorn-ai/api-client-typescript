@@ -4,9 +4,10 @@ import {
   TradingBot,
   SwapBalanceResponse,
   HistoricalSwapOrdersResponse,
+  TradingSignal,
 } from "./types";
 
-export function createTradeClient(tradeRoot: string, headers: any) {
+export function createTradeClient(tradeRoot: string, headers: any, fetch = globalThis.fetch) {
   const postApiKey = async ({
     api_key,
     secret,
@@ -93,11 +94,23 @@ export function createTradeClient(tradeRoot: string, headers: any) {
     }).then((res) => res.json()) as Promise<{ modified: number }>;
   };
 
+  const getSignals = async () => {
+    return fetch(`${tradeRoot}/signals`, {
+      headers,
+    }).then((res) => res.json()) as Promise<TradingSignal[]>;
+  };
+
   // exchange client endpoints
   const getSwapBalance = async (key: string) => {
     return fetch(`${tradeRoot}/swap/balance?key=${key}`, {
       headers,
     }).then((res) => res.json()) as Promise<SwapBalanceResponse>;
+  };
+
+  const getSwapLedger = async (key: string) => {
+    return fetch(`${tradeRoot}/swap/ledger?key=${key}`, {
+      headers,
+    }).then((res) => res.json()) as Promise<unknown>;
   };
 
   const getSpotBalance = async (key: string) => {
@@ -159,6 +172,8 @@ export function createTradeClient(tradeRoot: string, headers: any) {
     queryHistoricalSwapOrders,
     placeOrder,
     cancelOrder,
+    getSwapLedger,
+    getSignals,
     listOrders,
     listBots,
     deleteBot,

@@ -43,6 +43,19 @@ export type Order = {
   user_id: string;
 }
 
+export type TradingSignal = {
+  symbol: string;
+  buy: boolean;
+  sell: boolean;
+  buy_close: boolean;
+  sell_close: boolean;
+  buy_sl: number;
+  sell_sl: number;
+  interval: string;
+  strategy_name: string;
+  parameters: Record<string, any>;
+};
+
 export { Kucoin, BingX };
 export type SwapBalanceResponse = Kucoin.SwapBalanceResponse | BingX.SwapBalanceResponse;
 export type HistoricalSwapOrdersResponse = Kucoin.HistoricalSwapOrdersResponse | BingX.HistoricalSwapOrdersResponse;

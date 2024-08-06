@@ -106,6 +106,7 @@ export const createClient = ({
   environment = "prod",
   version = "v1",
   host,
+  ...rest
 }: {
   accessToken?: string;
   refreshToken?: string;
@@ -113,6 +114,7 @@ export const createClient = ({
   environment?: EnvironmentType;
   version?: string;
   host?: string;
+  fetch?: typeof fetch;
 }): {
   auth: ReturnType<typeof createAuthClient>;
   token: ReturnType<typeof createTokenClient>;
@@ -136,17 +138,18 @@ export const createClient = ({
       : `accessToken=${accessToken}`,
     "Content-Type": "application/json",
   };
-  const token = createTokenClient(apiRoot + "/tokens", headers);
-  const auth = createAuthClient(apiRoot + "/auth", headers);
+  const token = createTokenClient(apiRoot + "/tokens", headers, rest.fetch);
+  const auth = createAuthClient(apiRoot + "/auth", headers, rest.fetch);
   const api = createApiClient({
     accessToken,
     apiRoot,
     environment,
     version,
     host,
+    fetch: rest.fetch,
   });
-  const trade = createTradeClient(apiRoot + "/trade", headers);
-  const hive = createHiveClient(apiRoot + "/hive", headers);
+  const trade = createTradeClient(apiRoot + "/trade", headers, rest.fetch);
+  const hive = createHiveClient(apiRoot + "/hive", headers, rest.fetch);
   return {
     auth,
     token,
@@ -162,13 +165,16 @@ export const createApiClient = ({
   environment = "prod",
   version = "v1",
   host,
+  ...rest
 }: {
   accessToken: string;
   apiRoot?: string;
   environment?: EnvironmentType;
   version?: string;
   host?: string;
+  fetch?: typeof fetch;
 }) => {
+  const fetch = rest.fetch || globalThis.fetch;
   if (!apiRoot) {
     const result = getHosts({
       environment,
