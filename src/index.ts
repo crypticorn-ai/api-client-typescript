@@ -3,7 +3,7 @@ export * from "./types";
 export * from "./trade/types";
 export {
   isValidationError,
-  ValidationErrorData,
-  CustomErrorCode,
-  ValidationError,
+  type ValidationErrorData,
+  type CustomErrorCode,
+  type ValidationError,
 } from "@crypticorn-ai/auth-service";

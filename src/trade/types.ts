@@ -1,5 +1,5 @@
-import { Kucoin } from "./kucoin";
-import { BingX } from "./bingx";
+import type { Kucoin } from "./kucoin";
+import type { BingX } from "./bingx";
 
 export type ApiKey = {
   id: string;

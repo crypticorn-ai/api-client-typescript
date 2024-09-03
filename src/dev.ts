@@ -9,7 +9,7 @@ dotenv.config();
 const accessToken = process.env.ACCESS_TOKEN_DEV as string;
 
 const client = createClient({
-  environment: "local",
+  environment: "prod",
   accessToken,
 });
 
@@ -59,31 +59,33 @@ export async function runBackfill() {
   }
 }
 
-export async function runTests() {
-  client.api.getApiKeys().then((res) => {
-    console.log(res);
-  });
+// export async function runTests() {
+//   client.api.getApiKeys().then((res) => {
+//     console.log(res);
+//   });
 
-  client.api.getLatestPredictions().then((res) => {
-    console.log(res);
-  });
+//   client.api.getLatestPredictions().then((res) => {
+//     console.log(res);
+//   });
 
-  client.api.queryHistoricalSwapOrders().then((res) => {
-    console.log(res);
-  });
+//   client.api.queryHistoricalSwapOrders().then((res) => {
+//     console.log(res);
+//   });
 
-  client.api.getLatestTrends().then((res) => {
-    console.log(res);
-  });
+//   client.api.getLatestTrends().then((res) => {
+//     console.log(res);
+//   });
 
-  const result = await client.api.postApiKey({
-    api_key: "test",
-    secret: "test",
-    exchange: "bingx",
-    label: "test",
-  });
-}
+//   const result = await client.api.postApiKey({
+//     api_key: "test",
+//     secret: "test",
+//     exchange: "bingx",
+//     label: "test",
+//   });
+// }
 
-const result = await client.hive.getAccountInfo();
+// const result = await client.hive.getAccountInfo();
 
-console.log("done", result);
+// console.log("done", result);
+
+runBackfill();
