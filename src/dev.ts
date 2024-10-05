@@ -9,7 +9,7 @@ dotenv.config();
 const accessToken = process.env.ACCESS_TOKEN_DEV as string;
 
 const client = createClient({
-  environment: "dev",
+  environment: "local",
   accessToken,
 });
 
@@ -66,6 +66,9 @@ export async function runBackfill() {
     console.log("done all");
   }
 }
+
+const result = await client.hive.createAccount("mateh");
+console.log(result);
 
 // export async function runTests() {
 //   client.api.getApiKeys().then((res) => {

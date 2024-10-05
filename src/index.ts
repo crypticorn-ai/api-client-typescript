@@ -7,3 +7,4 @@ export {
   type CustomErrorCode,
   type ValidationError,
 } from "@crypticorn-ai/auth-service";
+export * from "./hive";
