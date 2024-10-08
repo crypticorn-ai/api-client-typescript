@@ -47,7 +47,11 @@ export interface HelpResponse {
   support: string;
 }
 
-export type DataInfoResponse = Record<string, Record<string, string[]>>;
+export type DataInfoResponse {
+    data: Record<string, Record<string, string[]>>;
+    coins: number[];
+    targets: string[];
+}
 
 export interface CreateModelResponse {
   id: number;
