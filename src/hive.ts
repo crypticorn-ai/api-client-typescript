@@ -25,8 +25,8 @@ export interface ModelInfoResponse {
 }
 
 export interface ModelInfoShortResponse {
-  b_correlation: number;
-  a_name: string;
+  correlation: number;
+  name: string;
   coin: number;
   target: string;
 }
@@ -48,9 +48,9 @@ export interface HelpResponse {
 }
 
 export interface DataInfoResponse {
-  data: Record<string, Record<string, string[]>>;
-  coins: number[];
-  targets: string[];
+    data: Record<string, Record<string, string[]>>;
+    coins: number[];
+    targets: string[];
 }
 
 export interface CreateModelResponse {
