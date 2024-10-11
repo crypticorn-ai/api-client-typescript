@@ -244,16 +244,9 @@ export const createApiClient = ({
   };
 
   const getEconomicsNewsData = async (): Promise<any[]> => {
-    try {
-      const response = await fetch(
-        `${apiRoot}/miners/ec?entries=100&reverse=false`
-      );
-      const result = await response.json();
-      return result.data;
-    } catch (error) {
-      console.error("Error fetching economics data:", error);
-      return [];
-    }
+    return fetch(`${apiRoot}/miners/ec?entries=100&reverse=false`, {
+      headers,
+    }).then((res) => res.json()) as Promise<any[]>;
   };
 
   return {
