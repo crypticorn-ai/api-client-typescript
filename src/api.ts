@@ -243,6 +243,19 @@ export const createApiClient = ({
     ) as Promise<DexProgress>;
   };
 
+  const getEconomicsNewsData = async (): Promise<any[]> => {
+    try {
+      const response = await fetch(
+        `${apiRoot}/miners/ec?entries=100&reverse=false`
+      );
+      const result = await response.json();
+      return result.data;
+    } catch (error) {
+      console.error("Error fetching economics data:", error);
+      return [];
+    }
+  };
+
   return {
     apiRoot,
     getLatestPredictions,
@@ -250,5 +263,6 @@ export const createApiClient = ({
     getDexProgress,
     getHistoricalPredictions,
     getLatestTrends,
+    getEconomicsNewsData,
   };
 };

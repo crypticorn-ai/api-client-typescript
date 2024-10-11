@@ -47,11 +47,11 @@ export interface HelpResponse {
   support: string;
 }
 
-export type DataInfoResponse {
-    data: Record<string, Record<string, string[]>>;
-    coins: number[];
-    targets: string[];
-}
+export type DataInfoResponse = {
+  data: Record<string, Record<string, string[]>>;
+  coins: number[];
+  targets: string[];
+};
 
 export interface CreateModelResponse {
   id: number;
@@ -98,7 +98,9 @@ export function createHiveClient(
       ).then((res) => res.json());
     },
 
-    getModel: (modelId: number): Promise<HiveApiResponse<ModelInfoResponse>> => {
+    getModel: (
+      modelId: number
+    ): Promise<HiveApiResponse<ModelInfoResponse>> => {
       return fetch(`${baseUrl}/model?id=${modelId}`, {
         method: "GET",
         headers: headers,
