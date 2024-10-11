@@ -243,7 +243,9 @@ export const createApiClient = ({
     ) as Promise<DexProgress>;
   };
 
+  // Testing the economics news data
   const getEconomicsNewsData = async (): Promise<any[]> => {
+    // To-DO: Add query parameters filters
     return fetch(`${apiRoot}/miners/ec?entries=100&reverse=false`, {
       headers,
     }).then((res) => res.json()) as Promise<any[]>;
