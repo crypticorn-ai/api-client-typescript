@@ -1,5 +1,6 @@
 import {
   DexProgress,
+  EconomicsNewsData,
   EnvironmentType,
   Kline,
   Prediction,
@@ -244,11 +245,47 @@ export const createApiClient = ({
   };
 
   // Testing the economics news data
-  const getEconomicsNewsData = async (): Promise<any[]> => {
-    // To-DO: Add query parameters filters
-    return fetch(`${apiRoot}/miners/ec?entries=100&reverse=false`, {
-      headers,
-    }).then((res) => res.json()) as Promise<any[]>;
+  const getEconomicsNewsData = async ({
+    entries = 100,
+    reverse = false,
+  }: {
+    entries?: number;
+    reverse?: boolean;
+  } = {}): Promise<EconomicsNewsData> => {
+    const res = (await fetch(
+      `${apiRoot}/miners/ec?entries=${entries}&reverse=${reverse}`,
+      {
+        headers,
+      }
+    ).then((res) => res.json())) as { data: any[] };
+    // cast the data: array to the actual type
+    const data = res.data.map((item) => {
+      const [
+        timestamp,
+        country,
+        event,
+        currency,
+        previous,
+        estimate,
+        actual,
+        change,
+        impact,
+        changePercentage,
+      ] = item;
+      return {
+        timestamp,
+        country,
+        event,
+        currency,
+        previous,
+        estimate,
+        actual,
+        change,
+        impact,
+        changePercentage,
+      };
+    });
+    return { data };
   };
 
   return {
