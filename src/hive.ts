@@ -25,8 +25,8 @@ export interface ModelInfoResponse {
 }
 
 export interface ModelInfoShortResponse {
-  correlation: number;
-  name: string;
+  b_correlation: number;
+  a_name: string;
   coin: number;
   target: string;
 }
@@ -41,13 +41,7 @@ export interface EvaluateModelResponse {
   model_id: number;
 }
 
-export interface HelpResponse {
-  dashboard: string;
-  documentation: string;
-  support: string;
-}
-
-export interface DataInfoResponse {
+export type DataInfoResponse {
     data: Record<string, Record<string, string[]>>;
     coins: number[];
     targets: string[];
@@ -98,9 +92,7 @@ export function createHiveClient(
       ).then((res) => res.json());
     },
 
-    getModel: (
-      modelId: number
-    ): Promise<HiveApiResponse<ModelInfoResponse>> => {
+    getModel: (modelId: number): Promise<HiveApiResponse<ModelInfoResponse>> => {
       return fetch(`${baseUrl}/model?id=${modelId}`, {
         method: "GET",
         headers: headers,
@@ -128,15 +120,8 @@ export function createHiveClient(
       }).then((res) => res.json());
     },
 
-    getHelp: (): Promise<HiveApiResponse<HelpResponse>> => {
-      return fetch(`${baseUrl}/help`, {
-        method: "GET",
-        headers: headers,
-      }).then((res) => res.json());
-    },
-
     getDataInfo: (): Promise<HiveApiResponse<DataInfoResponse>> => {
-      return fetch(`${baseUrl}/data-version`, {
+      return fetch(`${baseUrl}/data/info`, {
         method: "GET",
         headers: headers,
       }).then((res) => res.json());
@@ -178,13 +163,6 @@ export function createHiveClient(
         method: "GET",
         headers: headers,
       }).then((res) => res.status);
-    },
-
-    getDataVersion: (): Promise<HiveApiResponse<DataInfoResponse>> => {
-      return fetch(`${baseUrl}/data-version`, {
-        method: "GET",
-        headers: headers,
-      }).then((res) => res.json());
     },
   };
 }
