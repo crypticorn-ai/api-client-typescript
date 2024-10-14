@@ -25,15 +25,15 @@ export interface ModelInfoResponse {
 }
 
 export interface ModelInfoShortResponse {
-  b_correlation: number;
-  a_name: string;
+  id: number;
+  correlation: number;
+  name: string;
   coin: number;
   target: string;
 }
 
 export interface GenerateApiKeyResponse {
   api_key: string;
-  message: string;
 }
 
 export interface EvaluateModelResponse {
@@ -66,7 +66,7 @@ export function createHiveClient(
   const baseUrl = apiRoot;
 
   return {
-    createAccount: (username: string): Promise<HiveApiResponse<number>> => {
+    createAccount: (username?: string): Promise<HiveApiResponse<number>> => {
       return fetch(`${baseUrl}/account?username=${username}`, {
         method: "POST",
         headers: headers,
@@ -81,10 +81,10 @@ export function createHiveClient(
     },
 
     getAccountInfo: (
-      username: string
+      username?: string
     ): Promise<HiveApiResponse<AccountInfoResponse>> => {
       return fetch(
-        `${baseUrl}/account?username=${encodeURIComponent(username)}`,
+        `${baseUrl}/account?username=${username}`,
         {
           method: "GET",
           headers: headers,
