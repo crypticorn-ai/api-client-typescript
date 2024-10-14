@@ -66,8 +66,13 @@ export function createHiveClient(
   const baseUrl = apiRoot;
 
   return {
-    createAccount: (username?: string): Promise<HiveApiResponse<number>> => {
-      return fetch(`${baseUrl}/account?username=${username}`, {
+    createAccount: (
+      username?: string
+    ): Promise<HiveApiResponse<number>> => {
+      const params = new URLSearchParams({
+        ...(username && { username: encodeURIComponent(username) }),
+      });
+      return fetch(`${baseUrl}/account?${params}`, {
         method: "POST",
         headers: headers,
       }).then((res) => res.json());
@@ -83,13 +88,13 @@ export function createHiveClient(
     getAccountInfo: (
       username?: string
     ): Promise<HiveApiResponse<AccountInfoResponse>> => {
-      return fetch(
-        `${baseUrl}/account?username=${username}`,
-        {
-          method: "GET",
-          headers: headers,
-        }
-      ).then((res) => res.json());
+      const params = new URLSearchParams({
+        ...(username && { username: encodeURIComponent(username) }),
+      });
+      return fetch(`${baseUrl}/account?${params}`, {
+        method: "GET",
+        headers: headers,
+      }).then((res) => res.json());
     },
 
     getModel: (
