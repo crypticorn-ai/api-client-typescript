@@ -100,6 +100,8 @@ export async function createSocket({
 export type ApiClient = ReturnType<typeof createClient>;
 export type SocketClient = ReturnType<typeof createSocket>;
 
+const defaultVersion = "1.5";
+
 export const createClient = ({
   accessToken = "",
   refreshToken = "",
@@ -195,10 +197,10 @@ export const createApiClient = ({
   };
 
   const getLatestPredictions = async ({
-    version = 2,
+    version = defaultVersion,
     klines = 20,
   }: {
-    version?: number;
+    version?: string;
     klines?: number;
   } = {}) => {
     return fetch(`${predRoot}/latest?version=${version}&klines=${klines}`, {
@@ -218,11 +220,11 @@ export const createApiClient = ({
   const getHistoricalPredictions = async ({
     symbol,
     records,
-    version = 2,
+    version = defaultVersion,
   }: {
     symbol: string;
     records: number;
-    version?: number;
+    version?: string;
   }) => {
     return fetch(
       `${predRoot}/symbol/${symbol}?version=${version}&limit=${records}`,
