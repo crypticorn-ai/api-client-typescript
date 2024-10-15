@@ -9,6 +9,8 @@ export interface AccountInfo {
   models: SingleModel[];
   user_id: string;
   username: string;
+  updated: string;
+  created: string;
 }
 
 export interface SingleModel {
