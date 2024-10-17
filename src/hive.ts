@@ -1,6 +1,5 @@
 export type AccountInfo = {
   api_key: boolean;
-  joined: string;
   models: SingleModel[];
   user_id: string;
   username: string;
