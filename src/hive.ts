@@ -39,6 +39,17 @@ export type DataInfo = {
   targets: string[];
 }
 
+export type DataDownload = {
+  message: string;
+  coin: number;
+  feature_size: string;
+  version: number;
+  target: string;
+  y_train: string;
+  X_test: string;
+  y_test: string;
+}
+
 export function createHiveClient(
   apiRoot: string,
   headers: Record<string, string>,
@@ -145,7 +156,7 @@ export function createHiveClient(
       model_id: number,
       version?: number,
       feature_size?: string
-    ): Promise<number> => {
+    ): Promise<DataDownload> => {
       const params = new URLSearchParams({
         model_id: model_id.toString(),
         ...(version && { version: version.toString() }),
@@ -154,7 +165,7 @@ export function createHiveClient(
       return fetch(`${baseUrl}/data?${params}`, {
         method: "GET",
         headers: headers,
-      }).then((res) => res.status);
+      }).then((res) => res.json());
     },
   };
 }
