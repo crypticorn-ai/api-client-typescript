@@ -46,7 +46,7 @@ export type DataDownload = {
   target: string;
   X_train: string;
   X_test: string;
-  y_test: string;
+  y_train: string;
 }
 
 export function createHiveClient(
