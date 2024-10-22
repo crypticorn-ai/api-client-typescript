@@ -40,12 +40,11 @@ export type DataInfo = {
 }
 
 export type DataDownload = {
-  message: string;
   coin: number;
   feature_size: string;
   version: number;
   target: string;
-  y_train: string;
+  X_train: string;
   X_test: string;
   y_test: string;
 }
