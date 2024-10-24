@@ -12,7 +12,7 @@ export type SingleModel = {
   correlation: number;
   correlations: number[];
   created: string;
-  id: number;
+  model_id: number;
   name: string;
   status: string;
   target: string;
@@ -76,11 +76,11 @@ export function createHiveClient(
 
     getAccountInfo: (
       username?: string,
-      id?: string
+      userId?: string
     ): Promise<AccountInfo> => {
       const params = new URLSearchParams({
         ...(username && { username: encodeURIComponent(username) }),
-        ...(id && { id: id }),
+        ...(userId && { user_id: userId }),
       });
       return fetch(`${baseUrl}/account?${params}`, {
         method: "GET",
@@ -89,7 +89,7 @@ export function createHiveClient(
     },
 
     getModel: (modelId: number): Promise<SingleModel> => {
-      return fetch(`${baseUrl}/model?id=${modelId}`, {
+      return fetch(`${baseUrl}/model?model_id=${modelId}`, {
         method: "GET",
         headers: headers,
       }).then((res) => res.json());
@@ -103,7 +103,7 @@ export function createHiveClient(
     },
 
     deleteModel: (modelId: number): Promise<number> => {
-      return fetch(`${baseUrl}/model?id=${modelId}`, {
+      return fetch(`${baseUrl}/model?model_id=${modelId}`, {
         method: "DELETE",
         headers: headers,
       }).then((res) => res.json());
@@ -141,10 +141,10 @@ export function createHiveClient(
     },
 
     evaluateModel: (
-      id: number,
+      modelId: number,
       data: any
     ): Promise<ModelEvaluation> => {
-      return fetch(`${baseUrl}/model/evaluation?id=${id}`, {
+      return fetch(`${baseUrl}/model/evaluation?model_id=${modelId}`, {
         method: "POST",
         headers: { ...headers, "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -152,12 +152,12 @@ export function createHiveClient(
     },
 
     downloadData: (
-      model_id: number,
+      modelId: number,
       version?: number,
       feature_size?: string
     ): Promise<DataDownload> => {
       const params = new URLSearchParams({
-        model_id: model_id.toString(),
+        model_id: modelId.toString(),
         ...(version && { version: version.toString() }),
         ...(feature_size && { feature_size: feature_size }),
       });
