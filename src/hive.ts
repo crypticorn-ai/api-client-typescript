@@ -1,68 +1,53 @@
-export interface ErrorResponse {
-  error: string;
-  type?: string;
-}
-
-export interface AccountInfoResponse {
+export type AccountInfo = {
   api_key: boolean;
-  joined: string;
-  models: ModelInfoShortResponse[];
+  models: SingleModel[];
   user_id: string;
   username: string;
+  updated: string;
+  created: string;
 }
 
-export interface ModelInfoResponse {
+export type SingleModel = {
   coin_id: number;
   correlation: number;
   correlations: number[];
   created: string;
-  id: number;
+  model_id: number;
   name: string;
   status: string;
   target: string;
   updated: string;
-  ranks: Record<string, string>;
+  dev_id: string;
 }
 
-export interface ModelInfoShortResponse {
-  b_correlation: number;
-  a_name: string;
-  coin: number;
-  target: string;
+export type AllModels = {
+  models: SingleModel[];
 }
 
-export interface GenerateApiKeyResponse {
+export type ApiKeyGeneration = {
   api_key: string;
-  message: string;
 }
 
-export interface EvaluateModelResponse {
+export type ModelEvaluation = {
   metrics: Record<string, number>;
   model_id: number;
 }
 
-export interface HelpResponse {
-  dashboard: string;
-  documentation: string;
-  support: string;
+export type DataInfo = {
+  data: Record<string, Record<string, string[]>>;
+  coins: number[];
+  targets: string[];
 }
 
-export type DataInfoResponse {
-    data: Record<string, Record<string, string[]>>;
-    coins: number[];
-    targets: string[];
-}
-
-export interface CreateModelResponse {
-  id: number;
-  name: string;
-  coin_id: number;
+export type DataDownload = {
+  coin: number;
+  feature_size: string;
+  version: number;
   target: string;
-  status: string;
-  created: string;
+  X_train: string;
+  X_test: string;
+  y_train: string;
 }
-
-export type HiveApiResponse<T> = T | ErrorResponse;
 
 export function createHiveClient(
   apiRoot: string,
@@ -72,14 +57,17 @@ export function createHiveClient(
   const baseUrl = apiRoot;
 
   return {
-    createAccount: (username: string): Promise<HiveApiResponse<number>> => {
-      return fetch(`${baseUrl}/account?username=${username}`, {
+    createAccount: (username?: string): Promise<number> => {
+      const params = new URLSearchParams({
+        ...(username && { username: encodeURIComponent(username) }),
+      });
+      return fetch(`${baseUrl}/account?${params}`, {
         method: "POST",
-        headers: headers,
+        headers: { ...headers, "Content-Type": "application/json" },
       }).then((res) => res.json());
     },
 
-    updateUsername: (username: string): Promise<HiveApiResponse<number>> => {
+    updateUsername: (username: string): Promise<number> => {
       return fetch(`${baseUrl}/account?username=${username}`, {
         method: "PATCH",
         headers: headers,
@@ -87,54 +75,56 @@ export function createHiveClient(
     },
 
     getAccountInfo: (
-      username: string
-    ): Promise<HiveApiResponse<AccountInfoResponse>> => {
-      return fetch(
-        `${baseUrl}/account?username=${encodeURIComponent(username)}`,
-        {
-          method: "GET",
-          headers: headers,
-        }
-      ).then((res) => res.json());
-    },
-
-    getModel: (modelId: number): Promise<HiveApiResponse<ModelInfoResponse>> => {
-      return fetch(`${baseUrl}/model?id=${modelId}`, {
+      username?: string,
+      userId?: string
+    ): Promise<AccountInfo> => {
+      const params = new URLSearchParams({
+        ...(username && { username: encodeURIComponent(username) }),
+        ...(userId && { user_id: userId }),
+      });
+      return fetch(`${baseUrl}/account?${params}`, {
         method: "GET",
         headers: headers,
       }).then((res) => res.json());
     },
 
-    getLeaderboard: (): Promise<HiveApiResponse<ModelInfoShortResponse[]>> => {
-      return fetch(`${baseUrl}/leaderboard`, {
+    getModel: (modelId: number): Promise<SingleModel> => {
+      return fetch(`${baseUrl}/model?model_id=${modelId}`, {
         method: "GET",
         headers: headers,
       }).then((res) => res.json());
     },
 
-    generateApiKey: (): Promise<HiveApiResponse<GenerateApiKeyResponse>> => {
+    getModels: (): Promise<AllModels> => {
+      return fetch(`${baseUrl}/model`, {
+        method: "GET",
+        headers: headers,
+      }).then((res) => res.json());
+    },
+
+    deleteModel: (modelId: number): Promise<number> => {
+      return fetch(`${baseUrl}/model?model_id=${modelId}`, {
+        method: "DELETE",
+        headers: headers,
+      }).then((res) => res.json());
+    },
+
+    generateApiKey: (): Promise<ApiKeyGeneration> => {
       return fetch(`${baseUrl}/apikey`, {
         method: "POST",
-        headers: headers,
+        headers: { ...headers, "Content-Type": "application/json" },
       }).then((res) => res.json());
     },
 
-    deleteApiKey: (): Promise<HiveApiResponse<number>> => {
+    deleteApiKey: (): Promise<number> => {
       return fetch(`${baseUrl}/apikey`, {
         method: "DELETE",
         headers: headers,
       }).then((res) => res.json());
     },
 
-    getHelp: (): Promise<HiveApiResponse<HelpResponse>> => {
-      return fetch(`${baseUrl}/help`, {
-        method: "GET",
-        headers: headers,
-      }).then((res) => res.json());
-    },
-
-    getDataInfo: (): Promise<HiveApiResponse<DataInfoResponse>> => {
-      return fetch(`${baseUrl}/data-version`, {
+    getDataInfo: (): Promise<DataInfo> => {
+      return fetch(`${baseUrl}/data/info`, {
         method: "GET",
         headers: headers,
       }).then((res) => res.json());
@@ -143,19 +133,18 @@ export function createHiveClient(
     createModel: (
       coin_id: number,
       target: string
-    ): Promise<HiveApiResponse<CreateModelResponse>> => {
-      return fetch(`${baseUrl}/model/creation`, {
+    ): Promise<SingleModel> => {
+      return fetch(`${baseUrl}/model/creation?coin_id=${coin_id}&target=${target}`, {
         method: "POST",
-        headers: headers,
-        body: JSON.stringify({ coin_id, target }),
+        headers: { ...headers, "Content-Type": "application/json" },
       }).then((res) => res.json());
     },
 
     evaluateModel: (
-      id: number,
+      modelId: number,
       data: any
-    ): Promise<HiveApiResponse<EvaluateModelResponse>> => {
-      return fetch(`${baseUrl}/model/evaluation?id=${id}`, {
+    ): Promise<ModelEvaluation> => {
+      return fetch(`${baseUrl}/model/evaluation?model_id=${modelId}`, {
         method: "POST",
         headers: { ...headers, "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -163,23 +152,16 @@ export function createHiveClient(
     },
 
     downloadData: (
-      model_id: number,
+      modelId: number,
       version?: number,
       feature_size?: string
-    ): Promise<HiveApiResponse<number>> => {
+    ): Promise<DataDownload> => {
       const params = new URLSearchParams({
-        model_id: model_id.toString(),
+        model_id: modelId.toString(),
         ...(version && { version: version.toString() }),
-        ...(feature_size && { feature_size }),
+        ...(feature_size && { feature_size: feature_size }),
       });
       return fetch(`${baseUrl}/data?${params}`, {
-        method: "GET",
-        headers: headers,
-      }).then((res) => res.status);
-    },
-
-    getDataVersion: (): Promise<HiveApiResponse<DataInfoResponse>> => {
-      return fetch(`${baseUrl}/data-version`, {
         method: "GET",
         headers: headers,
       }).then((res) => res.json());

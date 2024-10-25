@@ -42,4 +42,19 @@ export type DexProgress = {
   };
 };
 
+export type EconomicsNewsData = {
+  data: {
+    timestamp: number;
+    country: string | null;
+    event: string | null;
+    currency: string | null;
+    previous: number | null;
+    estimate: number | null;
+    actual: number | null;
+    change: number | null;
+    impact: string | null;
+    changePercentage: number | null;
+  }[]
+};
+
 export type EnvironmentType = "local" | "dev" | "prod";

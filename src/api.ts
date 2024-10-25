@@ -1,5 +1,6 @@
 import {
   DexProgress,
+  EconomicsNewsData,
   EnvironmentType,
   Kline,
   Prediction,
@@ -99,6 +100,8 @@ export async function createSocket({
 export type ApiClient = ReturnType<typeof createClient>;
 export type SocketClient = ReturnType<typeof createSocket>;
 
+const defaultVersion = "1.5";
+
 export const createClient = ({
   accessToken = "",
   refreshToken = "",
@@ -194,10 +197,10 @@ export const createApiClient = ({
   };
 
   const getLatestPredictions = async ({
-    version = 2,
+    version = defaultVersion,
     klines = 20,
   }: {
-    version?: number;
+    version?: string;
     klines?: number;
   } = {}) => {
     return fetch(`${predRoot}/latest?version=${version}&klines=${klines}`, {
@@ -217,11 +220,11 @@ export const createApiClient = ({
   const getHistoricalPredictions = async ({
     symbol,
     records,
-    version = 2,
+    version = defaultVersion,
   }: {
     symbol: string;
     records: number;
-    version?: number;
+    version?: string;
   }) => {
     return fetch(
       `${predRoot}/symbol/${symbol}?version=${version}&limit=${records}`,
@@ -243,6 +246,50 @@ export const createApiClient = ({
     ) as Promise<DexProgress>;
   };
 
+  // Testing the economics news data
+  const getEconomicsNewsData = async ({
+    entries = 100,
+    reverse = false,
+  }: {
+    entries?: number;
+    reverse?: boolean;
+  } = {}): Promise<EconomicsNewsData> => {
+    const res = (await fetch(
+      `${apiRoot}/miners/ec?entries=${entries}&reverse=${reverse}`,
+      {
+        headers,
+      }
+    ).then((res) => res.json())) as { data: any[] };
+    // cast the data: array to the actual type
+    const data = res.data.map((item) => {
+      const [
+        timestamp,
+        country,
+        event,
+        currency,
+        previous,
+        estimate,
+        actual,
+        change,
+        impact,
+        changePercentage,
+      ] = item;
+      return {
+        timestamp,
+        country,
+        event,
+        currency,
+        previous,
+        estimate,
+        actual,
+        change,
+        impact,
+        changePercentage,
+      };
+    });
+    return { data };
+  };
+
   return {
     apiRoot,
     getLatestPredictions,
@@ -250,5 +297,6 @@ export const createApiClient = ({
     getDexProgress,
     getHistoricalPredictions,
     getLatestTrends,
+    getEconomicsNewsData,
   };
 };
