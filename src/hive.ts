@@ -9,7 +9,8 @@ export type AccountInfo = {
 
 export type SingleModel = {
   coin_id: number;
-  evaluations: number[];
+  evaluations: Record<string, string>;
+  scores: { timestamp: number; score: number }[];
   created: string;
   model_id: number;
   name: string;
