@@ -33,7 +33,7 @@ export type DataInfo = {
   data: Record<string, Record<string, Record<string, string[]>>>;
   feature_sizes: string[];
   targets: Record<string, string>;
-  version_log: Record<string, number>;
+  versions: Record<string, number>;
 };
 
 export type DataDownload = {
