@@ -46,6 +46,12 @@ export type DataDownload = {
   y_train: string;
 };
 
+export type HiveErrorResponse = {
+  type: string;
+  code: number;
+  error: string;
+};
+
 export function createHiveClient(
   apiRoot: string,
   headers: Record<string, string>,
