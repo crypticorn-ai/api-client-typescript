@@ -1,10 +1,9 @@
+import { createFuturesClient } from "./futures";
 import {
   ApiKey,
   Order,
   TradingBot,
-  SwapBalanceResponse,
-  HistoricalSwapOrdersResponse,
-  TradingSignal,
+  TradingAction,
 } from "./types";
 
 export function createTradeClient(tradeRoot: string, headers: any, fetch = globalThis.fetch) {
@@ -94,86 +93,18 @@ export function createTradeClient(tradeRoot: string, headers: any, fetch = globa
     }).then((res) => res.json()) as Promise<{ modified: number }>;
   };
 
-  const getSignals = async () => {
-    return fetch(`${tradeRoot}/signals`, {
+  const getActions = async () => {
+    return fetch(`${tradeRoot}/actions`, {
       headers,
-    }).then((res) => res.json()) as Promise<TradingSignal[]>;
+    }).then((res) => res.json()) as Promise<TradingAction[]>;
   };
 
-  // exchange client endpoints
-  const getSwapBalance = async (key: string) => {
-    return fetch(`${tradeRoot}/swap/balance?key=${key}`, {
-      headers,
-    }).then((res) => res.json()) as Promise<SwapBalanceResponse>;
-  };
-
-  const getSwapLedger = async (key: string) => {
-    return fetch(`${tradeRoot}/swap/ledger?key=${key}`, {
-      headers,
-    }).then((res) => res.json()) as Promise<unknown>;
-  };
-
-  const getSpotBalance = async (key: string) => {
-    return fetch(`${tradeRoot}/spot/balance?key=${key}`, {
-      headers,
-    }).then((res) => res.json()) as Promise<unknown>;
-  };
-
-  const queryHistoricalSwapOrders = async (key: string) => {
-    return fetch(`${tradeRoot}/swap/historical-orders?key=${key}`, {
-      headers,
-    }).then((res) => res.json()) as Promise<HistoricalSwapOrdersResponse>;
-  };
-
-  const placeOrder = async ({
-    key,
-    positionSide,
-    quantity,
-    side,
-    symbol,
-    type,
-  }: {
-    key: string;
-    positionSide: string;
-    quantity: number;
-    side: string;
-    symbol: string;
-    type: string;
-  }) => {
-    return fetch(`${tradeRoot}/swap/place-order?key=${key}`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ positionSide, quantity, side, symbol, type }),
-    }).then((res) => res.json()) as Promise<unknown>;
-  };
-
-  const cancelOrder = async ({
-    key,
-    orderId,
-    symbol,
-  }: {
-    key: string;
-    orderId: number;
-    symbol: string;
-  }) => {
-    return fetch(
-      `${tradeRoot}/swap/cancel-order?key=${key}&orderId=${orderId}&symbol=${symbol}`,
-      {
-        method: "DELETE",
-        headers,
-      }
-    ).then((res) => res.json()) as Promise<unknown>;
-  };
+  const futures = createFuturesClient(tradeRoot, headers, fetch);
 
   return {
+    futures,
     postApiKey,
-    getSwapBalance,
-    getSpotBalance,
-    queryHistoricalSwapOrders,
-    placeOrder,
-    cancelOrder,
-    getSwapLedger,
-    getSignals,
+    getActions,
     listOrders,
     listBots,
     deleteBot,

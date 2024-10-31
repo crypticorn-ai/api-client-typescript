@@ -1,6 +1,3 @@
-import type { Kucoin } from "./kucoin";
-import type { BingX } from "./bingx";
-
 export type ApiKey = {
   id: string;
   api_key: {
@@ -43,7 +40,7 @@ export type Order = {
   user_id: string;
 }
 
-export type TradingSignal = {
+export type TradingAction = {
   symbol: string;
   buy: boolean;
   sell: boolean;
@@ -56,7 +53,12 @@ export type TradingSignal = {
   parameters: Record<string, any>;
 };
 
-export { Kucoin, BingX };
-export type SwapBalanceResponse = Kucoin.SwapBalanceResponse | BingX.SwapBalanceResponse;
-export type HistoricalSwapOrdersResponse = Kucoin.HistoricalSwapOrdersResponse | BingX.HistoricalSwapOrdersResponse;
-export type SpotBalanceResponse = Kucoin.SpotBalanceResponse | BingX.SpotBalanceResponse;
+export type FuturesBalanceResponse = {
+  apiKeyId: string;
+  asset: string;
+  balance: number;
+  available: number;
+  unrealizedPnl: number;
+  usedMargin: number;
+  frozenAmount: number;
+}[];
