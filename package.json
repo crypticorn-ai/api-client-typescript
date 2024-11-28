@@ -1,6 +1,6 @@
 {
   "name": "@crypticorn-ai/api-client",
-  "version": "1.9.2",
+  "version": "2.0.0",
   "description": "Crypticorn API Client",
   "license": "ISC",
   "author": "Máté Homolya <mate.homolya@proton.me>",
@@ -9,13 +9,17 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "node esbuild.mjs && tsc",
-    "dev": "tsx watch src/dev.ts"
+    "dev": "tsx watch src/dev.ts",
+    "build:watch": "node esbuild.mjs --watch",
+    "generate:client": "tsx scripts/generate.ts"
   },
   "dependencies": {
     "@crypticorn-ai/auth-service": "^1.2.4",
     "@crypticorn-ai/token-service": "^0.4.3"
   },
   "devDependencies": {
+    "@hey-api/client-fetch": "^0.5.0",
+    "@hey-api/openapi-ts": "^0.57.1",
     "@trpc/server": "^10.45.2",
     "@types/cookie-parser": "^1.4.7",
     "@types/express": "^4.17.21",
@@ -24,6 +28,7 @@
     "@types/ws": "^8.5.12",
     "dotenv": "^16.4.5",
     "esbuild": "^0.23.0",
+    "prettier": "^3.4.1",
     "tsx": "^4.16.5",
     "viem": "^2.18.8",
     "ws": "^8.18.0",

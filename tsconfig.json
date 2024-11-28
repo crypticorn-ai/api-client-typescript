@@ -1,6 +1,6 @@
 {
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "src/dev.ts"],
+  "exclude": ["node_modules", "dist", "src/dev.ts", "scripts/generate.ts"],
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
