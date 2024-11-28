@@ -28,8 +28,11 @@ export function createTradeClient(tradeRoot: string, headers: any, fetch = globa
     }).then((res) => res.json()) as Promise<{ id: string }>;
   };
 
-  const listOrders = async () => {
-    return fetch(`${tradeRoot}/orders`, { headers }).then((res) =>
+  const listOrders = async (symbol?: string) => {
+    const params = new URLSearchParams({
+      ...(symbol && { symbol: encodeURIComponent(symbol) }),
+    });
+    return fetch(`${tradeRoot}/orders?${params}`, { headers }).then((res) =>
       res.json()
     ) as Promise<Order[]>;
   };
