@@ -11,66 +11,57 @@ import type {
   HeartbeatHeartbeatPostData,
   HeartbeatHeartbeatPostError,
   HeartbeatHeartbeatPostResponse,
-  GetFuturesBalanceFuturesBalanceGetData,
-  GetFuturesBalanceFuturesBalanceGetError,
-  GetFuturesBalanceFuturesBalanceGetResponse,
-  GetFuturesLedgerFuturesLedgerGetData,
-  GetFuturesLedgerFuturesLedgerGetError,
-  GetFuturesLedgerFuturesLedgerGetResponse,
-  GetHistoricalFuturesOrdersFuturesHistoricalOrdersGetData,
-  GetHistoricalFuturesOrdersFuturesHistoricalOrdersGetError,
-  GetHistoricalFuturesOrdersFuturesHistoricalOrdersGetResponse,
-  PlaceOrderFuturesPlaceOrderPostData,
-  PlaceOrderFuturesPlaceOrderPostError,
-  PlaceOrderFuturesPlaceOrderPostResponse,
-  CancelOrderFuturesCancelOrderDeleteData,
-  CancelOrderFuturesCancelOrderDeleteError,
-  CancelOrderFuturesCancelOrderDeleteResponse,
-  AppGetOrdersOrdersGetData,
-  AppGetOrdersOrdersGetError,
-  AppGetOrdersOrdersGetResponse,
-  AppPostOrdersOrdersPostData,
-  AppPostOrdersOrdersPostError,
-  AppPostOrdersOrdersPostResponse,
-  GetBotsBotsGetData,
-  GetBotsBotsGetError,
-  GetBotsBotsGetResponse,
-  CreateBotBotsPostData,
-  CreateBotBotsPostError,
-  CreateBotBotsPostResponse,
-  DeleteBotBotsDeleteData,
-  DeleteBotBotsDeleteError,
-  DeleteBotBotsDeleteResponse,
-  UpdateBotBotsPutData,
-  UpdateBotBotsPutError,
-  UpdateBotBotsPutResponse,
-  AppGetApiKeysApiKeysGetData,
-  AppGetApiKeysApiKeysGetError,
-  AppGetApiKeysApiKeysGetResponse,
-  AppGetApiKeysApiKeysEnabledGetData,
-  AppGetApiKeysApiKeysEnabledGetError,
-  AppGetApiKeysApiKeysEnabledGetResponse,
-  AppPostApiKeyApiKeyPostData,
-  AppPostApiKeyApiKeyPostError,
-  AppPostApiKeyApiKeyPostResponse,
-  AppDeleteApiKeyApiKeyDeleteData,
-  AppDeleteApiKeyApiKeyDeleteError,
-  AppDeleteApiKeyApiKeyDeleteResponse,
-  AppPutApiKeyApiKeyPutData,
-  AppPutApiKeyApiKeyPutError,
-  AppPutApiKeyApiKeyPutResponse,
-  PostManualActionActionsManualPostData,
-  PostManualActionActionsManualPostError,
-  PostManualActionActionsManualPostResponse,
+  GetFuturesBalanceData,
+  GetFuturesBalanceError,
+  GetFuturesBalanceResponse,
+  GetFuturesLedgerData,
+  GetFuturesLedgerError,
+  GetFuturesLedgerResponse,
+  GetHistoricalFuturesOrdersData,
+  GetHistoricalFuturesOrdersError,
+  GetHistoricalFuturesOrdersResponse,
+  PlaceFuturesOrderData,
+  PlaceFuturesOrderError,
+  PlaceFuturesOrderResponse,
+  CancelFuturesOrderData,
+  CancelFuturesOrderError,
+  CancelFuturesOrderResponse,
+  GetOrdersData,
+  GetOrdersError,
+  GetOrdersResponse,
+  GetBotsData,
+  GetBotsError,
+  GetBotsResponse,
+  CreateBotData,
+  CreateBotError,
+  CreateBotResponse,
+  DeleteBotData,
+  DeleteBotError,
+  DeleteBotResponse,
+  UpdateBotData,
+  UpdateBotError,
+  UpdateBotResponse,
+  GetApiKeysData,
+  GetApiKeysError,
+  GetApiKeysResponse,
+  CreateApiKeyData,
+  CreateApiKeyError,
+  CreateApiKeyResponse,
+  DeleteApiKeyData,
+  DeleteApiKeyError,
+  DeleteApiKeyResponse,
+  UpdateApiKeyData,
+  UpdateApiKeyError,
+  UpdateApiKeyResponse,
   PostFuturesActionActionsFuturesPostData,
   PostFuturesActionActionsFuturesPostError,
   PostFuturesActionActionsFuturesPostResponse,
   PostSpotActionActionsSpotPostData,
   PostSpotActionActionsSpotPostError,
   PostSpotActionActionsSpotPostResponse,
-  GetActionsActionsGetData,
-  GetActionsActionsGetError,
-  GetActionsActionsGetResponse,
+  GetActionsData,
+  GetActionsError,
+  GetActionsResponse,
 } from "./types.gen";
 export function createClient(
   baseUrl: string,
@@ -120,17 +111,12 @@ export function createClient(
   /**
    * Get Futures Balance
    */
-  const getFuturesBalanceFuturesBalanceGet = <
-    ThrowOnError extends boolean = false,
-  >(
-    options?: OptionsLegacyParser<
-      GetFuturesBalanceFuturesBalanceGetData,
-      ThrowOnError
-    >,
+  const getFuturesBalance = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetFuturesBalanceData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetFuturesBalanceFuturesBalanceGetResponse,
-      GetFuturesBalanceFuturesBalanceGetError,
+      GetFuturesBalanceResponse,
+      GetFuturesBalanceError,
       ThrowOnError
     >({
       ...options,
@@ -141,17 +127,12 @@ export function createClient(
   /**
    * Get Futures Ledger
    */
-  const getFuturesLedgerFuturesLedgerGet = <
-    ThrowOnError extends boolean = false,
-  >(
-    options: OptionsLegacyParser<
-      GetFuturesLedgerFuturesLedgerGetData,
-      ThrowOnError
-    >,
+  const getFuturesLedger = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetFuturesLedgerData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetFuturesLedgerFuturesLedgerGetResponse,
-      GetFuturesLedgerFuturesLedgerGetError,
+      GetFuturesLedgerResponse,
+      GetFuturesLedgerError,
       ThrowOnError
     >({
       ...options,
@@ -162,17 +143,12 @@ export function createClient(
   /**
    * Get Historical Futures Orders
    */
-  const getHistoricalFuturesOrdersFuturesHistoricalOrdersGet = <
-    ThrowOnError extends boolean = false,
-  >(
-    options: OptionsLegacyParser<
-      GetHistoricalFuturesOrdersFuturesHistoricalOrdersGetData,
-      ThrowOnError
-    >,
+  const getHistoricalFuturesOrders = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetHistoricalFuturesOrdersData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetHistoricalFuturesOrdersFuturesHistoricalOrdersGetResponse,
-      GetHistoricalFuturesOrdersFuturesHistoricalOrdersGetError,
+      GetHistoricalFuturesOrdersResponse,
+      GetHistoricalFuturesOrdersError,
       ThrowOnError
     >({
       ...options,
@@ -183,17 +159,12 @@ export function createClient(
   /**
    * Place Order
    */
-  const placeOrderFuturesPlaceOrderPost = <
-    ThrowOnError extends boolean = false,
-  >(
-    options: OptionsLegacyParser<
-      PlaceOrderFuturesPlaceOrderPostData,
-      ThrowOnError
-    >,
+  const placeFuturesOrder = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<PlaceFuturesOrderData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).post<
-      PlaceOrderFuturesPlaceOrderPostResponse,
-      PlaceOrderFuturesPlaceOrderPostError,
+      PlaceFuturesOrderResponse,
+      PlaceFuturesOrderError,
       ThrowOnError
     >({
       ...options,
@@ -204,17 +175,12 @@ export function createClient(
   /**
    * Cancel Order
    */
-  const cancelOrderFuturesCancelOrderDelete = <
-    ThrowOnError extends boolean = false,
-  >(
-    options: OptionsLegacyParser<
-      CancelOrderFuturesCancelOrderDeleteData,
-      ThrowOnError
-    >,
+  const cancelFuturesOrder = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<CancelFuturesOrderData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).delete<
-      CancelOrderFuturesCancelOrderDeleteResponse,
-      CancelOrderFuturesCancelOrderDeleteError,
+      CancelFuturesOrderResponse,
+      CancelFuturesOrderError,
       ThrowOnError
     >({
       ...options,
@@ -225,28 +191,12 @@ export function createClient(
   /**
    * App Get Orders
    */
-  const appGetOrdersOrdersGet = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<AppGetOrdersOrdersGetData, ThrowOnError>,
+  const getOrders = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetOrdersData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      AppGetOrdersOrdersGetResponse,
-      AppGetOrdersOrdersGetError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/orders",
-    });
-  };
-
-  /**
-   * App Post Orders
-   */
-  const appPostOrdersOrdersPost = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<AppPostOrdersOrdersPostData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).post<
-      AppPostOrdersOrdersPostResponse,
-      AppPostOrdersOrdersPostError,
+      GetOrdersResponse,
+      GetOrdersError,
       ThrowOnError
     >({
       ...options,
@@ -257,12 +207,12 @@ export function createClient(
   /**
    * Get Bots
    */
-  const getBotsBotsGet = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetBotsBotsGetData, ThrowOnError>,
+  const getBots = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetBotsData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetBotsBotsGetResponse,
-      GetBotsBotsGetError,
+      GetBotsResponse,
+      GetBotsError,
       ThrowOnError
     >({
       ...options,
@@ -273,12 +223,12 @@ export function createClient(
   /**
    * Create Bot
    */
-  const createBotBotsPost = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<CreateBotBotsPostData, ThrowOnError>,
+  const createBot = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<CreateBotData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).post<
-      CreateBotBotsPostResponse,
-      CreateBotBotsPostError,
+      CreateBotResponse,
+      CreateBotError,
       ThrowOnError
     >({
       ...options,
@@ -289,12 +239,12 @@ export function createClient(
   /**
    * Delete Bot
    */
-  const deleteBotBotsDelete = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<DeleteBotBotsDeleteData, ThrowOnError>,
+  const deleteBot = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<DeleteBotData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).delete<
-      DeleteBotBotsDeleteResponse,
-      DeleteBotBotsDeleteError,
+      DeleteBotResponse,
+      DeleteBotError,
       ThrowOnError
     >({
       ...options,
@@ -305,12 +255,12 @@ export function createClient(
   /**
    * Update Bot
    */
-  const updateBotBotsPut = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<UpdateBotBotsPutData, ThrowOnError>,
+  const updateBot = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<UpdateBotData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).put<
-      UpdateBotBotsPutResponse,
-      UpdateBotBotsPutError,
+      UpdateBotResponse,
+      UpdateBotError,
       ThrowOnError
     >({
       ...options,
@@ -321,12 +271,12 @@ export function createClient(
   /**
    * App Get Api Keys
    */
-  const appGetApiKeysApiKeysGet = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<AppGetApiKeysApiKeysGetData, ThrowOnError>,
+  const getApiKeys = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetApiKeysData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      AppGetApiKeysApiKeysGetResponse,
-      AppGetApiKeysApiKeysGetError,
+      GetApiKeysResponse,
+      GetApiKeysError,
       ThrowOnError
     >({
       ...options,
@@ -335,33 +285,14 @@ export function createClient(
   };
 
   /**
-   * App Get Api Keys
-   */
-  const appGetApiKeysApiKeysEnabledGet = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<
-      AppGetApiKeysApiKeysEnabledGetData,
-      ThrowOnError
-    >,
-  ) => {
-    return (options?.client ?? client).get<
-      AppGetApiKeysApiKeysEnabledGetResponse,
-      AppGetApiKeysApiKeysEnabledGetError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/api-keys/enabled",
-    });
-  };
-
-  /**
    * App Post Api Key
    */
-  const appPostApiKeyApiKeyPost = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<AppPostApiKeyApiKeyPostData, ThrowOnError>,
+  const createApiKey = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<CreateApiKeyData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).post<
-      AppPostApiKeyApiKeyPostResponse,
-      AppPostApiKeyApiKeyPostError,
+      CreateApiKeyResponse,
+      CreateApiKeyError,
       ThrowOnError
     >({
       ...options,
@@ -372,12 +303,12 @@ export function createClient(
   /**
    * App Delete Api Key
    */
-  const appDeleteApiKeyApiKeyDelete = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<AppDeleteApiKeyApiKeyDeleteData, ThrowOnError>,
+  const deleteApiKey = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<DeleteApiKeyData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).delete<
-      AppDeleteApiKeyApiKeyDeleteResponse,
-      AppDeleteApiKeyApiKeyDeleteError,
+      DeleteApiKeyResponse,
+      DeleteApiKeyError,
       ThrowOnError
     >({
       ...options,
@@ -388,37 +319,16 @@ export function createClient(
   /**
    * App Put Api Key
    */
-  const appPutApiKeyApiKeyPut = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<AppPutApiKeyApiKeyPutData, ThrowOnError>,
+  const updateApiKey = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<UpdateApiKeyData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).put<
-      AppPutApiKeyApiKeyPutResponse,
-      AppPutApiKeyApiKeyPutError,
+      UpdateApiKeyResponse,
+      UpdateApiKeyError,
       ThrowOnError
     >({
       ...options,
       url: "/api-key",
-    });
-  };
-
-  /**
-   * Post Manual Action
-   */
-  const postManualActionActionsManualPost = <
-    ThrowOnError extends boolean = false,
-  >(
-    options: OptionsLegacyParser<
-      PostManualActionActionsManualPostData,
-      ThrowOnError
-    >,
-  ) => {
-    return (options?.client ?? client).post<
-      PostManualActionActionsManualPostResponse,
-      PostManualActionActionsManualPostError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/actions/manual",
     });
   };
 
@@ -465,12 +375,12 @@ export function createClient(
   /**
    * Get Actions
    */
-  const getActionsActionsGet = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetActionsActionsGetData, ThrowOnError>,
+  const getActions = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetActionsData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetActionsActionsGetResponse,
-      GetActionsActionsGetError,
+      GetActionsResponse,
+      GetActionsError,
       ThrowOnError
     >({
       ...options,
@@ -481,25 +391,22 @@ export function createClient(
   return {
     healthHealthGet,
     heartbeatHeartbeatPost,
-    getFuturesBalanceFuturesBalanceGet,
-    getFuturesLedgerFuturesLedgerGet,
-    getHistoricalFuturesOrdersFuturesHistoricalOrdersGet,
-    placeOrderFuturesPlaceOrderPost,
-    cancelOrderFuturesCancelOrderDelete,
-    appGetOrdersOrdersGet,
-    appPostOrdersOrdersPost,
-    getBotsBotsGet,
-    createBotBotsPost,
-    deleteBotBotsDelete,
-    updateBotBotsPut,
-    appGetApiKeysApiKeysGet,
-    appGetApiKeysApiKeysEnabledGet,
-    appPostApiKeyApiKeyPost,
-    appDeleteApiKeyApiKeyDelete,
-    appPutApiKeyApiKeyPut,
-    postManualActionActionsManualPost,
+    getFuturesBalance,
+    getFuturesLedger,
+    getHistoricalFuturesOrders,
+    placeFuturesOrder,
+    cancelFuturesOrder,
+    getOrders,
+    getBots,
+    createBot,
+    deleteBot,
+    updateBot,
+    getApiKeys,
+    createApiKey,
+    deleteApiKey,
+    updateApiKey,
     postFuturesActionActionsFuturesPost,
     postSpotActionActionsSpotPost,
-    getActionsActionsGet,
+    getActions,
   };
 }

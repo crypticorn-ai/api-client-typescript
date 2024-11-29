@@ -5,9 +5,12 @@ import fs from 'fs/promises'
 
 async function main() {
   try {
+    // get path from args
+    // @ts-ignore
+    const path = process.argv[2] || 'http://localhost/v1/trade/openapi.json'
     const res = await createClient({
       client: '@hey-api/client-fetch',
-      input: 'http://localhost/v1/trade/openapi.json',
+      input: path,
       output: 'src/trade',
     });
 

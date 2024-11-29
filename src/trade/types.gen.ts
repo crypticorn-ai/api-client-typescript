@@ -17,11 +17,11 @@ export type APIKeyModel = {
   /**
    * API key
    */
-  api_key: string;
+  api_key?: string | null;
   /**
    * API secret
    */
-  secret: string;
+  secret?: string | null;
   /**
    * API passphrase
    */
@@ -45,6 +45,10 @@ export type APIKeyModel = {
 };
 
 export type BotModel = {
+  /**
+   * Unique identifier for the bot
+   */
+  id?: string | null;
   /**
    * Name of the bot
    */
@@ -76,6 +80,40 @@ export type DeleteAPIKey = {
    * Unique identifier for the API key
    */
   id: string;
+};
+
+/**
+ * Model for futures balance
+ */
+export type FuturesBalance = {
+  /**
+   * API key ID
+   */
+  apiKeyId: string;
+  /**
+   * Asset/Currency code
+   */
+  asset: string;
+  /**
+   * Total balance/equity
+   */
+  balance: number;
+  /**
+   * Available balance for trading/withdrawal
+   */
+  available: number;
+  /**
+   * Unrealized profit and loss
+   */
+  unrealizedPnl: number;
+  /**
+   * Used/Position margin
+   */
+  usedMargin?: number | null;
+  /**
+   * Frozen/Hold funds
+   */
+  frozenAmount?: number | null;
 };
 
 /**
@@ -281,6 +319,10 @@ export type UpdateAPIKey = {
 
 export type UpdateBot = {
   /**
+   * Unique identifier for the bot
+   */
+  id: string;
+  /**
    * Name of the bot
    */
   name: string;
@@ -304,10 +346,6 @@ export type UpdateBot = {
    * Unique identifier for the user
    */
   user_id?: string | null;
-  /**
-   * Unique identifier for the bot
-   */
-  id: string;
 };
 
 export type ValidationError = {
@@ -330,35 +368,33 @@ export type HeartbeatHeartbeatPostResponse = unknown;
 
 export type HeartbeatHeartbeatPostError = HTTPValidationError;
 
-export type GetFuturesBalanceFuturesBalanceGetData = unknown;
+export type GetFuturesBalanceData = unknown;
 
-export type GetFuturesBalanceFuturesBalanceGetResponse = unknown;
+export type GetFuturesBalanceResponse = Array<FuturesBalance>;
 
-export type GetFuturesBalanceFuturesBalanceGetError = HTTPValidationError;
+export type GetFuturesBalanceError = HTTPValidationError;
 
-export type GetFuturesLedgerFuturesLedgerGetData = {
+export type GetFuturesLedgerData = {
   query: {
     key: string;
   };
 };
 
-export type GetFuturesLedgerFuturesLedgerGetResponse = unknown;
+export type GetFuturesLedgerResponse = unknown;
 
-export type GetFuturesLedgerFuturesLedgerGetError = HTTPValidationError;
+export type GetFuturesLedgerError = HTTPValidationError;
 
-export type GetHistoricalFuturesOrdersFuturesHistoricalOrdersGetData = {
+export type GetHistoricalFuturesOrdersData = {
   query: {
     key: string;
   };
 };
 
-export type GetHistoricalFuturesOrdersFuturesHistoricalOrdersGetResponse =
-  unknown;
+export type GetHistoricalFuturesOrdersResponse = unknown;
 
-export type GetHistoricalFuturesOrdersFuturesHistoricalOrdersGetError =
-  HTTPValidationError;
+export type GetHistoricalFuturesOrdersError = HTTPValidationError;
 
-export type PlaceOrderFuturesPlaceOrderPostData = {
+export type PlaceFuturesOrderData = {
   body: {
     [key: string]: unknown;
   };
@@ -367,11 +403,11 @@ export type PlaceOrderFuturesPlaceOrderPostData = {
   };
 };
 
-export type PlaceOrderFuturesPlaceOrderPostResponse = unknown;
+export type PlaceFuturesOrderResponse = unknown;
 
-export type PlaceOrderFuturesPlaceOrderPostError = HTTPValidationError;
+export type PlaceFuturesOrderError = HTTPValidationError;
 
-export type CancelOrderFuturesCancelOrderDeleteData = {
+export type CancelFuturesOrderData = {
   query: {
     key: string;
     orderId: string;
@@ -379,114 +415,87 @@ export type CancelOrderFuturesCancelOrderDeleteData = {
   };
 };
 
-export type CancelOrderFuturesCancelOrderDeleteResponse = unknown;
+export type CancelFuturesOrderResponse = unknown;
 
-export type CancelOrderFuturesCancelOrderDeleteError = HTTPValidationError;
+export type CancelFuturesOrderError = HTTPValidationError;
 
-export type AppGetOrdersOrdersGetData = {
+export type GetOrdersData = {
   query?: {
     limit?: number;
     offset?: number;
   };
 };
 
-export type AppGetOrdersOrdersGetResponse = unknown;
+export type GetOrdersResponse = Array<OrderModel>;
 
-export type AppGetOrdersOrdersGetError = HTTPValidationError;
+export type GetOrdersError = HTTPValidationError;
 
-export type AppPostOrdersOrdersPostData = {
-  body: OrderModel;
-};
+export type GetBotsData = unknown;
 
-export type AppPostOrdersOrdersPostResponse = unknown;
+export type GetBotsResponse = Array<BotModel>;
 
-export type AppPostOrdersOrdersPostError = HTTPValidationError;
+export type GetBotsError = HTTPValidationError;
 
-export type GetBotsBotsGetData = unknown;
-
-export type GetBotsBotsGetResponse = unknown;
-
-export type GetBotsBotsGetError = HTTPValidationError;
-
-export type CreateBotBotsPostData = {
+export type CreateBotData = {
   body: BotModel;
 };
 
-export type CreateBotBotsPostResponse = unknown;
+export type CreateBotResponse = unknown;
 
-export type CreateBotBotsPostError = HTTPValidationError;
+export type CreateBotError = HTTPValidationError;
 
-export type DeleteBotBotsDeleteData = {
+export type DeleteBotData = {
   query: {
     id: string;
   };
 };
 
-export type DeleteBotBotsDeleteResponse = unknown;
+export type DeleteBotResponse = unknown;
 
-export type DeleteBotBotsDeleteError = HTTPValidationError;
+export type DeleteBotError = HTTPValidationError;
 
-export type UpdateBotBotsPutData = {
+export type UpdateBotData = {
   body: UpdateBot;
 };
 
-export type UpdateBotBotsPutResponse = unknown;
+export type UpdateBotResponse = unknown;
 
-export type UpdateBotBotsPutError = HTTPValidationError;
+export type UpdateBotError = HTTPValidationError;
 
-export type AppGetApiKeysApiKeysGetData = {
+export type GetApiKeysData = {
   query?: {
     limit?: number;
     offset?: number;
   };
 };
 
-export type AppGetApiKeysApiKeysGetResponse = unknown;
+export type GetApiKeysResponse = Array<APIKeyModel>;
 
-export type AppGetApiKeysApiKeysGetError = HTTPValidationError;
+export type GetApiKeysError = HTTPValidationError;
 
-export type AppGetApiKeysApiKeysEnabledGetData = {
-  query?: {
-    limit?: number;
-    offset?: number;
-  };
-};
-
-export type AppGetApiKeysApiKeysEnabledGetResponse = unknown;
-
-export type AppGetApiKeysApiKeysEnabledGetError = HTTPValidationError;
-
-export type AppPostApiKeyApiKeyPostData = {
+export type CreateApiKeyData = {
   body: APIKeyModel;
 };
 
-export type AppPostApiKeyApiKeyPostResponse = unknown;
+export type CreateApiKeyResponse = unknown;
 
-export type AppPostApiKeyApiKeyPostError = HTTPValidationError;
+export type CreateApiKeyError = HTTPValidationError;
 
-export type AppDeleteApiKeyApiKeyDeleteData = {
+export type DeleteApiKeyData = {
   body: DeleteAPIKey;
 };
 
-export type AppDeleteApiKeyApiKeyDeleteResponse = unknown;
+export type DeleteApiKeyResponse = unknown;
 
-export type AppDeleteApiKeyApiKeyDeleteError = HTTPValidationError;
+export type DeleteApiKeyError = HTTPValidationError;
 
-export type AppPutApiKeyApiKeyPutData = {
+export type UpdateApiKeyData = {
   body: UpdateAPIKey;
 };
 
-export type AppPutApiKeyApiKeyPutResponse = unknown;
+export type UpdateApiKeyResponse = unknown;
 
-export type AppPutApiKeyApiKeyPutError = HTTPValidationError;
-
-export type PostManualActionActionsManualPostData = {
-  body: FuturesTradingAction;
-};
-
-export type PostManualActionActionsManualPostResponse = unknown;
-
-export type PostManualActionActionsManualPostError = HTTPValidationError;
+export type UpdateApiKeyError = HTTPValidationError;
 
 export type PostFuturesActionActionsFuturesPostData = {
   body: FuturesTradingAction;
@@ -504,13 +513,13 @@ export type PostSpotActionActionsSpotPostResponse = unknown;
 
 export type PostSpotActionActionsSpotPostError = HTTPValidationError;
 
-export type GetActionsActionsGetData = {
+export type GetActionsData = {
   query?: {
     limit?: number;
     offset?: number;
   };
 };
 
-export type GetActionsActionsGetResponse = unknown;
+export type GetActionsResponse = Array<FuturesTradingAction>;
 
-export type GetActionsActionsGetError = HTTPValidationError;
+export type GetActionsError = HTTPValidationError;

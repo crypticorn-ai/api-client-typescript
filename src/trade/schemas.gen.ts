@@ -20,12 +20,26 @@ export const APIKeyModelSchema = {
       description: "Exchange name",
     },
     api_key: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Api Key",
       description: "API key",
     },
     secret: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Secret",
       description: "API secret",
     },
@@ -56,7 +70,7 @@ export const APIKeyModelSchema = {
       type: "integer",
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1732771214,
+      default: 1732856312,
     },
     user_id: {
       anyOf: [
@@ -72,7 +86,7 @@ export const APIKeyModelSchema = {
     },
   },
   type: "object",
-  required: ["exchange", "api_key", "secret", "label"],
+  required: ["exchange", "label"],
   title: "APIKeyModel",
 } as const;
 
@@ -123,6 +137,18 @@ export const ApiErrorSchema = {
 
 export const BotModelSchema = {
   properties: {
+    id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Id",
+      description: "Unique identifier for the bot",
+    },
     name: {
       type: "string",
       title: "Name",
@@ -177,6 +203,64 @@ export const DeleteAPIKeySchema = {
   type: "object",
   required: ["id"],
   title: "DeleteAPIKey",
+} as const;
+
+export const FuturesBalanceSchema = {
+  properties: {
+    apiKeyId: {
+      type: "string",
+      title: "Apikeyid",
+      description: "API key ID",
+    },
+    asset: {
+      type: "string",
+      title: "Asset",
+      description: "Asset/Currency code",
+    },
+    balance: {
+      type: "number",
+      title: "Balance",
+      description: "Total balance/equity",
+    },
+    available: {
+      type: "number",
+      title: "Available",
+      description: "Available balance for trading/withdrawal",
+    },
+    unrealizedPnl: {
+      type: "number",
+      title: "Unrealizedpnl",
+      description: "Unrealized profit and loss",
+    },
+    usedMargin: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Usedmargin",
+      description: "Used/Position margin",
+    },
+    frozenAmount: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Frozenamount",
+      description: "Frozen/Hold funds",
+    },
+  },
+  type: "object",
+  required: ["apiKeyId", "asset", "balance", "available", "unrealizedPnl"],
+  title: "FuturesBalance",
+  description: "Model for futures balance",
 } as const;
 
 export const FuturesTradingActionSchema = {
@@ -532,6 +616,11 @@ export const UpdateAPIKeySchema = {
 
 export const UpdateBotSchema = {
   properties: {
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the bot",
+    },
     name: {
       type: "string",
       title: "Name",
@@ -569,20 +658,15 @@ export const UpdateBotSchema = {
       title: "User Id",
       description: "Unique identifier for the user",
     },
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the bot",
-    },
   },
   type: "object",
   required: [
+    "id",
     "name",
     "strategy_name",
     "api_key_id",
     "allocation",
     "enabled",
-    "id",
   ],
   title: "UpdateBot",
 } as const;
