@@ -1,6 +1,6 @@
 {
   "name": "@crypticorn-ai/api-client",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Crypticorn API Client",
   "license": "ISC",
   "author": "Máté Homolya <mate.homolya@proton.me>",
@@ -15,10 +15,10 @@
   },
   "dependencies": {
     "@crypticorn-ai/auth-service": "^1.2.4",
-    "@crypticorn-ai/token-service": "^0.4.3"
+    "@crypticorn-ai/token-service": "^0.4.3",
+    "@hey-api/client-fetch": "^0.5.0"
   },
   "devDependencies": {
-    "@hey-api/client-fetch": "^0.5.0",
     "@hey-api/openapi-ts": "^0.57.1",
     "@trpc/server": "^10.45.2",
     "@types/cookie-parser": "^1.4.7",
