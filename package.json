@@ -1,6 +1,6 @@
 {
   "name": "@crypticorn-ai/api-client",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Crypticorn API Client",
   "license": "ISC",
   "author": "Máté Homolya <mate.homolya@proton.me>",
@@ -14,7 +14,7 @@
     "generate:client": "tsx scripts/generate.ts"
   },
   "dependencies": {
-    "@crypticorn-ai/auth-service": "^1.2.4",
+    "@crypticorn-ai/auth-service": "^1.3.0",
     "@crypticorn-ai/token-service": "^0.4.3",
     "@hey-api/client-fetch": "^0.5.0"
   },
