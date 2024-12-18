@@ -181,14 +181,6 @@ export type FuturesTradingAction = {
    */
   allocation?: number;
   /**
-   * Whether the order has a stop loss
-   */
-  has_stop_loss?: boolean;
-  /**
-   * Whether the order has a take profit
-   */
-  has_take_profit?: boolean;
-  /**
    * Take profit targets: buy/sell
    */
   take_profit_targets?: Array<TP_SL_Dict> | null;

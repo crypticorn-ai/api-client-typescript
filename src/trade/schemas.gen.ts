@@ -398,18 +398,6 @@ export const FuturesTradingActionSchema = {
       title: "Allocation",
       description: "Allocation for the order",
     },
-    has_stop_loss: {
-      type: "boolean",
-      title: "Has Stop Loss",
-      description: "Whether the order has a stop loss",
-      default: false,
-    },
-    has_take_profit: {
-      type: "boolean",
-      title: "Has Take Profit",
-      description: "Whether the order has a take profit",
-      default: false,
-    },
     take_profit_targets: {
       anyOf: [
         {
