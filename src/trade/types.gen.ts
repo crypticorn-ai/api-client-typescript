@@ -54,9 +54,9 @@ export type BotModel = {
    */
   name: string;
   /**
-   * Name of the strategy used by the bot
+   * Unique identifier for the trading strategy used by the bot
    */
-  strategy_name: string;
+  strategy_id: Strategy;
   /**
    * Unique identifier for the API key
    */
@@ -75,12 +75,28 @@ export type BotModel = {
   user_id?: string | null;
 };
 
+export type CreateAPIKeyResponse = {
+  /**
+   * Unique identifier for the API key
+   */
+  id?: string | null;
+  /**
+   * Error message
+   */
+  error?: string | null;
+};
+
 export type DeleteAPIKey = {
   /**
    * Unique identifier for the API key
    */
   id: string;
 };
+
+/**
+ * Supported exchanges
+ */
+export type Exchange = "kucoin" | "bingx";
 
 /**
  * Model for futures balance
@@ -121,13 +137,17 @@ export type FuturesBalance = {
  */
 export type FuturesTradingAction = {
   /**
-   * Unique identifier for the trading action in our system
+   * Unique identifier for the trading action in our system. Added by the system, therefore optional.
    */
-  id: string;
+  id?: string | null;
   /**
-   * Unique identifier for the trade in our system. This is the same for the opening and closing trading action.
+   * Unique identifier for the execution of the order. Added by the system, therefore optional.
    */
-  trade_id: string;
+  execution_id?: string | null;
+  /**
+   * Unique identifier for the order to close. Required on close actions to match with the open order
+   */
+  open_order_execution_id?: string | null;
   /**
    * The type of action: buy, sell, etc.
    */
@@ -145,13 +165,9 @@ export type FuturesTradingAction = {
    */
   client_timestamp: number;
   /**
-   * Trading symbol or asset pair (e.g., 'BTC/USDT')
+   * Trading symbol or asset pair (e.g., 'BTC/USDT'). Needs to be separated by '/'
    */
   symbol: string;
-  /**
-   * Current price of the symbol at the time of action creation
-   */
-  symbol_price: number;
   /**
    * Whether this is a limit order
    */
@@ -175,23 +191,23 @@ export type FuturesTradingAction = {
   /**
    * Take profit targets: buy/sell
    */
-  take_profit_targets?: Array<{
-    [key: string]: number;
-  }> | null;
+  take_profit_targets?: Array<TP_SL_Dict> | null;
   /**
    * Stop loss values: buy/sell
    */
-  stop_loss_values?: Array<{
-    [key: string]: number;
-  }> | null;
+  stop_loss_values?: Array<TP_SL_Dict> | null;
   /**
-   * Leverage to use for futures trades, optional for spot
+   * Whether the system should mark the remaining unfilled orders with the same open order id CANCELLED if e.g. the last take profit is hit, cancel the remaining stop losses
+   */
+  cancel_leftover?: boolean | null;
+  /**
+   * Leverage to use for futures trades. Limited to 10 to avoid misuse.
    */
   leverage: number | null;
   /**
    * Margin mode for futures trades: either isolated or cross, default is isolated
    */
-  margin_mode?: string | null;
+  margin_mode?: MarginMode | null;
 };
 
 export type HTTPValidationError = {
@@ -199,98 +215,140 @@ export type HTTPValidationError = {
 };
 
 /**
+ * Margin mode for futures trades
+ */
+export type MarginMode = "isolated" | "cross";
+
+/**
  * Type of market
  */
 export type MarketType = "spot" | "futures";
 
 /**
- * Response model for orders. Inherits ids from OrderInfo
+ * Response model for orders. All optional as the model is built step by step.
  */
 export type OrderModel = {
   /**
-   * Unique identifier for the order in the exchange
+   * Unique identifier for the order (unique to the bot)
    */
-  order_id: string;
+  id?: string | null;
   /**
-   * Unique identifier for the order in our system
+   * Unique identifier for the trading action that placed the order
    */
-  client_order_id: string;
+  open_trading_action_id?: string | null;
   /**
-   * Unique identifier for the trade in our system
+   * Unique identifier for the trading action that closed the order
    */
-  trade_id: string;
+  close_trading_action_id?: string | null;
+  /**
+   * Unique identifier for the execution (not unique to the bot)
+   */
+  execution_id?: string | null;
+  /**
+   * Unique identifier for the open order execution. Needed for closing the order
+   */
+  open_order_execution_id?: string | null;
   /**
    * Unique identifier for the API key
    */
-  api_key_id: string;
+  api_key_id?: string | null;
   /**
    * Unique identifier for the user
    */
-  user_id: string;
+  user_id?: string | null;
   /**
    * Unique identifier for the bot
    */
-  bot_id: string;
+  bot_id?: string | null;
   /**
-   * Unique identifier for the trading action
+   * Exchange name. Of type Exchange
    */
-  trading_action_id: string;
+  exchange?: Exchange | null;
   /**
-   * Exchange name
+   * Trading symbol on exchange
    */
-  exchange: string;
+  symbol?: string | null;
   /**
-   * Trading symbol
+   * Common trading symbol
    */
-  symbol: string;
+  common_symbol?: string | null;
   /**
    * Timestamp of the order
    */
-  timestamp: number;
+  timestamp?: number | null;
   /**
    * Price of the order
    */
-  price: number;
-  action_type: TradingActionType;
-  order_tpye: OrderType;
+  price?: number | null;
   /**
-   * Result status of the order
+   * Type of trading action. Of type TradingActionType
    */
-  status: OrderResult;
+  action_type?: TradingActionType | null;
   /**
-   * API error code
+   * API error code. Of type ApiError
    */
-  status_code: ApiError;
+  status_code?: ApiError | null;
   /**
-   * Trade status of the order
+   * Trade status of the order. Of type OrderStatus
    */
-  trade_status: OrderStatus;
+  status?: OrderStatus | null;
   /**
    * Percentage of the order filled
    */
-  filled_perc: number;
+  filled_perc?: number | null;
   /**
-   * Details of the order
+   * Quantity filled. Needed for pnl calculation
    */
-  order_details: {
+  filled_qty?: number | null;
+  /**
+   * Fees for the order
+   */
+  fee?: number | null;
+  /**
+   * Leverage for the order
+   */
+  leverage?: number | null;
+  /**
+   * Exchange specific details of the order
+   */
+  order_details?: {
     [key: string]: unknown;
-  };
+  } | null;
+  /**
+   * Comment for the order
+   */
+  comment?: string | null;
 };
-
-/**
- * Result of the order
- */
-export type OrderResult = "success" | "failure" | "error";
 
 /**
  * Status of the order
  */
-export type OrderStatus = "new" | "filled" | "partially_filled" | "cancelled";
+export type OrderStatus =
+  | "new"
+  | "filled"
+  | "partially_filled"
+  | "cancelled"
+  | "failed";
+
+export type Strategy = "daily_trend_momentum";
 
 /**
- * Type of order
+ * Model for take profit and stop loss targets
  */
-export type OrderType = "open" | "close" | "stop_loss" | "take_profit";
+export type TP_SL_Dict = {
+  /**
+   * Price to set the target at
+   */
+  price: number;
+  /**
+   * Percentage of the order to sell
+   */
+  percentage: number;
+  /**
+   * Execution ID of the order. Will be added by the system
+   */
+  execution_id?: string;
+};
 
 /**
  * Type of trading action
@@ -327,9 +385,9 @@ export type UpdateBot = {
    */
   name: string;
   /**
-   * Name of the strategy used by the bot
+   * Unique identifier for the trading strategy used by the bot
    */
-  strategy_name: string;
+  strategy_id: Strategy;
   /**
    * Unique identifier for the API key
    */
@@ -477,7 +535,7 @@ export type CreateApiKeyData = {
   body: APIKeyModel;
 };
 
-export type CreateApiKeyResponse = unknown;
+export type CreateApiKeyResponse = CreateAPIKeyResponse;
 
 export type CreateApiKeyError = HTTPValidationError;
 
@@ -496,6 +554,10 @@ export type UpdateApiKeyData = {
 export type UpdateApiKeyResponse = unknown;
 
 export type UpdateApiKeyError = HTTPValidationError;
+
+export type GetStrategiesResponse = unknown;
+
+export type GetStrategiesError = unknown;
 
 export type PostFuturesActionActionsFuturesPostData = {
   body: FuturesTradingAction;

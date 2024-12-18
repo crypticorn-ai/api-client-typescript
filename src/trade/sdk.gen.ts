@@ -53,6 +53,8 @@ import type {
   UpdateApiKeyData,
   UpdateApiKeyError,
   UpdateApiKeyResponse,
+  GetStrategiesError,
+  GetStrategiesResponse,
   PostFuturesActionActionsFuturesPostData,
   PostFuturesActionActionsFuturesPostError,
   PostFuturesActionActionsFuturesPostResponse,
@@ -333,6 +335,22 @@ export function createClient(
   };
 
   /**
+   * Get Strategies
+   */
+  const getStrategies = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetStrategiesResponse,
+      GetStrategiesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/strategies",
+    });
+  };
+
+  /**
    * Post Futures Action
    */
   const postFuturesActionActionsFuturesPost = <
@@ -405,6 +423,7 @@ export function createClient(
     createApiKey,
     deleteApiKey,
     updateApiKey,
+    getStrategies,
     postFuturesActionActionsFuturesPost,
     postSpotActionActionsSpotPost,
     getActions,

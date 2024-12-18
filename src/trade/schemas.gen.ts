@@ -70,7 +70,7 @@ export const APIKeyModelSchema = {
       type: "integer",
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1732856312,
+      default: 1734504967,
     },
     user_id: {
       anyOf: [
@@ -94,32 +94,32 @@ export const ApiErrorSchema = {
   type: "array",
   enum: [
     ["Success", null],
-    ["API key authentication failed", "server_error"],
-    ["Invalid signature", "server_error"],
-    ["Invalid timestamp", "server_error"],
-    ["IP address is not authorized", "server_error"],
-    ["Insufficient API permissions", "user_error"],
-    ["User account is frozen", "user_error"],
+    ["API key authentication failed", "server error"],
+    ["Invalid signature", "server error"],
+    ["Invalid timestamp", "server error"],
+    ["IP address is not authorized", "server error"],
+    ["Insufficient API permissions", "user error"],
+    ["User account is frozen", "user error"],
     ["Rate limit exceeded", "exchange_error"],
-    ["Invalid parameter provided", "server_error"],
+    ["Invalid parameter provided", "server error"],
     ["Request scope limit exceeded", "exchange_error"],
-    ["Invalid content type", "server_error"],
-    ["Requested resource not found", "server_error"],
-    ["Order does not exist", "server_error"],
-    ["Order is already filled", "server_error"],
-    ["Order is being processed", "server_error"],
-    ["Order quantity limit exceeded", "server_error"],
-    ["Order price is invalid", "server_error"],
-    ["Post-only order would immediately match", "server_error"],
-    ["Position does not exist", "user_error"],
-    ["Position limit exceeded", "user_error"],
-    ["No position available to close", "user_error"],
+    ["Invalid content type", "server error"],
+    ["Requested resource not found", "server error"],
+    ["Order does not exist", "server error"],
+    ["Order is already filled", "server error"],
+    ["Order is being processed", "no critical error"],
+    ["Order quantity limit exceeded", "user error"],
+    ["Order price is invalid", "server error"],
+    ["Post-only order would immediately match", "server error"],
+    ["Position does not exist", "user error"],
+    ["Position limit exceeded", "user error"],
+    ["No position available to close", "user error"],
     ["Position opening temporarily suspended", "exchange_error"],
-    ["Insufficient balance", "user_error"],
-    ["Insufficient margin", "user_error"],
-    ["Leverage limit exceeded", "server_error"],
-    ["Risk limit exceeded", "server_error"],
-    ["Order violates liquidation price constraints", "server_error"],
+    ["Insufficient balance", "user error"],
+    ["Insufficient margin", "user error"],
+    ["Leverage limit exceeded", "server error"],
+    ["Risk limit exceeded", "server error"],
+    ["Order violates liquidation price constraints", "server error"],
     ["Internal system error", "exchange_error"],
     ["System configuration error", "exchange_error"],
     ["Service temporarily unavailable", "exchange_error"],
@@ -154,10 +154,9 @@ export const BotModelSchema = {
       title: "Name",
       description: "Name of the bot",
     },
-    strategy_name: {
-      type: "string",
-      title: "Strategy Name",
-      description: "Name of the strategy used by the bot",
+    strategy_id: {
+      $ref: "#/components/schemas/Strategy",
+      description: "Unique identifier for the trading strategy used by the bot",
     },
     api_key_id: {
       type: "string",
@@ -188,8 +187,39 @@ export const BotModelSchema = {
     },
   },
   type: "object",
-  required: ["name", "strategy_name", "api_key_id", "allocation", "enabled"],
+  required: ["name", "strategy_id", "api_key_id", "allocation", "enabled"],
   title: "BotModel",
+} as const;
+
+export const CreateAPIKeyResponseSchema = {
+  properties: {
+    id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Id",
+      description: "Unique identifier for the API key",
+    },
+    error: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Error",
+      description: "Error message",
+    },
+  },
+  type: "object",
+  title: "CreateAPIKeyResponse",
 } as const;
 
 export const DeleteAPIKeySchema = {
@@ -203,6 +233,13 @@ export const DeleteAPIKeySchema = {
   type: "object",
   required: ["id"],
   title: "DeleteAPIKey",
+} as const;
+
+export const ExchangeSchema = {
+  type: "string",
+  enum: ["kucoin", "bingx"],
+  title: "Exchange",
+  description: "Supported exchanges",
 } as const;
 
 export const FuturesBalanceSchema = {
@@ -266,15 +303,43 @@ export const FuturesBalanceSchema = {
 export const FuturesTradingActionSchema = {
   properties: {
     id: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Id",
-      description: "Unique identifier for the trading action in our system",
-    },
-    trade_id: {
-      type: "string",
-      title: "Trade Id",
       description:
-        "Unique identifier for the trade in our system. This is the same for the opening and closing trading action.",
+        "Unique identifier for the trading action in our system. Added by the system, therefore optional.",
+    },
+    execution_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Execution Id",
+      description:
+        "Unique identifier for the execution of the order. Added by the system, therefore optional.",
+    },
+    open_order_execution_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Open Order Execution Id",
+      description:
+        "Unique identifier for the order to close. Required on close actions to match with the open order",
     },
     action_type: {
       $ref: "#/components/schemas/TradingActionType",
@@ -298,12 +363,8 @@ export const FuturesTradingActionSchema = {
     symbol: {
       type: "string",
       title: "Symbol",
-      description: "Trading symbol or asset pair (e.g., 'BTC/USDT')",
-    },
-    symbol_price: {
-      type: "number",
-      title: "Symbol Price",
-      description: "Current price of the symbol at the time of action creation",
+      description:
+        "Trading symbol or asset pair (e.g., 'BTC/USDT'). Needs to be separated by '/'",
     },
     is_limit: {
       anyOf: [
@@ -353,10 +414,7 @@ export const FuturesTradingActionSchema = {
       anyOf: [
         {
           items: {
-            additionalProperties: {
-              type: "number",
-            },
-            type: "object",
+            $ref: "#/components/schemas/TP_SL_Dict",
           },
           type: "array",
         },
@@ -371,10 +429,7 @@ export const FuturesTradingActionSchema = {
       anyOf: [
         {
           items: {
-            additionalProperties: {
-              type: "number",
-            },
-            type: "object",
+            $ref: "#/components/schemas/TP_SL_Dict",
           },
           type: "array",
         },
@@ -385,11 +440,25 @@ export const FuturesTradingActionSchema = {
       title: "Stop Loss Values",
       description: "Stop loss values: buy/sell",
     },
+    cancel_leftover: {
+      anyOf: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Cancel Leftover",
+      description:
+        "Whether the system should mark the remaining unfilled orders with the same open order id CANCELLED if e.g. the last take profit is hit, cancel the remaining stop losses",
+      default: false,
+    },
     leverage: {
       anyOf: [
         {
           type: "integer",
-          maximum: 200,
+          maximum: 10,
           minimum: 1,
           default: 1,
         },
@@ -398,18 +467,18 @@ export const FuturesTradingActionSchema = {
         },
       ],
       title: "Leverage",
-      description: "Leverage to use for futures trades, optional for spot",
+      description:
+        "Leverage to use for futures trades. Limited to 10 to avoid misuse.",
     },
     margin_mode: {
       anyOf: [
         {
-          type: "string",
+          $ref: "#/components/schemas/MarginMode",
         },
         {
           type: "null",
         },
       ],
-      title: "Margin Mode",
       description:
         "Margin mode for futures trades: either isolated or cross, default is isolated",
       default: "isolated",
@@ -417,14 +486,11 @@ export const FuturesTradingActionSchema = {
   },
   type: "object",
   required: [
-    "id",
-    "trade_id",
     "action_type",
     "market_type",
     "strategy_id",
     "client_timestamp",
     "symbol",
-    "symbol_price",
     "leverage",
   ],
   title: "FuturesTradingAction",
@@ -445,6 +511,13 @@ export const HTTPValidationErrorSchema = {
   title: "HTTPValidationError",
 } as const;
 
+export const MarginModeSchema = {
+  type: "string",
+  enum: ["isolated", "cross"],
+  title: "MarginMode",
+  description: "Margin mode for futures trades",
+} as const;
+
 export const MarketTypeSchema = {
   type: "string",
   enum: ["spot", "futures"],
@@ -454,134 +527,312 @@ export const MarketTypeSchema = {
 
 export const OrderModelSchema = {
   properties: {
-    order_id: {
-      type: "string",
-      title: "Order Id",
-      description: "Unique identifier for the order in the exchange",
+    id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Id",
+      description: "Unique identifier for the order (unique to the bot)",
     },
-    client_order_id: {
-      type: "string",
-      title: "Client Order Id",
-      description: "Unique identifier for the order in our system",
+    open_trading_action_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Open Trading Action Id",
+      description:
+        "Unique identifier for the trading action that placed the order",
     },
-    trade_id: {
-      type: "string",
-      title: "Trade Id",
-      description: "Unique identifier for the trade in our system",
+    close_trading_action_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Close Trading Action Id",
+      description:
+        "Unique identifier for the trading action that closed the order",
+    },
+    execution_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Execution Id",
+      description:
+        "Unique identifier for the execution (not unique to the bot)",
+    },
+    open_order_execution_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Open Order Execution Id",
+      description:
+        "Unique identifier for the open order execution. Needed for closing the order",
     },
     api_key_id: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Api Key Id",
       description: "Unique identifier for the API key",
     },
     user_id: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "User Id",
       description: "Unique identifier for the user",
     },
     bot_id: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Bot Id",
       description: "Unique identifier for the bot",
     },
-    trading_action_id: {
-      type: "string",
-      title: "Trading Action Id",
-      description: "Unique identifier for the trading action",
-    },
     exchange: {
-      type: "string",
-      title: "Exchange",
-      description: "Exchange name",
+      anyOf: [
+        {
+          $ref: "#/components/schemas/Exchange",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description: "Exchange name. Of type Exchange",
     },
     symbol: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Symbol",
-      description: "Trading symbol",
+      description: "Trading symbol on exchange",
+    },
+    common_symbol: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Common Symbol",
+      description: "Common trading symbol",
     },
     timestamp: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Timestamp",
       description: "Timestamp of the order",
     },
     price: {
-      type: "number",
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Price",
       description: "Price of the order",
     },
     action_type: {
-      $ref: "#/components/schemas/TradingActionType",
-    },
-    order_tpye: {
-      $ref: "#/components/schemas/OrderType",
-    },
-    status: {
-      $ref: "#/components/schemas/OrderResult",
-      description: "Result status of the order",
+      anyOf: [
+        {
+          $ref: "#/components/schemas/TradingActionType",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description: "Type of trading action. Of type TradingActionType",
     },
     status_code: {
-      $ref: "#/components/schemas/ApiError",
-      description: "API error code",
+      anyOf: [
+        {
+          $ref: "#/components/schemas/ApiError",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description: "API error code. Of type ApiError",
     },
-    trade_status: {
-      $ref: "#/components/schemas/OrderStatus",
-      description: "Trade status of the order",
+    status: {
+      anyOf: [
+        {
+          $ref: "#/components/schemas/OrderStatus",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description: "Trade status of the order. Of type OrderStatus",
     },
     filled_perc: {
-      type: "number",
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Filled Perc",
       description: "Percentage of the order filled",
     },
+    filled_qty: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Filled Qty",
+      description: "Quantity filled. Needed for pnl calculation",
+    },
+    fee: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Fee",
+      description: "Fees for the order",
+    },
+    leverage: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Leverage",
+      description: "Leverage for the order",
+    },
     order_details: {
-      type: "object",
+      anyOf: [
+        {
+          type: "object",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Order Details",
-      description: "Details of the order",
+      description: "Exchange specific details of the order",
+    },
+    comment: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Comment",
+      description: "Comment for the order",
     },
   },
   type: "object",
-  required: [
-    "order_id",
-    "client_order_id",
-    "trade_id",
-    "api_key_id",
-    "user_id",
-    "bot_id",
-    "trading_action_id",
-    "exchange",
-    "symbol",
-    "timestamp",
-    "price",
-    "action_type",
-    "order_tpye",
-    "status",
-    "status_code",
-    "trade_status",
-    "filled_perc",
-    "order_details",
-  ],
   title: "OrderModel",
-  description: "Response model for orders. Inherits ids from OrderInfo",
-} as const;
-
-export const OrderResultSchema = {
-  type: "string",
-  enum: ["success", "failure", "error"],
-  title: "OrderResult",
-  description: "Result of the order",
+  description:
+    "Response model for orders. All optional as the model is built step by step.",
 } as const;
 
 export const OrderStatusSchema = {
   type: "string",
-  enum: ["new", "filled", "partially_filled", "cancelled"],
+  enum: ["new", "filled", "partially_filled", "cancelled", "failed"],
   title: "OrderStatus",
   description: "Status of the order",
 } as const;
 
-export const OrderTypeSchema = {
+export const StrategySchema = {
   type: "string",
-  enum: ["open", "close", "stop_loss", "take_profit"],
-  title: "OrderType",
-  description: "Type of order",
+  enum: ["daily_trend_momentum"],
+  title: "Strategy",
+} as const;
+
+export const TP_SL_DictSchema = {
+  properties: {
+    price: {
+      type: "number",
+      title: "Price",
+      description: "Price to set the target at",
+    },
+    percentage: {
+      type: "number",
+      title: "Percentage",
+      description: "Percentage of the order to sell",
+    },
+    execution_id: {
+      type: "string",
+      title: "Execution Id",
+      description: "Execution ID of the order. Will be added by the system",
+    },
+  },
+  type: "object",
+  required: ["price", "percentage"],
+  title: "TP_SL_Dict",
+  description: "Model for take profit and stop loss targets",
 } as const;
 
 export const TradingActionTypeSchema = {
@@ -626,10 +877,9 @@ export const UpdateBotSchema = {
       title: "Name",
       description: "Name of the bot",
     },
-    strategy_name: {
-      type: "string",
-      title: "Strategy Name",
-      description: "Name of the strategy used by the bot",
+    strategy_id: {
+      $ref: "#/components/schemas/Strategy",
+      description: "Unique identifier for the trading strategy used by the bot",
     },
     api_key_id: {
       type: "string",
@@ -663,7 +913,7 @@ export const UpdateBotSchema = {
   required: [
     "id",
     "name",
-    "strategy_name",
+    "strategy_id",
     "api_key_id",
     "allocation",
     "enabled",
