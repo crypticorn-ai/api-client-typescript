@@ -352,6 +352,7 @@ export function createClient(
 
   /**
    * Post Futures Action
+   * Endpoint to receive futures trading actions from the trading strategy
    */
   const postFuturesActionActionsFuturesPost = <
     ThrowOnError extends boolean = false,

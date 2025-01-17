@@ -70,7 +70,7 @@ export const APIKeyModelSchema = {
       type: "integer",
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1734504967,
+      default: 1737091518,
     },
     user_id: {
       anyOf: [
@@ -94,11 +94,11 @@ export const ApiErrorSchema = {
   type: "array",
   enum: [
     ["Success", null],
-    ["API key authentication failed", "server error"],
+    ["Invalid API Key", "server error"],
     ["Invalid signature", "server error"],
     ["Invalid timestamp", "server error"],
     ["IP address is not authorized", "server error"],
-    ["Insufficient API permissions", "user error"],
+    ["Insufficient permissions: spot and futures required", "user error"],
     ["User account is frozen", "user error"],
     ["Rate limit exceeded", "exchange_error"],
     ["Invalid parameter provided", "server error"],
@@ -298,6 +298,25 @@ export const FuturesBalanceSchema = {
   required: ["apiKeyId", "asset", "balance", "available", "unrealizedPnl"],
   title: "FuturesBalance",
   description: "Model for futures balance",
+} as const;
+
+export const FuturesBalanceErrorSchema = {
+  properties: {
+    apiKeyId: {
+      type: "string",
+      title: "Apikeyid",
+      description: "API key ID",
+    },
+    error: {
+      type: "string",
+      title: "Error",
+      description: "Error message",
+    },
+  },
+  type: "object",
+  required: ["apiKeyId", "error"],
+  title: "FuturesBalanceError",
+  description: "Model for futures balance error response",
 } as const;
 
 export const FuturesTradingActionSchema = {

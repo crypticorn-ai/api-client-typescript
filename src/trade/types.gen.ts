@@ -133,6 +133,20 @@ export type FuturesBalance = {
 };
 
 /**
+ * Model for futures balance error response
+ */
+export type FuturesBalanceError = {
+  /**
+   * API key ID
+   */
+  apiKeyId: string;
+  /**
+   * Error message
+   */
+  error: string;
+};
+
+/**
  * Model for futures trading actions
  */
 export type FuturesTradingAction = {
@@ -420,7 +434,9 @@ export type HeartbeatHeartbeatPostError = HTTPValidationError;
 
 export type GetFuturesBalanceData = unknown;
 
-export type GetFuturesBalanceResponse = Array<FuturesBalance>;
+export type GetFuturesBalanceResponse = Array<
+  FuturesBalance | FuturesBalanceError
+>;
 
 export type GetFuturesBalanceError = HTTPValidationError;
 
