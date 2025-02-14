@@ -70,7 +70,7 @@ export const APIKeyModelSchema = {
       type: "integer",
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1737091518,
+      default: 1739512739,
     },
     user_id: {
       anyOf: [
@@ -130,6 +130,7 @@ export const ApiErrorSchema = {
     ["Trading is suspended", "exchange_error"],
     ["Trading has been locked", "exchange_error"],
     ["Unknown error occurred", "exchange_error"],
+    ["Trading action expired", "no critical error"],
   ],
   title: "ApiError",
   description: "API error codes",
@@ -332,7 +333,7 @@ export const FuturesTradingActionSchema = {
       ],
       title: "Id",
       description:
-        "Unique identifier for the trading action in our system. Added by the system, therefore optional.",
+        "Placeholder for the id of the trading action. Will be added by the system, therefore optional.",
     },
     execution_id: {
       anyOf: [
@@ -358,32 +359,31 @@ export const FuturesTradingActionSchema = {
       ],
       title: "Open Order Execution Id",
       description:
-        "Unique identifier for the order to close. Required on close actions to match with the open order",
+        "Unique identifier for the order to close. Required on close actions to match with the open order.",
     },
     action_type: {
       $ref: "#/components/schemas/TradingActionType",
-      description: "The type of action: buy, sell, etc.",
+      description: "The type of action.",
     },
     market_type: {
       $ref: "#/components/schemas/MarketType",
-      description: "Market type: either spot or futures",
+      description: "The type of market the action is for.",
     },
     strategy_id: {
-      type: "string",
-      title: "Strategy Id",
-      description: "Unique identifier for the strategy",
+      $ref: "#/components/schemas/Strategy",
+      description: "Unique identifier for the strategy.",
     },
     client_timestamp: {
       type: "integer",
       title: "Client Timestamp",
       description:
-        "Timestamp of when the action was created on the client side",
+        "Timestamp of when the action was created on the client side.",
     },
     symbol: {
       type: "string",
       title: "Symbol",
       description:
-        "Trading symbol or asset pair (e.g., 'BTC/USDT'). Needs to be separated by '/'",
+        "Trading symbol or asset pair in format: 'symbol/quote_currency' (see market service for valid symbols)",
     },
     is_limit: {
       anyOf: [
@@ -395,7 +395,7 @@ export const FuturesTradingActionSchema = {
         },
       ],
       title: "Is Limit",
-      description: "Whether this is a limit order",
+      description: "Whether this is a limit order.",
       default: false,
     },
     limit_price: {
@@ -408,20 +408,22 @@ export const FuturesTradingActionSchema = {
         },
       ],
       title: "Limit Price",
-      description: "The limit price for limit orders",
+      description:
+        "The limit price for limit orders. If not set, the market price will be used.",
     },
     allocation: {
       type: "number",
       maximum: 1,
       exclusiveMinimum: 0,
       title: "Allocation",
-      description: "Allocation for the order",
+      description:
+        "Allocation of the bots allocated balance for the order. 0=0%, 1=100%",
     },
     take_profit_targets: {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TP_SL_Dict",
+            $ref: "#/components/schemas/TPSL",
           },
           type: "array",
         },
@@ -430,13 +432,13 @@ export const FuturesTradingActionSchema = {
         },
       ],
       title: "Take Profit Targets",
-      description: "Take profit targets: buy/sell",
+      description: "Take profit targets. Can be set for open actions only.",
     },
     stop_loss_values: {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TP_SL_Dict",
+            $ref: "#/components/schemas/TPSL",
           },
           type: "array",
         },
@@ -445,21 +447,20 @@ export const FuturesTradingActionSchema = {
         },
       ],
       title: "Stop Loss Values",
-      description: "Stop loss values: buy/sell",
+      description: "Stop loss values. Can be set for open actions only.",
     },
-    cancel_leftover: {
+    expiry_timestamp: {
       anyOf: [
         {
-          type: "boolean",
+          type: "integer",
         },
         {
           type: "null",
         },
       ],
-      title: "Cancel Leftover",
+      title: "Expiry Timestamp",
       description:
-        "Whether the system should mark the remaining unfilled orders with the same open order id CANCELLED if e.g. the last take profit is hit, cancel the remaining stop losses",
-      default: false,
+        "Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.",
     },
     leverage: {
       anyOf: [
@@ -475,7 +476,7 @@ export const FuturesTradingActionSchema = {
       ],
       title: "Leverage",
       description:
-        "Leverage to use for futures trades. Limited to 10 to avoid misuse.",
+        "Leverage to use for futures trades. Limited to 10 to avoid exchange leverage support issues.",
     },
     margin_mode: {
       anyOf: [
@@ -486,8 +487,7 @@ export const FuturesTradingActionSchema = {
           type: "null",
         },
       ],
-      description:
-        "Margin mode for futures trades: either isolated or cross, default is isolated",
+      description: "Margin mode for futures trades.",
       default: "isolated",
     },
   },
@@ -544,7 +544,8 @@ export const OrderModelSchema = {
         },
       ],
       title: "Id",
-      description: "Unique identifier for the order (unique to the bot)",
+      description:
+        "Placeholder for the id of the order (unique to the bot). Will be added by the system, therefore optional.",
     },
     open_trading_action_id: {
       anyOf: [
@@ -680,6 +681,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
+      default: 1739512739,
     },
     price: {
       anyOf: [
@@ -816,9 +818,10 @@ export const StrategySchema = {
   type: "string",
   enum: ["daily_trend_momentum"],
   title: "Strategy",
+  description: "Supported strategies",
 } as const;
 
-export const TP_SL_DictSchema = {
+export const TPSLSchema = {
   properties: {
     price: {
       type: "number",
@@ -838,7 +841,7 @@ export const TP_SL_DictSchema = {
   },
   type: "object",
   required: ["price", "percentage"],
-  title: "TP_SL_Dict",
+  title: "TPSL",
   description: "Model for take profit and stop loss targets",
 } as const;
 

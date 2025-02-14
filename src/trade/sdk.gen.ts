@@ -6,29 +6,6 @@ import {
   type OptionsLegacyParser,
 } from "@hey-api/client-fetch";
 import type {
-  HealthHealthGetError,
-  HealthHealthGetResponse,
-  HeartbeatHeartbeatPostData,
-  HeartbeatHeartbeatPostError,
-  HeartbeatHeartbeatPostResponse,
-  GetFuturesBalanceData,
-  GetFuturesBalanceError,
-  GetFuturesBalanceResponse,
-  GetFuturesLedgerData,
-  GetFuturesLedgerError,
-  GetFuturesLedgerResponse,
-  GetHistoricalFuturesOrdersData,
-  GetHistoricalFuturesOrdersError,
-  GetHistoricalFuturesOrdersResponse,
-  PlaceFuturesOrderData,
-  PlaceFuturesOrderError,
-  PlaceFuturesOrderResponse,
-  CancelFuturesOrderData,
-  CancelFuturesOrderError,
-  CancelFuturesOrderResponse,
-  GetOrdersData,
-  GetOrdersError,
-  GetOrdersResponse,
   GetBotsData,
   GetBotsError,
   GetBotsResponse,
@@ -53,8 +30,6 @@ import type {
   UpdateApiKeyData,
   UpdateApiKeyError,
   UpdateApiKeyResponse,
-  GetStrategiesError,
-  GetStrategiesResponse,
   PostFuturesActionActionsFuturesPostData,
   PostFuturesActionActionsFuturesPostError,
   PostFuturesActionActionsFuturesPostResponse,
@@ -64,6 +39,31 @@ import type {
   GetActionsData,
   GetActionsError,
   GetActionsResponse,
+  GetOrdersData,
+  GetOrdersError,
+  GetOrdersResponse,
+  GetFuturesBalanceData,
+  GetFuturesBalanceError,
+  GetFuturesBalanceResponse,
+  GetFuturesLedgerData,
+  GetFuturesLedgerError,
+  GetFuturesLedgerResponse,
+  GetHistoricalFuturesOrdersData,
+  GetHistoricalFuturesOrdersError,
+  GetHistoricalFuturesOrdersResponse,
+  PlaceFuturesOrderData,
+  PlaceFuturesOrderError,
+  PlaceFuturesOrderResponse,
+  CancelFuturesOrderData,
+  CancelFuturesOrderError,
+  CancelFuturesOrderResponse,
+  HealthStatusHealthGetError,
+  HealthStatusHealthGetResponse,
+  HeartbeatStatusHeartbeatPostData,
+  HeartbeatStatusHeartbeatPostError,
+  HeartbeatStatusHeartbeatPostResponse,
+  GetStrategiesError,
+  GetStrategiesResponse,
 } from "./types.gen";
 export function createClient(
   baseUrl: string,
@@ -77,134 +77,6 @@ export function createClient(
       headers,
     }),
   );
-
-  /**
-   * Health
-   */
-  const healthHealthGet = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      HealthHealthGetResponse,
-      HealthHealthGetError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/health",
-    });
-  };
-
-  /**
-   * Heartbeat
-   */
-  const heartbeatHeartbeatPost = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<HeartbeatHeartbeatPostData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).post<
-      HeartbeatHeartbeatPostResponse,
-      HeartbeatHeartbeatPostError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/heartbeat",
-    });
-  };
-
-  /**
-   * Get Futures Balance
-   */
-  const getFuturesBalance = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetFuturesBalanceData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetFuturesBalanceResponse,
-      GetFuturesBalanceError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/futures/balance",
-    });
-  };
-
-  /**
-   * Get Futures Ledger
-   */
-  const getFuturesLedger = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetFuturesLedgerData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetFuturesLedgerResponse,
-      GetFuturesLedgerError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/futures/ledger",
-    });
-  };
-
-  /**
-   * Get Historical Futures Orders
-   */
-  const getHistoricalFuturesOrders = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetHistoricalFuturesOrdersData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetHistoricalFuturesOrdersResponse,
-      GetHistoricalFuturesOrdersError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/futures/historical-orders",
-    });
-  };
-
-  /**
-   * Place Order
-   */
-  const placeFuturesOrder = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<PlaceFuturesOrderData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).post<
-      PlaceFuturesOrderResponse,
-      PlaceFuturesOrderError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/futures/place-order",
-    });
-  };
-
-  /**
-   * Cancel Order
-   */
-  const cancelFuturesOrder = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<CancelFuturesOrderData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).delete<
-      CancelFuturesOrderResponse,
-      CancelFuturesOrderError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/futures/cancel-order",
-    });
-  };
-
-  /**
-   * App Get Orders
-   */
-  const getOrders = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetOrdersData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetOrdersResponse,
-      GetOrdersError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/orders",
-    });
-  };
 
   /**
    * Get Bots
@@ -271,7 +143,7 @@ export function createClient(
   };
 
   /**
-   * App Get Api Keys
+   * Get Api Keys
    */
   const getApiKeys = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetApiKeysData, ThrowOnError>,
@@ -287,7 +159,7 @@ export function createClient(
   };
 
   /**
-   * App Post Api Key
+   * Post Api Key
    */
   const createApiKey = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<CreateApiKeyData, ThrowOnError>,
@@ -298,12 +170,12 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/api-key",
+      url: "/api-keys",
     });
   };
 
   /**
-   * App Delete Api Key
+   * Delete Api Key
    */
   const deleteApiKey = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<DeleteApiKeyData, ThrowOnError>,
@@ -314,12 +186,12 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/api-key",
+      url: "/api-keys",
     });
   };
 
   /**
-   * App Put Api Key
+   * Put Api Key
    */
   const updateApiKey = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<UpdateApiKeyData, ThrowOnError>,
@@ -330,23 +202,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/api-key",
-    });
-  };
-
-  /**
-   * Get Strategies
-   */
-  const getStrategies = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetStrategiesResponse,
-      GetStrategiesError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/strategies",
+      url: "/api-keys",
     });
   };
 
@@ -407,15 +263,154 @@ export function createClient(
     });
   };
 
+  /**
+   * Get Orders
+   */
+  const getOrders = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetOrdersData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetOrdersResponse,
+      GetOrdersError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/orders",
+    });
+  };
+
+  /**
+   * Get Futures Balance
+   */
+  const getFuturesBalance = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetFuturesBalanceData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetFuturesBalanceResponse,
+      GetFuturesBalanceError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/futures/balance",
+    });
+  };
+
+  /**
+   * Get Futures Ledger
+   */
+  const getFuturesLedger = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetFuturesLedgerData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetFuturesLedgerResponse,
+      GetFuturesLedgerError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/futures/ledger",
+    });
+  };
+
+  /**
+   * Get Historical Futures Orders
+   */
+  const getHistoricalFuturesOrders = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetHistoricalFuturesOrdersData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetHistoricalFuturesOrdersResponse,
+      GetHistoricalFuturesOrdersError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/futures/orders",
+    });
+  };
+
+  /**
+   * Place Order
+   */
+  const placeFuturesOrder = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<PlaceFuturesOrderData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).post<
+      PlaceFuturesOrderResponse,
+      PlaceFuturesOrderError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/futures/orders",
+    });
+  };
+
+  /**
+   * Cancel Order
+   */
+  const cancelFuturesOrder = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<CancelFuturesOrderData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).delete<
+      CancelFuturesOrderResponse,
+      CancelFuturesOrderError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/futures/orders",
+    });
+  };
+
+  /**
+   * Health
+   */
+  const healthStatusHealthGet = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      HealthStatusHealthGetResponse,
+      HealthStatusHealthGetError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/status/health",
+    });
+  };
+
+  /**
+   * Heartbeat
+   */
+  const heartbeatStatusHeartbeatPost = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<
+      HeartbeatStatusHeartbeatPostData,
+      ThrowOnError
+    >,
+  ) => {
+    return (options?.client ?? client).post<
+      HeartbeatStatusHeartbeatPostResponse,
+      HeartbeatStatusHeartbeatPostError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/status/heartbeat",
+    });
+  };
+
+  /**
+   * Get Strategies
+   */
+  const getStrategies = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetStrategiesResponse,
+      GetStrategiesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/strategies",
+    });
+  };
+
   return {
-    healthHealthGet,
-    heartbeatHeartbeatPost,
-    getFuturesBalance,
-    getFuturesLedger,
-    getHistoricalFuturesOrders,
-    placeFuturesOrder,
-    cancelFuturesOrder,
-    getOrders,
     getBots,
     createBot,
     deleteBot,
@@ -424,9 +419,17 @@ export function createClient(
     createApiKey,
     deleteApiKey,
     updateApiKey,
-    getStrategies,
     postFuturesActionActionsFuturesPost,
     postSpotActionActionsSpotPost,
     getActions,
+    getOrders,
+    getFuturesBalance,
+    getFuturesLedger,
+    getHistoricalFuturesOrders,
+    placeFuturesOrder,
+    cancelFuturesOrder,
+    healthStatusHealthGet,
+    heartbeatStatusHeartbeatPost,
+    getStrategies,
   };
 }

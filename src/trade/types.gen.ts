@@ -151,7 +151,7 @@ export type FuturesBalanceError = {
  */
 export type FuturesTradingAction = {
   /**
-   * Unique identifier for the trading action in our system. Added by the system, therefore optional.
+   * Placeholder for the id of the trading action. Will be added by the system, therefore optional.
    */
   id?: string | null;
   /**
@@ -159,59 +159,59 @@ export type FuturesTradingAction = {
    */
   execution_id?: string | null;
   /**
-   * Unique identifier for the order to close. Required on close actions to match with the open order
+   * Unique identifier for the order to close. Required on close actions to match with the open order.
    */
   open_order_execution_id?: string | null;
   /**
-   * The type of action: buy, sell, etc.
+   * The type of action.
    */
   action_type: TradingActionType;
   /**
-   * Market type: either spot or futures
+   * The type of market the action is for.
    */
   market_type: MarketType;
   /**
-   * Unique identifier for the strategy
+   * Unique identifier for the strategy.
    */
-  strategy_id: string;
+  strategy_id: Strategy;
   /**
-   * Timestamp of when the action was created on the client side
+   * Timestamp of when the action was created on the client side.
    */
   client_timestamp: number;
   /**
-   * Trading symbol or asset pair (e.g., 'BTC/USDT'). Needs to be separated by '/'
+   * Trading symbol or asset pair in format: 'symbol/quote_currency' (see market service for valid symbols)
    */
   symbol: string;
   /**
-   * Whether this is a limit order
+   * Whether this is a limit order.
    */
   is_limit?: boolean | null;
   /**
-   * The limit price for limit orders
+   * The limit price for limit orders. If not set, the market price will be used.
    */
   limit_price?: number | null;
   /**
-   * Allocation for the order
+   * Allocation of the bots allocated balance for the order. 0=0%, 1=100%
    */
   allocation?: number;
   /**
-   * Take profit targets: buy/sell
+   * Take profit targets. Can be set for open actions only.
    */
-  take_profit_targets?: Array<TP_SL_Dict> | null;
+  take_profit_targets?: Array<TPSL> | null;
   /**
-   * Stop loss values: buy/sell
+   * Stop loss values. Can be set for open actions only.
    */
-  stop_loss_values?: Array<TP_SL_Dict> | null;
+  stop_loss_values?: Array<TPSL> | null;
   /**
-   * Whether the system should mark the remaining unfilled orders with the same open order id CANCELLED if e.g. the last take profit is hit, cancel the remaining stop losses
+   * Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.
    */
-  cancel_leftover?: boolean | null;
+  expiry_timestamp?: number | null;
   /**
-   * Leverage to use for futures trades. Limited to 10 to avoid misuse.
+   * Leverage to use for futures trades. Limited to 10 to avoid exchange leverage support issues.
    */
   leverage: number | null;
   /**
-   * Margin mode for futures trades: either isolated or cross, default is isolated
+   * Margin mode for futures trades.
    */
   margin_mode?: MarginMode | null;
 };
@@ -235,7 +235,7 @@ export type MarketType = "spot" | "futures";
  */
 export type OrderModel = {
   /**
-   * Unique identifier for the order (unique to the bot)
+   * Placeholder for the id of the order (unique to the bot). Will be added by the system, therefore optional.
    */
   id?: string | null;
   /**
@@ -336,12 +336,15 @@ export type OrderStatus =
   | "cancelled"
   | "failed";
 
+/**
+ * Supported strategies
+ */
 export type Strategy = "daily_trend_momentum";
 
 /**
  * Model for take profit and stop loss targets
  */
-export type TP_SL_Dict = {
+export type TPSL = {
   /**
    * Price to set the target at
    */
@@ -418,84 +421,6 @@ export type ValidationError = {
   type: string;
 };
 
-export type HealthHealthGetResponse = unknown;
-
-export type HealthHealthGetError = unknown;
-
-export type HeartbeatHeartbeatPostData = {
-  body: {
-    [key: string]: unknown;
-  };
-};
-
-export type HeartbeatHeartbeatPostResponse = unknown;
-
-export type HeartbeatHeartbeatPostError = HTTPValidationError;
-
-export type GetFuturesBalanceData = unknown;
-
-export type GetFuturesBalanceResponse = Array<
-  FuturesBalance | FuturesBalanceError
->;
-
-export type GetFuturesBalanceError = HTTPValidationError;
-
-export type GetFuturesLedgerData = {
-  query: {
-    key: string;
-  };
-};
-
-export type GetFuturesLedgerResponse = unknown;
-
-export type GetFuturesLedgerError = HTTPValidationError;
-
-export type GetHistoricalFuturesOrdersData = {
-  query: {
-    key: string;
-  };
-};
-
-export type GetHistoricalFuturesOrdersResponse = unknown;
-
-export type GetHistoricalFuturesOrdersError = HTTPValidationError;
-
-export type PlaceFuturesOrderData = {
-  body: {
-    [key: string]: unknown;
-  };
-  query: {
-    key: string;
-  };
-};
-
-export type PlaceFuturesOrderResponse = unknown;
-
-export type PlaceFuturesOrderError = HTTPValidationError;
-
-export type CancelFuturesOrderData = {
-  query: {
-    key: string;
-    orderId: string;
-    symbol: string;
-  };
-};
-
-export type CancelFuturesOrderResponse = unknown;
-
-export type CancelFuturesOrderError = HTTPValidationError;
-
-export type GetOrdersData = {
-  query?: {
-    limit?: number;
-    offset?: number;
-  };
-};
-
-export type GetOrdersResponse = Array<OrderModel>;
-
-export type GetOrdersError = HTTPValidationError;
-
 export type GetBotsData = unknown;
 
 export type GetBotsResponse = Array<BotModel>;
@@ -563,10 +488,6 @@ export type UpdateApiKeyResponse = unknown;
 
 export type UpdateApiKeyError = HTTPValidationError;
 
-export type GetStrategiesResponse = unknown;
-
-export type GetStrategiesError = unknown;
-
 export type PostFuturesActionActionsFuturesPostData = {
   body: FuturesTradingAction;
 };
@@ -593,3 +514,85 @@ export type GetActionsData = {
 export type GetActionsResponse = Array<FuturesTradingAction>;
 
 export type GetActionsError = HTTPValidationError;
+
+export type GetOrdersData = {
+  query?: {
+    limit?: number;
+    offset?: number;
+  };
+};
+
+export type GetOrdersResponse = Array<OrderModel>;
+
+export type GetOrdersError = HTTPValidationError;
+
+export type GetFuturesBalanceData = unknown;
+
+export type GetFuturesBalanceResponse = Array<
+  FuturesBalance | FuturesBalanceError
+>;
+
+export type GetFuturesBalanceError = HTTPValidationError;
+
+export type GetFuturesLedgerData = {
+  query: {
+    key: string;
+  };
+};
+
+export type GetFuturesLedgerResponse = unknown;
+
+export type GetFuturesLedgerError = HTTPValidationError;
+
+export type GetHistoricalFuturesOrdersData = {
+  query: {
+    key: string;
+  };
+};
+
+export type GetHistoricalFuturesOrdersResponse = unknown;
+
+export type GetHistoricalFuturesOrdersError = HTTPValidationError;
+
+export type PlaceFuturesOrderData = {
+  body: {
+    [key: string]: unknown;
+  };
+  query: {
+    key: string;
+  };
+};
+
+export type PlaceFuturesOrderResponse = unknown;
+
+export type PlaceFuturesOrderError = HTTPValidationError;
+
+export type CancelFuturesOrderData = {
+  query: {
+    key: string;
+    orderId: string;
+    symbol: string;
+  };
+};
+
+export type CancelFuturesOrderResponse = unknown;
+
+export type CancelFuturesOrderError = HTTPValidationError;
+
+export type HealthStatusHealthGetResponse = unknown;
+
+export type HealthStatusHealthGetError = unknown;
+
+export type HeartbeatStatusHeartbeatPostData = {
+  body: {
+    [key: string]: unknown;
+  };
+};
+
+export type HeartbeatStatusHeartbeatPostResponse = unknown;
+
+export type HeartbeatStatusHeartbeatPostError = HTTPValidationError;
+
+export type GetStrategiesResponse = unknown;
+
+export type GetStrategiesError = unknown;
