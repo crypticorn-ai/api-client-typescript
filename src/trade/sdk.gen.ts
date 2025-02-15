@@ -64,6 +64,21 @@ import type {
   HeartbeatStatusHeartbeatPostResponse,
   GetStrategiesError,
   GetStrategiesResponse,
+  GetNotificationsData,
+  GetNotificationsError,
+  GetNotificationsResponse,
+  CreateNotificationData,
+  CreateNotificationError,
+  CreateNotificationResponse,
+  UpdateNotificationData,
+  UpdateNotificationError,
+  UpdateNotificationResponse,
+  DeleteNotificationData,
+  DeleteNotificationError,
+  DeleteNotificationResponse,
+  BulkUpdateNotificationsData,
+  BulkUpdateNotificationsError,
+  BulkUpdateNotificationsResponse,
 } from "./types.gen";
 export function createClient(
   baseUrl: string,
@@ -410,6 +425,90 @@ export function createClient(
     });
   };
 
+  /**
+   * Get Notifications
+   * Get all notifications for the authenticated user
+   */
+  const getNotifications = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetNotificationsData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetNotificationsResponse,
+      GetNotificationsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/notifications",
+    });
+  };
+
+  /**
+   * Create Notification
+   * Create a new notification
+   */
+  const createNotification = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<CreateNotificationData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).post<
+      CreateNotificationResponse,
+      CreateNotificationError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/notifications",
+    });
+  };
+
+  /**
+   * Update Notification
+   * Update a notification's viewed status
+   */
+  const updateNotification = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<UpdateNotificationData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).put<
+      UpdateNotificationResponse,
+      UpdateNotificationError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/notifications",
+    });
+  };
+
+  /**
+   * Delete Notification
+   */
+  const deleteNotification = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<DeleteNotificationData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).delete<
+      DeleteNotificationResponse,
+      DeleteNotificationError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/notifications",
+    });
+  };
+
+  /**
+   * Bulk Update Notifications
+   * Bulk update notifications
+   */
+  const bulkUpdateNotifications = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<BulkUpdateNotificationsData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).put<
+      BulkUpdateNotificationsResponse,
+      BulkUpdateNotificationsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/notifications/bulk",
+    });
+  };
+
   return {
     getBots,
     createBot,
@@ -431,5 +530,10 @@ export function createClient(
     healthStatusHealthGet,
     heartbeatStatusHeartbeatPost,
     getStrategies,
+    getNotifications,
+    createNotification,
+    updateNotification,
+    deleteNotification,
+    bulkUpdateNotifications,
   };
 }

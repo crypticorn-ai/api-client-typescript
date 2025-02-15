@@ -12,7 +12,8 @@ export const APIKeyModelSchema = {
         },
       ],
       title: "Id",
-      description: "Unique identifier for the API key",
+      description:
+        "Unique identifier, used as a placeholder in the response body",
     },
     exchange: {
       type: "string",
@@ -70,7 +71,7 @@ export const APIKeyModelSchema = {
       type: "integer",
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1739512739,
+      default: 1739650840,
     },
     user_id: {
       anyOf: [
@@ -93,44 +94,101 @@ export const APIKeyModelSchema = {
 export const ApiErrorSchema = {
   type: "array",
   enum: [
-    ["Success", null],
-    ["Invalid API Key", "server error"],
-    ["Invalid signature", "server error"],
-    ["Invalid timestamp", "server error"],
-    ["IP address is not authorized", "server error"],
-    ["Insufficient permissions: spot and futures required", "user error"],
-    ["User account is frozen", "user error"],
-    ["Rate limit exceeded", "exchange_error"],
-    ["Invalid parameter provided", "server error"],
-    ["Request scope limit exceeded", "exchange_error"],
-    ["Invalid content type", "server error"],
-    ["Requested resource not found", "server error"],
-    ["Order does not exist", "server error"],
-    ["Order is already filled", "server error"],
-    ["Order is being processed", "no critical error"],
-    ["Order quantity limit exceeded", "user error"],
-    ["Order price is invalid", "server error"],
-    ["Post-only order would immediately match", "server error"],
-    ["Position does not exist", "user error"],
-    ["Position limit exceeded", "user error"],
-    ["No position available to close", "user error"],
-    ["Position opening temporarily suspended", "exchange_error"],
-    ["Insufficient balance", "user error"],
-    ["Insufficient margin", "user error"],
-    ["Leverage limit exceeded", "server error"],
-    ["Risk limit exceeded", "server error"],
-    ["Order violates liquidation price constraints", "server error"],
-    ["Internal system error", "exchange_error"],
-    ["System configuration error", "exchange_error"],
-    ["Service temporarily unavailable", "exchange_error"],
-    ["System is busy, please try again later", "exchange_error"],
-    ["System under maintenance", "exchange_error"],
-    ["RPC timeout", "exchange_error"],
-    ["System settlement in process", "exchange_error"],
-    ["Trading is suspended", "exchange_error"],
-    ["Trading has been locked", "exchange_error"],
-    ["Unknown error occurred", "exchange_error"],
-    ["Trading action expired", "no critical error"],
+    ["success", "no error", "success"],
+    ["Invalid API Key", "server error", "invalid_api_key"],
+    ["Invalid signature", "server error", "invalid_signature"],
+    ["Invalid timestamp", "server error", "invalid_timestamp"],
+    [
+      "IP address is not authorized",
+      "server error",
+      "ip_address_is_not_authorized",
+    ],
+    [
+      "Insufficient permissions: spot and futures required",
+      "user error",
+      "insufficient_permissions_spot_and_futures_required",
+    ],
+    ["User account is frozen", "user error", "user_account_is_frozen"],
+    ["Rate limit exceeded", "exchange error", "rate_limit_exceeded"],
+    [
+      "Invalid parameter provided",
+      "server error",
+      "invalid_parameter_provided",
+    ],
+    [
+      "Request scope limit exceeded",
+      "exchange error",
+      "request_scope_limit_exceeded",
+    ],
+    ["Invalid content type", "server error", "invalid_content_type"],
+    [
+      "Requested resource not found",
+      "server error",
+      "requested_resource_not_found",
+    ],
+    ["Order does not exist", "server error", "order_does_not_exist"],
+    ["Order is already filled", "server error", "order_is_already_filled"],
+    ["Order is being processed", "no error", "order_is_being_processed"],
+    [
+      "Order quantity limit exceeded",
+      "user error",
+      "order_quantity_limit_exceeded",
+    ],
+    ["Order price is invalid", "server error", "order_price_is_invalid"],
+    [
+      "Post-only order would immediately match",
+      "server error",
+      "post_only_order_would_immediately_match",
+    ],
+    ["Position does not exist", "user error", "position_does_not_exist"],
+    ["Position limit exceeded", "user error", "position_limit_exceeded"],
+    [
+      "No position available to close",
+      "user error",
+      "no_position_available_to_close",
+    ],
+    [
+      "Position opening temporarily suspended",
+      "exchange error",
+      "position_opening_temporarily_suspended",
+    ],
+    ["Insufficient balance", "user error", "insufficient_balance"],
+    ["Insufficient margin", "user error", "insufficient_margin"],
+    ["Leverage limit exceeded", "server error", "leverage_limit_exceeded"],
+    ["Risk limit exceeded", "server error", "risk_limit_exceeded"],
+    [
+      "Order violates liquidation price constraints",
+      "server error",
+      "order_violates_liquidation_price_constraints",
+    ],
+    ["Internal system error", "exchange error", "internal_system_error"],
+    [
+      "System configuration error",
+      "exchange error",
+      "system_configuration_error",
+    ],
+    [
+      "Service temporarily unavailable",
+      "exchange error",
+      "service_temporarily_unavailable",
+    ],
+    [
+      "System is busy, please try again later",
+      "exchange error",
+      "system_is_busy_please_try_again_later",
+    ],
+    ["System under maintenance", "exchange error", "system_under_maintenance"],
+    ["RPC timeout", "exchange error", "rpc_timeout"],
+    [
+      "System settlement in process",
+      "exchange error",
+      "system_settlement_in_process",
+    ],
+    ["Trading is suspended", "exchange error", "trading_is_suspended"],
+    ["Trading has been locked", "exchange error", "trading_has_been_locked"],
+    ["Unknown error occurred", "exchange error", "unknown_error_occurred"],
+    ["HTTP request error", "exchange error", "http_request_error"],
+    ["Trading action expired", "no error", "trading_action_expired"],
   ],
   title: "ApiError",
   description: "API error codes",
@@ -148,7 +206,8 @@ export const BotModelSchema = {
         },
       ],
       title: "Id",
-      description: "Unique identifier for the bot",
+      description:
+        "Unique identifier, used as a placeholder in the response body",
     },
     name: {
       type: "string",
@@ -204,7 +263,8 @@ export const CreateAPIKeyResponseSchema = {
         },
       ],
       title: "Id",
-      description: "Unique identifier for the API key",
+      description:
+        "Unique identifier, used as a placeholder in the response body",
     },
     error: {
       anyOf: [
@@ -223,17 +283,17 @@ export const CreateAPIKeyResponseSchema = {
   title: "CreateAPIKeyResponse",
 } as const;
 
-export const DeleteAPIKeySchema = {
+export const DeletedSchema = {
   properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the API key",
+    deleted: {
+      type: "integer",
+      title: "Deleted",
+      description: "Number of deleted documents",
     },
   },
   type: "object",
-  required: ["id"],
-  title: "DeleteAPIKey",
+  required: ["deleted"],
+  title: "Deleted",
 } as const;
 
 export const ExchangeSchema = {
@@ -518,6 +578,19 @@ export const HTTPValidationErrorSchema = {
   title: "HTTPValidationError",
 } as const;
 
+export const IDSchema = {
+  properties: {
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier, required in the request body",
+    },
+  },
+  type: "object",
+  required: ["id"],
+  title: "ID",
+} as const;
+
 export const MarginModeSchema = {
   type: "string",
   enum: ["isolated", "cross"],
@@ -530,6 +603,86 @@ export const MarketTypeSchema = {
   enum: ["spot", "futures"],
   title: "MarketType",
   description: "Type of market",
+} as const;
+
+export const ModifiedSchema = {
+  properties: {
+    modified: {
+      type: "integer",
+      title: "Modified",
+      description: "Number of modified documents",
+    },
+  },
+  type: "object",
+  required: ["modified"],
+  title: "Modified",
+} as const;
+
+export const NotificationModelSchema = {
+  properties: {
+    id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Id",
+      description:
+        "Unique identifier, used as a placeholder in the response body",
+    },
+    identifier: {
+      type: "string",
+      title: "Identifier",
+      description:
+        "Identifier string. Must match the mapping key in the frontend.",
+    },
+    user_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "User Id",
+      description: "Unique identifier for the user. None for all users.",
+    },
+    viewed: {
+      type: "boolean",
+      title: "Viewed",
+      description: "Whether the notification has been marked as seen",
+      default: false,
+    },
+    sent: {
+      type: "boolean",
+      title: "Sent",
+      description: "Whether the notification has been sent as an email",
+      default: false,
+    },
+    type: {
+      $ref: "#/components/schemas/NotificationType",
+      description: "The type of the notification.",
+    },
+    timestamp: {
+      type: "integer",
+      title: "Timestamp",
+      description: "Timestamp of creation",
+      default: 1739650840,
+    },
+  },
+  type: "object",
+  required: ["identifier", "type"],
+  title: "NotificationModel",
+} as const;
+
+export const NotificationTypeSchema = {
+  type: "string",
+  enum: ["error", "success", "info", "warning"],
+  title: "NotificationType",
 } as const;
 
 export const OrderModelSchema = {
@@ -545,7 +698,7 @@ export const OrderModelSchema = {
       ],
       title: "Id",
       description:
-        "Placeholder for the id of the order (unique to the bot). Will be added by the system, therefore optional.",
+        "Unique identifier, used as a placeholder in the response body",
     },
     open_trading_action_id: {
       anyOf: [
@@ -585,19 +738,6 @@ export const OrderModelSchema = {
       title: "Execution Id",
       description:
         "Unique identifier for the execution (not unique to the bot)",
-    },
-    open_order_execution_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Open Order Execution Id",
-      description:
-        "Unique identifier for the open order execution. Needed for closing the order",
     },
     api_key_id: {
       anyOf: [
@@ -681,7 +821,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1739512739,
+      default: 1739650840,
     },
     price: {
       anyOf: [
@@ -788,18 +928,6 @@ export const OrderModelSchema = {
       title: "Order Details",
       description: "Exchange specific details of the order",
     },
-    comment: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Comment",
-      description: "Comment for the order",
-    },
   },
   type: "object",
   title: "OrderModel",
@@ -852,83 +980,29 @@ export const TradingActionTypeSchema = {
   description: "Type of trading action",
 } as const;
 
-export const UpdateAPIKeySchema = {
+export const UpdateNotificationSchema = {
   properties: {
     id: {
       type: "string",
       title: "Id",
-      description: "Unique identifier for the API key",
+      description: "Unique identifier, required in the request body",
     },
-    enabled: {
+    viewed: {
       type: "boolean",
-      title: "Enabled",
-      description: "Status of the API key",
+      title: "Viewed",
+      description: "Whether the notification has been marked as seen",
+      default: false,
     },
-    label: {
-      type: "string",
-      title: "Label",
-      description: "Label for the API key",
+    sent: {
+      type: "boolean",
+      title: "Sent",
+      description: "Whether the notification has been sent as an email",
+      default: false,
     },
   },
   type: "object",
-  required: ["id", "enabled", "label"],
-  title: "UpdateAPIKey",
-} as const;
-
-export const UpdateBotSchema = {
-  properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the bot",
-    },
-    name: {
-      type: "string",
-      title: "Name",
-      description: "Name of the bot",
-    },
-    strategy_id: {
-      $ref: "#/components/schemas/Strategy",
-      description: "Unique identifier for the trading strategy used by the bot",
-    },
-    api_key_id: {
-      type: "string",
-      title: "Api Key Id",
-      description: "Unique identifier for the API key",
-    },
-    allocation: {
-      type: "number",
-      title: "Allocation",
-      description: "Allocation for the bot",
-    },
-    enabled: {
-      type: "boolean",
-      title: "Enabled",
-      description: "Status of the bot",
-    },
-    user_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "User Id",
-      description: "Unique identifier for the user",
-    },
-  },
-  type: "object",
-  required: [
-    "id",
-    "name",
-    "strategy_id",
-    "api_key_id",
-    "allocation",
-    "enabled",
-  ],
-  title: "UpdateBot",
+  required: ["id"],
+  title: "UpdateNotification",
 } as const;
 
 export const ValidationErrorSchema = {

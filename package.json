@@ -1,6 +1,6 @@
 {
   "name": "@crypticorn-ai/api-client",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "Crypticorn API Client",
   "license": "ISC",
   "author": "Máté Homolya <mate.homolya@proton.me>",
@@ -8,6 +8,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "update": "rm -rf dist && npm run generate:client && npm run build",
     "build": "node esbuild.mjs && tsc",
     "dev": "tsx watch src/dev.ts",
     "build:watch": "node esbuild.mjs --watch",

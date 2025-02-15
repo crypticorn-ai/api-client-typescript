@@ -7,7 +7,7 @@ export type ApiError = unknown[];
 
 export type APIKeyModel = {
   /**
-   * Unique identifier for the API key
+   * Unique identifier, used as a placeholder in the response body
    */
   id?: string | null;
   /**
@@ -46,7 +46,7 @@ export type APIKeyModel = {
 
 export type BotModel = {
   /**
-   * Unique identifier for the bot
+   * Unique identifier, used as a placeholder in the response body
    */
   id?: string | null;
   /**
@@ -77,7 +77,7 @@ export type BotModel = {
 
 export type CreateAPIKeyResponse = {
   /**
-   * Unique identifier for the API key
+   * Unique identifier, used as a placeholder in the response body
    */
   id?: string | null;
   /**
@@ -86,11 +86,11 @@ export type CreateAPIKeyResponse = {
   error?: string | null;
 };
 
-export type DeleteAPIKey = {
+export type Deleted = {
   /**
-   * Unique identifier for the API key
+   * Number of deleted documents
    */
-  id: string;
+  deleted: number;
 };
 
 /**
@@ -220,6 +220,13 @@ export type HTTPValidationError = {
   detail?: Array<ValidationError>;
 };
 
+export type ID = {
+  /**
+   * Unique identifier, required in the request body
+   */
+  id: string;
+};
+
 /**
  * Margin mode for futures trades
  */
@@ -230,12 +237,52 @@ export type MarginMode = "isolated" | "cross";
  */
 export type MarketType = "spot" | "futures";
 
+export type Modified = {
+  /**
+   * Number of modified documents
+   */
+  modified: number;
+};
+
+export type NotificationModel = {
+  /**
+   * Unique identifier, used as a placeholder in the response body
+   */
+  id?: string | null;
+  /**
+   * Identifier string. Must match the mapping key in the frontend.
+   */
+  identifier: string;
+  /**
+   * Unique identifier for the user. None for all users.
+   */
+  user_id?: string | null;
+  /**
+   * Whether the notification has been marked as seen
+   */
+  viewed?: boolean;
+  /**
+   * Whether the notification has been sent as an email
+   */
+  sent?: boolean;
+  /**
+   * The type of the notification.
+   */
+  type: NotificationType;
+  /**
+   * Timestamp of creation
+   */
+  timestamp?: number;
+};
+
+export type NotificationType = "error" | "success" | "info" | "warning";
+
 /**
  * Response model for orders. All optional as the model is built step by step.
  */
 export type OrderModel = {
   /**
-   * Placeholder for the id of the order (unique to the bot). Will be added by the system, therefore optional.
+   * Unique identifier, used as a placeholder in the response body
    */
   id?: string | null;
   /**
@@ -250,10 +297,6 @@ export type OrderModel = {
    * Unique identifier for the execution (not unique to the bot)
    */
   execution_id?: string | null;
-  /**
-   * Unique identifier for the open order execution. Needed for closing the order
-   */
-  open_order_execution_id?: string | null;
   /**
    * Unique identifier for the API key
    */
@@ -320,10 +363,6 @@ export type OrderModel = {
   order_details?: {
     [key: string]: unknown;
   } | null;
-  /**
-   * Comment for the order
-   */
-  comment?: string | null;
 };
 
 /**
@@ -369,50 +408,19 @@ export type TradingActionType =
   | "sell_close"
   | "cancel_order";
 
-export type UpdateAPIKey = {
+export type UpdateNotification = {
   /**
-   * Unique identifier for the API key
+   * Unique identifier, required in the request body
    */
   id: string;
   /**
-   * Status of the API key
+   * Whether the notification has been marked as seen
    */
-  enabled: boolean;
+  viewed?: boolean;
   /**
-   * Label for the API key
+   * Whether the notification has been sent as an email
    */
-  label: string;
-};
-
-export type UpdateBot = {
-  /**
-   * Unique identifier for the bot
-   */
-  id: string;
-  /**
-   * Name of the bot
-   */
-  name: string;
-  /**
-   * Unique identifier for the trading strategy used by the bot
-   */
-  strategy_id: Strategy;
-  /**
-   * Unique identifier for the API key
-   */
-  api_key_id: string;
-  /**
-   * Allocation for the bot
-   */
-  allocation: number;
-  /**
-   * Status of the bot
-   */
-  enabled: boolean;
-  /**
-   * Unique identifier for the user
-   */
-  user_id?: string | null;
+  sent?: boolean;
 };
 
 export type ValidationError = {
@@ -446,19 +454,14 @@ export type DeleteBotResponse = unknown;
 export type DeleteBotError = HTTPValidationError;
 
 export type UpdateBotData = {
-  body: UpdateBot;
+  body: BotModel;
 };
 
 export type UpdateBotResponse = unknown;
 
 export type UpdateBotError = HTTPValidationError;
 
-export type GetApiKeysData = {
-  query?: {
-    limit?: number;
-    offset?: number;
-  };
-};
+export type GetApiKeysData = unknown;
 
 export type GetApiKeysResponse = Array<APIKeyModel>;
 
@@ -473,7 +476,7 @@ export type CreateApiKeyResponse = CreateAPIKeyResponse;
 export type CreateApiKeyError = HTTPValidationError;
 
 export type DeleteApiKeyData = {
-  body: DeleteAPIKey;
+  body: ID;
 };
 
 export type DeleteApiKeyResponse = unknown;
@@ -481,7 +484,7 @@ export type DeleteApiKeyResponse = unknown;
 export type DeleteApiKeyError = HTTPValidationError;
 
 export type UpdateApiKeyData = {
-  body: UpdateAPIKey;
+  body: APIKeyModel;
 };
 
 export type UpdateApiKeyResponse = unknown;
@@ -596,3 +599,41 @@ export type HeartbeatStatusHeartbeatPostError = HTTPValidationError;
 export type GetStrategiesResponse = unknown;
 
 export type GetStrategiesError = unknown;
+
+export type GetNotificationsData = unknown;
+
+export type GetNotificationsResponse = Array<NotificationModel>;
+
+export type GetNotificationsError = HTTPValidationError;
+
+export type CreateNotificationData = {
+  body: NotificationModel;
+};
+
+export type CreateNotificationResponse = ID;
+
+export type CreateNotificationError = HTTPValidationError;
+
+export type UpdateNotificationData = {
+  body: UpdateNotification;
+};
+
+export type UpdateNotificationResponse = Modified;
+
+export type UpdateNotificationError = HTTPValidationError;
+
+export type DeleteNotificationData = {
+  body: ID;
+};
+
+export type DeleteNotificationResponse = Deleted;
+
+export type DeleteNotificationError = HTTPValidationError;
+
+export type BulkUpdateNotificationsData = {
+  body: Array<UpdateNotification>;
+};
+
+export type BulkUpdateNotificationsResponse = Modified;
+
+export type BulkUpdateNotificationsError = HTTPValidationError;
