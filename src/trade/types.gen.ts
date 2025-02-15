@@ -13,7 +13,7 @@ export type APIKeyModel = {
   /**
    * Exchange name
    */
-  exchange: string;
+  exchange: string | null;
   /**
    * API key
    */
@@ -29,15 +29,15 @@ export type APIKeyModel = {
   /**
    * Label for the API key
    */
-  label: string;
+  label: string | null;
   /**
    * Status of the API key
    */
-  enabled?: boolean;
+  enabled?: boolean | null;
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at?: number | null;
   /**
    * Unique identifier for the user
    */
@@ -487,7 +487,7 @@ export type UpdateApiKeyData = {
   body: APIKeyModel;
 };
 
-export type UpdateApiKeyResponse = unknown;
+export type UpdateApiKeyResponse = CreateAPIKeyResponse;
 
 export type UpdateApiKeyError = HTTPValidationError;
 

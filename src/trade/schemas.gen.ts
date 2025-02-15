@@ -16,7 +16,14 @@ export const APIKeyModelSchema = {
         "Unique identifier, used as a placeholder in the response body",
     },
     exchange: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Exchange",
       description: "Exchange name",
     },
@@ -57,21 +64,42 @@ export const APIKeyModelSchema = {
       description: "API passphrase",
     },
     label: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Label",
       description: "Label for the API key",
     },
     enabled: {
-      type: "boolean",
+      anyOf: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Enabled",
       description: "Status of the API key",
       default: false,
     },
     created_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1739650840,
+      default: 1739655117,
     },
     user_id: {
       anyOf: [
@@ -671,7 +699,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1739650840,
+      default: 1739655117,
     },
   },
   type: "object",
@@ -821,7 +849,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1739650840,
+      default: 1739655117,
     },
     price: {
       anyOf: [
