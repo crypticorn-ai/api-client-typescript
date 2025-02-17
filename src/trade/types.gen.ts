@@ -56,7 +56,7 @@ export type BotModel = {
   /**
    * Unique identifier for the trading strategy used by the bot
    */
-  strategy_id: Strategy;
+  strategy_id: StrategyIdentifier;
   /**
    * Unique identifier for the API key
    */
@@ -173,7 +173,7 @@ export type FuturesTradingAction = {
   /**
    * Unique identifier for the strategy.
    */
-  strategy_id: Strategy;
+  strategy_id: StrategyIdentifier;
   /**
    * Timestamp of when the action was created on the client side.
    */
@@ -376,9 +376,28 @@ export type OrderStatus =
   | "failed";
 
 /**
- * Supported strategies
+ * Identifies for supported strategies
  */
-export type Strategy = "daily_trend_momentum";
+export type StrategyIdentifier = "daily_trend_momentum" | "swing_lh_ma_5min";
+
+export type StrategyModel = {
+  /**
+   * Unique identifier, used as a placeholder in the response body
+   */
+  id?: string | null;
+  /**
+   * Name of the strategy
+   */
+  name: string;
+  /**
+   * Description of the strategy
+   */
+  description: string;
+  /**
+   * Exchanges supported by the strategy. Leave empty for all exchanges.
+   */
+  exchanges?: Array<Exchange> | null;
+};
 
 /**
  * Model for take profit and stop loss targets
@@ -596,7 +615,7 @@ export type HeartbeatStatusHeartbeatPostResponse = unknown;
 
 export type HeartbeatStatusHeartbeatPostError = HTTPValidationError;
 
-export type GetStrategiesResponse = unknown;
+export type GetStrategiesResponse = Array<StrategyModel>;
 
 export type GetStrategiesError = unknown;
 

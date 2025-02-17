@@ -99,7 +99,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1739655117,
+      default: 1739759025,
     },
     user_id: {
       anyOf: [
@@ -243,7 +243,7 @@ export const BotModelSchema = {
       description: "Name of the bot",
     },
     strategy_id: {
-      $ref: "#/components/schemas/Strategy",
+      $ref: "#/components/schemas/StrategyIdentifier",
       description: "Unique identifier for the trading strategy used by the bot",
     },
     api_key_id: {
@@ -458,7 +458,7 @@ export const FuturesTradingActionSchema = {
       description: "The type of market the action is for.",
     },
     strategy_id: {
-      $ref: "#/components/schemas/Strategy",
+      $ref: "#/components/schemas/StrategyIdentifier",
       description: "Unique identifier for the strategy.",
     },
     client_timestamp: {
@@ -699,7 +699,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1739655117,
+      default: 1739759025,
     },
   },
   type: "object",
@@ -849,7 +849,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1739655117,
+      default: 1739759025,
     },
     price: {
       anyOf: [
@@ -970,11 +970,58 @@ export const OrderStatusSchema = {
   description: "Status of the order",
 } as const;
 
-export const StrategySchema = {
+export const StrategyIdentifierSchema = {
   type: "string",
-  enum: ["daily_trend_momentum"],
-  title: "Strategy",
-  description: "Supported strategies",
+  enum: ["daily_trend_momentum", "swing_lh_ma_5min"],
+  title: "StrategyIdentifier",
+  description: "Identifies for supported strategies",
+} as const;
+
+export const StrategyModelSchema = {
+  properties: {
+    id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Id",
+      description:
+        "Unique identifier, used as a placeholder in the response body",
+    },
+    name: {
+      type: "string",
+      title: "Name",
+      description: "Name of the strategy",
+    },
+    description: {
+      type: "string",
+      title: "Description",
+      description: "Description of the strategy",
+    },
+    exchanges: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/Exchange",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Exchanges",
+      description:
+        "Exchanges supported by the strategy. Leave empty for all exchanges.",
+    },
+  },
+  type: "object",
+  required: ["name", "description"],
+  title: "StrategyModel",
 } as const;
 
 export const TPSLSchema = {
