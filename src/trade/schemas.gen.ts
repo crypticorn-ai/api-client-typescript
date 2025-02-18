@@ -99,7 +99,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1739759025,
+      default: 1739913920,
     },
     user_id: {
       anyOf: [
@@ -119,107 +119,53 @@ export const APIKeyModelSchema = {
   title: "APIKeyModel",
 } as const;
 
-export const ApiErrorSchema = {
-  type: "array",
+export const ApiErrorIdentifierSchema = {
+  type: "string",
   enum: [
-    ["success", "no error", "success"],
-    ["Invalid API Key", "server error", "invalid_api_key"],
-    ["Invalid signature", "server error", "invalid_signature"],
-    ["Invalid timestamp", "server error", "invalid_timestamp"],
-    [
-      "IP address is not authorized",
-      "server error",
-      "ip_address_is_not_authorized",
-    ],
-    [
-      "Insufficient permissions: spot and futures required",
-      "user error",
-      "insufficient_permissions_spot_and_futures_required",
-    ],
-    ["User account is frozen", "user error", "user_account_is_frozen"],
-    ["Rate limit exceeded", "exchange error", "rate_limit_exceeded"],
-    [
-      "Invalid parameter provided",
-      "server error",
-      "invalid_parameter_provided",
-    ],
-    [
-      "Request scope limit exceeded",
-      "exchange error",
-      "request_scope_limit_exceeded",
-    ],
-    ["Invalid content type", "server error", "invalid_content_type"],
-    [
-      "Requested resource not found",
-      "server error",
-      "requested_resource_not_found",
-    ],
-    ["Order does not exist", "server error", "order_does_not_exist"],
-    ["Order is already filled", "server error", "order_is_already_filled"],
-    ["Order is being processed", "no error", "order_is_being_processed"],
-    [
-      "Order quantity limit exceeded",
-      "user error",
-      "order_quantity_limit_exceeded",
-    ],
-    ["Order price is invalid", "server error", "order_price_is_invalid"],
-    [
-      "Post-only order would immediately match",
-      "server error",
-      "post_only_order_would_immediately_match",
-    ],
-    ["Position does not exist", "user error", "position_does_not_exist"],
-    ["Position limit exceeded", "user error", "position_limit_exceeded"],
-    [
-      "No position available to close",
-      "user error",
-      "no_position_available_to_close",
-    ],
-    [
-      "Position opening temporarily suspended",
-      "exchange error",
-      "position_opening_temporarily_suspended",
-    ],
-    ["Insufficient balance", "user error", "insufficient_balance"],
-    ["Insufficient margin", "user error", "insufficient_margin"],
-    ["Leverage limit exceeded", "server error", "leverage_limit_exceeded"],
-    ["Risk limit exceeded", "server error", "risk_limit_exceeded"],
-    [
-      "Order violates liquidation price constraints",
-      "server error",
-      "order_violates_liquidation_price_constraints",
-    ],
-    ["Internal system error", "exchange error", "internal_system_error"],
-    [
-      "System configuration error",
-      "exchange error",
-      "system_configuration_error",
-    ],
-    [
-      "Service temporarily unavailable",
-      "exchange error",
-      "service_temporarily_unavailable",
-    ],
-    [
-      "System is busy, please try again later",
-      "exchange error",
-      "system_is_busy_please_try_again_later",
-    ],
-    ["System under maintenance", "exchange error", "system_under_maintenance"],
-    ["RPC timeout", "exchange error", "rpc_timeout"],
-    [
-      "System settlement in process",
-      "exchange error",
-      "system_settlement_in_process",
-    ],
-    ["Trading is suspended", "exchange error", "trading_is_suspended"],
-    ["Trading has been locked", "exchange error", "trading_has_been_locked"],
-    ["Unknown error occurred", "exchange error", "unknown_error_occurred"],
-    ["HTTP request error", "exchange error", "http_request_error"],
-    ["Trading action expired", "no error", "trading_action_expired"],
+    "success",
+    "invalid_api_key",
+    "invalid_signature",
+    "invalid_timestamp",
+    "ip_address_is_not_authorized",
+    "insufficient_permissions_spot_and_futures_required",
+    "user_account_is_frozen",
+    "rate_limit_exceeded",
+    "invalid_parameter_provided",
+    "request_scope_limit_exceeded",
+    "invalid_content_type",
+    "requested_resource_not_found",
+    "order_does_not_exist",
+    "order_is_already_filled",
+    "order_is_being_processed",
+    "order_quantity_limit_exceeded",
+    "order_price_is_invalid",
+    "post_only_order_would_immediately_match",
+    "position_does_not_exist",
+    "position_limit_exceeded",
+    "no_position_available_to_close",
+    "position_opening_temporarily_suspended",
+    "insufficient_balance",
+    "insufficient_margin",
+    "leverage_limit_exceeded",
+    "risk_limit_exceeded",
+    "order_violates_liquidation_price_constraints",
+    "internal_system_error",
+    "system_configuration_error",
+    "service_temporarily_unavailable",
+    "system_is_busy_please_try_again_later",
+    "system_under_maintenance",
+    "rpc_timeout",
+    "system_settlement_in_process",
+    "trading_is_suspended",
+    "trading_has_been_locked",
+    "unknown_error_occurred",
+    "http_request_error",
+    "trading_action_expired",
+    "bot_disabled",
+    "black_swan",
   ],
-  title: "ApiError",
-  description: "API error codes",
+  title: "ApiErrorIdentifier",
+  description: "API error identifiers",
 } as const;
 
 export const BotModelSchema = {
@@ -243,7 +189,8 @@ export const BotModelSchema = {
       description: "Name of the bot",
     },
     strategy_id: {
-      $ref: "#/components/schemas/StrategyIdentifier",
+      type: "string",
+      title: "Strategy Id",
       description: "Unique identifier for the trading strategy used by the bot",
     },
     api_key_id: {
@@ -458,7 +405,8 @@ export const FuturesTradingActionSchema = {
       description: "The type of market the action is for.",
     },
     strategy_id: {
-      $ref: "#/components/schemas/StrategyIdentifier",
+      type: "string",
+      title: "Strategy Id",
       description: "Unique identifier for the strategy.",
     },
     client_timestamp: {
@@ -699,7 +647,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1739759025,
+      default: 1739913920,
     },
   },
   type: "object",
@@ -849,7 +797,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1739759025,
+      default: 1739913920,
     },
     price: {
       anyOf: [
@@ -877,13 +825,13 @@ export const OrderModelSchema = {
     status_code: {
       anyOf: [
         {
-          $ref: "#/components/schemas/ApiError",
+          $ref: "#/components/schemas/ApiErrorIdentifier",
         },
         {
           type: "null",
         },
       ],
-      description: "API error code. Of type ApiError",
+      description: "API error identifier. Of type ApiErrorIdentifier",
     },
     status: {
       anyOf: [
@@ -970,13 +918,6 @@ export const OrderStatusSchema = {
   description: "Status of the order",
 } as const;
 
-export const StrategyIdentifierSchema = {
-  type: "string",
-  enum: ["daily_trend_momentum", "swing_lh_ma_5min"],
-  title: "StrategyIdentifier",
-  description: "Identifies for supported strategies",
-} as const;
-
 export const StrategyModelSchema = {
   properties: {
     id: {
@@ -991,6 +932,12 @@ export const StrategyModelSchema = {
       title: "Id",
       description:
         "Unique identifier, used as a placeholder in the response body",
+    },
+    identifier: {
+      type: "string",
+      title: "Identifier",
+      description:
+        "Unique human readable identifier for the strategy e.g. 'daily_trend_momentum'",
     },
     name: {
       type: "string",
@@ -1018,9 +965,14 @@ export const StrategyModelSchema = {
       description:
         "Exchanges supported by the strategy. Leave empty for all exchanges.",
     },
+    public: {
+      type: "boolean",
+      title: "Public",
+      description: "Whether the strategy is public or for internal testing",
+    },
   },
   type: "object",
-  required: ["name", "description"],
+  required: ["identifier", "name", "description", "public"],
   title: "StrategyModel",
 } as const;
 

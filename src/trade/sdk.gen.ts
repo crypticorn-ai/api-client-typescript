@@ -57,11 +57,8 @@ import type {
   CancelFuturesOrderData,
   CancelFuturesOrderError,
   CancelFuturesOrderResponse,
-  HealthStatusHealthGetError,
-  HealthStatusHealthGetResponse,
-  HeartbeatStatusHeartbeatPostData,
-  HeartbeatStatusHeartbeatPostError,
-  HeartbeatStatusHeartbeatPostResponse,
+  HealthStatusGetError,
+  HealthStatusGetResponse,
   GetStrategiesError,
   GetStrategiesResponse,
   GetNotificationsData,
@@ -377,35 +374,16 @@ export function createClient(
   /**
    * Health
    */
-  const healthStatusHealthGet = <ThrowOnError extends boolean = false>(
+  const healthStatusGet = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      HealthStatusHealthGetResponse,
-      HealthStatusHealthGetError,
+      HealthStatusGetResponse,
+      HealthStatusGetError,
       ThrowOnError
     >({
       ...options,
-      url: "/status/health",
-    });
-  };
-
-  /**
-   * Heartbeat
-   */
-  const heartbeatStatusHeartbeatPost = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<
-      HeartbeatStatusHeartbeatPostData,
-      ThrowOnError
-    >,
-  ) => {
-    return (options?.client ?? client).post<
-      HeartbeatStatusHeartbeatPostResponse,
-      HeartbeatStatusHeartbeatPostError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/status/heartbeat",
+      url: "/status",
     });
   };
 
@@ -527,8 +505,7 @@ export function createClient(
     getHistoricalFuturesOrders,
     placeFuturesOrder,
     cancelFuturesOrder,
-    healthStatusHealthGet,
-    heartbeatStatusHeartbeatPost,
+    healthStatusGet,
     getStrategies,
     getNotifications,
     createNotification,
