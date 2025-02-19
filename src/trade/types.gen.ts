@@ -506,8 +506,18 @@ export type CreateBotResponse = unknown;
 
 export type CreateBotError = HTTPValidationError;
 
+export type GetBotByIdData = {
+  path: {
+    id: string;
+  };
+};
+
+export type GetBotByIdResponse = BotModel;
+
+export type GetBotByIdError = HTTPValidationError;
+
 export type DeleteBotData = {
-  query: {
+  path: {
     id: string;
   };
 };
@@ -518,6 +528,9 @@ export type DeleteBotError = HTTPValidationError;
 
 export type UpdateBotData = {
   body: BotModel;
+  path: {
+    id: string;
+  };
 };
 
 export type UpdateBotResponse = unknown;
@@ -538,8 +551,20 @@ export type CreateApiKeyResponse = CreateAPIKeyResponse;
 
 export type CreateApiKeyError = HTTPValidationError;
 
+export type GetApiKeyByIdData = {
+  path: {
+    id: string;
+  };
+};
+
+export type GetApiKeyByIdResponse = APIKeyModel;
+
+export type GetApiKeyByIdError = HTTPValidationError;
+
 export type DeleteApiKeyData = {
-  body: ID;
+  path: {
+    id: string;
+  };
 };
 
 export type DeleteApiKeyResponse = unknown;
@@ -548,6 +573,9 @@ export type DeleteApiKeyError = HTTPValidationError;
 
 export type UpdateApiKeyData = {
   body: APIKeyModel;
+  path: {
+    id: string;
+  };
 };
 
 export type UpdateApiKeyResponse = CreateAPIKeyResponse;
@@ -667,8 +695,25 @@ export type CreateNotificationResponse = ID;
 
 export type CreateNotificationError = HTTPValidationError;
 
+export type UpdateNotificationsData = {
+  body: Array<UpdateNotification>;
+};
+
+export type UpdateNotificationsResponse = Modified;
+
+export type UpdateNotificationsError = HTTPValidationError;
+
+export type DeleteNotificationsData = unknown;
+
+export type DeleteNotificationsResponse = Deleted;
+
+export type DeleteNotificationsError = HTTPValidationError;
+
 export type UpdateNotificationData = {
   body: UpdateNotification;
+  path: {
+    id: string;
+  };
 };
 
 export type UpdateNotificationResponse = Modified;
@@ -676,17 +721,11 @@ export type UpdateNotificationResponse = Modified;
 export type UpdateNotificationError = HTTPValidationError;
 
 export type DeleteNotificationData = {
-  body: ID;
+  path: {
+    id: string;
+  };
 };
 
 export type DeleteNotificationResponse = Deleted;
 
 export type DeleteNotificationError = HTTPValidationError;
-
-export type BulkUpdateNotificationsData = {
-  body: Array<UpdateNotification>;
-};
-
-export type BulkUpdateNotificationsResponse = Modified;
-
-export type BulkUpdateNotificationsError = HTTPValidationError;

@@ -99,7 +99,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1739913920,
+      default: 1739983563,
     },
     user_id: {
       anyOf: [
@@ -502,7 +502,6 @@ export const FuturesTradingActionSchema = {
       anyOf: [
         {
           type: "integer",
-          maximum: 10,
           minimum: 1,
           default: 1,
         },
@@ -647,7 +646,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1739913920,
+      default: 1739983563,
     },
   },
   type: "object",
@@ -797,7 +796,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1739913920,
+      default: 1739983563,
     },
     price: {
       anyOf: [

@@ -12,6 +12,9 @@ import type {
   CreateBotData,
   CreateBotError,
   CreateBotResponse,
+  GetBotByIdData,
+  GetBotByIdError,
+  GetBotByIdResponse,
   DeleteBotData,
   DeleteBotError,
   DeleteBotResponse,
@@ -24,6 +27,9 @@ import type {
   CreateApiKeyData,
   CreateApiKeyError,
   CreateApiKeyResponse,
+  GetApiKeyByIdData,
+  GetApiKeyByIdError,
+  GetApiKeyByIdResponse,
   DeleteApiKeyData,
   DeleteApiKeyError,
   DeleteApiKeyResponse,
@@ -67,15 +73,18 @@ import type {
   CreateNotificationData,
   CreateNotificationError,
   CreateNotificationResponse,
+  UpdateNotificationsData,
+  UpdateNotificationsError,
+  UpdateNotificationsResponse,
+  DeleteNotificationsData,
+  DeleteNotificationsError,
+  DeleteNotificationsResponse,
   UpdateNotificationData,
   UpdateNotificationError,
   UpdateNotificationResponse,
   DeleteNotificationData,
   DeleteNotificationError,
   DeleteNotificationResponse,
-  BulkUpdateNotificationsData,
-  BulkUpdateNotificationsError,
-  BulkUpdateNotificationsResponse,
 } from "./types.gen";
 export function createClient(
   baseUrl: string,
@@ -123,6 +132,22 @@ export function createClient(
   };
 
   /**
+   * Get Bot By Id
+   */
+  const getBotById = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetBotByIdData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotByIdResponse,
+      GetBotByIdError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/{id}",
+    });
+  };
+
+  /**
    * Delete Bot
    */
   const deleteBot = <ThrowOnError extends boolean = false>(
@@ -134,7 +159,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/bots",
+      url: "/bots/{id}",
     });
   };
 
@@ -150,7 +175,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/bots",
+      url: "/bots/{id}",
     });
   };
 
@@ -187,6 +212,22 @@ export function createClient(
   };
 
   /**
+   * Get Api Key By Id
+   */
+  const getApiKeyById = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetApiKeyByIdData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetApiKeyByIdResponse,
+      GetApiKeyByIdError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/api-keys/{id}",
+    });
+  };
+
+  /**
    * Delete Api Key
    */
   const deleteApiKey = <ThrowOnError extends boolean = false>(
@@ -198,7 +239,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/api-keys",
+      url: "/api-keys/{id}",
     });
   };
 
@@ -214,7 +255,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/api-keys",
+      url: "/api-keys/{id}",
     });
   };
 
@@ -438,6 +479,40 @@ export function createClient(
   };
 
   /**
+   * Update Notifications
+   * Bulk update notifications
+   */
+  const updateNotifications = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<UpdateNotificationsData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).put<
+      UpdateNotificationsResponse,
+      UpdateNotificationsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/notifications",
+    });
+  };
+
+  /**
+   * Delete Notifications
+   * Delete all notifications for the authenticated user
+   */
+  const deleteNotifications = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<DeleteNotificationsData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).delete<
+      DeleteNotificationsResponse,
+      DeleteNotificationsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/notifications",
+    });
+  };
+
+  /**
    * Update Notification
    * Update a notification's viewed status
    */
@@ -450,7 +525,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/notifications",
+      url: "/notifications/{id}",
     });
   };
 
@@ -466,34 +541,19 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/notifications",
-    });
-  };
-
-  /**
-   * Bulk Update Notifications
-   * Bulk update notifications
-   */
-  const bulkUpdateNotifications = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<BulkUpdateNotificationsData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).put<
-      BulkUpdateNotificationsResponse,
-      BulkUpdateNotificationsError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/notifications/bulk",
+      url: "/notifications/{id}",
     });
   };
 
   return {
     getBots,
     createBot,
+    getBotById,
     deleteBot,
     updateBot,
     getApiKeys,
     createApiKey,
+    getApiKeyById,
     deleteApiKey,
     updateApiKey,
     postFuturesActionActionsFuturesPost,
@@ -509,8 +569,9 @@ export function createClient(
     getStrategies,
     getNotifications,
     createNotification,
+    updateNotifications,
+    deleteNotifications,
     updateNotification,
     deleteNotification,
-    bulkUpdateNotifications,
   };
 }
