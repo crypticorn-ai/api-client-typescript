@@ -31,6 +31,7 @@ export type ApiErrorIdentifier =
   | "leverage_limit_exceeded"
   | "risk_limit_exceeded"
   | "order_violates_liquidation_price_constraints"
+  | "invalid_margin_mode"
   | "internal_system_error"
   | "system_configuration_error"
   | "service_temporarily_unavailable"

@@ -99,7 +99,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1739983563,
+      default: 1740090033,
     },
     user_id: {
       anyOf: [
@@ -149,6 +149,7 @@ export const ApiErrorIdentifierSchema = {
     "leverage_limit_exceeded",
     "risk_limit_exceeded",
     "order_violates_liquidation_price_constraints",
+    "invalid_margin_mode",
     "internal_system_error",
     "system_configuration_error",
     "service_temporarily_unavailable",
@@ -646,7 +647,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1739983563,
+      default: 1740090033,
     },
   },
   type: "object",
@@ -796,7 +797,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1739983563,
+      default: 1740090033,
     },
     price: {
       anyOf: [
