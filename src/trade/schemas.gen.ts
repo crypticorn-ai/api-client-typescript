@@ -99,7 +99,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1740090033,
+      default: 1740602856,
     },
     user_id: {
       anyOf: [
@@ -199,10 +199,23 @@ export const BotModelSchema = {
       title: "Api Key Id",
       description: "Unique identifier for the API key",
     },
-    allocation: {
+    initial_allocation: {
       type: "number",
-      title: "Allocation",
-      description: "Allocation for the bot",
+      title: "Initial Allocation",
+      description: "Initial allocation for the bot",
+    },
+    current_allocation: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Current Allocation",
+      description:
+        "Current allocation for the bot. Adds up the pnl of all orders. On change by user, is reset to initial allocation.",
     },
     enabled: {
       type: "boolean",
@@ -223,7 +236,13 @@ export const BotModelSchema = {
     },
   },
   type: "object",
-  required: ["name", "strategy_id", "api_key_id", "allocation", "enabled"],
+  required: [
+    "name",
+    "strategy_id",
+    "api_key_id",
+    "initial_allocation",
+    "enabled",
+  ],
   title: "BotModel",
 } as const;
 
@@ -647,7 +666,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1740090033,
+      default: 1740602856,
     },
   },
   type: "object",
@@ -797,7 +816,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1740090033,
+      default: 1740602856,
     },
     price: {
       anyOf: [
@@ -989,7 +1008,14 @@ export const TPSLSchema = {
       description: "Percentage of the order to sell",
     },
     execution_id: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Execution Id",
       description: "Execution ID of the order. Will be added by the system",
     },

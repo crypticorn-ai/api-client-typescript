@@ -104,9 +104,13 @@ export type BotModel = {
    */
   api_key_id: string;
   /**
-   * Allocation for the bot
+   * Initial allocation for the bot
    */
-  allocation: number;
+  initial_allocation: number;
+  /**
+   * Current allocation for the bot. Adds up the pnl of all orders. On change by user, is reset to initial allocation.
+   */
+  current_allocation?: number | null;
   /**
    * Status of the bot
    */
@@ -459,7 +463,7 @@ export type TPSL = {
   /**
    * Execution ID of the order. Will be added by the system
    */
-  execution_id?: string;
+  execution_id?: string | null;
 };
 
 /**
@@ -529,9 +533,6 @@ export type DeleteBotError = HTTPValidationError;
 
 export type UpdateBotData = {
   body: BotModel;
-  path: {
-    id: string;
-  };
 };
 
 export type UpdateBotResponse = unknown;
