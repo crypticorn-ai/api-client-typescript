@@ -45,7 +45,8 @@ export type ApiErrorIdentifier =
   | "http_request_error"
   | "trading_action_expired"
   | "bot_disabled"
-  | "black_swan";
+  | "black_swan"
+  | "new_trading_action";
 
 export type APIKeyModel = {
   /**
@@ -110,7 +111,7 @@ export type BotModel = {
   /**
    * Current allocation for the bot. Adds up the pnl of all orders. On change by user, is reset to initial allocation.
    */
-  current_allocation?: number | null;
+  current_allocation: number;
   /**
    * Status of the bot
    */
@@ -143,6 +144,12 @@ export type Deleted = {
  * Supported exchanges
  */
 export type Exchange = "kucoin" | "bingx";
+
+export type ExecutionIds = {
+  main: Array<string>;
+  sl: Array<string>;
+  tp: Array<string>;
+};
 
 /**
  * Model for futures balance
@@ -241,13 +248,13 @@ export type FuturesTradingAction = {
    */
   allocation?: number;
   /**
-   * Take profit targets. Can be set for open actions only.
+   * Take profit targets. Can be set for open actions only. Multiple can be set.
    */
-  take_profit_targets?: Array<TPSL> | null;
+  take_profit?: Array<TakeProfit> | null;
   /**
-   * Stop loss values. Can be set for open actions only.
+   * Stop loss value. Can be set for open actions only. Only one can be set.
    */
-  stop_loss_values?: Array<TPSL> | null;
+  stop_loss?: StopLoss | null;
   /**
    * Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.
    */
@@ -334,15 +341,15 @@ export type OrderModel = {
   /**
    * Unique identifier for the trading action that placed the order
    */
-  open_trading_action_id?: string | null;
-  /**
-   * Unique identifier for the trading action that closed the order
-   */
-  close_trading_action_id?: string | null;
+  trading_action_id?: string | null;
   /**
    * Unique identifier for the execution (not unique to the bot)
    */
   execution_id?: string | null;
+  /**
+   * Unique identifier for the order on the exchange
+   */
+  exchange_order_id?: string | null;
   /**
    * Unique identifier for the API key
    */
@@ -409,6 +416,10 @@ export type OrderModel = {
   order_details?: {
     [key: string]: unknown;
   } | null;
+  /**
+   * Profit and loss for the order
+   */
+  pnl?: number | null;
 };
 
 /**
@@ -420,6 +431,29 @@ export type OrderStatus =
   | "partially_filled"
   | "cancelled"
   | "failed";
+
+export type PostFuturesAction = {
+  id: string;
+  execution_ids: ExecutionIds;
+};
+
+/**
+ * Model for take profit and stop loss targets
+ */
+export type StopLoss = {
+  /**
+   * The price delta to calculate the limit price from the current market price, e.g. for a SL of 1% the it would be 0.99
+   */
+  price_delta?: number | null;
+  /**
+   * The limit price to set the target at. If not set, the limit price will be calculated from the current market price.
+   */
+  price?: number | null;
+  /**
+   * Execution ID of the order. Will be added by the system
+   */
+  execution_id?: string | null;
+};
 
 export type StrategyModel = {
   /**
@@ -449,31 +483,35 @@ export type StrategyModel = {
 };
 
 /**
- * Model for take profit and stop loss targets
+ * Model for take profit targets
  */
-export type TPSL = {
+export type TakeProfit = {
   /**
-   * Price to set the target at
+   * The price delta to calculate the limit price from the current market price, e.g. for a SL of 1% the it would be 0.99
    */
-  price: number;
+  price_delta?: number | null;
   /**
-   * Percentage of the order to sell
+   * The limit price to set the target at. If not set, the limit price will be calculated from the current market price.
    */
-  percentage: number;
+  price?: number | null;
   /**
    * Execution ID of the order. Will be added by the system
    */
   execution_id?: string | null;
+  /**
+   * Percentage of the order to sell
+   */
+  allocation: number;
 };
 
 /**
  * Type of trading action
  */
 export type TradingActionType =
-  | "buy"
-  | "sell"
-  | "buy_close"
-  | "sell_close"
+  | "open_long"
+  | "open_short"
+  | "close_long"
+  | "close_short"
   | "cancel_order";
 
 export type UpdateNotification = {
@@ -588,7 +626,7 @@ export type PostFuturesActionActionsFuturesPostData = {
   body: FuturesTradingAction;
 };
 
-export type PostFuturesActionActionsFuturesPostResponse = unknown;
+export type PostFuturesActionActionsFuturesPostResponse = PostFuturesAction;
 
 export type PostFuturesActionActionsFuturesPostError = HTTPValidationError;
 

@@ -99,7 +99,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1740602856,
+      default: 1741039711,
     },
     user_id: {
       anyOf: [
@@ -164,6 +164,7 @@ export const ApiErrorIdentifierSchema = {
     "trading_action_expired",
     "bot_disabled",
     "black_swan",
+    "new_trading_action",
   ],
   title: "ApiErrorIdentifier",
   description: "API error identifiers",
@@ -205,14 +206,7 @@ export const BotModelSchema = {
       description: "Initial allocation for the bot",
     },
     current_allocation: {
-      anyOf: [
-        {
-          type: "number",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "number",
       title: "Current Allocation",
       description:
         "Current allocation for the bot. Adds up the pnl of all orders. On change by user, is reset to initial allocation.",
@@ -241,6 +235,7 @@ export const BotModelSchema = {
     "strategy_id",
     "api_key_id",
     "initial_allocation",
+    "current_allocation",
     "enabled",
   ],
   title: "BotModel",
@@ -296,6 +291,35 @@ export const ExchangeSchema = {
   enum: ["kucoin", "bingx"],
   title: "Exchange",
   description: "Supported exchanges",
+} as const;
+
+export const ExecutionIdsSchema = {
+  properties: {
+    main: {
+      items: {
+        type: "string",
+      },
+      type: "array",
+      title: "Main",
+    },
+    sl: {
+      items: {
+        type: "string",
+      },
+      type: "array",
+      title: "Sl",
+    },
+    tp: {
+      items: {
+        type: "string",
+      },
+      type: "array",
+      title: "Tp",
+    },
+  },
+  type: "object",
+  required: ["main", "sl", "tp"],
+  title: "ExecutionIds",
 } as const;
 
 export const FuturesBalanceSchema = {
@@ -475,11 +499,11 @@ export const FuturesTradingActionSchema = {
       description:
         "Allocation of the bots allocated balance for the order. 0=0%, 1=100%",
     },
-    take_profit_targets: {
+    take_profit: {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TPSL",
+            $ref: "#/components/schemas/TakeProfit",
           },
           type: "array",
         },
@@ -487,23 +511,21 @@ export const FuturesTradingActionSchema = {
           type: "null",
         },
       ],
-      title: "Take Profit Targets",
-      description: "Take profit targets. Can be set for open actions only.",
+      title: "Take Profit",
+      description:
+        "Take profit targets. Can be set for open actions only. Multiple can be set.",
     },
-    stop_loss_values: {
+    stop_loss: {
       anyOf: [
         {
-          items: {
-            $ref: "#/components/schemas/TPSL",
-          },
-          type: "array",
+          $ref: "#/components/schemas/StopLoss",
         },
         {
           type: "null",
         },
       ],
-      title: "Stop Loss Values",
-      description: "Stop loss values. Can be set for open actions only.",
+      description:
+        "Stop loss value. Can be set for open actions only. Only one can be set.",
     },
     expiry_timestamp: {
       anyOf: [
@@ -666,7 +688,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1740602856,
+      default: 1741039711,
     },
   },
   type: "object",
@@ -695,7 +717,7 @@ export const OrderModelSchema = {
       description:
         "Unique identifier, used as a placeholder in the response body",
     },
-    open_trading_action_id: {
+    trading_action_id: {
       anyOf: [
         {
           type: "string",
@@ -704,22 +726,9 @@ export const OrderModelSchema = {
           type: "null",
         },
       ],
-      title: "Open Trading Action Id",
+      title: "Trading Action Id",
       description:
         "Unique identifier for the trading action that placed the order",
-    },
-    close_trading_action_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Close Trading Action Id",
-      description:
-        "Unique identifier for the trading action that closed the order",
     },
     execution_id: {
       anyOf: [
@@ -733,6 +742,18 @@ export const OrderModelSchema = {
       title: "Execution Id",
       description:
         "Unique identifier for the execution (not unique to the bot)",
+    },
+    exchange_order_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Exchange Order Id",
+      description: "Unique identifier for the order on the exchange",
     },
     api_key_id: {
       anyOf: [
@@ -816,7 +837,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1740602856,
+      default: 1741039711,
     },
     price: {
       anyOf: [
@@ -923,6 +944,18 @@ export const OrderModelSchema = {
       title: "Order Details",
       description: "Exchange specific details of the order",
     },
+    pnl: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Pnl",
+      description: "Profit and loss for the order",
+    },
   },
   type: "object",
   title: "OrderModel",
@@ -935,6 +968,68 @@ export const OrderStatusSchema = {
   enum: ["new", "filled", "partially_filled", "cancelled", "failed"],
   title: "OrderStatus",
   description: "Status of the order",
+} as const;
+
+export const PostFuturesActionSchema = {
+  properties: {
+    id: {
+      type: "string",
+      title: "Id",
+    },
+    execution_ids: {
+      $ref: "#/components/schemas/ExecutionIds",
+    },
+  },
+  type: "object",
+  required: ["id", "execution_ids"],
+  title: "PostFuturesAction",
+} as const;
+
+export const StopLossSchema = {
+  properties: {
+    price_delta: {
+      anyOf: [
+        {
+          type: "number",
+          minimum: 0,
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Price Delta",
+      description:
+        "The price delta to calculate the limit price from the current market price, e.g. for a SL of 1% the it would be 0.99",
+    },
+    price: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Price",
+      description:
+        "The limit price to set the target at. If not set, the limit price will be calculated from the current market price.",
+    },
+    execution_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Execution Id",
+      description: "Execution ID of the order. Will be added by the system",
+    },
+  },
+  type: "object",
+  title: "StopLoss",
+  description: "Model for take profit and stop loss targets",
 } as const;
 
 export const StrategyModelSchema = {
@@ -995,17 +1090,34 @@ export const StrategyModelSchema = {
   title: "StrategyModel",
 } as const;
 
-export const TPSLSchema = {
+export const TakeProfitSchema = {
   properties: {
-    price: {
-      type: "number",
-      title: "Price",
-      description: "Price to set the target at",
+    price_delta: {
+      anyOf: [
+        {
+          type: "number",
+          minimum: 0,
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Price Delta",
+      description:
+        "The price delta to calculate the limit price from the current market price, e.g. for a SL of 1% the it would be 0.99",
     },
-    percentage: {
-      type: "number",
-      title: "Percentage",
-      description: "Percentage of the order to sell",
+    price: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Price",
+      description:
+        "The limit price to set the target at. If not set, the limit price will be calculated from the current market price.",
     },
     execution_id: {
       anyOf: [
@@ -1019,16 +1131,29 @@ export const TPSLSchema = {
       title: "Execution Id",
       description: "Execution ID of the order. Will be added by the system",
     },
+    allocation: {
+      type: "number",
+      maximum: 1,
+      minimum: 0,
+      title: "Allocation",
+      description: "Percentage of the order to sell",
+    },
   },
   type: "object",
-  required: ["price", "percentage"],
-  title: "TPSL",
-  description: "Model for take profit and stop loss targets",
+  required: ["allocation"],
+  title: "TakeProfit",
+  description: "Model for take profit targets",
 } as const;
 
 export const TradingActionTypeSchema = {
   type: "string",
-  enum: ["buy", "sell", "buy_close", "sell_close", "cancel_order"],
+  enum: [
+    "open_long",
+    "open_short",
+    "close_long",
+    "close_short",
+    "cancel_order",
+  ],
   title: "TradingActionType",
   description: "Type of trading action",
 } as const;
