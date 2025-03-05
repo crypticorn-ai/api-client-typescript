@@ -12,8 +12,7 @@ export const APIKeyModelSchema = {
         },
       ],
       title: "Id",
-      description:
-        "Unique identifier, used as a placeholder in the response body",
+      description: "UID, used as a placeholder in the response body",
     },
     exchange: {
       anyOf: [
@@ -99,7 +98,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1741039711,
+      default: 1741209049,
     },
     user_id: {
       anyOf: [
@@ -111,7 +110,7 @@ export const APIKeyModelSchema = {
         },
       ],
       title: "User Id",
-      description: "Unique identifier for the user",
+      description: "UID for the user",
     },
   },
   type: "object",
@@ -161,10 +160,12 @@ export const ApiErrorIdentifierSchema = {
     "trading_has_been_locked",
     "unknown_error_occurred",
     "http_request_error",
+    "black_swan",
     "trading_action_expired",
     "bot_disabled",
-    "black_swan",
     "new_trading_action",
+    "order_size_too_small",
+    "order_size_too_large",
   ],
   title: "ApiErrorIdentifier",
   description: "API error identifiers",
@@ -182,8 +183,7 @@ export const BotModelSchema = {
         },
       ],
       title: "Id",
-      description:
-        "Unique identifier, used as a placeholder in the response body",
+      description: "UID, used as a placeholder in the response body",
     },
     name: {
       type: "string",
@@ -193,12 +193,12 @@ export const BotModelSchema = {
     strategy_id: {
       type: "string",
       title: "Strategy Id",
-      description: "Unique identifier for the trading strategy used by the bot",
+      description: "UID for the trading strategy used by the bot",
     },
     api_key_id: {
       type: "string",
       title: "Api Key Id",
-      description: "Unique identifier for the API key",
+      description: "UID for the API key",
     },
     initial_allocation: {
       type: "number",
@@ -206,7 +206,14 @@ export const BotModelSchema = {
       description: "Initial allocation for the bot",
     },
     current_allocation: {
-      type: "number",
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Current Allocation",
       description:
         "Current allocation for the bot. Adds up the pnl of all orders. On change by user, is reset to initial allocation.",
@@ -226,7 +233,7 @@ export const BotModelSchema = {
         },
       ],
       title: "User Id",
-      description: "Unique identifier for the user",
+      description: "UID for the user",
     },
   },
   type: "object",
@@ -235,7 +242,6 @@ export const BotModelSchema = {
     "strategy_id",
     "api_key_id",
     "initial_allocation",
-    "current_allocation",
     "enabled",
   ],
   title: "BotModel",
@@ -253,8 +259,7 @@ export const CreateAPIKeyResponseSchema = {
         },
       ],
       title: "Id",
-      description:
-        "Unique identifier, used as a placeholder in the response body",
+      description: "UID, used as a placeholder in the response body",
     },
     error: {
       anyOf: [
@@ -425,7 +430,7 @@ export const FuturesTradingActionSchema = {
       ],
       title: "Execution Id",
       description:
-        "Unique identifier for the execution of the order. Added by the system, therefore optional.",
+        "UID for the execution of the order. Leave empty for open actions. Required on close actions if you havent't placed a TP/SL before. A specific TP/SL execution ID of the opening order.",
     },
     open_order_execution_id: {
       anyOf: [
@@ -438,7 +443,7 @@ export const FuturesTradingActionSchema = {
       ],
       title: "Open Order Execution Id",
       description:
-        "Unique identifier for the order to close. Required on close actions to match with the open order.",
+        "UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.",
     },
     action_type: {
       $ref: "#/components/schemas/TradingActionType",
@@ -451,7 +456,7 @@ export const FuturesTradingActionSchema = {
     strategy_id: {
       type: "string",
       title: "Strategy Id",
-      description: "Unique identifier for the strategy.",
+      description: "UID for the strategy.",
     },
     client_timestamp: {
       type: "integer",
@@ -497,13 +502,13 @@ export const FuturesTradingActionSchema = {
       exclusiveMinimum: 0,
       title: "Allocation",
       description:
-        "Allocation of the bots allocated balance for the order. 0=0%, 1=100%",
+        "How much of bot's balance to use for the order (for open actions). How much of the position to close (for close actions). 0=0%, 1=100%.",
     },
     take_profit: {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TakeProfit",
+            $ref: "#/components/schemas/TPSL",
           },
           type: "array",
         },
@@ -518,14 +523,18 @@ export const FuturesTradingActionSchema = {
     stop_loss: {
       anyOf: [
         {
-          $ref: "#/components/schemas/StopLoss",
+          items: {
+            $ref: "#/components/schemas/TPSL",
+          },
+          type: "array",
         },
         {
           type: "null",
         },
       ],
+      title: "Stop Loss",
       description:
-        "Stop loss value. Can be set for open actions only. Only one can be set.",
+        "Stop loss values. Can be set for open actions only. Multiple can be set.",
     },
     expiry_timestamp: {
       anyOf: [
@@ -552,8 +561,7 @@ export const FuturesTradingActionSchema = {
         },
       ],
       title: "Leverage",
-      description:
-        "Leverage to use for futures trades. Limited to 10 to avoid exchange leverage support issues.",
+      description: "Leverage to use for futures trades.",
     },
     margin_mode: {
       anyOf: [
@@ -600,7 +608,7 @@ export const IDSchema = {
     id: {
       type: "string",
       title: "Id",
-      description: "Unique identifier, required in the request body",
+      description: "UID, required in the request body",
     },
   },
   type: "object",
@@ -647,12 +655,10 @@ export const NotificationModelSchema = {
         },
       ],
       title: "Id",
-      description:
-        "Unique identifier, used as a placeholder in the response body",
+      description: "UID, used as a placeholder in the response body",
     },
     identifier: {
-      type: "string",
-      title: "Identifier",
+      $ref: "#/components/schemas/ApiErrorIdentifier",
       description:
         "Identifier string. Must match the mapping key in the frontend.",
     },
@@ -666,7 +672,7 @@ export const NotificationModelSchema = {
         },
       ],
       title: "User Id",
-      description: "Unique identifier for the user. None for all users.",
+      description: "UID for the user. None for all users.",
     },
     viewed: {
       type: "boolean",
@@ -688,7 +694,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1741039711,
+      default: 1741209049,
     },
   },
   type: "object",
@@ -714,8 +720,7 @@ export const OrderModelSchema = {
         },
       ],
       title: "Id",
-      description:
-        "Unique identifier, used as a placeholder in the response body",
+      description: "UID, used as a placeholder in the response body",
     },
     trading_action_id: {
       anyOf: [
@@ -727,8 +732,7 @@ export const OrderModelSchema = {
         },
       ],
       title: "Trading Action Id",
-      description:
-        "Unique identifier for the trading action that placed the order",
+      description: "UID for the trading action that placed the order",
     },
     execution_id: {
       anyOf: [
@@ -740,8 +744,7 @@ export const OrderModelSchema = {
         },
       ],
       title: "Execution Id",
-      description:
-        "Unique identifier for the execution (not unique to the bot)",
+      description: "UID for the execution (not unique to the bot)",
     },
     exchange_order_id: {
       anyOf: [
@@ -753,7 +756,7 @@ export const OrderModelSchema = {
         },
       ],
       title: "Exchange Order Id",
-      description: "Unique identifier for the order on the exchange",
+      description: "UID for the order on the exchange",
     },
     api_key_id: {
       anyOf: [
@@ -765,7 +768,7 @@ export const OrderModelSchema = {
         },
       ],
       title: "Api Key Id",
-      description: "Unique identifier for the API key",
+      description: "UID for the API key",
     },
     user_id: {
       anyOf: [
@@ -777,7 +780,7 @@ export const OrderModelSchema = {
         },
       ],
       title: "User Id",
-      description: "Unique identifier for the user",
+      description: "UID for the user",
     },
     bot_id: {
       anyOf: [
@@ -789,7 +792,7 @@ export const OrderModelSchema = {
         },
       ],
       title: "Bot Id",
-      description: "Unique identifier for the bot",
+      description: "UID for the bot",
     },
     exchange: {
       anyOf: [
@@ -837,7 +840,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1741039711,
+      default: 1741209049,
     },
     price: {
       anyOf: [
@@ -985,53 +988,6 @@ export const PostFuturesActionSchema = {
   title: "PostFuturesAction",
 } as const;
 
-export const StopLossSchema = {
-  properties: {
-    price_delta: {
-      anyOf: [
-        {
-          type: "number",
-          minimum: 0,
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Price Delta",
-      description:
-        "The price delta to calculate the limit price from the current market price, e.g. for a SL of 1% the it would be 0.99",
-    },
-    price: {
-      anyOf: [
-        {
-          type: "number",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Price",
-      description:
-        "The limit price to set the target at. If not set, the limit price will be calculated from the current market price.",
-    },
-    execution_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Execution Id",
-      description: "Execution ID of the order. Will be added by the system",
-    },
-  },
-  type: "object",
-  title: "StopLoss",
-  description: "Model for take profit and stop loss targets",
-} as const;
-
 export const StrategyModelSchema = {
   properties: {
     id: {
@@ -1044,8 +1000,7 @@ export const StrategyModelSchema = {
         },
       ],
       title: "Id",
-      description:
-        "Unique identifier, used as a placeholder in the response body",
+      description: "UID, used as a placeholder in the response body",
     },
     identifier: {
       type: "string",
@@ -1090,7 +1045,7 @@ export const StrategyModelSchema = {
   title: "StrategyModel",
 } as const;
 
-export const TakeProfitSchema = {
+export const TPSLSchema = {
   properties: {
     price_delta: {
       anyOf: [
@@ -1141,19 +1096,13 @@ export const TakeProfitSchema = {
   },
   type: "object",
   required: ["allocation"],
-  title: "TakeProfit",
-  description: "Model for take profit targets",
+  title: "TPSL",
+  description: "Model for take profit and stop loss targets",
 } as const;
 
 export const TradingActionTypeSchema = {
   type: "string",
-  enum: [
-    "open_long",
-    "open_short",
-    "close_long",
-    "close_short",
-    "cancel_order",
-  ],
+  enum: ["open_long", "open_short", "close_long", "close_short"],
   title: "TradingActionType",
   description: "Type of trading action",
 } as const;
@@ -1163,7 +1112,7 @@ export const UpdateNotificationSchema = {
     id: {
       type: "string",
       title: "Id",
-      description: "Unique identifier, required in the request body",
+      description: "UID, required in the request body",
     },
     viewed: {
       type: "boolean",

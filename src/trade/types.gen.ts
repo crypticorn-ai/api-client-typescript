@@ -43,14 +43,16 @@ export type ApiErrorIdentifier =
   | "trading_has_been_locked"
   | "unknown_error_occurred"
   | "http_request_error"
+  | "black_swan"
   | "trading_action_expired"
   | "bot_disabled"
-  | "black_swan"
-  | "new_trading_action";
+  | "new_trading_action"
+  | "order_size_too_small"
+  | "order_size_too_large";
 
 export type APIKeyModel = {
   /**
-   * Unique identifier, used as a placeholder in the response body
+   * UID, used as a placeholder in the response body
    */
   id?: string | null;
   /**
@@ -82,14 +84,14 @@ export type APIKeyModel = {
    */
   created_at?: number | null;
   /**
-   * Unique identifier for the user
+   * UID for the user
    */
   user_id?: string | null;
 };
 
 export type BotModel = {
   /**
-   * Unique identifier, used as a placeholder in the response body
+   * UID, used as a placeholder in the response body
    */
   id?: string | null;
   /**
@@ -97,11 +99,11 @@ export type BotModel = {
    */
   name: string;
   /**
-   * Unique identifier for the trading strategy used by the bot
+   * UID for the trading strategy used by the bot
    */
   strategy_id: string;
   /**
-   * Unique identifier for the API key
+   * UID for the API key
    */
   api_key_id: string;
   /**
@@ -111,20 +113,20 @@ export type BotModel = {
   /**
    * Current allocation for the bot. Adds up the pnl of all orders. On change by user, is reset to initial allocation.
    */
-  current_allocation: number;
+  current_allocation?: number | null;
   /**
    * Status of the bot
    */
   enabled: boolean;
   /**
-   * Unique identifier for the user
+   * UID for the user
    */
   user_id?: string | null;
 };
 
 export type CreateAPIKeyResponse = {
   /**
-   * Unique identifier, used as a placeholder in the response body
+   * UID, used as a placeholder in the response body
    */
   id?: string | null;
   /**
@@ -208,11 +210,11 @@ export type FuturesTradingAction = {
    */
   id?: string | null;
   /**
-   * Unique identifier for the execution of the order. Added by the system, therefore optional.
+   * UID for the execution of the order. Leave empty for open actions. Required on close actions if you havent't placed a TP/SL before. A specific TP/SL execution ID of the opening order.
    */
   execution_id?: string | null;
   /**
-   * Unique identifier for the order to close. Required on close actions to match with the open order.
+   * UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.
    */
   open_order_execution_id?: string | null;
   /**
@@ -224,7 +226,7 @@ export type FuturesTradingAction = {
    */
   market_type: MarketType;
   /**
-   * Unique identifier for the strategy.
+   * UID for the strategy.
    */
   strategy_id: string;
   /**
@@ -244,23 +246,23 @@ export type FuturesTradingAction = {
    */
   limit_price?: number | null;
   /**
-   * Allocation of the bots allocated balance for the order. 0=0%, 1=100%
+   * How much of bot's balance to use for the order (for open actions). How much of the position to close (for close actions). 0=0%, 1=100%.
    */
   allocation?: number;
   /**
    * Take profit targets. Can be set for open actions only. Multiple can be set.
    */
-  take_profit?: Array<TakeProfit> | null;
+  take_profit?: Array<TPSL> | null;
   /**
-   * Stop loss value. Can be set for open actions only. Only one can be set.
+   * Stop loss values. Can be set for open actions only. Multiple can be set.
    */
-  stop_loss?: StopLoss | null;
+  stop_loss?: Array<TPSL> | null;
   /**
    * Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.
    */
   expiry_timestamp?: number | null;
   /**
-   * Leverage to use for futures trades. Limited to 10 to avoid exchange leverage support issues.
+   * Leverage to use for futures trades.
    */
   leverage: number | null;
   /**
@@ -275,7 +277,7 @@ export type HTTPValidationError = {
 
 export type ID = {
   /**
-   * Unique identifier, required in the request body
+   * UID, required in the request body
    */
   id: string;
 };
@@ -299,15 +301,15 @@ export type Modified = {
 
 export type NotificationModel = {
   /**
-   * Unique identifier, used as a placeholder in the response body
+   * UID, used as a placeholder in the response body
    */
   id?: string | null;
   /**
    * Identifier string. Must match the mapping key in the frontend.
    */
-  identifier: string;
+  identifier: ApiErrorIdentifier;
   /**
-   * Unique identifier for the user. None for all users.
+   * UID for the user. None for all users.
    */
   user_id?: string | null;
   /**
@@ -335,31 +337,31 @@ export type NotificationType = "error" | "success" | "info" | "warning";
  */
 export type OrderModel = {
   /**
-   * Unique identifier, used as a placeholder in the response body
+   * UID, used as a placeholder in the response body
    */
   id?: string | null;
   /**
-   * Unique identifier for the trading action that placed the order
+   * UID for the trading action that placed the order
    */
   trading_action_id?: string | null;
   /**
-   * Unique identifier for the execution (not unique to the bot)
+   * UID for the execution (not unique to the bot)
    */
   execution_id?: string | null;
   /**
-   * Unique identifier for the order on the exchange
+   * UID for the order on the exchange
    */
   exchange_order_id?: string | null;
   /**
-   * Unique identifier for the API key
+   * UID for the API key
    */
   api_key_id?: string | null;
   /**
-   * Unique identifier for the user
+   * UID for the user
    */
   user_id?: string | null;
   /**
-   * Unique identifier for the bot
+   * UID for the bot
    */
   bot_id?: string | null;
   /**
@@ -437,27 +439,9 @@ export type PostFuturesAction = {
   execution_ids: ExecutionIds;
 };
 
-/**
- * Model for take profit and stop loss targets
- */
-export type StopLoss = {
-  /**
-   * The price delta to calculate the limit price from the current market price, e.g. for a SL of 1% the it would be 0.99
-   */
-  price_delta?: number | null;
-  /**
-   * The limit price to set the target at. If not set, the limit price will be calculated from the current market price.
-   */
-  price?: number | null;
-  /**
-   * Execution ID of the order. Will be added by the system
-   */
-  execution_id?: string | null;
-};
-
 export type StrategyModel = {
   /**
-   * Unique identifier, used as a placeholder in the response body
+   * UID, used as a placeholder in the response body
    */
   id?: string | null;
   /**
@@ -483,9 +467,9 @@ export type StrategyModel = {
 };
 
 /**
- * Model for take profit targets
+ * Model for take profit and stop loss targets
  */
-export type TakeProfit = {
+export type TPSL = {
   /**
    * The price delta to calculate the limit price from the current market price, e.g. for a SL of 1% the it would be 0.99
    */
@@ -511,12 +495,11 @@ export type TradingActionType =
   | "open_long"
   | "open_short"
   | "close_long"
-  | "close_short"
-  | "cancel_order";
+  | "close_short";
 
 export type UpdateNotification = {
   /**
-   * Unique identifier, required in the request body
+   * UID, required in the request body
    */
   id: string;
   /**
