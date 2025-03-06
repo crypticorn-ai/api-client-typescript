@@ -85,6 +85,9 @@ import type {
   DeleteNotificationData,
   DeleteNotificationError,
   DeleteNotificationResponse,
+  GetExchangesData,
+  GetExchangesError,
+  GetExchangesResponse,
 } from "./types.gen";
 export function createClient(
   baseUrl: string,
@@ -545,6 +548,22 @@ export function createClient(
     });
   };
 
+  /**
+   * Get Exchanges
+   */
+  const getExchanges = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetExchangesData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetExchangesResponse,
+      GetExchangesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/exchanges",
+    });
+  };
+
   return {
     getBots,
     createBot,
@@ -573,5 +592,6 @@ export function createClient(
     deleteNotifications,
     updateNotification,
     deleteNotification,
+    getExchanges,
   };
 }

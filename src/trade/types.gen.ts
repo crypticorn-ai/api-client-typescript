@@ -58,7 +58,7 @@ export type APIKeyModel = {
   /**
    * Exchange name
    */
-  exchange: string | null;
+  exchange: string;
   /**
    * API key
    */
@@ -74,7 +74,7 @@ export type APIKeyModel = {
   /**
    * Label for the API key
    */
-  label: string | null;
+  label: string;
   /**
    * Status of the API key
    */
@@ -439,6 +439,13 @@ export type PostFuturesAction = {
   execution_ids: ExecutionIds;
 };
 
+export type StrategyExchangeInfo = {
+  /**
+   * Minimum amount for the strategy on the exchange
+   */
+  min_amount: number;
+};
+
 export type StrategyModel = {
   /**
    * UID, used as a placeholder in the response body
@@ -457,9 +464,11 @@ export type StrategyModel = {
    */
   description: string;
   /**
-   * Exchanges supported by the strategy. Leave empty for all exchanges.
+   * Exchanges supported by the strategy.
    */
-  exchanges?: Array<Exchange> | null;
+  exchanges: Array<{
+    [key: string]: StrategyExchangeInfo;
+  }>;
   /**
    * Whether the strategy is public or for internal testing
    */
@@ -752,3 +761,9 @@ export type DeleteNotificationData = {
 export type DeleteNotificationResponse = Deleted;
 
 export type DeleteNotificationError = HTTPValidationError;
+
+export type GetExchangesData = unknown;
+
+export type GetExchangesResponse = Array<Exchange>;
+
+export type GetExchangesError = HTTPValidationError;

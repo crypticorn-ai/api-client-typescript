@@ -15,14 +15,7 @@ export const APIKeyModelSchema = {
       description: "UID, used as a placeholder in the response body",
     },
     exchange: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Exchange",
       description: "Exchange name",
     },
@@ -63,14 +56,7 @@ export const APIKeyModelSchema = {
       description: "API passphrase",
     },
     label: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Label",
       description: "Label for the API key",
     },
@@ -98,7 +84,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1741209049,
+      default: 1741289329,
     },
     user_id: {
       anyOf: [
@@ -694,7 +680,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1741209049,
+      default: 1741289329,
     },
   },
   type: "object",
@@ -840,7 +826,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1741209049,
+      default: 1741289329,
     },
     price: {
       anyOf: [
@@ -988,6 +974,19 @@ export const PostFuturesActionSchema = {
   title: "PostFuturesAction",
 } as const;
 
+export const StrategyExchangeInfoSchema = {
+  properties: {
+    min_amount: {
+      type: "number",
+      title: "Min Amount",
+      description: "Minimum amount for the strategy on the exchange",
+    },
+  },
+  type: "object",
+  required: ["min_amount"],
+  title: "StrategyExchangeInfo",
+} as const;
+
 export const StrategyModelSchema = {
   properties: {
     id: {
@@ -1019,20 +1018,18 @@ export const StrategyModelSchema = {
       description: "Description of the strategy",
     },
     exchanges: {
-      anyOf: [
-        {
-          items: {
-            $ref: "#/components/schemas/Exchange",
-          },
-          type: "array",
+      items: {
+        additionalProperties: {
+          $ref: "#/components/schemas/StrategyExchangeInfo",
         },
-        {
-          type: "null",
+        propertyNames: {
+          $ref: "#/components/schemas/Exchange",
         },
-      ],
+        type: "object",
+      },
+      type: "array",
       title: "Exchanges",
-      description:
-        "Exchanges supported by the strategy. Leave empty for all exchanges.",
+      description: "Exchanges supported by the strategy.",
     },
     public: {
       type: "boolean",
@@ -1041,7 +1038,7 @@ export const StrategyModelSchema = {
     },
   },
   type: "object",
-  required: ["identifier", "name", "description", "public"],
+  required: ["identifier", "name", "description", "exchanges", "public"],
   title: "StrategyModel",
 } as const;
 
