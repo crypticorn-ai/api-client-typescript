@@ -475,6 +475,10 @@ export type StrategyModel = {
    * Whether the strategy is public or for internal testing
    */
   public: boolean;
+  /**
+   * Leverage for the strategy
+   */
+  leverage: number;
 };
 
 /**

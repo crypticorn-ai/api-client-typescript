@@ -84,7 +84,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1741330169,
+      default: 1741351849,
     },
     user_id: {
       anyOf: [
@@ -680,7 +680,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1741330169,
+      default: 1741351849,
     },
   },
   type: "object",
@@ -826,7 +826,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1741330169,
+      default: 1741351849,
     },
     price: {
       anyOf: [
@@ -1034,9 +1034,21 @@ export const StrategyModelSchema = {
       title: "Public",
       description: "Whether the strategy is public or for internal testing",
     },
+    leverage: {
+      type: "integer",
+      title: "Leverage",
+      description: "Leverage for the strategy",
+    },
   },
   type: "object",
-  required: ["identifier", "name", "description", "exchanges", "public"],
+  required: [
+    "identifier",
+    "name",
+    "description",
+    "exchanges",
+    "public",
+    "leverage",
+  ],
   title: "StrategyModel",
 } as const;
 
