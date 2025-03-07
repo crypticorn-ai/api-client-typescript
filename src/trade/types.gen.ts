@@ -441,6 +441,10 @@ export type PostFuturesAction = {
 
 export type StrategyExchangeInfo = {
   /**
+   * Exchange name. Of type Exchange
+   */
+  exchange: Exchange;
+  /**
    * Minimum amount for the strategy on the exchange
    */
   min_amount: number;
@@ -466,9 +470,7 @@ export type StrategyModel = {
   /**
    * Exchanges supported by the strategy.
    */
-  exchanges: Array<{
-    [key: string]: StrategyExchangeInfo;
-  }>;
+  exchanges: Array<StrategyExchangeInfo>;
   /**
    * Whether the strategy is public or for internal testing
    */

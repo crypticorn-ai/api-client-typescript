@@ -84,7 +84,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1741289329,
+      default: 1741330169,
     },
     user_id: {
       anyOf: [
@@ -680,7 +680,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1741289329,
+      default: 1741330169,
     },
   },
   type: "object",
@@ -826,7 +826,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1741289329,
+      default: 1741330169,
     },
     price: {
       anyOf: [
@@ -976,6 +976,10 @@ export const PostFuturesActionSchema = {
 
 export const StrategyExchangeInfoSchema = {
   properties: {
+    exchange: {
+      $ref: "#/components/schemas/Exchange",
+      description: "Exchange name. Of type Exchange",
+    },
     min_amount: {
       type: "number",
       title: "Min Amount",
@@ -983,7 +987,7 @@ export const StrategyExchangeInfoSchema = {
     },
   },
   type: "object",
-  required: ["min_amount"],
+  required: ["exchange", "min_amount"],
   title: "StrategyExchangeInfo",
 } as const;
 
@@ -1019,13 +1023,7 @@ export const StrategyModelSchema = {
     },
     exchanges: {
       items: {
-        additionalProperties: {
-          $ref: "#/components/schemas/StrategyExchangeInfo",
-        },
-        propertyNames: {
-          $ref: "#/components/schemas/Exchange",
-        },
-        type: "object",
+        $ref: "#/components/schemas/StrategyExchangeInfo",
       },
       type: "array",
       title: "Exchanges",
