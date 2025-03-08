@@ -215,7 +215,7 @@ export type FuturesBalanceError = {
  */
 export type FuturesTradingAction = {
   /**
-   * Placeholder for the id of the trading action. Will be added by the system, therefore optional.
+   * Placeholder for the id of the trading action. Will be added by the system, therefore leave empty.
    */
   id?: string | null;
   /**
@@ -226,6 +226,10 @@ export type FuturesTradingAction = {
    * UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.
    */
   open_order_execution_id?: string | null;
+  /**
+   * UID for the position to close. Leave empty.
+   */
+  position_id?: string | null;
   /**
    * The type of action.
    */
@@ -238,10 +242,6 @@ export type FuturesTradingAction = {
    * UID for the strategy.
    */
   strategy_id: string;
-  /**
-   * Timestamp of when the action was created on the client side.
-   */
-  client_timestamp: number;
   /**
    * Trading symbol or asset pair in format: 'symbol/quote_currency' (see market service for valid symbols)
    */
@@ -361,6 +361,10 @@ export type OrderModel = {
    * UID for the order on the exchange
    */
   exchange_order_id?: string | null;
+  /**
+   * UID for the position on the exchange
+   */
+  position_id?: string | null;
   /**
    * UID for the API key
    */
@@ -577,16 +581,6 @@ export type CreateBotData = {
 export type CreateBotResponse = unknown;
 
 export type CreateBotError = HTTPValidationError;
-
-export type GetBotByIdData = {
-  path: {
-    id: string;
-  };
-};
-
-export type GetBotByIdResponse = BotModel;
-
-export type GetBotByIdError = HTTPValidationError;
 
 export type DeleteBotData = {
   path: {

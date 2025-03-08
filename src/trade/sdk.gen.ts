@@ -12,9 +12,6 @@ import type {
   CreateBotData,
   CreateBotError,
   CreateBotResponse,
-  GetBotByIdData,
-  GetBotByIdError,
-  GetBotByIdResponse,
   DeleteBotData,
   DeleteBotError,
   DeleteBotResponse,
@@ -131,22 +128,6 @@ export function createClient(
     >({
       ...options,
       url: "/bots",
-    });
-  };
-
-  /**
-   * Get Bot By Id
-   */
-  const getBotById = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetBotByIdData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetBotByIdResponse,
-      GetBotByIdError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/bots/{id}",
     });
   };
 
@@ -567,7 +548,6 @@ export function createClient(
   return {
     getBots,
     createBot,
-    getBotById,
     deleteBot,
     updateBot,
     getApiKeys,

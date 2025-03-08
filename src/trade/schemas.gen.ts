@@ -84,7 +84,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1741443395,
+      default: 1741475038,
     },
     user_id: {
       anyOf: [
@@ -408,7 +408,7 @@ export const FuturesTradingActionSchema = {
       ],
       title: "Id",
       description:
-        "Placeholder for the id of the trading action. Will be added by the system, therefore optional.",
+        "Placeholder for the id of the trading action. Will be added by the system, therefore leave empty.",
     },
     execution_id: {
       anyOf: [
@@ -436,6 +436,18 @@ export const FuturesTradingActionSchema = {
       description:
         "UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.",
     },
+    position_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Position Id",
+      description: "UID for the position to close. Leave empty.",
+    },
     action_type: {
       $ref: "#/components/schemas/TradingActionType",
       description: "The type of action.",
@@ -448,12 +460,6 @@ export const FuturesTradingActionSchema = {
       type: "string",
       title: "Strategy Id",
       description: "UID for the strategy.",
-    },
-    client_timestamp: {
-      type: "integer",
-      title: "Client Timestamp",
-      description:
-        "Timestamp of when the action was created on the client side.",
     },
     symbol: {
       type: "string",
@@ -568,14 +574,7 @@ export const FuturesTradingActionSchema = {
     },
   },
   type: "object",
-  required: [
-    "action_type",
-    "market_type",
-    "strategy_id",
-    "client_timestamp",
-    "symbol",
-    "leverage",
-  ],
+  required: ["action_type", "market_type", "strategy_id", "symbol", "leverage"],
   title: "FuturesTradingAction",
   description: "Model for futures trading actions",
 } as const;
@@ -685,7 +684,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1741443395,
+      default: 1741475038,
     },
   },
   type: "object",
@@ -748,6 +747,18 @@ export const OrderModelSchema = {
       ],
       title: "Exchange Order Id",
       description: "UID for the order on the exchange",
+    },
+    position_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Position Id",
+      description: "UID for the position on the exchange",
     },
     api_key_id: {
       anyOf: [
@@ -831,7 +842,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1741443395,
+      default: 1741475038,
     },
     price: {
       anyOf: [
