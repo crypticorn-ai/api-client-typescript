@@ -84,7 +84,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1741351849,
+      default: 1741443395,
     },
     user_id: {
       anyOf: [
@@ -292,6 +292,7 @@ export const ExecutionIdsSchema = {
       },
       type: "array",
       title: "Main",
+      description: "Main execution ID. List with one item.",
     },
     sl: {
       items: {
@@ -299,6 +300,8 @@ export const ExecutionIdsSchema = {
       },
       type: "array",
       title: "Sl",
+      description:
+        "Stop loss execution IDs. List with multiple items ordered by the next stop loss.",
     },
     tp: {
       items: {
@@ -306,6 +309,8 @@ export const ExecutionIdsSchema = {
       },
       type: "array",
       title: "Tp",
+      description:
+        "Take profit execution IDs. List with multiple items ordered by the next take profit.",
     },
   },
   type: "object",
@@ -680,7 +685,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1741351849,
+      default: 1741443395,
     },
   },
   type: "object",
@@ -826,7 +831,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1741351849,
+      default: 1741443395,
     },
     price: {
       anyOf: [
@@ -850,6 +855,28 @@ export const OrderModelSchema = {
         },
       ],
       description: "Type of trading action. Of type TradingActionType",
+    },
+    market_type: {
+      anyOf: [
+        {
+          $ref: "#/components/schemas/MarketType",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description: "Market type of the order. Of type MarketType",
+    },
+    margin_mode: {
+      anyOf: [
+        {
+          $ref: "#/components/schemas/MarginMode",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description: "Margin mode of the order. Of type MarginMode",
     },
     status_code: {
       anyOf: [
@@ -964,9 +991,11 @@ export const PostFuturesActionSchema = {
     id: {
       type: "string",
       title: "Id",
+      description: "Action ID.",
     },
     execution_ids: {
       $ref: "#/components/schemas/ExecutionIds",
+      description: "Execution IDs for the action.",
     },
   },
   type: "object",
@@ -1034,10 +1063,22 @@ export const StrategyModelSchema = {
       title: "Public",
       description: "Whether the strategy is public or for internal testing",
     },
+    enabled: {
+      type: "boolean",
+      title: "Enabled",
+      description: "Whether the strategy is enabled",
+    },
     leverage: {
       type: "integer",
       title: "Leverage",
       description: "Leverage for the strategy",
+    },
+    performance_fee: {
+      type: "number",
+      maximum: 1,
+      exclusiveMinimum: 0,
+      title: "Performance Fee",
+      description: "Performance fee for the strategy",
     },
   },
   type: "object",
@@ -1047,7 +1088,9 @@ export const StrategyModelSchema = {
     "description",
     "exchanges",
     "public",
+    "enabled",
     "leverage",
+    "performance_fee",
   ],
   title: "StrategyModel",
 } as const;

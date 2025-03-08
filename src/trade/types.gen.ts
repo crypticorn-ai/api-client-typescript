@@ -148,8 +148,17 @@ export type Deleted = {
 export type Exchange = "kucoin" | "bingx";
 
 export type ExecutionIds = {
+  /**
+   * Main execution ID. List with one item.
+   */
   main: Array<string>;
+  /**
+   * Stop loss execution IDs. List with multiple items ordered by the next stop loss.
+   */
   sl: Array<string>;
+  /**
+   * Take profit execution IDs. List with multiple items ordered by the next take profit.
+   */
   tp: Array<string>;
 };
 
@@ -389,6 +398,14 @@ export type OrderModel = {
    */
   action_type?: TradingActionType | null;
   /**
+   * Market type of the order. Of type MarketType
+   */
+  market_type?: MarketType | null;
+  /**
+   * Margin mode of the order. Of type MarginMode
+   */
+  margin_mode?: MarginMode | null;
+  /**
    * API error identifier. Of type ApiErrorIdentifier
    */
   status_code?: ApiErrorIdentifier | null;
@@ -435,7 +452,13 @@ export type OrderStatus =
   | "failed";
 
 export type PostFuturesAction = {
+  /**
+   * Action ID.
+   */
   id: string;
+  /**
+   * Execution IDs for the action.
+   */
   execution_ids: ExecutionIds;
 };
 
@@ -476,9 +499,17 @@ export type StrategyModel = {
    */
   public: boolean;
   /**
+   * Whether the strategy is enabled
+   */
+  enabled: boolean;
+  /**
    * Leverage for the strategy
    */
   leverage: number;
+  /**
+   * Performance fee for the strategy
+   */
+  performance_fee: number;
 };
 
 /**
@@ -622,6 +653,9 @@ export type UpdateApiKeyError = HTTPValidationError;
 
 export type PostFuturesActionActionsFuturesPostData = {
   body: FuturesTradingAction;
+  headers?: {
+    authorization?: string | null;
+  };
 };
 
 export type PostFuturesActionActionsFuturesPostResponse = PostFuturesAction;
