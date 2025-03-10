@@ -84,7 +84,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1741475038,
+      default: 1741570454,
     },
     user_id: {
       anyOf: [
@@ -102,6 +102,202 @@ export const APIKeyModelSchema = {
   type: "object",
   required: ["exchange", "label"],
   title: "APIKeyModel",
+} as const;
+
+export const ActionModelSchema = {
+  properties: {
+    id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Id",
+      description:
+        "Placeholder for the id of the trading action. Will be added by the system, therefore leave empty.",
+    },
+    execution_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Execution Id",
+      description:
+        "UID for the execution of the order. Leave empty for open actions. Required on close actions if you havent't placed a TP/SL before. A specific TP/SL execution ID of the opening order.",
+    },
+    open_order_execution_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Open Order Execution Id",
+      description:
+        "UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.",
+    },
+    position_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Position Id",
+      description: "UID for the position to close. Leave empty.",
+    },
+    action_type: {
+      $ref: "#/components/schemas/TradingActionType",
+      description: "The type of action.",
+    },
+    market_type: {
+      $ref: "#/components/schemas/MarketType",
+      description: "The type of market the action is for.",
+    },
+    strategy_id: {
+      type: "string",
+      title: "Strategy Id",
+      description: "UID for the strategy.",
+    },
+    symbol: {
+      type: "string",
+      title: "Symbol",
+      description:
+        "Trading symbol or asset pair in format: 'symbol/quote_currency' (see market service for valid symbols)",
+    },
+    is_limit: {
+      anyOf: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Is Limit",
+      description: "Whether this is a limit order.",
+      default: false,
+    },
+    limit_price: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Limit Price",
+      description:
+        "The limit price for limit orders. If not set, the market price will be used.",
+    },
+    allocation: {
+      type: "number",
+      maximum: 1,
+      exclusiveMinimum: 0,
+      title: "Allocation",
+      description:
+        "How much of bot's balance to use for the order (for open actions). How much of the position to close (for close actions). 0=0%, 1=100%.",
+    },
+    take_profit: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/TPSL",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Take Profit",
+      description:
+        "Take profit targets. Can be set for open actions only. Multiple can be set.",
+    },
+    stop_loss: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/TPSL",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Stop Loss",
+      description:
+        "Stop loss values. Can be set for open actions only. Multiple can be set.",
+    },
+    expiry_timestamp: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Expiry Timestamp",
+      description:
+        "Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.",
+    },
+    leverage: {
+      anyOf: [
+        {
+          type: "integer",
+          minimum: 1,
+          default: 1,
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Leverage",
+      description: "Leverage to use for futures trades.",
+    },
+    margin_mode: {
+      anyOf: [
+        {
+          $ref: "#/components/schemas/MarginMode",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description: "Margin mode for futures trades.",
+      default: "isolated",
+    },
+    timestamp: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Timestamp",
+      description: "Timestamp of the action",
+      default: 1741570454,
+    },
+  },
+  type: "object",
+  required: ["action_type", "market_type", "strategy_id", "symbol", "leverage"],
+  title: "ActionModel",
 } as const;
 
 export const ApiErrorIdentifierSchema = {
@@ -125,9 +321,9 @@ export const ApiErrorIdentifierSchema = {
     "order_quantity_limit_exceeded",
     "order_price_is_invalid",
     "post_only_order_would_immediately_match",
+    "symbol_does_not_exist",
     "position_does_not_exist",
     "position_limit_exceeded",
-    "no_position_available_to_close",
     "position_opening_temporarily_suspended",
     "insufficient_balance",
     "insufficient_margin",
@@ -208,6 +404,12 @@ export const BotModelSchema = {
       type: "boolean",
       title: "Enabled",
       description: "Status of the bot",
+    },
+    deleted: {
+      type: "boolean",
+      title: "Deleted",
+      description: "Whether the bot has been deleted",
+      default: false,
     },
     user_id: {
       anyOf: [
@@ -684,7 +886,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1741475038,
+      default: 1741570454,
     },
   },
   type: "object",
@@ -842,7 +1044,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1741475038,
+      default: 1741570454,
     },
     price: {
       anyOf: [
@@ -1069,11 +1271,6 @@ export const StrategyModelSchema = {
       title: "Exchanges",
       description: "Exchanges supported by the strategy.",
     },
-    public: {
-      type: "boolean",
-      title: "Public",
-      description: "Whether the strategy is public or for internal testing",
-    },
     enabled: {
       type: "boolean",
       title: "Enabled",
@@ -1098,7 +1295,6 @@ export const StrategyModelSchema = {
     "name",
     "description",
     "exchanges",
-    "public",
     "enabled",
     "leverage",
     "performance_fee",
