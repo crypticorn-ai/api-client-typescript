@@ -84,7 +84,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1741570454,
+      default: 1741707906,
     },
     user_id: {
       anyOf: [
@@ -156,6 +156,18 @@ export const ActionModelSchema = {
       ],
       title: "Position Id",
       description: "UID for the position to close. Leave empty.",
+    },
+    client_order_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Client Order Id",
+      description: "UID for the client order. Leave empty.",
     },
     action_type: {
       $ref: "#/components/schemas/TradingActionType",
@@ -292,7 +304,7 @@ export const ActionModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the action",
-      default: 1741570454,
+      default: 1741707906,
     },
   },
   type: "object",
@@ -650,6 +662,18 @@ export const FuturesTradingActionSchema = {
       title: "Position Id",
       description: "UID for the position to close. Leave empty.",
     },
+    client_order_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Client Order Id",
+      description: "UID for the client order. Leave empty.",
+    },
     action_type: {
       $ref: "#/components/schemas/TradingActionType",
       description: "The type of action.",
@@ -886,7 +910,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1741570454,
+      default: 1741707906,
     },
   },
   type: "object",
@@ -998,6 +1022,18 @@ export const OrderModelSchema = {
       title: "Bot Id",
       description: "UID for the bot",
     },
+    client_order_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Client Order Id",
+      description: "Client order ID",
+    },
     exchange: {
       anyOf: [
         {
@@ -1044,7 +1080,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1741570454,
+      default: 1741707906,
     },
     price: {
       anyOf: [
@@ -1124,6 +1160,7 @@ export const OrderModelSchema = {
       ],
       title: "Filled Perc",
       description: "Percentage of the order filled",
+      default: 0,
     },
     filled_qty: {
       anyOf: [
@@ -1136,6 +1173,7 @@ export const OrderModelSchema = {
       ],
       title: "Filled Qty",
       description: "Quantity filled. Needed for pnl calculation",
+      default: 0,
     },
     fee: {
       anyOf: [
@@ -1148,6 +1186,7 @@ export const OrderModelSchema = {
       ],
       title: "Fee",
       description: "Fees for the order",
+      default: 0,
     },
     leverage: {
       anyOf: [
@@ -1172,6 +1211,7 @@ export const OrderModelSchema = {
       ],
       title: "Order Details",
       description: "Exchange specific details of the order",
+      default: {},
     },
     pnl: {
       anyOf: [
@@ -1184,6 +1224,7 @@ export const OrderModelSchema = {
       ],
       title: "Pnl",
       description: "Profit and loss for the order",
+      default: 0,
     },
   },
   type: "object",
@@ -1331,6 +1372,13 @@ export const TPSLSchema = {
       description:
         "The limit price to set the target at. If not set, the limit price will be calculated from the current market price.",
     },
+    allocation: {
+      type: "number",
+      maximum: 1,
+      minimum: 0,
+      title: "Allocation",
+      description: "Percentage of the order to sell",
+    },
     execution_id: {
       anyOf: [
         {
@@ -1341,14 +1389,19 @@ export const TPSLSchema = {
         },
       ],
       title: "Execution Id",
-      description: "Execution ID of the order. Will be added by the system",
+      description: "Execution ID of the order. Leave empty.",
     },
-    allocation: {
-      type: "number",
-      maximum: 1,
-      minimum: 0,
-      title: "Allocation",
-      description: "Percentage of the order to sell",
+    client_order_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Client Order Id",
+      description: "Client order ID of the order. Leave empty.",
     },
   },
   type: "object",

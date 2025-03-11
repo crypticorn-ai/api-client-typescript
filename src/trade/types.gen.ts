@@ -18,6 +18,10 @@ export type ActionModel = {
    */
   position_id?: string | null;
   /**
+   * UID for the client order. Leave empty.
+   */
+  client_order_id?: string | null;
+  /**
    * The type of action.
    */
   action_type: TradingActionType;
@@ -306,6 +310,10 @@ export type FuturesTradingAction = {
    */
   position_id?: string | null;
   /**
+   * UID for the client order. Leave empty.
+   */
+  client_order_id?: string | null;
+  /**
    * The type of action.
    */
   action_type: TradingActionType;
@@ -452,6 +460,10 @@ export type OrderModel = {
    * UID for the bot
    */
   bot_id?: string | null;
+  /**
+   * Client order ID
+   */
+  client_order_id?: string | null;
   /**
    * Exchange name. Of type Exchange
    */
@@ -600,13 +612,17 @@ export type TPSL = {
    */
   price?: number | null;
   /**
-   * Execution ID of the order. Will be added by the system
-   */
-  execution_id?: string | null;
-  /**
    * Percentage of the order to sell
    */
   allocation: number;
+  /**
+   * Execution ID of the order. Leave empty.
+   */
+  execution_id?: string | null;
+  /**
+   * Client order ID of the order. Leave empty.
+   */
+  client_order_id?: string | null;
 };
 
 /**
@@ -657,6 +673,14 @@ export type CreateBotResponse = unknown;
 
 export type CreateBotError = HTTPValidationError;
 
+export type UpdateBotData = {
+  body: BotModel;
+};
+
+export type UpdateBotResponse = unknown;
+
+export type UpdateBotError = HTTPValidationError;
+
 export type DeleteBotData = {
   path: {
     id: string;
@@ -666,14 +690,6 @@ export type DeleteBotData = {
 export type DeleteBotResponse = unknown;
 
 export type DeleteBotError = HTTPValidationError;
-
-export type UpdateBotData = {
-  body: BotModel;
-};
-
-export type UpdateBotResponse = unknown;
-
-export type UpdateBotError = HTTPValidationError;
 
 export type GetApiKeysData = unknown;
 

@@ -12,12 +12,12 @@ import type {
   CreateBotData,
   CreateBotError,
   CreateBotResponse,
-  DeleteBotData,
-  DeleteBotError,
-  DeleteBotResponse,
   UpdateBotData,
   UpdateBotError,
   UpdateBotResponse,
+  DeleteBotData,
+  DeleteBotError,
+  DeleteBotResponse,
   GetApiKeysData,
   GetApiKeysError,
   GetApiKeysResponse,
@@ -132,22 +132,6 @@ export function createClient(
   };
 
   /**
-   * Delete Bot
-   */
-  const deleteBot = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<DeleteBotData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).delete<
-      DeleteBotResponse,
-      DeleteBotError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/bots/{id}",
-    });
-  };
-
-  /**
    * Update Bot
    */
   const updateBot = <ThrowOnError extends boolean = false>(
@@ -156,6 +140,22 @@ export function createClient(
     return (options?.client ?? client).put<
       UpdateBotResponse,
       UpdateBotError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/{id}",
+    });
+  };
+
+  /**
+   * Delete Bot
+   */
+  const deleteBot = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<DeleteBotData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).delete<
+      DeleteBotResponse,
+      DeleteBotError,
       ThrowOnError
     >({
       ...options,
@@ -548,8 +548,8 @@ export function createClient(
   return {
     getBots,
     createBot,
-    deleteBot,
     updateBot,
+    deleteBot,
     getApiKeys,
     createApiKey,
     getApiKeyById,
