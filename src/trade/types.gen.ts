@@ -121,9 +121,11 @@ export type ApiErrorIdentifier =
   | "black_swan"
   | "trading_action_expired"
   | "bot_disabled"
-  | "new_trading_action"
   | "order_size_too_small"
-  | "order_size_too_large";
+  | "order_size_too_large"
+  | "hedge_mode_not_active"
+  | "api_key_already_exists"
+  | "delete_bot_error";
 
 export type APIKeyModel = {
   /**
@@ -203,24 +205,6 @@ export type BotModel = {
   user_id?: string | null;
 };
 
-export type CreateAPIKeyResponse = {
-  /**
-   * UID, used as a placeholder in the response body
-   */
-  id?: string | null;
-  /**
-   * Error message
-   */
-  error?: string | null;
-};
-
-export type Deleted = {
-  /**
-   * Number of deleted documents
-   */
-  deleted: number;
-};
-
 /**
  * Supported exchanges
  */
@@ -273,20 +257,6 @@ export type FuturesBalance = {
    * Frozen/Hold funds
    */
   frozenAmount?: number | null;
-};
-
-/**
- * Model for futures balance error response
- */
-export type FuturesBalanceError = {
-  /**
-   * API key ID
-   */
-  apiKeyId: string;
-  /**
-   * Error message
-   */
-  error: string;
 };
 
 /**
@@ -367,13 +337,6 @@ export type HTTPValidationError = {
   detail?: Array<ValidationError>;
 };
 
-export type ID = {
-  /**
-   * UID, required in the request body
-   */
-  id: string;
-};
-
 /**
  * Margin mode for futures trades
  */
@@ -383,13 +346,6 @@ export type MarginMode = "isolated" | "cross";
  * Type of market
  */
 export type MarketType = "spot" | "futures";
-
-export type Modified = {
-  /**
-   * Number of modified documents
-   */
-  modified: number;
-};
 
 export type NotificationModel = {
   /**
@@ -701,7 +657,7 @@ export type CreateApiKeyData = {
   body: APIKeyModel;
 };
 
-export type CreateApiKeyResponse = CreateAPIKeyResponse;
+export type CreateApiKeyResponse = unknown;
 
 export type CreateApiKeyError = HTTPValidationError;
 
@@ -732,7 +688,7 @@ export type UpdateApiKeyData = {
   };
 };
 
-export type UpdateApiKeyResponse = CreateAPIKeyResponse;
+export type UpdateApiKeyResponse = unknown;
 
 export type UpdateApiKeyError = HTTPValidationError;
 
@@ -779,9 +735,7 @@ export type GetOrdersError = HTTPValidationError;
 
 export type GetFuturesBalanceData = unknown;
 
-export type GetFuturesBalanceResponse = Array<
-  FuturesBalance | FuturesBalanceError
->;
+export type GetFuturesBalanceResponse = Array<FuturesBalance>;
 
 export type GetFuturesBalanceError = HTTPValidationError;
 
@@ -830,10 +784,6 @@ export type CancelFuturesOrderResponse = unknown;
 
 export type CancelFuturesOrderError = HTTPValidationError;
 
-export type HealthStatusGetResponse = unknown;
-
-export type HealthStatusGetError = unknown;
-
 export type GetStrategiesResponse = Array<StrategyModel>;
 
 export type GetStrategiesError = unknown;
@@ -848,7 +798,7 @@ export type CreateNotificationData = {
   body: NotificationModel;
 };
 
-export type CreateNotificationResponse = ID;
+export type CreateNotificationResponse = unknown;
 
 export type CreateNotificationError = HTTPValidationError;
 
@@ -856,13 +806,13 @@ export type UpdateNotificationsData = {
   body: Array<UpdateNotification>;
 };
 
-export type UpdateNotificationsResponse = Modified;
+export type UpdateNotificationsResponse = unknown;
 
 export type UpdateNotificationsError = HTTPValidationError;
 
 export type DeleteNotificationsData = unknown;
 
-export type DeleteNotificationsResponse = Deleted;
+export type DeleteNotificationsResponse = unknown;
 
 export type DeleteNotificationsError = HTTPValidationError;
 
@@ -873,7 +823,7 @@ export type UpdateNotificationData = {
   };
 };
 
-export type UpdateNotificationResponse = Modified;
+export type UpdateNotificationResponse = unknown;
 
 export type UpdateNotificationError = HTTPValidationError;
 
@@ -883,7 +833,7 @@ export type DeleteNotificationData = {
   };
 };
 
-export type DeleteNotificationResponse = Deleted;
+export type DeleteNotificationResponse = unknown;
 
 export type DeleteNotificationError = HTTPValidationError;
 
@@ -892,3 +842,7 @@ export type GetExchangesData = unknown;
 export type GetExchangesResponse = Array<Exchange>;
 
 export type GetExchangesError = HTTPValidationError;
+
+export type HealthGetResponse = unknown;
+
+export type HealthGetError = unknown;

@@ -60,8 +60,6 @@ import type {
   CancelFuturesOrderData,
   CancelFuturesOrderError,
   CancelFuturesOrderResponse,
-  HealthStatusGetError,
-  HealthStatusGetResponse,
   GetStrategiesError,
   GetStrategiesResponse,
   GetNotificationsData,
@@ -85,6 +83,8 @@ import type {
   GetExchangesData,
   GetExchangesError,
   GetExchangesResponse,
+  HealthGetError,
+  HealthGetResponse,
 } from "./types.gen";
 export function createClient(
   baseUrl: string,
@@ -397,22 +397,6 @@ export function createClient(
   };
 
   /**
-   * Health
-   */
-  const healthStatusGet = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      HealthStatusGetResponse,
-      HealthStatusGetError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/status",
-    });
-  };
-
-  /**
    * Get Strategies
    */
   const getStrategies = <ThrowOnError extends boolean = false>(
@@ -545,6 +529,22 @@ export function createClient(
     });
   };
 
+  /**
+   * Health
+   */
+  const healthGet = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      HealthGetResponse,
+      HealthGetError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/",
+    });
+  };
+
   return {
     getBots,
     createBot,
@@ -564,7 +564,6 @@ export function createClient(
     getHistoricalFuturesOrders,
     placeFuturesOrder,
     cancelFuturesOrder,
-    healthStatusGet,
     getStrategies,
     getNotifications,
     createNotification,
@@ -573,5 +572,6 @@ export function createClient(
     updateNotification,
     deleteNotification,
     getExchanges,
+    healthGet,
   };
 }

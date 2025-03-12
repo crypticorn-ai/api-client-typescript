@@ -84,7 +84,7 @@ export const APIKeyModelSchema = {
       ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1741707906,
+      default: 1741802429,
     },
     user_id: {
       anyOf: [
@@ -304,7 +304,7 @@ export const ActionModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the action",
-      default: 1741707906,
+      default: 1741802429,
     },
   },
   type: "object",
@@ -357,9 +357,11 @@ export const ApiErrorIdentifierSchema = {
     "black_swan",
     "trading_action_expired",
     "bot_disabled",
-    "new_trading_action",
     "order_size_too_small",
     "order_size_too_large",
+    "hedge_mode_not_active",
+    "api_key_already_exists",
+    "delete_bot_error",
   ],
   title: "ApiErrorIdentifier",
   description: "API error identifiers",
@@ -445,50 +447,6 @@ export const BotModelSchema = {
     "enabled",
   ],
   title: "BotModel",
-} as const;
-
-export const CreateAPIKeyResponseSchema = {
-  properties: {
-    id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Id",
-      description: "UID, used as a placeholder in the response body",
-    },
-    error: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Error",
-      description: "Error message",
-    },
-  },
-  type: "object",
-  title: "CreateAPIKeyResponse",
-} as const;
-
-export const DeletedSchema = {
-  properties: {
-    deleted: {
-      type: "integer",
-      title: "Deleted",
-      description: "Number of deleted documents",
-    },
-  },
-  type: "object",
-  required: ["deleted"],
-  title: "Deleted",
 } as const;
 
 export const ExchangeSchema = {
@@ -588,25 +546,6 @@ export const FuturesBalanceSchema = {
   required: ["apiKeyId", "asset", "balance", "available", "unrealizedPnl"],
   title: "FuturesBalance",
   description: "Model for futures balance",
-} as const;
-
-export const FuturesBalanceErrorSchema = {
-  properties: {
-    apiKeyId: {
-      type: "string",
-      title: "Apikeyid",
-      description: "API key ID",
-    },
-    error: {
-      type: "string",
-      title: "Error",
-      description: "Error message",
-    },
-  },
-  type: "object",
-  required: ["apiKeyId", "error"],
-  title: "FuturesBalanceError",
-  description: "Model for futures balance error response",
 } as const;
 
 export const FuturesTradingActionSchema = {
@@ -819,19 +758,6 @@ export const HTTPValidationErrorSchema = {
   title: "HTTPValidationError",
 } as const;
 
-export const IDSchema = {
-  properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "UID, required in the request body",
-    },
-  },
-  type: "object",
-  required: ["id"],
-  title: "ID",
-} as const;
-
 export const MarginModeSchema = {
   type: "string",
   enum: ["isolated", "cross"],
@@ -844,19 +770,6 @@ export const MarketTypeSchema = {
   enum: ["spot", "futures"],
   title: "MarketType",
   description: "Type of market",
-} as const;
-
-export const ModifiedSchema = {
-  properties: {
-    modified: {
-      type: "integer",
-      title: "Modified",
-      description: "Number of modified documents",
-    },
-  },
-  type: "object",
-  required: ["modified"],
-  title: "Modified",
 } as const;
 
 export const NotificationModelSchema = {
@@ -910,7 +823,7 @@ export const NotificationModelSchema = {
       type: "integer",
       title: "Timestamp",
       description: "Timestamp of creation",
-      default: 1741707906,
+      default: 1741802429,
     },
   },
   type: "object",
@@ -1080,7 +993,7 @@ export const OrderModelSchema = {
       ],
       title: "Timestamp",
       description: "Timestamp of the order",
-      default: 1741707906,
+      default: 1741802429,
     },
     price: {
       anyOf: [
