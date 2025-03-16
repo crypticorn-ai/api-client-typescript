@@ -614,6 +614,8 @@ export type ValidationError = {
 export type GetBotsData = {
   query?: {
     include_deleted?: boolean;
+    limit?: number;
+    offset?: number;
   };
 };
 
@@ -647,7 +649,12 @@ export type DeleteBotResponse = unknown;
 
 export type DeleteBotError = HTTPValidationError;
 
-export type GetApiKeysData = unknown;
+export type GetApiKeysData = {
+  query?: {
+    limit?: number;
+    offset?: number;
+  };
+};
 
 export type GetApiKeysResponse = Array<APIKeyModel>;
 
@@ -692,24 +699,24 @@ export type UpdateApiKeyResponse = unknown;
 
 export type UpdateApiKeyError = HTTPValidationError;
 
-export type PostFuturesActionActionsFuturesPostData = {
+export type PostFuturesActionData = {
   body: FuturesTradingAction;
   headers?: {
     authorization?: string | null;
   };
 };
 
-export type PostFuturesActionActionsFuturesPostResponse = PostFuturesAction;
+export type PostFuturesActionResponse = PostFuturesAction;
 
-export type PostFuturesActionActionsFuturesPostError = HTTPValidationError;
+export type PostFuturesActionError = HTTPValidationError;
 
-export type PostSpotActionActionsSpotPostData = {
+export type PostSpotActionData = {
   body: FuturesTradingAction;
 };
 
-export type PostSpotActionActionsSpotPostResponse = unknown;
+export type PostSpotActionResponse = unknown;
 
-export type PostSpotActionActionsSpotPostError = HTTPValidationError;
+export type PostSpotActionError = HTTPValidationError;
 
 export type GetActionsData = {
   query?: {
@@ -784,11 +791,23 @@ export type CancelFuturesOrderResponse = unknown;
 
 export type CancelFuturesOrderError = HTTPValidationError;
 
+export type GetStrategiesData = {
+  query?: {
+    limit?: number;
+    offset?: number;
+  };
+};
+
 export type GetStrategiesResponse = Array<StrategyModel>;
 
-export type GetStrategiesError = unknown;
+export type GetStrategiesError = HTTPValidationError;
 
-export type GetNotificationsData = unknown;
+export type GetNotificationsData = {
+  query?: {
+    limit?: number;
+    offset?: number;
+  };
+};
 
 export type GetNotificationsResponse = Array<NotificationModel>;
 
@@ -843,6 +862,6 @@ export type GetExchangesResponse = Array<Exchange>;
 
 export type GetExchangesError = HTTPValidationError;
 
-export type HealthGetResponse = unknown;
+export type PingResponse = unknown;
 
-export type HealthGetError = unknown;
+export type PingError = unknown;

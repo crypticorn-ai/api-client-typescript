@@ -33,12 +33,12 @@ import type {
   UpdateApiKeyData,
   UpdateApiKeyError,
   UpdateApiKeyResponse,
-  PostFuturesActionActionsFuturesPostData,
-  PostFuturesActionActionsFuturesPostError,
-  PostFuturesActionActionsFuturesPostResponse,
-  PostSpotActionActionsSpotPostData,
-  PostSpotActionActionsSpotPostError,
-  PostSpotActionActionsSpotPostResponse,
+  PostFuturesActionData,
+  PostFuturesActionError,
+  PostFuturesActionResponse,
+  PostSpotActionData,
+  PostSpotActionError,
+  PostSpotActionResponse,
   GetActionsData,
   GetActionsError,
   GetActionsResponse,
@@ -60,6 +60,7 @@ import type {
   CancelFuturesOrderData,
   CancelFuturesOrderError,
   CancelFuturesOrderResponse,
+  GetStrategiesData,
   GetStrategiesError,
   GetStrategiesResponse,
   GetNotificationsData,
@@ -83,8 +84,8 @@ import type {
   GetExchangesData,
   GetExchangesError,
   GetExchangesResponse,
-  HealthGetError,
-  HealthGetResponse,
+  PingError,
+  PingResponse,
 } from "./types.gen";
 export function createClient(
   baseUrl: string,
@@ -247,17 +248,12 @@ export function createClient(
    * Post Futures Action
    * Endpoint to receive futures trading actions from the trading strategy
    */
-  const postFuturesActionActionsFuturesPost = <
-    ThrowOnError extends boolean = false,
-  >(
-    options: OptionsLegacyParser<
-      PostFuturesActionActionsFuturesPostData,
-      ThrowOnError
-    >,
+  const postFuturesAction = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<PostFuturesActionData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).post<
-      PostFuturesActionActionsFuturesPostResponse,
-      PostFuturesActionActionsFuturesPostError,
+      PostFuturesActionResponse,
+      PostFuturesActionError,
       ThrowOnError
     >({
       ...options,
@@ -268,15 +264,12 @@ export function createClient(
   /**
    * Post Spot Action
    */
-  const postSpotActionActionsSpotPost = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<
-      PostSpotActionActionsSpotPostData,
-      ThrowOnError
-    >,
+  const postSpotAction = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<PostSpotActionData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).post<
-      PostSpotActionActionsSpotPostResponse,
-      PostSpotActionActionsSpotPostError,
+      PostSpotActionResponse,
+      PostSpotActionError,
       ThrowOnError
     >({
       ...options,
@@ -400,7 +393,7 @@ export function createClient(
    * Get Strategies
    */
   const getStrategies = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+    options?: OptionsLegacyParser<GetStrategiesData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
       GetStrategiesResponse,
@@ -530,14 +523,14 @@ export function createClient(
   };
 
   /**
-   * Health
+   * Ping
    */
-  const healthGet = <ThrowOnError extends boolean = false>(
+  const ping = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      HealthGetResponse,
-      HealthGetError,
+      PingResponse,
+      PingError,
       ThrowOnError
     >({
       ...options,
@@ -555,8 +548,8 @@ export function createClient(
     getApiKeyById,
     deleteApiKey,
     updateApiKey,
-    postFuturesActionActionsFuturesPost,
-    postSpotActionActionsSpotPost,
+    postFuturesAction,
+    postSpotAction,
     getActions,
     getOrders,
     getFuturesBalance,
@@ -572,6 +565,6 @@ export function createClient(
     updateNotification,
     deleteNotification,
     getExchanges,
-    healthGet,
+    ping,
   };
 }
