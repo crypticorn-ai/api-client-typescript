@@ -2,6 +2,14 @@
 
 export type ActionModel = {
   /**
+   * Timestamp of creation
+   */
+  created_at?: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at?: number;
+  /**
    * Placeholder for the id of the trading action. Will be added by the system, therefore leave empty.
    */
   id?: string | null;
@@ -69,10 +77,6 @@ export type ActionModel = {
    * Margin mode for futures trades.
    */
   margin_mode?: MarginMode | null;
-  /**
-   * Timestamp of the action
-   */
-  timestamp?: number | null;
 };
 
 /**
@@ -125,9 +129,18 @@ export type ApiErrorIdentifier =
   | "order_size_too_large"
   | "hedge_mode_not_active"
   | "api_key_already_exists"
-  | "delete_bot_error";
+  | "delete_bot_error"
+  | "jwt_expired";
 
 export type APIKeyModel = {
+  /**
+   * Timestamp of creation
+   */
+  created_at?: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at?: number;
   /**
    * UID, used as a placeholder in the response body
    */
@@ -157,16 +170,20 @@ export type APIKeyModel = {
    */
   enabled?: boolean | null;
   /**
-   * Timestamp of creation
-   */
-  created_at?: number | null;
-  /**
    * UID for the user
    */
   user_id?: string | null;
 };
 
 export type BotModel = {
+  /**
+   * Timestamp of creation
+   */
+  created_at?: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at?: number;
   /**
    * UID, used as a placeholder in the response body
    */
@@ -186,11 +203,7 @@ export type BotModel = {
   /**
    * Initial allocation for the bot
    */
-  initial_allocation: number;
-  /**
-   * Current allocation for the bot. Adds up the pnl of all orders. On change by user, is reset to initial allocation.
-   */
-  current_allocation?: number | null;
+  allocation: number;
   /**
    * Status of the bot
    */
@@ -203,6 +216,10 @@ export type BotModel = {
    * UID for the user
    */
   user_id?: string | null;
+  /**
+   * Initial allocation for the bot + accumulated PnL of the orders after the last allocation change
+   */
+  current_allocation?: number | null;
 };
 
 /**
@@ -349,6 +366,14 @@ export type MarketType = "spot" | "futures";
 
 export type NotificationModel = {
   /**
+   * Timestamp of creation
+   */
+  created_at?: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at?: number;
+  /**
    * UID, used as a placeholder in the response body
    */
   id?: string | null;
@@ -372,10 +397,6 @@ export type NotificationModel = {
    * The type of the notification.
    */
   type: NotificationType;
-  /**
-   * Timestamp of creation
-   */
-  timestamp?: number;
 };
 
 export type NotificationType = "error" | "success" | "info" | "warning";
@@ -384,6 +405,14 @@ export type NotificationType = "error" | "success" | "info" | "warning";
  * Response model for orders. All optional as the model is built step by step.
  */
 export type OrderModel = {
+  /**
+   * Timestamp of creation
+   */
+  created_at?: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at?: number;
   /**
    * UID, used as a placeholder in the response body
    */
@@ -432,10 +461,6 @@ export type OrderModel = {
    * Common trading symbol
    */
   common_symbol?: string | null;
-  /**
-   * Timestamp of the order
-   */
-  timestamp?: number | null;
   /**
    * Price of the order
    */
@@ -522,6 +547,14 @@ export type StrategyExchangeInfo = {
 
 export type StrategyModel = {
   /**
+   * Timestamp of creation
+   */
+  created_at?: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at?: number;
+  /**
    * UID, used as a placeholder in the response body
    */
   id?: string | null;
@@ -590,21 +623,6 @@ export type TradingActionType =
   | "close_long"
   | "close_short";
 
-export type UpdateNotification = {
-  /**
-   * UID, required in the request body
-   */
-  id: string;
-  /**
-   * Whether the notification has been marked as seen
-   */
-  viewed?: boolean;
-  /**
-   * Whether the notification has been sent as an email
-   */
-  sent?: boolean;
-};
-
 export type ValidationError = {
   loc: Array<string | number>;
   msg: string;
@@ -633,6 +651,9 @@ export type CreateBotError = HTTPValidationError;
 
 export type UpdateBotData = {
   body: BotModel;
+  path: {
+    id: string;
+  };
 };
 
 export type UpdateBotResponse = unknown;
@@ -822,7 +843,10 @@ export type CreateNotificationResponse = unknown;
 export type CreateNotificationError = HTTPValidationError;
 
 export type UpdateNotificationsData = {
-  body: Array<UpdateNotification>;
+  query: {
+    sent: boolean;
+    viewed: boolean;
+  };
 };
 
 export type UpdateNotificationsResponse = unknown;
@@ -836,9 +860,12 @@ export type DeleteNotificationsResponse = unknown;
 export type DeleteNotificationsError = HTTPValidationError;
 
 export type UpdateNotificationData = {
-  body: UpdateNotification;
   path: {
     id: string;
+  };
+  query: {
+    sent: boolean;
+    viewed: boolean;
   };
 };
 

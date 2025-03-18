@@ -2,6 +2,18 @@
 
 export const APIKeyModelSchema = {
   properties: {
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+      default: 1742255580,
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+      default: 1742255580,
+    },
     id: {
       anyOf: [
         {
@@ -73,19 +85,6 @@ export const APIKeyModelSchema = {
       description: "Status of the API key",
       default: false,
     },
-    created_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Created At",
-      description: "Timestamp of creation",
-      default: 1742163750,
-    },
     user_id: {
       anyOf: [
         {
@@ -106,6 +105,18 @@ export const APIKeyModelSchema = {
 
 export const ActionModelSchema = {
   properties: {
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+      default: 1742255580,
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+      default: 1742255580,
+    },
     id: {
       anyOf: [
         {
@@ -293,19 +304,6 @@ export const ActionModelSchema = {
       description: "Margin mode for futures trades.",
       default: "isolated",
     },
-    timestamp: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Timestamp",
-      description: "Timestamp of the action",
-      default: 1742163750,
-    },
   },
   type: "object",
   required: ["action_type", "market_type", "strategy_id", "symbol", "leverage"],
@@ -362,6 +360,7 @@ export const ApiErrorIdentifierSchema = {
     "hedge_mode_not_active",
     "api_key_already_exists",
     "delete_bot_error",
+    "jwt_expired",
   ],
   title: "ApiErrorIdentifier",
   description: "API error identifiers",
@@ -369,6 +368,18 @@ export const ApiErrorIdentifierSchema = {
 
 export const BotModelSchema = {
   properties: {
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+      default: 1742255580,
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+      default: 1742255580,
+    },
     id: {
       anyOf: [
         {
@@ -396,23 +407,10 @@ export const BotModelSchema = {
       title: "Api Key Id",
       description: "UID for the API key",
     },
-    initial_allocation: {
-      type: "number",
-      title: "Initial Allocation",
+    allocation: {
+      type: "integer",
+      title: "Allocation",
       description: "Initial allocation for the bot",
-    },
-    current_allocation: {
-      anyOf: [
-        {
-          type: "number",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Current Allocation",
-      description:
-        "Current allocation for the bot. Adds up the pnl of all orders. On change by user, is reset to initial allocation.",
     },
     enabled: {
       type: "boolean",
@@ -437,15 +435,22 @@ export const BotModelSchema = {
       title: "User Id",
       description: "UID for the user",
     },
+    current_allocation: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Current Allocation",
+      description:
+        "Initial allocation for the bot + accumulated PnL of the orders after the last allocation change",
+    },
   },
   type: "object",
-  required: [
-    "name",
-    "strategy_id",
-    "api_key_id",
-    "initial_allocation",
-    "enabled",
-  ],
+  required: ["name", "strategy_id", "api_key_id", "allocation", "enabled"],
   title: "BotModel",
 } as const;
 
@@ -774,6 +779,18 @@ export const MarketTypeSchema = {
 
 export const NotificationModelSchema = {
   properties: {
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+      default: 1742255580,
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+      default: 1742255580,
+    },
     id: {
       anyOf: [
         {
@@ -819,12 +836,6 @@ export const NotificationModelSchema = {
       $ref: "#/components/schemas/NotificationType",
       description: "The type of the notification.",
     },
-    timestamp: {
-      type: "integer",
-      title: "Timestamp",
-      description: "Timestamp of creation",
-      default: 1742163750,
-    },
   },
   type: "object",
   required: ["identifier", "type"],
@@ -839,6 +850,18 @@ export const NotificationTypeSchema = {
 
 export const OrderModelSchema = {
   properties: {
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+      default: 1742255580,
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+      default: 1742255580,
+    },
     id: {
       anyOf: [
         {
@@ -981,19 +1004,6 @@ export const OrderModelSchema = {
       ],
       title: "Common Symbol",
       description: "Common trading symbol",
-    },
-    timestamp: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Timestamp",
-      description: "Timestamp of the order",
-      default: 1742163750,
     },
     price: {
       anyOf: [
@@ -1189,6 +1199,18 @@ export const StrategyExchangeInfoSchema = {
 
 export const StrategyModelSchema = {
   properties: {
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+      default: 1742255580,
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+      default: 1742255580,
+    },
     id: {
       anyOf: [
         {
@@ -1328,31 +1350,6 @@ export const TradingActionTypeSchema = {
   enum: ["open_long", "open_short", "close_long", "close_short"],
   title: "TradingActionType",
   description: "Type of trading action",
-} as const;
-
-export const UpdateNotificationSchema = {
-  properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "UID, required in the request body",
-    },
-    viewed: {
-      type: "boolean",
-      title: "Viewed",
-      description: "Whether the notification has been marked as seen",
-      default: false,
-    },
-    sent: {
-      type: "boolean",
-      title: "Sent",
-      description: "Whether the notification has been sent as an email",
-      default: false,
-    },
-  },
-  type: "object",
-  required: ["id"],
-  title: "UpdateNotification",
 } as const;
 
 export const ValidationErrorSchema = {
