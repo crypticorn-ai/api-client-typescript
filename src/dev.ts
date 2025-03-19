@@ -79,7 +79,7 @@ console.log(result);
 //     console.log(res);
 //   });
 
-//   client.api.queryHistoricalSwapOrders().then((res) => {
+//   client.api.queryHistoricalFuturesOrders().then((res) => {
 //     console.log(res);
 //   });
 

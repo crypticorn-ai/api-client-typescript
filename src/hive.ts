@@ -5,12 +5,11 @@ export type AccountInfo = {
   username: string;
   updated: string;
   created: string;
-}
+};
 
 export type SingleModel = {
   coin_id: number;
-  correlation: number;
-  correlations: number[];
+  evaluations: { timestamp: number; score: number }[];
   created: string;
   model_id: number;
   name: string;
@@ -18,26 +17,24 @@ export type SingleModel = {
   target: string;
   updated: string;
   dev_id: string;
-}
+  target_type: string;
+};
 
 export type AllModels = {
   models: SingleModel[];
-}
+};
 
 export type ApiKeyGeneration = {
   api_key: string;
-}
-
-export type ModelEvaluation = {
-  metrics: Record<string, number>;
-  model_id: number;
-}
+};
 
 export type DataInfo = {
-  data: Record<string, Record<string, string[]>>;
-  coins: number[];
-  targets: string[];
-}
+  coins: string[];
+  data: Record<string, Record<string, Record<string, string[]>>>;
+  feature_sizes: string[];
+  targets: Record<string, string>;
+  versions: Record<string, number>;
+};
 
 export type DataDownload = {
   coin: number;
@@ -47,7 +44,13 @@ export type DataDownload = {
   X_train: string;
   X_test: string;
   y_train: string;
-}
+};
+
+export type HiveErrorResponse = {
+  type: string;
+  code: number;
+  error: string;
+};
 
 export function createHiveClient(
   apiRoot: string,
@@ -130,25 +133,14 @@ export function createHiveClient(
       }).then((res) => res.json());
     },
 
-    createModel: (
-      coin_id: number,
-      target: string
-    ): Promise<SingleModel> => {
-      return fetch(`${baseUrl}/model/creation?coin_id=${coin_id}&target=${target}`, {
-        method: "POST",
-        headers: { ...headers, "Content-Type": "application/json" },
-      }).then((res) => res.json());
-    },
-
-    evaluateModel: (
-      modelId: number,
-      data: any
-    ): Promise<ModelEvaluation> => {
-      return fetch(`${baseUrl}/model/evaluation?model_id=${modelId}`, {
-        method: "POST",
-        headers: { ...headers, "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      }).then((res) => res.json());
+    createModel: (coin_id: number, target: string): Promise<SingleModel> => {
+      return fetch(
+        `${baseUrl}/model/creation?coin_id=${coin_id}&target=${target}`,
+        {
+          method: "POST",
+          headers: { ...headers, "Content-Type": "application/json" },
+        }
+      ).then((res) => res.json());
     },
 
     downloadData: (
