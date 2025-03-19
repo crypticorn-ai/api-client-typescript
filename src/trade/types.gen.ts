@@ -4,11 +4,11 @@ export type ActionModel = {
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at?: number | null;
   /**
    * Timestamp of last update
    */
-  updated_at?: number;
+  updated_at?: number | null;
   /**
    * Placeholder for the id of the trading action. Will be added by the system, therefore leave empty.
    */
@@ -21,10 +21,6 @@ export type ActionModel = {
    * UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.
    */
   open_order_execution_id?: string | null;
-  /**
-   * UID for the position to close. Leave empty.
-   */
-  position_id?: string | null;
   /**
    * UID for the client order. Leave empty.
    */
@@ -69,6 +65,10 @@ export type ActionModel = {
    * Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.
    */
   expiry_timestamp?: number | null;
+  /**
+   * Extra Field. UID for the position to close. Leave empty.
+   */
+  position_id?: string | null;
   /**
    * Leverage to use for futures trades.
    */
@@ -136,11 +136,11 @@ export type APIKeyModel = {
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at?: number | null;
   /**
    * Timestamp of last update
    */
-  updated_at?: number;
+  updated_at?: number | null;
   /**
    * UID, used as a placeholder in the response body
    */
@@ -179,11 +179,11 @@ export type BotModel = {
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at?: number | null;
   /**
    * Timestamp of last update
    */
-  updated_at?: number;
+  updated_at?: number | null;
   /**
    * UID, used as a placeholder in the response body
    */
@@ -293,10 +293,6 @@ export type FuturesTradingAction = {
    */
   open_order_execution_id?: string | null;
   /**
-   * UID for the position to close. Leave empty.
-   */
-  position_id?: string | null;
-  /**
    * UID for the client order. Leave empty.
    */
   client_order_id?: string | null;
@@ -341,6 +337,10 @@ export type FuturesTradingAction = {
    */
   expiry_timestamp?: number | null;
   /**
+   * Extra Field. UID for the position to close. Leave empty.
+   */
+  position_id?: string | null;
+  /**
    * Leverage to use for futures trades.
    */
   leverage: number | null;
@@ -368,11 +368,11 @@ export type NotificationModel = {
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at?: number | null;
   /**
    * Timestamp of last update
    */
-  updated_at?: number;
+  updated_at?: number | null;
   /**
    * UID, used as a placeholder in the response body
    */
@@ -408,11 +408,11 @@ export type OrderModel = {
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at?: number | null;
   /**
    * Timestamp of last update
    */
-  updated_at?: number;
+  updated_at?: number | null;
   /**
    * UID, used as a placeholder in the response body
    */
@@ -549,11 +549,11 @@ export type StrategyModel = {
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at?: number | null;
   /**
    * Timestamp of last update
    */
-  updated_at?: number;
+  updated_at?: number | null;
   /**
    * UID, used as a placeholder in the response body
    */

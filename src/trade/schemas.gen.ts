@@ -3,16 +3,28 @@
 export const APIKeyModelSchema = {
   properties: {
     created_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1742255580,
     },
     updated_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Updated At",
       description: "Timestamp of last update",
-      default: 1742255580,
     },
     id: {
       anyOf: [
@@ -106,16 +118,28 @@ export const APIKeyModelSchema = {
 export const ActionModelSchema = {
   properties: {
     created_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1742255580,
     },
     updated_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Updated At",
       description: "Timestamp of last update",
-      default: 1742255580,
     },
     id: {
       anyOf: [
@@ -155,18 +179,6 @@ export const ActionModelSchema = {
       title: "Open Order Execution Id",
       description:
         "UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.",
-    },
-    position_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Position Id",
-      description: "UID for the position to close. Leave empty.",
     },
     client_order_id: {
       anyOf: [
@@ -278,6 +290,18 @@ export const ActionModelSchema = {
       description:
         "Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.",
     },
+    position_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Position Id",
+      description: "Extra Field. UID for the position to close. Leave empty.",
+    },
     leverage: {
       anyOf: [
         {
@@ -369,16 +393,28 @@ export const ApiErrorIdentifierSchema = {
 export const BotModelSchema = {
   properties: {
     created_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1742255580,
     },
     updated_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Updated At",
       description: "Timestamp of last update",
-      default: 1742255580,
     },
     id: {
       anyOf: [
@@ -594,18 +630,6 @@ export const FuturesTradingActionSchema = {
       description:
         "UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.",
     },
-    position_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Position Id",
-      description: "UID for the position to close. Leave empty.",
-    },
     client_order_id: {
       anyOf: [
         {
@@ -716,6 +740,18 @@ export const FuturesTradingActionSchema = {
       description:
         "Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.",
     },
+    position_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Position Id",
+      description: "Extra Field. UID for the position to close. Leave empty.",
+    },
     leverage: {
       anyOf: [
         {
@@ -780,16 +816,28 @@ export const MarketTypeSchema = {
 export const NotificationModelSchema = {
   properties: {
     created_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1742255580,
     },
     updated_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Updated At",
       description: "Timestamp of last update",
-      default: 1742255580,
     },
     id: {
       anyOf: [
@@ -851,16 +899,28 @@ export const NotificationTypeSchema = {
 export const OrderModelSchema = {
   properties: {
     created_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1742255580,
     },
     updated_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Updated At",
       description: "Timestamp of last update",
-      default: 1742255580,
     },
     id: {
       anyOf: [
@@ -1200,16 +1260,28 @@ export const StrategyExchangeInfoSchema = {
 export const StrategyModelSchema = {
   properties: {
     created_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Created At",
       description: "Timestamp of creation",
-      default: 1742255580,
     },
     updated_at: {
-      type: "integer",
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Updated At",
       description: "Timestamp of last update",
-      default: 1742255580,
     },
     id: {
       anyOf: [
