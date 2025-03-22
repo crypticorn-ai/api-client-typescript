@@ -378,6 +378,7 @@ export const ApiErrorIdentifierSchema = {
     "http_request_error",
     "black_swan",
     "trading_action_expired",
+    "trading_action_skipped",
     "bot_disabled",
     "order_size_too_small",
     "order_size_too_large",
@@ -385,9 +386,23 @@ export const ApiErrorIdentifierSchema = {
     "api_key_already_exists",
     "delete_bot_error",
     "jwt_expired",
+    "bot_stopping_complete",
   ],
   title: "ApiErrorIdentifier",
   description: "API error identifiers",
+} as const;
+
+export const ApiErrorLevelSchema = {
+  type: "string",
+  enum: ["error", "success", "info", "warning"],
+  title: "ApiErrorLevel",
+} as const;
+
+export const ApiErrorTypeSchema = {
+  type: "string",
+  enum: ["user error", "exchange error", "server error", "no error"],
+  title: "ApiErrorType",
+  description: "Type of API error",
 } as const;
 
 export const BotModelSchema = {
@@ -448,16 +463,21 @@ export const BotModelSchema = {
       title: "Allocation",
       description: "Initial allocation for the bot",
     },
-    enabled: {
-      type: "boolean",
-      title: "Enabled",
+    status: {
+      $ref: "#/components/schemas/BotStatus",
       description: "Status of the bot",
     },
-    deleted: {
-      type: "boolean",
-      title: "Deleted",
-      description: "Whether the bot has been deleted",
-      default: false,
+    status_code: {
+      anyOf: [
+        {
+          $ref: "#/components/schemas/ApiErrorIdentifier",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description:
+        "Status code of the bot. Set if the bot is stopped by an error.",
     },
     user_id: {
       anyOf: [
@@ -486,8 +506,14 @@ export const BotModelSchema = {
     },
   },
   type: "object",
-  required: ["name", "strategy_id", "api_key_id", "allocation", "enabled"],
+  required: ["name", "strategy_id", "api_key_id", "allocation", "status"],
   title: "BotModel",
+} as const;
+
+export const BotStatusSchema = {
+  type: "string",
+  enum: ["running", "stopping", "stopped", "deleted"],
+  title: "BotStatus",
 } as const;
 
 export const ExchangeSchema = {
@@ -856,6 +882,14 @@ export const NotificationModelSchema = {
       description:
         "Identifier string. Must match the mapping key in the frontend.",
     },
+    level: {
+      $ref: "#/components/schemas/ApiErrorLevel",
+      description: "Level of the notification. Of type ApiErrorLevel",
+    },
+    type: {
+      $ref: "#/components/schemas/ApiErrorType",
+      description: "Type of the notification. Of type ApiErrorType",
+    },
     user_id: {
       anyOf: [
         {
@@ -880,20 +914,10 @@ export const NotificationModelSchema = {
       description: "Whether the notification has been sent as an email",
       default: false,
     },
-    type: {
-      $ref: "#/components/schemas/NotificationType",
-      description: "The type of the notification.",
-    },
   },
   type: "object",
-  required: ["identifier", "type"],
+  required: ["identifier", "level", "type"],
   title: "NotificationModel",
-} as const;
-
-export const NotificationTypeSchema = {
-  type: "string",
-  enum: ["error", "success", "info", "warning"],
-  title: "NotificationType",
 } as const;
 
 export const OrderModelSchema = {
@@ -1336,6 +1360,10 @@ export const StrategyModelSchema = {
       title: "Performance Fee",
       description: "Performance fee for the strategy",
     },
+    market_type: {
+      $ref: "#/components/schemas/MarketType",
+      description: "Market of operation of the strategy",
+    },
   },
   type: "object",
   required: [
@@ -1346,6 +1374,7 @@ export const StrategyModelSchema = {
     "enabled",
     "leverage",
     "performance_fee",
+    "market_type",
   ],
   title: "StrategyModel",
 } as const;

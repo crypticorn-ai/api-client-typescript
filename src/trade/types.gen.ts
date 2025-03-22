@@ -124,13 +124,26 @@ export type ApiErrorIdentifier =
   | "http_request_error"
   | "black_swan"
   | "trading_action_expired"
+  | "trading_action_skipped"
   | "bot_disabled"
   | "order_size_too_small"
   | "order_size_too_large"
   | "hedge_mode_not_active"
   | "api_key_already_exists"
   | "delete_bot_error"
-  | "jwt_expired";
+  | "jwt_expired"
+  | "bot_stopping_complete";
+
+export type ApiErrorLevel = "error" | "success" | "info" | "warning";
+
+/**
+ * Type of API error
+ */
+export type ApiErrorType =
+  | "user error"
+  | "exchange error"
+  | "server error"
+  | "no error";
 
 export type APIKeyModel = {
   /**
@@ -207,11 +220,11 @@ export type BotModel = {
   /**
    * Status of the bot
    */
-  enabled: boolean;
+  status: BotStatus;
   /**
-   * Whether the bot has been deleted
+   * Status code of the bot. Set if the bot is stopped by an error.
    */
-  deleted?: boolean;
+  status_code?: ApiErrorIdentifier | null;
   /**
    * UID for the user
    */
@@ -221,6 +234,8 @@ export type BotModel = {
    */
   current_allocation?: number | null;
 };
+
+export type BotStatus = "running" | "stopping" | "stopped" | "deleted";
 
 /**
  * Supported exchanges
@@ -382,6 +397,14 @@ export type NotificationModel = {
    */
   identifier: ApiErrorIdentifier;
   /**
+   * Level of the notification. Of type ApiErrorLevel
+   */
+  level: ApiErrorLevel;
+  /**
+   * Type of the notification. Of type ApiErrorType
+   */
+  type: ApiErrorType;
+  /**
    * UID for the user. None for all users.
    */
   user_id?: string | null;
@@ -393,13 +416,7 @@ export type NotificationModel = {
    * Whether the notification has been sent as an email
    */
   sent?: boolean;
-  /**
-   * The type of the notification.
-   */
-  type: NotificationType;
 };
-
-export type NotificationType = "error" | "success" | "info" | "warning";
 
 /**
  * Response model for orders. All optional as the model is built step by step.
@@ -586,6 +603,10 @@ export type StrategyModel = {
    * Performance fee for the strategy
    */
   performance_fee: number;
+  /**
+   * Market of operation of the strategy
+   */
+  market_type: MarketType;
 };
 
 /**
