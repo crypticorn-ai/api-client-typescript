@@ -132,7 +132,7 @@ export type ApiErrorIdentifier =
   | "api_key_already_exists"
   | "delete_bot_error"
   | "jwt_expired"
-  | "bot_stopping_complete";
+  | "bot_stopping_completed";
 
 export type ApiErrorLevel = "error" | "success" | "info" | "warning";
 
@@ -233,6 +233,10 @@ export type BotModel = {
    * Initial allocation for the bot + accumulated PnL of the orders after the last allocation change
    */
   current_allocation?: number | null;
+  /**
+   * Current exposure of the bot, aka. the sum of the absolute values of the open positions
+   */
+  current_exposure?: number | null;
 };
 
 export type BotStatus = "running" | "stopping" | "stopped" | "deleted";
@@ -528,6 +532,10 @@ export type OrderModel = {
    * Profit and loss for the order
    */
   pnl?: number | null;
+  /**
+   * Timestamp of order creation on the exchange.
+   */
+  order_time?: number | null;
 };
 
 /**

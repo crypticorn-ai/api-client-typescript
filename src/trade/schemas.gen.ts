@@ -386,7 +386,7 @@ export const ApiErrorIdentifierSchema = {
     "api_key_already_exists",
     "delete_bot_error",
     "jwt_expired",
-    "bot_stopping_complete",
+    "bot_stopping_completed",
   ],
   title: "ApiErrorIdentifier",
   description: "API error identifiers",
@@ -503,6 +503,19 @@ export const BotModelSchema = {
       title: "Current Allocation",
       description:
         "Initial allocation for the bot + accumulated PnL of the orders after the last allocation change",
+    },
+    current_exposure: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Current Exposure",
+      description:
+        "Current exposure of the bot, aka. the sum of the absolute values of the open positions",
     },
   },
   type: "object",
@@ -1232,6 +1245,18 @@ export const OrderModelSchema = {
       title: "Pnl",
       description: "Profit and loss for the order",
       default: 0,
+    },
+    order_time: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Order Time",
+      description: "Timestamp of order creation on the exchange.",
     },
   },
   type: "object",
