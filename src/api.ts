@@ -10,6 +10,7 @@ import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
 import { createClient as createTokenClient } from "@crypticorn-ai/token-service/dist/client";
 import { createHiveClient } from "./hive";
 import { createClient as createTradeClient } from "./trade";
+import { createClient as createPayClient } from "./pay";
 
 export const environments: Record<EnvironmentType, string> = {
   // local development
@@ -124,6 +125,7 @@ export const createClient = ({
   api: ReturnType<typeof createApiClient>;
   hive: ReturnType<typeof createHiveClient>;
   trade: ReturnType<typeof createTradeClient>;
+  pay: ReturnType<typeof createPayClient>;
 } => {
   if (!apiRoot) {
     const result = getHosts({
@@ -153,12 +155,14 @@ export const createClient = ({
   });
   const trade = createTradeClient(apiRoot + "/trade", headers, rest.fetch);
   const hive = createHiveClient(apiRoot + "/hive", headers, rest.fetch);
+  const pay = createPayClient(apiRoot + "/pay", headers, rest.fetch);
   return {
     auth,
     token,
     api,
     hive,
     trade,
+    pay,
   };
 };
 
