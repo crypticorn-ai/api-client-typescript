@@ -6,33 +6,33 @@ import {
   type OptionsLegacyParser,
 } from "@hey-api/client-fetch";
 import type {
-  NowGetApiStatusError,
-  NowGetApiStatusResponse,
-  NowGetCurrenciesData,
-  NowGetCurrenciesError,
-  NowGetCurrenciesResponse,
-  NowGetEstimatePriceData,
-  NowGetEstimatePriceError,
-  NowGetEstimatePriceResponse,
-  NowGetPaymentStatusData,
-  NowGetPaymentStatusError,
-  NowGetPaymentStatusResponse,
-  NowGetMinimumPaymentAmountData,
-  NowGetMinimumPaymentAmountError,
-  NowGetMinimumPaymentAmountResponse,
-  NowCreateInvoiceData,
-  NowCreateInvoiceError,
-  NowCreateInvoiceResponse,
-  NowGetPaymentsListData,
-  NowGetPaymentsListError,
-  NowGetPaymentsListResponse,
-  NowHandleWebhookError,
-  NowHandleWebhookResponse,
-  PingError,
-  PingResponse,
+  GetNowApiStatusError,
+  GetNowApiStatusResponse,
+  CreateNowInvoiceData,
+  CreateNowInvoiceError,
+  CreateNowInvoiceResponse,
+  SendNowWebhookData,
+  SendNowWebhookError,
+  SendNowWebhookResponse,
   GetProductsData,
   GetProductsError,
   GetProductsResponse,
+  CreateProductData,
+  CreateProductError,
+  CreateProductResponse,
+  UpdateProductData,
+  UpdateProductError,
+  UpdateProductResponse,
+  GetPaymentHistoryData,
+  GetPaymentHistoryError,
+  GetPaymentHistoryResponse,
+  GetSubscriptionsData,
+  GetSubscriptionsError,
+  GetSubscriptionsResponse,
+  GetPaymentsHtmlGetError,
+  GetPaymentsHtmlGetResponse,
+  PingError,
+  PingResponse,
 } from "./types.gen";
 export function createClient(
   baseUrl: string,
@@ -48,15 +48,15 @@ export function createClient(
   );
 
   /**
-   * Get Api Status
+   * Get Status
    * Get NOWPayments API status
    */
-  const nowGetApiStatus = <ThrowOnError extends boolean = false>(
+  const getNowApiStatus = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      NowGetApiStatusResponse,
-      NowGetApiStatusError,
+      GetNowApiStatusResponse,
+      GetNowApiStatusError,
       ThrowOnError
     >({
       ...options,
@@ -65,83 +65,15 @@ export function createClient(
   };
 
   /**
-   * Get Currencies
-   * Get all available cryptocurrencies
-   */
-  const nowGetCurrencies = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<NowGetCurrenciesData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      NowGetCurrenciesResponse,
-      NowGetCurrenciesError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/now/currencies",
-    });
-  };
-
-  /**
-   * Get Estimate Price
-   * Get price estimate for currency conversion
-   */
-  const nowGetEstimatePrice = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<NowGetEstimatePriceData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).post<
-      NowGetEstimatePriceResponse,
-      NowGetEstimatePriceError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/now/estimate",
-    });
-  };
-
-  /**
-   * Get Payment Status
-   * Get status of a specific payment
-   */
-  const nowGetPaymentStatus = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<NowGetPaymentStatusData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      NowGetPaymentStatusResponse,
-      NowGetPaymentStatusError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/now/payment/{payment_id}",
-    });
-  };
-
-  /**
-   * Get Minimum Payment Amount
-   * Get minimum payment amount for a currency pair
-   */
-  const nowGetMinimumPaymentAmount = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<NowGetMinimumPaymentAmountData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).post<
-      NowGetMinimumPaymentAmountResponse,
-      NowGetMinimumPaymentAmountError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/now/min-amount",
-    });
-  };
-
-  /**
    * Create Invoice
    * Create a payment invoice with a payment link for customer completion
    */
-  const nowCreateInvoice = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<NowCreateInvoiceData, ThrowOnError>,
+  const createNowInvoice = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<CreateNowInvoiceData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).post<
-      NowCreateInvoiceResponse,
-      NowCreateInvoiceError,
+      CreateNowInvoiceResponse,
+      CreateNowInvoiceError,
       ThrowOnError
     >({
       ...options,
@@ -150,53 +82,20 @@ export function createClient(
   };
 
   /**
-   * Get Payments List
-   * Get list of all payments with optional filtering and pagination
-   */
-  const nowGetPaymentsList = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<NowGetPaymentsListData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      NowGetPaymentsListResponse,
-      NowGetPaymentsListError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/now/payment",
-    });
-  };
-
-  /**
-   * Handle Nowpayments Webhook
+   * Handle Webhook
    * Handle NOWPayments webhook notifications (IPN).
-   * Validates the signature and forwards the payment status update to the auth service.
+   * Validates the signature, updates the payment status and creates a product subscription if the payment is successful.
    */
-  const nowHandleWebhook = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  const sendNowWebhook = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<SendNowWebhookData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).post<
-      NowHandleWebhookResponse,
-      NowHandleWebhookError,
+      SendNowWebhookResponse,
+      SendNowWebhookError,
       ThrowOnError
     >({
       ...options,
       url: "/now/webhook",
-    });
-  };
-
-  /**
-   * Ping
-   */
-  const ping = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      PingResponse,
-      PingError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/",
     });
   };
 
@@ -217,16 +116,115 @@ export function createClient(
     });
   };
 
+  /**
+   * Create Product
+   * Create a new product
+   */
+  const createProduct = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<CreateProductData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).post<
+      CreateProductResponse,
+      CreateProductError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/products",
+    });
+  };
+
+  /**
+   * Update Product
+   * Update an existing product
+   */
+  const updateProduct = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<UpdateProductData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).put<
+      UpdateProductResponse,
+      UpdateProductError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/products/{id}",
+    });
+  };
+
+  /**
+   * Get Payments
+   * Get combined payment history for a user across all payment services.
+   */
+  const getPaymentHistory = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetPaymentHistoryData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetPaymentHistoryResponse,
+      GetPaymentHistoryError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/payments/history",
+    });
+  };
+
+  /**
+   * Get Subscriptions
+   */
+  const getSubscriptions = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetSubscriptionsData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetSubscriptionsResponse,
+      GetSubscriptionsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/payments/subscriptions",
+    });
+  };
+
+  /**
+   * Get
+   */
+  const getPaymentsHtmlGet = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetPaymentsHtmlGetResponse,
+      GetPaymentsHtmlGetError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/payments/html",
+    });
+  };
+
+  /**
+   * Ping
+   */
+  const ping = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      PingResponse,
+      PingError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/",
+    });
+  };
+
   return {
-    nowGetApiStatus,
-    nowGetCurrencies,
-    nowGetEstimatePrice,
-    nowGetPaymentStatus,
-    nowGetMinimumPaymentAmount,
-    nowCreateInvoice,
-    nowGetPaymentsList,
-    nowHandleWebhook,
-    ping,
+    getNowApiStatus,
+    createNowInvoice,
+    sendNowWebhook,
     getProducts,
+    createProduct,
+    updateProduct,
+    getPaymentHistory,
+    getSubscriptions,
+    getPaymentsHtmlGet,
+    ping,
   };
 }
