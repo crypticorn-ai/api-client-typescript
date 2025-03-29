@@ -263,7 +263,8 @@ export type NowWebhookPayload = {
  * Payment status
  */
 export type PaymentStatus =
-  | "pending"
+  | "waiting"
+  | "processing"
   | "paid"
   | "partially_paid"
   | "refunded"
@@ -329,6 +330,14 @@ export type Services = "now";
  * Combined payment model across all services
  */
 export type UnifiedPaymentModel = {
+  /**
+   * Payment ID
+   */
+  id: string;
+  /**
+   * Product ID
+   */
+  product_id: string;
   /**
    * Payment date in seconds
    */
@@ -417,6 +426,16 @@ export type UpdateProductResponse = unknown;
 
 export type UpdateProductError = HTTPValidationError;
 
+export type GetLatestPaymentFromInvoiceData = {
+  query: {
+    invoice_id: string;
+  };
+};
+
+export type GetLatestPaymentFromInvoiceResponse = UnifiedPaymentModel;
+
+export type GetLatestPaymentFromInvoiceError = HTTPValidationError;
+
 export type GetPaymentHistoryData = unknown;
 
 export type GetPaymentHistoryResponse = Array<UnifiedPaymentModel>;
@@ -428,10 +447,6 @@ export type GetSubscriptionsData = unknown;
 export type GetSubscriptionsResponse = Array<ProductSubsModel>;
 
 export type GetSubscriptionsError = HTTPValidationError;
-
-export type GetPaymentsHtmlGetResponse = unknown;
-
-export type GetPaymentsHtmlGetError = unknown;
 
 export type PingResponse = unknown;
 

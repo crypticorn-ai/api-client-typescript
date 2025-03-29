@@ -494,7 +494,8 @@ export const NowWebhookPayloadSchema = {
 export const PaymentStatusSchema = {
   type: "string",
   enum: [
-    "pending",
+    "waiting",
+    "processing",
     "paid",
     "partially_paid",
     "refunded",
@@ -599,6 +600,16 @@ export const ServicesSchema = {
 
 export const UnifiedPaymentModelSchema = {
   properties: {
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Payment ID",
+    },
+    product_id: {
+      type: "string",
+      title: "Product Id",
+      description: "Product ID",
+    },
     date: {
       type: "integer",
       title: "Date",
@@ -628,7 +639,16 @@ export const UnifiedPaymentModelSchema = {
     },
   },
   type: "object",
-  required: ["date", "amount", "currency", "status", "service", "market"],
+  required: [
+    "id",
+    "product_id",
+    "date",
+    "amount",
+    "currency",
+    "status",
+    "service",
+    "market",
+  ],
   title: "UnifiedPaymentModel",
   description: "Combined payment model across all services",
 } as const;

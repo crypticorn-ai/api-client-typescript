@@ -23,14 +23,15 @@ import type {
   UpdateProductData,
   UpdateProductError,
   UpdateProductResponse,
+  GetLatestPaymentFromInvoiceData,
+  GetLatestPaymentFromInvoiceError,
+  GetLatestPaymentFromInvoiceResponse,
   GetPaymentHistoryData,
   GetPaymentHistoryError,
   GetPaymentHistoryResponse,
   GetSubscriptionsData,
   GetSubscriptionsError,
   GetSubscriptionsResponse,
-  GetPaymentsHtmlGetError,
-  GetPaymentsHtmlGetResponse,
   PingError,
   PingResponse,
 } from "./types.gen";
@@ -151,6 +152,23 @@ export function createClient(
   };
 
   /**
+   * Get Latest Payment From Invoice
+   * Get the latest payment from an invoice
+   */
+  const getLatestPaymentFromInvoice = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetLatestPaymentFromInvoiceData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetLatestPaymentFromInvoiceResponse,
+      GetLatestPaymentFromInvoiceError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/payments",
+    });
+  };
+
+  /**
    * Get Payments
    * Get combined payment history for a user across all payment services.
    */
@@ -184,22 +202,6 @@ export function createClient(
   };
 
   /**
-   * Get
-   */
-  const getPaymentsHtmlGet = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetPaymentsHtmlGetResponse,
-      GetPaymentsHtmlGetError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/payments/html",
-    });
-  };
-
-  /**
    * Ping
    */
   const ping = <ThrowOnError extends boolean = false>(
@@ -222,9 +224,9 @@ export function createClient(
     getProducts,
     createProduct,
     updateProduct,
+    getLatestPaymentFromInvoice,
     getPaymentHistory,
     getSubscriptions,
-    getPaymentsHtmlGet,
     ping,
   };
 }
