@@ -1,6 +1,6 @@
 {
   "name": "@crypticorn-ai/api-client",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "Crypticorn API Client",
   "license": "ISC",
   "author": "Máté Homolya <mate.homolya@proton.me>",
@@ -30,6 +30,7 @@
     "dotenv": "^16.4.5",
     "esbuild": "^0.23.0",
     "prettier": "^3.4.1",
+    "trpc-openapi": "^1.2.0",
     "tsx": "^4.16.5",
     "viem": "^2.18.8",
     "ws": "^8.18.0",
