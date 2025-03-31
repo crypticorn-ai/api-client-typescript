@@ -143,8 +143,8 @@ export const createClient = ({
       : `accessToken=${accessToken}`,
     "Content-Type": "application/json",
   };
-  const token = createTokenClient(apiRoot + "/tokens", headers, rest.fetch);
-  const auth = createAuthClient(apiRoot + "/auth", headers, rest.fetch);
+  const token = createTokenClient(apiRoot + "/token", headers, rest.fetch);
+  const auth = createAuthClient(apiRoot + "/auth/trpc", headers, rest.fetch);
   const api = createApiClient({
     accessToken,
     apiRoot,
