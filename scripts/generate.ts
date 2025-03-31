@@ -1,9 +1,13 @@
+/// <reference types="node" />
 import { createClient } from '@hey-api/openapi-ts'
 import prettier from 'prettier'
-// @ts-ignore
 import fs from 'fs/promises'
 
-const service = 'pay'
+const service = process.argv[2]
+if (!service) {
+  console.error('Usage: pnpm run generate <service>')
+  process.exit(1)
+}
 
 // if you run this script the first time for a service, comment out lines 20-62
 
@@ -13,7 +17,9 @@ async function main() {
     // @ts-ignore
     const path = `http://localhost/v1/${service}/openapi.json`
     const res = await createClient({
+      // @ts-ignore
       client: '@hey-api/client-fetch',
+      // plugins: ['@hey-api/client-fetch'], 
       input: path,
       output: `src/${service}`,
     });
@@ -74,4 +80,4 @@ ${ops.map((op) => `    ${op},`).join('\n')}
   }
 }
 
-main() 
+main()
