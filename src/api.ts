@@ -11,7 +11,7 @@ import { createClient as createTokenClient } from "@crypticorn-ai/token-service/
 import { createHiveClient } from "./hive";
 import { createClient as createTradeClient } from "./trade";
 import { createClient as createPayClient } from "./pay";
-
+import { createClient as createKlinesClient } from "./klines";
 export const environments: Record<EnvironmentType, string> = {
   // local development
   local: "localhost",
@@ -126,6 +126,7 @@ export const createClient = ({
   hive: ReturnType<typeof createHiveClient>;
   trade: ReturnType<typeof createTradeClient>;
   pay: ReturnType<typeof createPayClient>;
+  klines: ReturnType<typeof createKlinesClient>;
 } => {
   if (!apiRoot) {
     const result = getHosts({
