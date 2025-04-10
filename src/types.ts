@@ -1,5 +1,5 @@
-export type { AuthContext, User, ValidationError } from "@crypticorn-ai/auth-service";
-
+export type { AuthContext, User, ValidationError, getApiKeysSchema } from "@crypticorn-ai/auth-service";
+export { Scope } from "@crypticorn-ai/auth-service";
 export type Prediction = {
   action: string;
   symbol: string;

@@ -157,6 +157,7 @@ export const createClient = ({
   const trade = createTradeClient(apiRoot + "/trade", headers, rest.fetch);
   const hive = createHiveClient(apiRoot + "/hive", headers, rest.fetch);
   const pay = createPayClient(apiRoot + "/pay", headers, rest.fetch);
+  const klines = createKlinesClient(apiRoot + "/klines", headers, rest.fetch);
   return {
     auth,
     token,
@@ -164,6 +165,7 @@ export const createClient = ({
     hive,
     trade,
     pay,
+    klines,
   };
 };
 
