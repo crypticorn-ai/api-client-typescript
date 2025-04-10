@@ -14,7 +14,7 @@ export type ActionModel = {
    */
   id?: string | null;
   /**
-   * UID for the execution of the order. Leave empty for open actions. Required on close actions if you havent't placed a TP/SL before. A specific TP/SL execution ID of the opening order.
+   * UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.
    */
   execution_id?: string | null;
   /**
@@ -50,7 +50,7 @@ export type ActionModel = {
    */
   limit_price?: number | null;
   /**
-   * How much of bot's balance to use for the order (for open actions). How much of the position to close (for close actions). 0=0%, 1=100%.
+   * How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.
    */
   allocation?: number;
   /**
@@ -83,58 +83,70 @@ export type ActionModel = {
  * API error identifiers
  */
 export type ApiErrorIdentifier =
-  | "success"
-  | "invalid_api_key"
-  | "invalid_signature"
-  | "invalid_timestamp"
-  | "ip_address_is_not_authorized"
-  | "insufficient_permissions_spot_and_futures_required"
-  | "user_account_is_frozen"
-  | "rate_limit_exceeded"
-  | "invalid_parameter_provided"
-  | "request_scope_limit_exceeded"
+  | "api_key_already_exists"
+  | "black_swan"
+  | "bot_already_deleted"
+  | "bot_disabled"
+  | "bot_stopping_completed"
+  | "client_order_id_already_exists"
   | "invalid_content_type"
-  | "requested_resource_not_found"
-  | "order_does_not_exist"
+  | "delete_bot_error"
+  | "exchange_api_key_in_use"
+  | "exchange_invalid_signature"
+  | "exchange_invalid_timestamp"
+  | "exchange_ip_address_is_not_authorized"
+  | "exchange_system_under_maintenance"
+  | "exchange_rate_limit_exceeded"
+  | "exchange_service_temporarily_unavailable"
+  | "exchange_system_is_busy"
+  | "exchange_system_configuration_error"
+  | "exchange_internal_system_error"
+  | "exchange_user_account_is_frozen"
+  | "insufficient_permissions_spot_and_futures_required"
+  | "hedge_mode_not_active"
+  | "http_request_error"
+  | "insufficient_balance"
+  | "insufficient_margin"
+  | "insufficient_scopes"
+  | "invalid_api_key"
+  | "invalid_bearer"
+  | "invalid_exchange_api_key"
+  | "invalid_margin_mode"
+  | "invalid_parameter_provided"
+  | "jwt_expired"
+  | "leverage_limit_exceeded"
+  | "order_violates_liquidation_price_constraints"
+  | "no_credentials"
+  | "object_not_found"
   | "order_is_already_filled"
   | "order_is_being_processed"
   | "order_quantity_limit_exceeded"
+  | "order_does_not_exist"
   | "order_price_is_invalid"
-  | "post_only_order_would_immediately_match"
-  | "symbol_does_not_exist"
-  | "position_does_not_exist"
+  | "order_size_too_large"
+  | "order_size_too_small"
   | "position_limit_exceeded"
+  | "position_does_not_exist"
   | "position_opening_temporarily_suspended"
-  | "insufficient_balance"
-  | "insufficient_margin"
-  | "leverage_limit_exceeded"
+  | "post_only_order_would_immediately_match"
+  | "request_scope_limit_exceeded"
   | "risk_limit_exceeded"
-  | "order_violates_liquidation_price_constraints"
-  | "invalid_margin_mode"
-  | "internal_system_error"
-  | "system_configuration_error"
-  | "service_temporarily_unavailable"
-  | "system_is_busy_please_try_again_later"
-  | "system_under_maintenance"
   | "rpc_timeout"
   | "system_settlement_in_process"
-  | "trading_is_suspended"
+  | "strategy_disabled"
+  | "success"
+  | "symbol_does_not_exist"
   | "trading_has_been_locked"
-  | "unknown_error_occurred"
-  | "http_request_error"
-  | "black_swan"
   | "trading_action_expired"
   | "trading_action_skipped"
-  | "bot_disabled"
-  | "order_size_too_small"
-  | "order_size_too_large"
-  | "hedge_mode_not_active"
-  | "api_key_already_exists"
-  | "delete_bot_error"
-  | "jwt_expired"
-  | "bot_stopping_completed";
+  | "trading_is_suspended"
+  | "unknown_error_occurred"
+  | "requested_resource_not_found";
 
-export type ApiErrorLevel = "error" | "success" | "info" | "warning";
+/**
+ * API error levels
+ */
+export type ApiErrorLevel = "error" | "info" | "success" | "warning";
 
 /**
  * Type of API error
@@ -144,49 +156,6 @@ export type ApiErrorType =
   | "exchange error"
   | "server error"
   | "no error";
-
-export type APIKeyModel = {
-  /**
-   * Timestamp of creation
-   */
-  created_at?: number | null;
-  /**
-   * Timestamp of last update
-   */
-  updated_at?: number | null;
-  /**
-   * UID, used as a placeholder in the response body
-   */
-  id?: string | null;
-  /**
-   * Exchange name
-   */
-  exchange: string;
-  /**
-   * API key
-   */
-  api_key?: string | null;
-  /**
-   * API secret
-   */
-  secret?: string | null;
-  /**
-   * API passphrase
-   */
-  passphrase?: string | null;
-  /**
-   * Label for the API key
-   */
-  label: string;
-  /**
-   * Status of the API key
-   */
-  enabled?: boolean | null;
-  /**
-   * UID for the user
-   */
-  user_id?: string | null;
-};
 
 export type BotModel = {
   /**
@@ -246,6 +215,49 @@ export type BotStatus = "running" | "stopping" | "stopped" | "deleted";
  */
 export type Exchange = "kucoin" | "bingx";
 
+export type ExchangeKeyModel = {
+  /**
+   * Timestamp of creation
+   */
+  created_at?: number | null;
+  /**
+   * Timestamp of last update
+   */
+  updated_at?: number | null;
+  /**
+   * UID, used as a placeholder in the response body
+   */
+  id?: string | null;
+  /**
+   * Exchange name
+   */
+  exchange: string;
+  /**
+   * API key
+   */
+  api_key?: string | null;
+  /**
+   * API secret
+   */
+  secret?: string | null;
+  /**
+   * API passphrase
+   */
+  passphrase?: string | null;
+  /**
+   * Label for the API key
+   */
+  label: string;
+  /**
+   * Status of the API key
+   */
+  enabled?: boolean | null;
+  /**
+   * UID for the user
+   */
+  user_id?: string | null;
+};
+
 export type ExecutionIds = {
   /**
    * Main execution ID. List with one item.
@@ -304,7 +316,7 @@ export type FuturesTradingAction = {
    */
   id?: string | null;
   /**
-   * UID for the execution of the order. Leave empty for open actions. Required on close actions if you havent't placed a TP/SL before. A specific TP/SL execution ID of the opening order.
+   * UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.
    */
   execution_id?: string | null;
   /**
@@ -340,7 +352,7 @@ export type FuturesTradingAction = {
    */
   limit_price?: number | null;
   /**
-   * How much of bot's balance to use for the order (for open actions). How much of the position to close (for close actions). 0=0%, 1=100%.
+   * How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.
    */
   allocation?: number;
   /**
@@ -525,9 +537,7 @@ export type OrderModel = {
   /**
    * Exchange specific details of the order
    */
-  order_details?: {
-    [key: string]: unknown;
-  } | null;
+  order_details?: unknown | null;
   /**
    * Profit and loss for the order
    */
@@ -570,7 +580,7 @@ export type StrategyExchangeInfo = {
   min_amount: number;
 };
 
-export type StrategyModel = {
+export type StrategyModel_Input = {
   /**
    * Timestamp of creation
    */
@@ -600,7 +610,54 @@ export type StrategyModel = {
    */
   exchanges: Array<StrategyExchangeInfo>;
   /**
-   * Whether the strategy is enabled
+   * Whether the strategy is enabled. If false, no bots will be created or updated for this strategy, open trades will be rejected. Existing bots will be marked as stopping.
+   */
+  enabled: boolean;
+  /**
+   * Leverage for the strategy
+   */
+  leverage: number;
+  /**
+   * Performance fee for the strategy
+   */
+  performance_fee: number;
+  /**
+   * Market of operation of the strategy
+   */
+  market_type: MarketType;
+};
+
+export type StrategyModel_Output = {
+  /**
+   * Timestamp of creation
+   */
+  created_at?: number | null;
+  /**
+   * Timestamp of last update
+   */
+  updated_at?: number | null;
+  /**
+   * UID, used as a placeholder in the response body
+   */
+  id?: string | null;
+  /**
+   * Unique human readable identifier for the strategy e.g. 'daily_trend_momentum'
+   */
+  identifier: string;
+  /**
+   * Name of the strategy
+   */
+  name: string;
+  /**
+   * Description of the strategy
+   */
+  description: string;
+  /**
+   * Exchanges supported by the strategy.
+   */
+  exchanges: Array<StrategyExchangeInfo>;
+  /**
+   * Whether the strategy is enabled. If false, no bots will be created or updated for this strategy, open trades will be rejected. Existing bots will be marked as stopping.
    */
   enabled: boolean;
   /**
@@ -699,61 +756,58 @@ export type DeleteBotResponse = unknown;
 
 export type DeleteBotError = HTTPValidationError;
 
-export type GetApiKeysData = {
+export type GetExchangeKeysData = {
   query?: {
     limit?: number;
     offset?: number;
   };
 };
 
-export type GetApiKeysResponse = Array<APIKeyModel>;
+export type GetExchangeKeysResponse = Array<ExchangeKeyModel>;
 
-export type GetApiKeysError = HTTPValidationError;
+export type GetExchangeKeysError = HTTPValidationError;
 
-export type CreateApiKeyData = {
-  body: APIKeyModel;
+export type CreateExchangeKeyData = {
+  body: ExchangeKeyModel;
 };
 
-export type CreateApiKeyResponse = unknown;
+export type CreateExchangeKeyResponse = unknown;
 
-export type CreateApiKeyError = HTTPValidationError;
+export type CreateExchangeKeyError = HTTPValidationError;
 
-export type GetApiKeyByIdData = {
+export type GetExchangeKeyByIdData = {
   path: {
     id: string;
   };
 };
 
-export type GetApiKeyByIdResponse = APIKeyModel;
+export type GetExchangeKeyByIdResponse = ExchangeKeyModel;
 
-export type GetApiKeyByIdError = HTTPValidationError;
+export type GetExchangeKeyByIdError = HTTPValidationError;
 
-export type DeleteApiKeyData = {
+export type DeleteExchangeKeyData = {
   path: {
     id: string;
   };
 };
 
-export type DeleteApiKeyResponse = unknown;
+export type DeleteExchangeKeyResponse = unknown;
 
-export type DeleteApiKeyError = HTTPValidationError;
+export type DeleteExchangeKeyError = HTTPValidationError;
 
-export type UpdateApiKeyData = {
-  body: APIKeyModel;
+export type UpdateExchangeKeyData = {
+  body: ExchangeKeyModel;
   path: {
     id: string;
   };
 };
 
-export type UpdateApiKeyResponse = unknown;
+export type UpdateExchangeKeyResponse = unknown;
 
-export type UpdateApiKeyError = HTTPValidationError;
+export type UpdateExchangeKeyError = HTTPValidationError;
 
 export type PostFuturesActionData = {
   body: FuturesTradingAction;
-  headers?: {
-    authorization?: string | null;
-  };
 };
 
 export type PostFuturesActionResponse = PostFuturesAction;
@@ -790,11 +844,9 @@ export type GetOrdersResponse = Array<OrderModel>;
 
 export type GetOrdersError = HTTPValidationError;
 
-export type GetFuturesBalanceData = unknown;
-
 export type GetFuturesBalanceResponse = Array<FuturesBalance>;
 
-export type GetFuturesBalanceError = HTTPValidationError;
+export type GetFuturesBalanceError = unknown;
 
 export type GetFuturesLedgerData = {
   query: {
@@ -848,9 +900,38 @@ export type GetStrategiesData = {
   };
 };
 
-export type GetStrategiesResponse = Array<StrategyModel>;
+export type GetStrategiesResponse = Array<StrategyModel_Output>;
 
 export type GetStrategiesError = HTTPValidationError;
+
+export type CreateStrategyData = {
+  body: StrategyModel_Input;
+};
+
+export type CreateStrategyResponse = unknown;
+
+export type CreateStrategyError = HTTPValidationError;
+
+export type KillStrategyData = {
+  path: {
+    id: string;
+  };
+};
+
+export type KillStrategyResponse = unknown;
+
+export type KillStrategyError = HTTPValidationError;
+
+export type UpdateStrategyData = {
+  body: StrategyModel_Input;
+  path: {
+    id: string;
+  };
+};
+
+export type UpdateStrategyResponse = unknown;
+
+export type UpdateStrategyError = HTTPValidationError;
 
 export type GetNotificationsData = {
   query?: {
@@ -882,11 +963,9 @@ export type UpdateNotificationsResponse = unknown;
 
 export type UpdateNotificationsError = HTTPValidationError;
 
-export type DeleteNotificationsData = unknown;
-
 export type DeleteNotificationsResponse = unknown;
 
-export type DeleteNotificationsError = HTTPValidationError;
+export type DeleteNotificationsError = unknown;
 
 export type UpdateNotificationData = {
   path: {
@@ -912,11 +991,9 @@ export type DeleteNotificationResponse = unknown;
 
 export type DeleteNotificationError = HTTPValidationError;
 
-export type GetExchangesData = unknown;
-
 export type GetExchangesResponse = Array<Exchange>;
 
-export type GetExchangesError = HTTPValidationError;
+export type GetExchangesError = unknown;
 
 export type PingResponse = unknown;
 

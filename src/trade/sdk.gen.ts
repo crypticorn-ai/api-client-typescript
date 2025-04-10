@@ -18,21 +18,21 @@ import type {
   DeleteBotData,
   DeleteBotError,
   DeleteBotResponse,
-  GetApiKeysData,
-  GetApiKeysError,
-  GetApiKeysResponse,
-  CreateApiKeyData,
-  CreateApiKeyError,
-  CreateApiKeyResponse,
-  GetApiKeyByIdData,
-  GetApiKeyByIdError,
-  GetApiKeyByIdResponse,
-  DeleteApiKeyData,
-  DeleteApiKeyError,
-  DeleteApiKeyResponse,
-  UpdateApiKeyData,
-  UpdateApiKeyError,
-  UpdateApiKeyResponse,
+  GetExchangeKeysData,
+  GetExchangeKeysError,
+  GetExchangeKeysResponse,
+  CreateExchangeKeyData,
+  CreateExchangeKeyError,
+  CreateExchangeKeyResponse,
+  GetExchangeKeyByIdData,
+  GetExchangeKeyByIdError,
+  GetExchangeKeyByIdResponse,
+  DeleteExchangeKeyData,
+  DeleteExchangeKeyError,
+  DeleteExchangeKeyResponse,
+  UpdateExchangeKeyData,
+  UpdateExchangeKeyError,
+  UpdateExchangeKeyResponse,
   PostFuturesActionData,
   PostFuturesActionError,
   PostFuturesActionResponse,
@@ -45,7 +45,6 @@ import type {
   GetOrdersData,
   GetOrdersError,
   GetOrdersResponse,
-  GetFuturesBalanceData,
   GetFuturesBalanceError,
   GetFuturesBalanceResponse,
   GetFuturesLedgerData,
@@ -63,6 +62,15 @@ import type {
   GetStrategiesData,
   GetStrategiesError,
   GetStrategiesResponse,
+  CreateStrategyData,
+  CreateStrategyError,
+  CreateStrategyResponse,
+  KillStrategyData,
+  KillStrategyError,
+  KillStrategyResponse,
+  UpdateStrategyData,
+  UpdateStrategyError,
+  UpdateStrategyResponse,
   GetNotificationsData,
   GetNotificationsError,
   GetNotificationsResponse,
@@ -72,7 +80,6 @@ import type {
   UpdateNotificationsData,
   UpdateNotificationsError,
   UpdateNotificationsResponse,
-  DeleteNotificationsData,
   DeleteNotificationsError,
   DeleteNotificationsResponse,
   UpdateNotificationData,
@@ -81,7 +88,6 @@ import type {
   DeleteNotificationData,
   DeleteNotificationError,
   DeleteNotificationResponse,
-  GetExchangesData,
   GetExchangesError,
   GetExchangesResponse,
   PingError,
@@ -118,6 +124,7 @@ export function createClient(
 
   /**
    * Create Bot
+   * Creates a new bot.
    */
   const createBot = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<CreateBotData, ThrowOnError>,
@@ -134,6 +141,7 @@ export function createClient(
 
   /**
    * Update Bot
+   * Updates a bot.
    */
   const updateBot = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<UpdateBotData, ThrowOnError>,
@@ -150,6 +158,7 @@ export function createClient(
 
   /**
    * Delete Bot
+   * Soft deletes a bot by cancelling all orders and closing all positions.
    */
   const deleteBot = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<DeleteBotData, ThrowOnError>,
@@ -165,14 +174,14 @@ export function createClient(
   };
 
   /**
-   * Get Api Keys
+   * Get Exchange Keys
    */
-  const getApiKeys = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetApiKeysData, ThrowOnError>,
+  const getExchangeKeys = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetExchangeKeysData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetApiKeysResponse,
-      GetApiKeysError,
+      GetExchangeKeysResponse,
+      GetExchangeKeysError,
       ThrowOnError
     >({
       ...options,
@@ -181,14 +190,14 @@ export function createClient(
   };
 
   /**
-   * Post Api Key
+   * Post Exchange Key
    */
-  const createApiKey = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<CreateApiKeyData, ThrowOnError>,
+  const createExchangeKey = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<CreateExchangeKeyData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).post<
-      CreateApiKeyResponse,
-      CreateApiKeyError,
+      CreateExchangeKeyResponse,
+      CreateExchangeKeyError,
       ThrowOnError
     >({
       ...options,
@@ -197,14 +206,14 @@ export function createClient(
   };
 
   /**
-   * Get Api Key By Id
+   * Get Exchange Key By Id
    */
-  const getApiKeyById = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetApiKeyByIdData, ThrowOnError>,
+  const getExchangeKeyById = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetExchangeKeyByIdData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetApiKeyByIdResponse,
-      GetApiKeyByIdError,
+      GetExchangeKeyByIdResponse,
+      GetExchangeKeyByIdError,
       ThrowOnError
     >({
       ...options,
@@ -213,14 +222,14 @@ export function createClient(
   };
 
   /**
-   * Delete Api Key
+   * Delete Exchange Key
    */
-  const deleteApiKey = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<DeleteApiKeyData, ThrowOnError>,
+  const deleteExchangeKey = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<DeleteExchangeKeyData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).delete<
-      DeleteApiKeyResponse,
-      DeleteApiKeyError,
+      DeleteExchangeKeyResponse,
+      DeleteExchangeKeyError,
       ThrowOnError
     >({
       ...options,
@@ -229,14 +238,14 @@ export function createClient(
   };
 
   /**
-   * Put Api Key
+   * Put Exchange Key
    */
-  const updateApiKey = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<UpdateApiKeyData, ThrowOnError>,
+  const updateExchangeKey = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<UpdateExchangeKeyData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).put<
-      UpdateApiKeyResponse,
-      UpdateApiKeyError,
+      UpdateExchangeKeyResponse,
+      UpdateExchangeKeyError,
       ThrowOnError
     >({
       ...options,
@@ -313,7 +322,7 @@ export function createClient(
    * Get Futures Balance
    */
   const getFuturesBalance = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetFuturesBalanceData, ThrowOnError>,
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
       GetFuturesBalanceResponse,
@@ -406,6 +415,56 @@ export function createClient(
   };
 
   /**
+   * Create Strategy
+   */
+  const createStrategy = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<CreateStrategyData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).post<
+      CreateStrategyResponse,
+      CreateStrategyError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/strategies",
+    });
+  };
+
+  /**
+   * Kill Strategy
+   * Kills a strategy by disabling it and deleting all bots associated with it.
+   */
+  const killStrategy = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<KillStrategyData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).delete<
+      KillStrategyResponse,
+      KillStrategyError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/strategies/{id}",
+    });
+  };
+
+  /**
+   * Update Strategy
+   * Updates a strategy. If the strategy is being disabled, all bots associated with it will be set to stopping.
+   */
+  const updateStrategy = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<UpdateStrategyData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).put<
+      UpdateStrategyResponse,
+      UpdateStrategyError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/strategies/{id}",
+    });
+  };
+
+  /**
    * Get Notifications
    * Get all notifications for the authenticated user
    */
@@ -461,7 +520,7 @@ export function createClient(
    * Delete all notifications for the authenticated user
    */
   const deleteNotifications = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<DeleteNotificationsData, ThrowOnError>,
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).delete<
       DeleteNotificationsResponse,
@@ -510,7 +569,7 @@ export function createClient(
    * Get Exchanges
    */
   const getExchanges = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetExchangesData, ThrowOnError>,
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
       GetExchangesResponse,
@@ -543,11 +602,11 @@ export function createClient(
     createBot,
     updateBot,
     deleteBot,
-    getApiKeys,
-    createApiKey,
-    getApiKeyById,
-    deleteApiKey,
-    updateApiKey,
+    getExchangeKeys,
+    createExchangeKey,
+    getExchangeKeyById,
+    deleteExchangeKey,
+    updateExchangeKey,
     postFuturesAction,
     postSpotAction,
     getActions,
@@ -558,6 +617,9 @@ export function createClient(
     placeFuturesOrder,
     cancelFuturesOrder,
     getStrategies,
+    createStrategy,
+    killStrategy,
+    updateStrategy,
     getNotifications,
     createNotification,
     updateNotifications,

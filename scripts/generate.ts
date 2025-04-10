@@ -3,11 +3,14 @@ import { createClient } from '@hey-api/openapi-ts'
 import prettier from 'prettier'
 import fs from 'fs/promises'
 
-const service = 'klines'//process.argv[2]
-// if (!service) {
-//   console.error('Usage: pnpm run generate <service>')
-//   process.exit(1)
-// }
+const service = process.argv[2]
+const services = ['klines', 'trade', 'pay', 'auth', 'token']
+if (!service || !services.includes(service)) {
+  console.error(`Invalid service: ${service}`)
+  console.error('Valid services are:')
+  services.forEach((s) => console.error(`  - ${s}`))
+  process.exit(1)
+}
 
 // if you run this script the first time for a service, comment out lines 20-62
 
@@ -75,14 +78,15 @@ ${ops.map((op) => `    ${op},`).join('\n')}
     }
 
     console.log('Client generation complete!')
+    console.log(`!!! Remember to run: pnpm run build`)
     console.log(
-      `
-      =========================================================
-      If you are adding a new module, you need to do the following:
-      - Edit the generated src/index.ts file to export the new module. You might need to update the exports due to name clashes.
-      - Edit the src/api.ts file to add the new module to the return type of the createClient function.
-      =========================================================
-    `
+`
+=========================================================
+If you are adding a new module, you need to do the following:
+- Edit the generated src/index.ts file to export the new module. You might need to update the exports due to name clashes.
+- Edit the src/api.ts file to add the new module to the return type of the createClient function.
+=========================================================
+`
     )
   } catch (error) {
     console.error('Error generating client:', error)

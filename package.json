@@ -8,7 +8,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "update": "rm -rf dist && npm run generate && npm run build",
+    "update": "rm -rf dist && npm run generate --",
     "build": "node esbuild.mjs && tsc",
     "dev": "tsx watch src/dev.ts",
     "build:watch": "node esbuild.mjs --watch",
