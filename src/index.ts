@@ -19,5 +19,6 @@ export {
   type ValidationErrorData,
   type CustomErrorCode,
   type ValidationError,
+  Scope
 } from "@crypticorn-ai/auth-service";
 export * from "./hive";

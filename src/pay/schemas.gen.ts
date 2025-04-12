@@ -382,7 +382,6 @@ export const NowWebhookPayloadSchema = {
     },
     fee: {
       $ref: "#/components/schemas/NowFeeStructure",
-      description: "Fee structure for the payment",
     },
     invoice_id: {
       type: "integer",
@@ -506,20 +505,8 @@ export const PaymentStatusSchema = {
   description: "Payment status",
 } as const;
 
-export const ProductModelSchema = {
+export const ProductCreateSchema = {
   properties: {
-    id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Id",
-      description: "Product ID. Added on database query.",
-    },
     name: {
       type: "string",
       title: "Name",
@@ -529,6 +516,21 @@ export const ProductModelSchema = {
       type: "number",
       title: "Price",
       description: "Product price",
+    },
+    scopes: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/Scope",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Scopes",
+      description: "Scopes that product provides",
     },
     duration: {
       type: "integer",
@@ -548,10 +550,11 @@ export const ProductModelSchema = {
   },
   type: "object",
   required: ["name", "price", "duration", "description", "is_active"],
-  title: "ProductModel",
+  title: "ProductCreate",
+  description: "Model for creating a product",
 } as const;
 
-export const ProductSubsModelSchema = {
+export const ProductSubsSchema = {
   properties: {
     id: {
       anyOf: [
@@ -563,7 +566,7 @@ export const ProductSubsModelSchema = {
         },
       ],
       title: "Id",
-      description: "Product ID. Added on database query.",
+      description: "Database ID of the object.",
     },
     user_id: {
       type: "string",
@@ -588,7 +591,122 @@ export const ProductSubsModelSchema = {
   },
   type: "object",
   required: ["user_id", "product_id", "access_from", "access_until"],
-  title: "ProductSubsModel",
+  title: "ProductSubs",
+  description: "Product subscription model",
+} as const;
+
+export const ProductUpdateSchema = {
+  properties: {
+    name: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Name",
+      description: "Product name",
+    },
+    price: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Price",
+      description: "Product price",
+    },
+    scopes: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/Scope",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Scopes",
+      description: "Scopes that product provides",
+    },
+    duration: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Duration",
+      description: "Product duration in days. 0 means unlimited.",
+    },
+    description: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Description",
+      description: "Product description",
+    },
+    is_active: {
+      anyOf: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Is Active",
+      description: "Product is active",
+    },
+  },
+  type: "object",
+  title: "ProductUpdate",
+  description: "Model for updating a product",
+} as const;
+
+export const ScopeSchema = {
+  type: "string",
+  enum: [
+    "read:hive:model",
+    "read:hive:data",
+    "write:hive:model",
+    "read:trade:bots",
+    "write:trade:bots",
+    "read:trade:exchangekeys",
+    "write:trade:exchangekeys",
+    "read:trade:orders",
+    "read:trade:actions",
+    "write:trade:actions",
+    "read:trade:exchanges",
+    "read:trade:futures",
+    "write:trade:futures",
+    "read:trade:notifications",
+    "write:trade:notifications",
+    "read:trade:strategies",
+    "write:trade:strategies",
+    "read:pay:payments",
+    "read:pay:products",
+    "write:pay:products",
+    "read:pay:now",
+    "write:pay:now",
+    "read:predictions",
+  ],
+  title: "Scope",
+  description: "The permission scopes for the API.",
 } as const;
 
 export const ServicesSchema = {
@@ -598,7 +716,7 @@ export const ServicesSchema = {
   description: "Available payment services",
 } as const;
 
-export const UnifiedPaymentModelSchema = {
+export const UnifiedPaymentSchema = {
   properties: {
     id: {
       type: "string",
@@ -649,7 +767,7 @@ export const UnifiedPaymentModelSchema = {
     "service",
     "market",
   ],
-  title: "UnifiedPaymentModel",
+  title: "UnifiedPayment",
   description: "Combined payment model across all services",
 } as const;
 

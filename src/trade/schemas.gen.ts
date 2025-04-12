@@ -222,7 +222,8 @@ export const ActionModelSchema = {
 export const ApiErrorIdentifierSchema = {
   type: "string",
   enum: [
-    "api_key_already_exists",
+    "allocation_below_current_exposure",
+    "allocation_below_min_amount",
     "black_swan",
     "bot_already_deleted",
     "bot_disabled",
@@ -230,18 +231,19 @@ export const ApiErrorIdentifierSchema = {
     "client_order_id_already_exists",
     "invalid_content_type",
     "delete_bot_error",
-    "exchange_api_key_in_use",
     "exchange_invalid_signature",
     "exchange_invalid_timestamp",
     "exchange_ip_address_is_not_authorized",
+    "exchange_key_already_exists",
+    "exchange_key_in_use",
     "exchange_system_under_maintenance",
     "exchange_rate_limit_exceeded",
+    "insufficient_permissions_spot_and_futures_required",
     "exchange_service_temporarily_unavailable",
     "exchange_system_is_busy",
     "exchange_system_configuration_error",
     "exchange_internal_system_error",
     "exchange_user_account_is_frozen",
-    "insufficient_permissions_spot_and_futures_required",
     "hedge_mode_not_active",
     "http_request_error",
     "insufficient_balance",
@@ -249,14 +251,16 @@ export const ApiErrorIdentifierSchema = {
     "insufficient_scopes",
     "invalid_api_key",
     "invalid_bearer",
-    "invalid_exchange_api_key",
+    "invalid_exchange_key",
     "invalid_margin_mode",
     "invalid_parameter_provided",
     "jwt_expired",
     "leverage_limit_exceeded",
     "order_violates_liquidation_price_constraints",
     "no_credentials",
+    "now_api_down",
     "object_not_found",
+    "object_already_exists",
     "order_is_already_filled",
     "order_is_being_processed",
     "order_quantity_limit_exceeded",
@@ -273,11 +277,13 @@ export const ApiErrorIdentifierSchema = {
     "rpc_timeout",
     "system_settlement_in_process",
     "strategy_disabled",
+    "strategy_leverage_mismatch",
+    "strategy_not_supporting_exchange",
     "success",
     "symbol_does_not_exist",
-    "trading_has_been_locked",
     "trading_action_expired",
     "trading_action_skipped",
+    "trading_has_been_locked",
     "trading_is_suspended",
     "unknown_error_occurred",
     "requested_resource_not_found",
@@ -355,6 +361,7 @@ export const BotModelSchema = {
     },
     allocation: {
       type: "integer",
+      exclusiveMinimum: 0,
       title: "Allocation",
       description: "Initial allocation for the bot",
     },
@@ -428,7 +435,7 @@ export const ExchangeSchema = {
   type: "string",
   enum: ["kucoin", "bingx"],
   title: "Exchange",
-  description: "Supported exchanges",
+  description: "Supported exchanges for trading",
 } as const;
 
 export const ExchangeKeyModelSchema = {
@@ -563,7 +570,7 @@ export const ExecutionIdsSchema = {
       type: "array",
       title: "Sl",
       description:
-        "Stop loss execution IDs. List with multiple items ordered by the next stop loss.",
+        "Stop loss execution IDs. List with multiple items ordered by the next stop loss, e.g. price = 10000 => SLs: ['900', '700', '500'].",
     },
     tp: {
       items: {
@@ -572,7 +579,7 @@ export const ExecutionIdsSchema = {
       type: "array",
       title: "Tp",
       description:
-        "Take profit execution IDs. List with multiple items ordered by the next take profit.",
+        "Take profit execution IDs. List with multiple items ordered by the next take profit, e.g. price = 10000 => TPs: ['1100', '1300', '1500'].",
     },
   },
   type: "object",
@@ -859,7 +866,7 @@ export const MarketTypeSchema = {
   type: "string",
   enum: ["spot", "futures"],
   title: "MarketType",
-  description: "Type of market",
+  description: "Market types",
 } as const;
 
 export const NotificationModelSchema = {

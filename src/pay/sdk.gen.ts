@@ -6,14 +6,16 @@ import {
   type OptionsLegacyParser,
 } from "@hey-api/client-fetch";
 import type {
+  PingError,
+  PingResponse,
   GetNowApiStatusError,
   GetNowApiStatusResponse,
   CreateNowInvoiceData,
   CreateNowInvoiceError,
   CreateNowInvoiceResponse,
-  SendNowWebhookData,
-  SendNowWebhookError,
-  SendNowWebhookResponse,
+  HandleNowWebhookData,
+  HandleNowWebhookError,
+  HandleNowWebhookResponse,
   GetProductsData,
   GetProductsError,
   GetProductsResponse,
@@ -32,8 +34,6 @@ import type {
   GetSubscriptionsData,
   GetSubscriptionsError,
   GetSubscriptionsResponse,
-  PingError,
-  PingResponse,
 } from "./types.gen";
 export function createClient(
   baseUrl: string,
@@ -49,8 +49,24 @@ export function createClient(
   );
 
   /**
+   * Ping
+   */
+  const ping = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      PingResponse,
+      PingError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/",
+    });
+  };
+
+  /**
    * Get Status
-   * Get NOWPayments API status
+   * Get the status of the NOWPayments API
    */
   const getNowApiStatus = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
@@ -87,12 +103,12 @@ export function createClient(
    * Handle NOWPayments webhook notifications (IPN).
    * Validates the signature, updates the payment status and creates a product subscription if the payment is successful.
    */
-  const sendNowWebhook = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<SendNowWebhookData, ThrowOnError>,
+  const handleNowWebhook = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<HandleNowWebhookData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).post<
-      SendNowWebhookResponse,
-      SendNowWebhookError,
+      HandleNowWebhookResponse,
+      HandleNowWebhookError,
       ThrowOnError
     >({
       ...options,
@@ -102,7 +118,7 @@ export function createClient(
 
   /**
    * Get Products
-   * Get all products
+   * Get all software products from Crypticorn
    */
   const getProducts = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetProductsData, ThrowOnError>,
@@ -153,7 +169,7 @@ export function createClient(
 
   /**
    * Get Latest Payment From Invoice
-   * Get the latest payment from an invoice
+   * Get the latest payment by a user from an invoice
    */
   const getLatestPaymentFromInvoice = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<GetLatestPaymentFromInvoiceData, ThrowOnError>,
@@ -170,7 +186,7 @@ export function createClient(
 
   /**
    * Get Payments
-   * Get combined payment history for a user across all payment services.
+   * Get the combined payment history for a user across all payment services.
    */
   const getPaymentHistory = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetPaymentHistoryData, ThrowOnError>,
@@ -187,6 +203,7 @@ export function createClient(
 
   /**
    * Get Subscriptions
+   * Get all subscriptions for a user. Subscriptions are the products a user has subscribed to. Returns both active and inactive subscriptions.
    */
   const getSubscriptions = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetSubscriptionsData, ThrowOnError>,
@@ -201,32 +218,16 @@ export function createClient(
     });
   };
 
-  /**
-   * Ping
-   */
-  const ping = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      PingResponse,
-      PingError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/",
-    });
-  };
-
   return {
+    ping,
     getNowApiStatus,
     createNowInvoice,
-    sendNowWebhook,
+    handleNowWebhook,
     getProducts,
     createProduct,
     updateProduct,
     getLatestPaymentFromInvoice,
     getPaymentHistory,
     getSubscriptions,
-    ping,
   };
 }

@@ -192,9 +192,6 @@ export type NowWebhookPayload = {
    * Actually paid amount in fiat currency
    */
   actually_paid_at_fiat: number;
-  /**
-   * Fee structure for the payment
-   */
   fee: NowFeeStructure;
   /**
    * Associated invoice ID
@@ -271,11 +268,10 @@ export type PaymentStatus =
   | "failed"
   | "cancelled";
 
-export type ProductModel = {
-  /**
-   * Product ID. Added on database query.
-   */
-  id?: string | null;
+/**
+ * Model for creating a product
+ */
+export type ProductCreate = {
   /**
    * Product name
    */
@@ -284,6 +280,10 @@ export type ProductModel = {
    * Product price
    */
   price: number;
+  /**
+   * Scopes that product provides
+   */
+  scopes?: Array<Scope> | null;
   /**
    * Product duration in days. 0 means unlimited.
    */
@@ -298,9 +298,12 @@ export type ProductModel = {
   is_active: boolean;
 };
 
-export type ProductSubsModel = {
+/**
+ * Product subscription model
+ */
+export type ProductSubs = {
   /**
-   * Product ID. Added on database query.
+   * Database ID of the object.
    */
   id?: string | null;
   /**
@@ -322,6 +325,64 @@ export type ProductSubsModel = {
 };
 
 /**
+ * Model for updating a product
+ */
+export type ProductUpdate = {
+  /**
+   * Product name
+   */
+  name?: string | null;
+  /**
+   * Product price
+   */
+  price?: number | null;
+  /**
+   * Scopes that product provides
+   */
+  scopes?: Array<Scope> | null;
+  /**
+   * Product duration in days. 0 means unlimited.
+   */
+  duration?: number | null;
+  /**
+   * Product description
+   */
+  description?: string | null;
+  /**
+   * Product is active
+   */
+  is_active?: boolean | null;
+};
+
+/**
+ * The permission scopes for the API.
+ */
+export type Scope =
+  | "read:hive:model"
+  | "read:hive:data"
+  | "write:hive:model"
+  | "read:trade:bots"
+  | "write:trade:bots"
+  | "read:trade:exchangekeys"
+  | "write:trade:exchangekeys"
+  | "read:trade:orders"
+  | "read:trade:actions"
+  | "write:trade:actions"
+  | "read:trade:exchanges"
+  | "read:trade:futures"
+  | "write:trade:futures"
+  | "read:trade:notifications"
+  | "write:trade:notifications"
+  | "read:trade:strategies"
+  | "write:trade:strategies"
+  | "read:pay:payments"
+  | "read:pay:products"
+  | "write:pay:products"
+  | "read:pay:now"
+  | "write:pay:now"
+  | "read:predictions";
+
+/**
  * Available payment services
  */
 export type Services = "now";
@@ -329,7 +390,7 @@ export type Services = "now";
 /**
  * Combined payment model across all services
  */
-export type UnifiedPaymentModel = {
+export type UnifiedPayment = {
   /**
    * Payment ID
    */
@@ -367,6 +428,10 @@ export type ValidationError = {
   type: string;
 };
 
+export type PingResponse = unknown;
+
+export type PingError = unknown;
+
 export type GetNowApiStatusResponse = NowAPIStatusRes;
 
 export type GetNowApiStatusError = unknown;
@@ -379,7 +444,7 @@ export type CreateNowInvoiceResponse = NowCreateInvoiceRes;
 
 export type CreateNowInvoiceError = HTTPValidationError;
 
-export type SendNowWebhookData = {
+export type HandleNowWebhookData = {
   body: NowWebhookPayload;
   headers: {
     /**
@@ -389,26 +454,29 @@ export type SendNowWebhookData = {
   };
 };
 
-export type SendNowWebhookResponse = unknown;
+export type HandleNowWebhookResponse = unknown;
 
-export type SendNowWebhookError = HTTPValidationError;
+export type HandleNowWebhookError = HTTPValidationError;
 
 export type GetProductsData = {
-  body?: {
-    [key: string]: unknown;
-  };
   query?: {
+    /**
+     * Limit the number of products returned. 0 means no limit.
+     */
     limit?: number;
+    /**
+     * Offset the number of products returned. 0 means no offset.
+     */
     offset?: number;
   };
 };
 
-export type GetProductsResponse = Array<ProductModel>;
+export type GetProductsResponse = Array<ProductCreate>;
 
 export type GetProductsError = HTTPValidationError;
 
 export type CreateProductData = {
-  body: ProductModel;
+  body: ProductCreate;
 };
 
 export type CreateProductResponse = unknown;
@@ -416,8 +484,11 @@ export type CreateProductResponse = unknown;
 export type CreateProductError = HTTPValidationError;
 
 export type UpdateProductData = {
-  body: ProductModel;
+  body: ProductUpdate;
   path: {
+    /**
+     * The ID of the product to update
+     */
     id: string;
   };
 };
@@ -428,26 +499,43 @@ export type UpdateProductError = HTTPValidationError;
 
 export type GetLatestPaymentFromInvoiceData = {
   query: {
+    /**
+     * The invoice ID to get the latest payment from
+     */
     invoice_id: string;
   };
 };
 
-export type GetLatestPaymentFromInvoiceResponse = UnifiedPaymentModel;
+export type GetLatestPaymentFromInvoiceResponse = UnifiedPayment;
 
 export type GetLatestPaymentFromInvoiceError = HTTPValidationError;
 
-export type GetPaymentHistoryData = unknown;
+export type GetPaymentHistoryData = {
+  query?: {
+    /**
+     * Limit the number of payments returned. 0 means no limit.
+     */
+    limit?: number;
+    /**
+     * Offset the number of payments returned. 0 means no offset.
+     */
+    offset?: number;
+  };
+};
 
-export type GetPaymentHistoryResponse = Array<UnifiedPaymentModel>;
+export type GetPaymentHistoryResponse = Array<UnifiedPayment>;
 
 export type GetPaymentHistoryError = HTTPValidationError;
 
-export type GetSubscriptionsData = unknown;
+export type GetSubscriptionsData = {
+  query?: {
+    /**
+     * The user ID to get subscriptions for. Defaults to the authenticated user.
+     */
+    user_id?: string | null;
+  };
+};
 
-export type GetSubscriptionsResponse = Array<ProductSubsModel>;
+export type GetSubscriptionsResponse = Array<ProductSubs>;
 
 export type GetSubscriptionsError = HTTPValidationError;
-
-export type PingResponse = unknown;
-
-export type PingError = unknown;
