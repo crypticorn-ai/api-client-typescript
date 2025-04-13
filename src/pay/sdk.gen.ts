@@ -6,8 +6,6 @@ import {
   type OptionsLegacyParser,
 } from "@hey-api/client-fetch";
 import type {
-  PingError,
-  PingResponse,
   GetNowApiStatusError,
   GetNowApiStatusResponse,
   CreateNowInvoiceData,
@@ -34,6 +32,8 @@ import type {
   GetSubscriptionsData,
   GetSubscriptionsError,
   GetSubscriptionsResponse,
+  PingError,
+  PingResponse,
 } from "./types.gen";
 export function createClient(
   baseUrl: string,
@@ -47,22 +47,6 @@ export function createClient(
       headers,
     }),
   );
-
-  /**
-   * Ping
-   */
-  const ping = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      PingResponse,
-      PingError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/",
-    });
-  };
 
   /**
    * Get Status
@@ -218,8 +202,23 @@ export function createClient(
     });
   };
 
+  /**
+   * Ping
+   */
+  const ping = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      PingResponse,
+      PingError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/",
+    });
+  };
+
   return {
-    ping,
     getNowApiStatus,
     createNowInvoice,
     handleNowWebhook,
@@ -229,5 +228,6 @@ export function createClient(
     getLatestPaymentFromInvoice,
     getPaymentHistory,
     getSubscriptions,
+    ping,
   };
 }

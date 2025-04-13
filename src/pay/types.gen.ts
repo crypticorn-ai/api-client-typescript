@@ -462,10 +462,6 @@ export type ValidationError = {
   type: string;
 };
 
-export type PingResponse = unknown;
-
-export type PingError = unknown;
-
 export type GetNowApiStatusResponse = NowAPIStatusRes;
 
 export type GetNowApiStatusError = unknown;
@@ -573,3 +569,7 @@ export type GetSubscriptionsData = {
 export type GetSubscriptionsResponse = Array<ProductSubRead>;
 
 export type GetSubscriptionsError = HTTPValidationError;
+
+export type PingResponse = unknown;
+
+export type PingError = unknown;
