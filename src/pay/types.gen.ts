@@ -257,6 +257,41 @@ export type NowWebhookPayload = {
 };
 
 /**
+ * Combined payment model across all services
+ */
+export type Payment = {
+  /**
+   * Payment ID
+   */
+  id: string;
+  /**
+   * Product ID
+   */
+  product_id: string;
+  /**
+   * Payment date in seconds
+   */
+  date: number;
+  /**
+   * Payment amount
+   */
+  amount: number;
+  /**
+   * Payment currency
+   */
+  currency: string;
+  status: PaymentStatus;
+  /**
+   * Payment service
+   */
+  service: Services;
+  /**
+   * Payment market
+   */
+  market: string;
+};
+
+/**
  * Payment status
  */
 export type PaymentStatus =
@@ -299,13 +334,43 @@ export type ProductCreate = {
 };
 
 /**
- * Product subscription model
+ * Model for reading a product
  */
-export type ProductSubs = {
+export type ProductRead = {
   /**
-   * Database ID of the object.
+   * Product name
    */
-  id?: string | null;
+  name: string;
+  /**
+   * Product price
+   */
+  price: number;
+  /**
+   * Scopes that product provides
+   */
+  scopes?: Array<Scope> | null;
+  /**
+   * Product duration in days. 0 means unlimited.
+   */
+  duration: number;
+  /**
+   * Product description
+   */
+  description: string;
+  /**
+   * Product is active
+   */
+  is_active: boolean;
+  /**
+   * UID of the product
+   */
+  id: string;
+};
+
+/**
+ * Model for reading a product subscription
+ */
+export type ProductSubRead = {
   /**
    * User ID
    */
@@ -322,6 +387,10 @@ export type ProductSubs = {
    * Access until timestamp in milliseconds. 0 means unlimited.
    */
   access_until: number;
+  /**
+   * UID of the product subscription
+   */
+  id: string;
 };
 
 /**
@@ -387,41 +456,6 @@ export type Scope =
  */
 export type Services = "now";
 
-/**
- * Combined payment model across all services
- */
-export type UnifiedPayment = {
-  /**
-   * Payment ID
-   */
-  id: string;
-  /**
-   * Product ID
-   */
-  product_id: string;
-  /**
-   * Payment date in seconds
-   */
-  date: number;
-  /**
-   * Payment amount
-   */
-  amount: number;
-  /**
-   * Payment currency
-   */
-  currency: string;
-  status: PaymentStatus;
-  /**
-   * Payment service
-   */
-  service: Services;
-  /**
-   * Payment market
-   */
-  market: string;
-};
-
 export type ValidationError = {
   loc: Array<string | number>;
   msg: string;
@@ -471,7 +505,7 @@ export type GetProductsData = {
   };
 };
 
-export type GetProductsResponse = Array<ProductCreate>;
+export type GetProductsResponse = Array<ProductRead>;
 
 export type GetProductsError = HTTPValidationError;
 
@@ -479,7 +513,7 @@ export type CreateProductData = {
   body: ProductCreate;
 };
 
-export type CreateProductResponse = unknown;
+export type CreateProductResponse = ProductRead;
 
 export type CreateProductError = HTTPValidationError;
 
@@ -493,7 +527,7 @@ export type UpdateProductData = {
   };
 };
 
-export type UpdateProductResponse = unknown;
+export type UpdateProductResponse = ProductRead;
 
 export type UpdateProductError = HTTPValidationError;
 
@@ -506,7 +540,7 @@ export type GetLatestPaymentFromInvoiceData = {
   };
 };
 
-export type GetLatestPaymentFromInvoiceResponse = UnifiedPayment;
+export type GetLatestPaymentFromInvoiceResponse = Payment;
 
 export type GetLatestPaymentFromInvoiceError = HTTPValidationError;
 
@@ -523,7 +557,7 @@ export type GetPaymentHistoryData = {
   };
 };
 
-export type GetPaymentHistoryResponse = Array<UnifiedPayment>;
+export type GetPaymentHistoryResponse = Array<Payment>;
 
 export type GetPaymentHistoryError = HTTPValidationError;
 
@@ -536,6 +570,6 @@ export type GetSubscriptionsData = {
   };
 };
 
-export type GetSubscriptionsResponse = Array<ProductSubs>;
+export type GetSubscriptionsResponse = Array<ProductSubRead>;
 
 export type GetSubscriptionsError = HTTPValidationError;

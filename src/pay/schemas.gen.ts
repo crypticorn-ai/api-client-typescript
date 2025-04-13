@@ -490,6 +490,61 @@ export const NowWebhookPayloadSchema = {
   description: "Model for NOWPayments webhook (IPN) payload.",
 } as const;
 
+export const PaymentSchema = {
+  properties: {
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Payment ID",
+    },
+    product_id: {
+      type: "string",
+      title: "Product Id",
+      description: "Product ID",
+    },
+    date: {
+      type: "integer",
+      title: "Date",
+      description: "Payment date in seconds",
+    },
+    amount: {
+      type: "number",
+      title: "Amount",
+      description: "Payment amount",
+    },
+    currency: {
+      type: "string",
+      title: "Currency",
+      description: "Payment currency",
+    },
+    status: {
+      $ref: "#/components/schemas/PaymentStatus",
+    },
+    service: {
+      $ref: "#/components/schemas/Services",
+      description: "Payment service",
+    },
+    market: {
+      type: "string",
+      title: "Market",
+      description: "Payment market",
+    },
+  },
+  type: "object",
+  required: [
+    "id",
+    "product_id",
+    "date",
+    "amount",
+    "currency",
+    "status",
+    "service",
+    "market",
+  ],
+  title: "Payment",
+  description: "Combined payment model across all services",
+} as const;
+
 export const PaymentStatusSchema = {
   type: "string",
   enum: [
@@ -554,20 +609,62 @@ export const ProductCreateSchema = {
   description: "Model for creating a product",
 } as const;
 
-export const ProductSubsSchema = {
+export const ProductReadSchema = {
   properties: {
-    id: {
+    name: {
+      type: "string",
+      title: "Name",
+      description: "Product name",
+    },
+    price: {
+      type: "number",
+      title: "Price",
+      description: "Product price",
+    },
+    scopes: {
       anyOf: [
         {
-          type: "string",
+          items: {
+            $ref: "#/components/schemas/Scope",
+          },
+          type: "array",
         },
         {
           type: "null",
         },
       ],
-      title: "Id",
-      description: "Database ID of the object.",
+      title: "Scopes",
+      description: "Scopes that product provides",
     },
+    duration: {
+      type: "integer",
+      title: "Duration",
+      description: "Product duration in days. 0 means unlimited.",
+    },
+    description: {
+      type: "string",
+      title: "Description",
+      description: "Product description",
+    },
+    is_active: {
+      type: "boolean",
+      title: "Is Active",
+      description: "Product is active",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "UID of the product",
+    },
+  },
+  type: "object",
+  required: ["name", "price", "duration", "description", "is_active", "id"],
+  title: "ProductRead",
+  description: "Model for reading a product",
+} as const;
+
+export const ProductSubReadSchema = {
+  properties: {
     user_id: {
       type: "string",
       title: "User Id",
@@ -588,11 +685,16 @@ export const ProductSubsSchema = {
       title: "Access Until",
       description: "Access until timestamp in milliseconds. 0 means unlimited.",
     },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "UID of the product subscription",
+    },
   },
   type: "object",
-  required: ["user_id", "product_id", "access_from", "access_until"],
-  title: "ProductSubs",
-  description: "Product subscription model",
+  required: ["user_id", "product_id", "access_from", "access_until", "id"],
+  title: "ProductSubRead",
+  description: "Model for reading a product subscription",
 } as const;
 
 export const ProductUpdateSchema = {
@@ -714,61 +816,6 @@ export const ServicesSchema = {
   enum: ["now"],
   title: "Services",
   description: "Available payment services",
-} as const;
-
-export const UnifiedPaymentSchema = {
-  properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Payment ID",
-    },
-    product_id: {
-      type: "string",
-      title: "Product Id",
-      description: "Product ID",
-    },
-    date: {
-      type: "integer",
-      title: "Date",
-      description: "Payment date in seconds",
-    },
-    amount: {
-      type: "number",
-      title: "Amount",
-      description: "Payment amount",
-    },
-    currency: {
-      type: "string",
-      title: "Currency",
-      description: "Payment currency",
-    },
-    status: {
-      $ref: "#/components/schemas/PaymentStatus",
-    },
-    service: {
-      $ref: "#/components/schemas/Services",
-      description: "Payment service",
-    },
-    market: {
-      type: "string",
-      title: "Market",
-      description: "Payment market",
-    },
-  },
-  type: "object",
-  required: [
-    "id",
-    "product_id",
-    "date",
-    "amount",
-    "currency",
-    "status",
-    "service",
-    "market",
-  ],
-  title: "UnifiedPayment",
-  description: "Combined payment model across all services",
 } as const;
 
 export const ValidationErrorSchema = {
