@@ -11,7 +11,6 @@ import type {
   CreateNowInvoiceData,
   CreateNowInvoiceError,
   CreateNowInvoiceResponse,
-  HandleNowWebhookData,
   HandleNowWebhookError,
   HandleNowWebhookResponse,
   GetProductsData,
@@ -88,7 +87,7 @@ export function createClient(
    * Validates the signature, updates the payment status and creates a product subscription if the payment is successful.
    */
   const handleNowWebhook = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<HandleNowWebhookData, ThrowOnError>,
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).post<
       HandleNowWebhookResponse,

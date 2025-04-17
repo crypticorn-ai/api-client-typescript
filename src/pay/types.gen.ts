@@ -145,118 +145,6 @@ export type NowCreateInvoiceRes = {
 };
 
 /**
- * Fee structure for the payment
- */
-export type NowFeeStructure = {
-  /**
-   * Currency of the fee
-   */
-  currency: string;
-  /**
-   * Deposit fee amount
-   */
-  depositFee: number;
-  /**
-   * Service fee amount
-   */
-  serviceFee: number;
-  /**
-   * Withdrawal fee amount
-   */
-  withdrawalFee: number;
-};
-
-/**
- * Payment status for the payment
- */
-export type NowPaymentStatus =
-  | "waiting"
-  | "confirming"
-  | "confirmed"
-  | "sending"
-  | "partially_paid"
-  | "finished"
-  | "failed"
-  | "refunded"
-  | "expired";
-
-/**
- * Model for NOWPayments webhook (IPN) payload.
- */
-export type NowWebhookPayload = {
-  /**
-   * Actually paid amount
-   */
-  actually_paid: number;
-  /**
-   * Actually paid amount in fiat currency
-   */
-  actually_paid_at_fiat: number;
-  fee: NowFeeStructure;
-  /**
-   * Associated invoice ID
-   */
-  invoice_id: number;
-  /**
-   * Order description
-   */
-  order_description: string;
-  /**
-   * Internal order ID
-   */
-  order_id: string;
-  /**
-   * Outcome amount
-   */
-  outcome_amount: number;
-  /**
-   * Outcome currency
-   */
-  outcome_currency: string;
-  /**
-   * Payment ID of parent payment
-   */
-  parent_payment_id?: number | null;
-  /**
-   * Payment destination address
-   */
-  pay_address: string;
-  /**
-   * Amount to pay
-   */
-  pay_amount: number;
-  /**
-   * Payment currency
-   */
-  pay_currency: string;
-  /**
-   * Unique payment identifier
-   */
-  payment_id: number;
-  /**
-   * Current payment status
-   */
-  payment_status: NowPaymentStatus;
-  /**
-   * Original price amount
-   */
-  price_amount: number;
-  /**
-   * Original price currency
-   */
-  price_currency: string;
-  /**
-   * Purchase ID
-   */
-  purchase_id: string;
-  /**
-   * Payment last update timestamp in milliseconds
-   */
-  updated_at: number;
-  [key: string]: unknown | number | NowFeeStructure | string | NowPaymentStatus;
-};
-
-/**
  * Combined payment model across all services
  */
 export type Payment = {
@@ -269,9 +157,9 @@ export type Payment = {
    */
   product_id: string;
   /**
-   * Payment date in seconds
+   * Payment timestamp in seconds
    */
-  date: number;
+  timestamp: number;
   /**
    * Payment amount
    */
@@ -427,6 +315,7 @@ export type ProductUpdate = {
  * The permission scopes for the API.
  */
 export type Scope =
+  | "read:predictions"
   | "read:hive:model"
   | "read:hive:data"
   | "write:hive:model"
@@ -449,7 +338,11 @@ export type Scope =
   | "write:pay:products"
   | "read:pay:now"
   | "write:pay:now"
-  | "read:predictions";
+  | "read:metrics:marketcap"
+  | "read:metrics:indicators"
+  | "read:metrics:exchanges"
+  | "read:metrics:tokens"
+  | "read:metrics:markets";
 
 /**
  * Available payment services
@@ -474,19 +367,9 @@ export type CreateNowInvoiceResponse = NowCreateInvoiceRes;
 
 export type CreateNowInvoiceError = HTTPValidationError;
 
-export type HandleNowWebhookData = {
-  body: NowWebhookPayload;
-  headers: {
-    /**
-     * Signature for the webhook
-     */
-    "x-nowpayments-sig": string;
-  };
-};
-
 export type HandleNowWebhookResponse = unknown;
 
-export type HandleNowWebhookError = HTTPValidationError;
+export type HandleNowWebhookError = unknown;
 
 export type GetProductsData = {
   query?: {

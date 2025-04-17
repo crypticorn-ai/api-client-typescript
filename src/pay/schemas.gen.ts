@@ -322,174 +322,6 @@ export const NowCreateInvoiceResSchema = {
 https://documenter.getpostman.com/view/7907941/2s93JusNJt#f5e4e645-dce2-4b06-b2ca-2a29aaa5e845`,
 } as const;
 
-export const NowFeeStructureSchema = {
-  properties: {
-    currency: {
-      type: "string",
-      title: "Currency",
-      description: "Currency of the fee",
-    },
-    depositFee: {
-      type: "number",
-      title: "Depositfee",
-      description: "Deposit fee amount",
-    },
-    serviceFee: {
-      type: "number",
-      title: "Servicefee",
-      description: "Service fee amount",
-    },
-    withdrawalFee: {
-      type: "number",
-      title: "Withdrawalfee",
-      description: "Withdrawal fee amount",
-    },
-  },
-  type: "object",
-  required: ["currency", "depositFee", "serviceFee", "withdrawalFee"],
-  title: "NowFeeStructure",
-  description: "Fee structure for the payment",
-} as const;
-
-export const NowPaymentStatusSchema = {
-  type: "string",
-  enum: [
-    "waiting",
-    "confirming",
-    "confirmed",
-    "sending",
-    "partially_paid",
-    "finished",
-    "failed",
-    "refunded",
-    "expired",
-  ],
-  title: "NowPaymentStatus",
-  description: "Payment status for the payment",
-} as const;
-
-export const NowWebhookPayloadSchema = {
-  properties: {
-    actually_paid: {
-      type: "number",
-      title: "Actually Paid",
-      description: "Actually paid amount",
-    },
-    actually_paid_at_fiat: {
-      type: "number",
-      title: "Actually Paid At Fiat",
-      description: "Actually paid amount in fiat currency",
-    },
-    fee: {
-      $ref: "#/components/schemas/NowFeeStructure",
-    },
-    invoice_id: {
-      type: "integer",
-      title: "Invoice Id",
-      description: "Associated invoice ID",
-    },
-    order_description: {
-      type: "string",
-      title: "Order Description",
-      description: "Order description",
-    },
-    order_id: {
-      type: "string",
-      title: "Order Id",
-      description: "Internal order ID",
-    },
-    outcome_amount: {
-      type: "number",
-      title: "Outcome Amount",
-      description: "Outcome amount",
-    },
-    outcome_currency: {
-      type: "string",
-      title: "Outcome Currency",
-      description: "Outcome currency",
-    },
-    parent_payment_id: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Parent Payment Id",
-      description: "Payment ID of parent payment",
-    },
-    pay_address: {
-      type: "string",
-      title: "Pay Address",
-      description: "Payment destination address",
-    },
-    pay_amount: {
-      type: "number",
-      title: "Pay Amount",
-      description: "Amount to pay",
-    },
-    pay_currency: {
-      type: "string",
-      title: "Pay Currency",
-      description: "Payment currency",
-    },
-    payment_id: {
-      type: "integer",
-      title: "Payment Id",
-      description: "Unique payment identifier",
-    },
-    payment_status: {
-      $ref: "#/components/schemas/NowPaymentStatus",
-      description: "Current payment status",
-    },
-    price_amount: {
-      type: "number",
-      title: "Price Amount",
-      description: "Original price amount",
-    },
-    price_currency: {
-      type: "string",
-      title: "Price Currency",
-      description: "Original price currency",
-    },
-    purchase_id: {
-      type: "string",
-      title: "Purchase Id",
-      description: "Purchase ID",
-    },
-    updated_at: {
-      type: "integer",
-      title: "Updated At",
-      description: "Payment last update timestamp in milliseconds",
-    },
-  },
-  additionalProperties: true,
-  type: "object",
-  required: [
-    "actually_paid",
-    "actually_paid_at_fiat",
-    "fee",
-    "invoice_id",
-    "order_description",
-    "order_id",
-    "outcome_amount",
-    "outcome_currency",
-    "pay_address",
-    "pay_amount",
-    "pay_currency",
-    "payment_id",
-    "payment_status",
-    "price_amount",
-    "price_currency",
-    "purchase_id",
-    "updated_at",
-  ],
-  title: "NowWebhookPayload",
-  description: "Model for NOWPayments webhook (IPN) payload.",
-} as const;
-
 export const PaymentSchema = {
   properties: {
     id: {
@@ -502,10 +334,10 @@ export const PaymentSchema = {
       title: "Product Id",
       description: "Product ID",
     },
-    date: {
+    timestamp: {
       type: "integer",
-      title: "Date",
-      description: "Payment date in seconds",
+      title: "Timestamp",
+      description: "Payment timestamp in seconds",
     },
     amount: {
       type: "number",
@@ -534,7 +366,7 @@ export const PaymentSchema = {
   required: [
     "id",
     "product_id",
-    "date",
+    "timestamp",
     "amount",
     "currency",
     "status",
@@ -783,6 +615,7 @@ export const ProductUpdateSchema = {
 export const ScopeSchema = {
   type: "string",
   enum: [
+    "read:predictions",
     "read:hive:model",
     "read:hive:data",
     "write:hive:model",
@@ -805,7 +638,11 @@ export const ScopeSchema = {
     "write:pay:products",
     "read:pay:now",
     "write:pay:now",
-    "read:predictions",
+    "read:metrics:marketcap",
+    "read:metrics:indicators",
+    "read:metrics:exchanges",
+    "read:metrics:tokens",
+    "read:metrics:markets",
   ],
   title: "Scope",
   description: "The permission scopes for the API.",
