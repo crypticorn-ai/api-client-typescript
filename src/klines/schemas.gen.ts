@@ -38,6 +38,48 @@ export const BaseResponse_HealthCheckResponse_Schema = {
   title: "BaseResponse[HealthCheckResponse]",
 } as const;
 
+export const BaseResponse_List_ChangeInTimeframeResponse__Schema = {
+  properties: {
+    success: {
+      type: "boolean",
+      title: "Success",
+      default: true,
+    },
+    message: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Message",
+    },
+    data: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/ChangeInTimeframeResponse",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Data",
+    },
+    timestamp: {
+      type: "string",
+      format: "date-time",
+      title: "Timestamp",
+    },
+  },
+  type: "object",
+  title: "BaseResponse[List[ChangeInTimeframeResponse]]",
+} as const;
+
 export const BaseResponse_List_FundingRateResponse__Schema = {
   properties: {
     success: {
@@ -160,6 +202,22 @@ export const BaseResponse_OHLCVResponse_Schema = {
   title: "BaseResponse[OHLCVResponse]",
 } as const;
 
+export const ChangeInTimeframeResponseSchema = {
+  properties: {
+    pair: {
+      type: "string",
+      title: "Pair",
+    },
+    change: {
+      type: "number",
+      title: "Change",
+    },
+  },
+  type: "object",
+  required: ["pair", "change"],
+  title: "ChangeInTimeframeResponse",
+} as const;
+
 export const ErrorResponseSchema = {
   properties: {
     success: {
@@ -178,6 +236,7 @@ export const ErrorResponseSchema = {
     details: {
       anyOf: [
         {
+          additionalProperties: true,
           type: "object",
         },
         {
@@ -401,10 +460,11 @@ export const HistorySuccessResponseSchema = {
   title: "HistorySuccessResponse",
 } as const;
 
-export const MarketSchema = {
+export const MarketTypeSchema = {
   type: "string",
   enum: ["spot", "futures"],
-  title: "Market",
+  title: "MarketType",
+  description: "Market types",
 } as const;
 
 export const OHLCVResponseSchema = {

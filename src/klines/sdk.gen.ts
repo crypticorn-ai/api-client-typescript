@@ -6,36 +6,39 @@ import {
   type OptionsLegacyParser,
 } from "@hey-api/client-fetch";
 import type {
-  GetConfigUdfConfigGetError,
-  GetConfigUdfConfigGetResponse,
-  SearchSymbolsUdfSearchGetData,
-  SearchSymbolsUdfSearchGetError,
-  SearchSymbolsUdfSearchGetResponse,
-  GetSymbolUdfSymbolsGetData,
-  GetSymbolUdfSymbolsGetError,
-  GetSymbolUdfSymbolsGetResponse,
-  GetHistoryUdfHistoryGetData,
-  GetHistoryUdfHistoryGetError,
-  GetHistoryUdfHistoryGetResponse,
-  GetServerTimeUdfTimeGetError,
-  GetServerTimeUdfTimeGetResponse,
-  GetSymbolInfoUdfSymbolInfoGetData,
-  GetSymbolInfoUdfSymbolInfoGetError,
-  GetSymbolInfoUdfSymbolInfoGetResponse,
-  OptionsHandlerUdfPathOptionsData,
-  OptionsHandlerUdfPathOptionsError,
-  OptionsHandlerUdfPathOptionsResponse,
+  GetUdfConfigError,
+  GetUdfConfigResponse,
+  SearchSymbolsData,
+  SearchSymbolsError,
+  SearchSymbolsResponse,
+  GetSymbolData,
+  GetSymbolError,
+  GetSymbolResponse,
+  GetUdfHistoryData,
+  GetUdfHistoryError,
+  GetUdfHistoryResponse,
+  GetServerTimeError,
+  GetServerTimeResponse,
+  GetSymbolInfoData,
+  GetSymbolInfoError,
+  GetSymbolInfoResponse,
+  OptionsHandlerData,
+  OptionsHandlerError,
+  OptionsHandlerResponse,
   IndexGetError,
   IndexGetResponse,
-  GetOhlcvMarketTimeframeSymbolGetData,
-  GetOhlcvMarketTimeframeSymbolGetError,
-  GetOhlcvMarketTimeframeSymbolGetResponse,
-  FundingRateFundingRatesSymbolGetData,
-  FundingRateFundingRatesSymbolGetError,
-  FundingRateFundingRatesSymbolGetResponse,
-  SymbolsSymbolsMarketGetData,
-  SymbolsSymbolsMarketGetError,
-  SymbolsSymbolsMarketGetResponse,
+  GetOhlcvData,
+  GetOhlcvError,
+  GetOhlcvResponse,
+  GetFundingRatesData,
+  GetFundingRatesError,
+  GetFundingRatesResponse,
+  GetKlinesSymbolsData,
+  GetKlinesSymbolsError,
+  GetKlinesSymbolsResponse,
+  GetChangeInTimeframeData,
+  GetChangeInTimeframeError,
+  GetChangeInTimeframeResponse,
 } from "./types.gen";
 export function createClient(
   baseUrl: string,
@@ -53,12 +56,12 @@ export function createClient(
   /**
    * Get Config
    */
-  const getConfigUdfConfigGet = <ThrowOnError extends boolean = false>(
+  const getUdfConfig = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetConfigUdfConfigGetResponse,
-      GetConfigUdfConfigGetError,
+      GetUdfConfigResponse,
+      GetUdfConfigError,
       ThrowOnError
     >({
       ...options,
@@ -70,12 +73,12 @@ export function createClient(
    * Search Symbols
    * Called when a user searches for symbols in TradingView
    */
-  const searchSymbolsUdfSearchGet = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<SearchSymbolsUdfSearchGetData, ThrowOnError>,
+  const searchSymbols = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<SearchSymbolsData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      SearchSymbolsUdfSearchGetResponse,
-      SearchSymbolsUdfSearchGetError,
+      SearchSymbolsResponse,
+      SearchSymbolsError,
       ThrowOnError
     >({
       ...options,
@@ -86,12 +89,12 @@ export function createClient(
   /**
    * Get Symbol
    */
-  const getSymbolUdfSymbolsGet = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetSymbolUdfSymbolsGetData, ThrowOnError>,
+  const getSymbol = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetSymbolData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetSymbolUdfSymbolsGetResponse,
-      GetSymbolUdfSymbolsGetError,
+      GetSymbolResponse,
+      GetSymbolError,
       ThrowOnError
     >({
       ...options,
@@ -102,12 +105,12 @@ export function createClient(
   /**
    * Get History
    */
-  const getHistoryUdfHistoryGet = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetHistoryUdfHistoryGetData, ThrowOnError>,
+  const getUdfHistory = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetUdfHistoryData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetHistoryUdfHistoryGetResponse,
-      GetHistoryUdfHistoryGetError,
+      GetUdfHistoryResponse,
+      GetUdfHistoryError,
       ThrowOnError
     >({
       ...options,
@@ -118,12 +121,12 @@ export function createClient(
   /**
    * Get Server Time
    */
-  const getServerTimeUdfTimeGet = <ThrowOnError extends boolean = false>(
+  const getServerTime = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetServerTimeUdfTimeGetResponse,
-      GetServerTimeUdfTimeGetError,
+      GetServerTimeResponse,
+      GetServerTimeError,
       ThrowOnError
     >({
       ...options,
@@ -135,15 +138,12 @@ export function createClient(
    * Get Symbol Info
    * Handle symbol info requests for different groups
    */
-  const getSymbolInfoUdfSymbolInfoGet = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<
-      GetSymbolInfoUdfSymbolInfoGetData,
-      ThrowOnError
-    >,
+  const getSymbolInfo = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetSymbolInfoData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetSymbolInfoUdfSymbolInfoGetResponse,
-      GetSymbolInfoUdfSymbolInfoGetError,
+      GetSymbolInfoResponse,
+      GetSymbolInfoError,
       ThrowOnError
     >({
       ...options,
@@ -155,15 +155,12 @@ export function createClient(
    * Options Handler
    * Handle OPTIONS requests for all UDF endpoints
    */
-  const optionsHandlerUdfPathOptions = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<
-      OptionsHandlerUdfPathOptionsData,
-      ThrowOnError
-    >,
+  const optionsHandler = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<OptionsHandlerData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).options<
-      OptionsHandlerUdfPathOptionsResponse,
-      OptionsHandlerUdfPathOptionsError,
+      OptionsHandlerResponse,
+      OptionsHandlerError,
       ThrowOnError
     >({
       ...options,
@@ -192,17 +189,12 @@ export function createClient(
    * Get Ohlcv
    * Retrieve OHLCV (Open, High, Low, Close, Volume) data for a specific market, timeframe, and symbol.
    */
-  const getOhlcvMarketTimeframeSymbolGet = <
-    ThrowOnError extends boolean = false,
-  >(
-    options: OptionsLegacyParser<
-      GetOhlcvMarketTimeframeSymbolGetData,
-      ThrowOnError
-    >,
+  const getOhlcv = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetOhlcvData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetOhlcvMarketTimeframeSymbolGetResponse,
-      GetOhlcvMarketTimeframeSymbolGetError,
+      GetOhlcvResponse,
+      GetOhlcvError,
       ThrowOnError
     >({
       ...options,
@@ -214,17 +206,12 @@ export function createClient(
    * Funding Rate
    * Retrieve funding rate data for a specific symbol in the futures market.
    */
-  const fundingRateFundingRatesSymbolGet = <
-    ThrowOnError extends boolean = false,
-  >(
-    options: OptionsLegacyParser<
-      FundingRateFundingRatesSymbolGetData,
-      ThrowOnError
-    >,
+  const getFundingRates = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetFundingRatesData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      FundingRateFundingRatesSymbolGetResponse,
-      FundingRateFundingRatesSymbolGetError,
+      GetFundingRatesResponse,
+      GetFundingRatesError,
       ThrowOnError
     >({
       ...options,
@@ -236,12 +223,12 @@ export function createClient(
    * Symbols
    * Retrieve a list of whitelisted symbols for a specific market.
    */
-  const symbolsSymbolsMarketGet = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<SymbolsSymbolsMarketGetData, ThrowOnError>,
+  const getKlinesSymbols = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetKlinesSymbolsData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      SymbolsSymbolsMarketGetResponse,
-      SymbolsSymbolsMarketGetError,
+      GetKlinesSymbolsResponse,
+      GetKlinesSymbolsError,
       ThrowOnError
     >({
       ...options,
@@ -249,17 +236,38 @@ export function createClient(
     });
   };
 
+  /**
+   * Get Change In Timeframe
+   * Retrieve price change percentage between last two completed timestamps for all pairs.
+   *
+   * Valid markets: spot, futures
+   * Valid timeframes: 15m, 30m, 1h, 4h, 1d
+   */
+  const getChangeInTimeframe = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetChangeInTimeframeData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetChangeInTimeframeResponse,
+      GetChangeInTimeframeError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/change",
+    });
+  };
+
   return {
-    getConfigUdfConfigGet,
-    searchSymbolsUdfSearchGet,
-    getSymbolUdfSymbolsGet,
-    getHistoryUdfHistoryGet,
-    getServerTimeUdfTimeGet,
-    getSymbolInfoUdfSymbolInfoGet,
-    optionsHandlerUdfPathOptions,
+    getUdfConfig,
+    searchSymbols,
+    getSymbol,
+    getUdfHistory,
+    getServerTime,
+    getSymbolInfo,
+    optionsHandler,
     indexGet,
-    getOhlcvMarketTimeframeSymbolGet,
-    fundingRateFundingRatesSymbolGet,
-    symbolsSymbolsMarketGet,
+    getOhlcv,
+    getFundingRates,
+    getKlinesSymbols,
+    getChangeInTimeframe,
   };
 }

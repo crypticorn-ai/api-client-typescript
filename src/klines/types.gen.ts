@@ -7,6 +7,13 @@ export type BaseResponse_HealthCheckResponse_ = {
   timestamp?: string;
 };
 
+export type BaseResponse_List_ChangeInTimeframeResponse__ = {
+  success?: boolean;
+  message?: string | null;
+  data?: Array<ChangeInTimeframeResponse> | null;
+  timestamp?: string;
+};
+
 export type BaseResponse_List_FundingRateResponse__ = {
   success?: boolean;
   message?: string | null;
@@ -26,6 +33,11 @@ export type BaseResponse_OHLCVResponse_ = {
   message?: string | null;
   data?: OHLCVResponse | null;
   timestamp?: string;
+};
+
+export type ChangeInTimeframeResponse = {
+  pair: string;
+  change: number;
 };
 
 export type ErrorResponse = {
@@ -84,7 +96,10 @@ export type HTTPValidationError = {
   detail?: Array<ValidationError>;
 };
 
-export type Market = "spot" | "futures";
+/**
+ * Market types
+ */
+export type MarketType = "spot" | "futures";
 
 export type OHLCVResponse = {
   timestamp: Array<string>;
@@ -156,32 +171,32 @@ export type ValidationError = {
   type: string;
 };
 
-export type GetConfigUdfConfigGetResponse = UDFConfigResponse;
+export type GetUdfConfigResponse = UDFConfigResponse;
 
-export type GetConfigUdfConfigGetError = unknown;
+export type GetUdfConfigError = unknown;
 
-export type SearchSymbolsUdfSearchGetData = {
+export type SearchSymbolsData = {
   query: {
     limit?: number;
     query: string;
   };
 };
 
-export type SearchSymbolsUdfSearchGetResponse = Array<SearchSymbolResponse>;
+export type SearchSymbolsResponse = Array<SearchSymbolResponse>;
 
-export type SearchSymbolsUdfSearchGetError = HTTPValidationError;
+export type SearchSymbolsError = HTTPValidationError;
 
-export type GetSymbolUdfSymbolsGetData = {
+export type GetSymbolData = {
   query: {
     symbol: string;
   };
 };
 
-export type GetSymbolUdfSymbolsGetResponse = SymbolInfoResponse;
+export type GetSymbolResponse = SymbolInfoResponse;
 
-export type GetSymbolUdfSymbolsGetError = HTTPValidationError;
+export type GetSymbolError = HTTPValidationError;
 
-export type GetHistoryUdfHistoryGetData = {
+export type GetUdfHistoryData = {
   query: {
     countback?: number | null;
     from: number;
@@ -191,47 +206,47 @@ export type GetHistoryUdfHistoryGetData = {
   };
 };
 
-export type GetHistoryUdfHistoryGetResponse =
+export type GetUdfHistoryResponse =
   | HistorySuccessResponse
   | HistoryNoDataResponse
   | HistoryErrorResponse;
 
-export type GetHistoryUdfHistoryGetError = HTTPValidationError;
+export type GetUdfHistoryError = HTTPValidationError;
 
-export type GetServerTimeUdfTimeGetResponse = unknown;
+export type GetServerTimeResponse = unknown;
 
-export type GetServerTimeUdfTimeGetError = unknown;
+export type GetServerTimeError = unknown;
 
-export type GetSymbolInfoUdfSymbolInfoGetData = {
+export type GetSymbolInfoData = {
   query: {
     group: string;
   };
 };
 
-export type GetSymbolInfoUdfSymbolInfoGetResponse = SymbolGroupResponse;
+export type GetSymbolInfoResponse = SymbolGroupResponse;
 
-export type GetSymbolInfoUdfSymbolInfoGetError = HTTPValidationError;
+export type GetSymbolInfoError = HTTPValidationError;
 
-export type OptionsHandlerUdfPathOptionsData = {
+export type OptionsHandlerData = {
   path: {
     path: string;
   };
 };
 
-export type OptionsHandlerUdfPathOptionsResponse = unknown;
+export type OptionsHandlerResponse = unknown;
 
-export type OptionsHandlerUdfPathOptionsError = HTTPValidationError;
+export type OptionsHandlerError = HTTPValidationError;
 
 export type IndexGetResponse = BaseResponse_HealthCheckResponse_;
 
 export type IndexGetError = unknown;
 
-export type GetOhlcvMarketTimeframeSymbolGetData = {
+export type GetOhlcvData = {
   path: {
     /**
      * Market type (spot or futures)
      */
-    market: Market;
+    market: MarketType;
     /**
      * Trading pair symbol (e.g., BTCUSDT)
      */
@@ -261,14 +276,11 @@ export type GetOhlcvMarketTimeframeSymbolGetData = {
   };
 };
 
-export type GetOhlcvMarketTimeframeSymbolGetResponse =
-  BaseResponse_OHLCVResponse_;
+export type GetOhlcvResponse = BaseResponse_OHLCVResponse_;
 
-export type GetOhlcvMarketTimeframeSymbolGetError =
-  | ErrorResponse
-  | HTTPValidationError;
+export type GetOhlcvError = ErrorResponse | HTTPValidationError;
 
-export type FundingRateFundingRatesSymbolGetData = {
+export type GetFundingRatesData = {
   path: {
     /**
      * Trading pair symbol (e.g., BTCUSDT)
@@ -291,22 +303,37 @@ export type FundingRateFundingRatesSymbolGetData = {
   };
 };
 
-export type FundingRateFundingRatesSymbolGetResponse =
-  BaseResponse_List_FundingRateResponse__;
+export type GetFundingRatesResponse = BaseResponse_List_FundingRateResponse__;
 
-export type FundingRateFundingRatesSymbolGetError =
-  | ErrorResponse
-  | HTTPValidationError;
+export type GetFundingRatesError = ErrorResponse | HTTPValidationError;
 
-export type SymbolsSymbolsMarketGetData = {
+export type GetKlinesSymbolsData = {
   path: {
     /**
      * Market type (spot or futures)
      */
-    market: Market;
+    market: MarketType;
   };
 };
 
-export type SymbolsSymbolsMarketGetResponse = BaseResponse_List_str__;
+export type GetKlinesSymbolsResponse = BaseResponse_List_str__;
 
-export type SymbolsSymbolsMarketGetError = ErrorResponse | HTTPValidationError;
+export type GetKlinesSymbolsError = ErrorResponse | HTTPValidationError;
+
+export type GetChangeInTimeframeData = {
+  query?: {
+    /**
+     * Market type: 'spot' or 'futures'
+     */
+    market?: MarketType;
+    /**
+     * Timeframe: '15m', '30m', '1h', '4h', '1d'
+     */
+    timeframe?: Timeframe;
+  };
+};
+
+export type GetChangeInTimeframeResponse =
+  BaseResponse_List_ChangeInTimeframeResponse__;
+
+export type GetChangeInTimeframeError = ErrorResponse | HTTPValidationError;
