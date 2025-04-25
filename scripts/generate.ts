@@ -2,8 +2,10 @@
 import { createClient } from '@hey-api/openapi-ts'
 import prettier from 'prettier'
 import fs from 'fs/promises'
+import minimist from 'minimist'
 
-const service = process.argv[2]
+const args = minimist(process.argv.slice(2));
+const service = args['service']
 const services = ['klines', 'trade', 'pay', 'auth', 'token']
 if (!service || !services.includes(service)) {
   console.error(`Invalid service: ${service}`)
@@ -11,6 +13,15 @@ if (!service || !services.includes(service)) {
   services.forEach((s) => console.error(`  - ${s}`))
   process.exit(1)
 }
+const environment = args['env'] || 'local'
+const environments = ['local', 'dev', 'prod']
+if (!environment || !environments.includes(environment)) {
+  console.error(`Invalid environment: ${environment}`)
+  console.error('Valid environments are:')
+  environments.forEach((e) => console.error(`  - ${e}`))
+  process.exit(1)
+}
+const host = environment === 'local' ? 'http://localhost' : environment === 'dev' ? 'https://api.crypticorn.dev' : 'https://api.crypticorn.com'
 
 // if you run this script the first time for a service, comment out lines 20-62
 
@@ -18,13 +29,16 @@ async function main() {
   try {
     // get path from args
     // @ts-ignore
-    const path = `http://localhost/v1/${service}/openapi.json`
+    const path = `${host}/v1/${service}/openapi.json`
     const res = await createClient({
       // @ts-ignore
       client: '@hey-api/client-fetch',
       // plugins: ['@hey-api/client-fetch'], 
       input: path,
       output: `src/${service}`,
+    }).catch((err) => {
+      console.error('Could not find openapi.json file at path:', path)
+      process.exit(1)
     });
 
     // @ts-ignore
