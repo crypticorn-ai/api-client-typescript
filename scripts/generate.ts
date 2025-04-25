@@ -6,7 +6,7 @@ import minimist from 'minimist'
 
 const args = minimist(process.argv.slice(2));
 const service = args['service']
-const services = ['klines', 'trade', 'pay', 'auth', 'token']
+const services = ['klines', 'trade', 'pay', 'auth', 'token', 'sentiment', 'metrics']
 if (!service || !services.includes(service)) {
   console.error(`Invalid service: ${service}`)
   console.error('Valid services are:')
