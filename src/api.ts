@@ -12,6 +12,9 @@ import { createHiveClient } from "./hive";
 import { createClient as createTradeClient } from "./trade";
 import { createClient as createPayClient } from "./pay";
 import { createClient as createKlinesClient } from "./klines";
+import { createClient as createSentimentClient } from "./sentiment";
+import { createClient as createMetricsClient } from "./metrics";
+
 export const environments: Record<EnvironmentType, string> = {
   // local development
   local: "localhost",
@@ -127,6 +130,8 @@ export const createClient = ({
   trade: ReturnType<typeof createTradeClient>;
   pay: ReturnType<typeof createPayClient>;
   klines: ReturnType<typeof createKlinesClient>;
+  sentiment: ReturnType<typeof createSentimentClient>;
+  metrics: ReturnType<typeof createMetricsClient>;
 } => {
   if (!apiRoot) {
     const result = getHosts({
@@ -158,6 +163,8 @@ export const createClient = ({
   const hive = createHiveClient(apiRoot + "/hive", headers, rest.fetch);
   const pay = createPayClient(apiRoot + "/pay", headers, rest.fetch);
   const klines = createKlinesClient(apiRoot + "/klines", headers, rest.fetch);
+  const sentiment = createSentimentClient(apiRoot + "/sentiment", headers, rest.fetch);
+  const metrics = createMetricsClient(apiRoot + "/metrics", headers, rest.fetch);
   return {
     auth,
     token,
@@ -166,6 +173,8 @@ export const createClient = ({
     trade,
     pay,
     klines,
+    sentiment,
+    metrics,
   };
 };
 
