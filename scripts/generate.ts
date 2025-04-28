@@ -46,12 +46,7 @@ async function main() {
     const res = await createClient({
       // @ts-ignore
       client: "@hey-api/client-fetch",
-      plugins: [
-        {
-          name: "@hey-api/typescript",
-          enums: "typescript", // Emit TypeScript enums
-        },
-      ],
+      // plugins: ['@hey-api/client-fetch'],
       input: path,
       output: `src/${service}`,
     }).catch((err) => {
