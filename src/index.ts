@@ -1,39 +1,31 @@
 export * from "./api";
 export * from "./types";
-// https://stackoverflow.com/questions/41293108/how-to-do-re-export-with-overrides
-
-// common 
-export * from "./common/enums";
-export * from "./common/exceptions";
-export * from "./common/errors";
-
-
+// common
+import * as CommonEnums from "./common/enums";
+import * as CommonExceptions from "./common/exceptions";
+import * as CommonErrors from "./common/errors";
+export { CommonEnums, CommonExceptions, CommonErrors };
 // trade
-export * from "./trade/schemas.gen";
-export * from "./trade/types.gen";
+import * as TradeSchemas from "./trade/schemas.gen";
+import * as TradeTypes from "./trade/types.gen";
+export { TradeTypes, TradeSchemas };
 // pay
-import { HTTPValidationErrorSchema, ValidationErrorSchema } from "./pay";
-import { HTTPValidationError, PingError, PingResponse } from "./pay/types.gen";
-export * from "./pay/schemas.gen";
-export * from "./pay/types.gen";
-export { HTTPValidationErrorSchema, ValidationErrorSchema }; // pay
+import * as PaySchemas from "./pay/schemas.gen";
+import * as PayTypes from "./pay/types.gen";
+export { PayTypes, PaySchemas };
 // sentiment
-export * from "./sentiment/schemas.gen";
-export * from "./sentiment/types.gen";
+import * as SentimentSchemas from "./sentiment/schemas.gen";
+import * as SentimentTypes from "./sentiment/types.gen";
+export { SentimentSchemas, SentimentTypes };
 // metrics
-import { ApiErrorIdentifierSchema, ApiErrorLevelSchema, ApiErrorTypeSchema, MarketTypeSchema } from "./metrics/schemas.gen";
-import { ApiErrorIdentifier, ApiErrorLevel, ApiErrorType, MarketType } from "./metrics/types.gen";
-export * from "./metrics/schemas.gen";
-export * from "./metrics/types.gen";
-export { ApiErrorIdentifierSchema, ApiErrorLevelSchema, ApiErrorTypeSchema, MarketTypeSchema, ApiErrorIdentifier, ApiErrorLevel, ApiErrorType, MarketType }; // metrics
+import * as MetricsSchemas from "./metrics/schemas.gen";
+import * as MetricsTypes from "./metrics/types.gen";
+export { MetricsSchemas, MetricsTypes };
 // klines
-import { ApiErrorIdentifierSchema as KlinesApiErrorIdentifierSchema, ApiErrorLevelSchema as KlinesApiErrorLevelSchema, ApiErrorTypeSchema as KlinesApiErrorTypeSchema, MarketTypeSchema as KlinesMarketTypeSchema } from "./klines/schemas.gen";
-import { ApiErrorIdentifier as KlinesApiErrorIdentifier, ApiErrorLevel as KlinesApiErrorLevel, ApiErrorType as KlinesApiErrorType, MarketType as KlinesMarketType } from "./klines/types.gen";
-export * from "./klines/schemas.gen";
-export * from "./klines/types.gen";
-export { KlinesApiErrorIdentifierSchema, KlinesApiErrorLevelSchema, KlinesApiErrorTypeSchema, KlinesMarketTypeSchema, KlinesApiErrorIdentifier, KlinesApiErrorLevel, KlinesApiErrorType, KlinesMarketType }; // klines
+import * as KlinesSchemas from "./klines/schemas.gen";
+import * as KlinesTypes from "./klines/types.gen";
+export { KlinesSchemas, KlinesTypes };
 
-export { HTTPValidationError, PingError, PingResponse };
 export {
   isValidationError,
   type ValidationErrorData,
@@ -41,6 +33,10 @@ export {
   type ValidationError,
   Scope,
   getDefaultJwtAdminScopes,
-  getDefaultJwtScopes
+  getDefaultJwtScopes,
+  AuthContext,
+  User,
+  GetApiKeysResponse,
 } from "@crypticorn-ai/auth-service";
+
 export * from "./hive";

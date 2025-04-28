@@ -1,5 +1,3 @@
-export type { AuthContext, User, ValidationError, GetApiKeysResponse } from "@crypticorn-ai/auth-service";
-export { Scope } from "@crypticorn-ai/auth-service";
 export type Prediction = {
   action: string;
   symbol: string;
@@ -22,7 +20,7 @@ export type Trend = {
   positive_prob: number[];
   id: number;
   symbol: string;
-}
+};
 
 export type Kline = [
   number, // open time
@@ -30,7 +28,7 @@ export type Kline = [
   number, // high
   number, // low
   number, // close
-  number // volume
+  number, // volume
 ];
 
 export type DexProgress = {
@@ -54,7 +52,7 @@ export type EconomicsNewsData = {
     change: number | null;
     impact: string | null;
     changePercentage: number | null;
-  }[]
+  }[];
 };
 
 export type EnvironmentType = "local" | "dev" | "prod";
