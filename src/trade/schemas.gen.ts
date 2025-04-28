@@ -221,87 +221,18 @@ export const ActionModelSchema = {
 
 export const ApiErrorIdentifierSchema = {
   type: "string",
-  enum: [
-    "allocation_below_current_exposure",
-    "allocation_below_min_amount",
-    "black_swan",
-    "bot_already_deleted",
-    "bot_disabled",
-    "bot_stopping_completed",
-    "client_order_id_already_exists",
-    "invalid_content_type",
-    "delete_bot_error",
-    "exchange_invalid_signature",
-    "exchange_invalid_timestamp",
-    "exchange_ip_address_is_not_authorized",
-    "exchange_key_already_exists",
-    "exchange_key_in_use",
-    "exchange_system_under_maintenance",
-    "exchange_rate_limit_exceeded",
-    "insufficient_permissions_spot_and_futures_required",
-    "exchange_service_temporarily_unavailable",
-    "exchange_system_is_busy",
-    "exchange_system_configuration_error",
-    "exchange_internal_system_error",
-    "exchange_user_account_is_frozen",
-    "hedge_mode_not_active",
-    "http_request_error",
-    "insufficient_balance",
-    "insufficient_margin",
-    "insufficient_scopes",
-    "invalid_api_key",
-    "invalid_bearer",
-    "invalid_exchange_key",
-    "invalid_margin_mode",
-    "invalid_parameter_provided",
-    "jwt_expired",
-    "leverage_limit_exceeded",
-    "order_violates_liquidation_price_constraints",
-    "no_credentials",
-    "now_api_down",
-    "object_not_found",
-    "object_already_exists",
-    "order_is_already_filled",
-    "order_is_being_processed",
-    "order_quantity_limit_exceeded",
-    "order_does_not_exist",
-    "order_price_is_invalid",
-    "order_size_too_large",
-    "order_size_too_small",
-    "position_limit_exceeded",
-    "position_does_not_exist",
-    "position_opening_temporarily_suspended",
-    "post_only_order_would_immediately_match",
-    "request_scope_limit_exceeded",
-    "risk_limit_exceeded",
-    "rpc_timeout",
-    "system_settlement_in_process",
-    "strategy_disabled",
-    "strategy_leverage_mismatch",
-    "strategy_not_supporting_exchange",
-    "success",
-    "symbol_does_not_exist",
-    "trading_action_expired",
-    "trading_action_skipped",
-    "trading_has_been_locked",
-    "trading_is_suspended",
-    "unknown_error_occurred",
-    "requested_resource_not_found",
-  ],
   title: "ApiErrorIdentifier",
   description: "API error identifiers",
 } as const;
 
 export const ApiErrorLevelSchema = {
   type: "string",
-  enum: ["error", "info", "success", "warning"],
   title: "ApiErrorLevel",
   description: "API error levels",
 } as const;
 
 export const ApiErrorTypeSchema = {
   type: "string",
-  enum: ["user error", "exchange error", "server error", "no error"],
   title: "ApiErrorType",
   description: "Type of API error",
 } as const;
@@ -433,7 +364,6 @@ export const BotStatusSchema = {
 
 export const ExchangeSchema = {
   type: "string",
-  enum: ["kucoin", "bingx"],
   title: "Exchange",
   description: "Supported exchanges for trading",
 } as const;
@@ -477,8 +407,7 @@ export const ExchangeKeyModelSchema = {
       description: "UID, used as a placeholder in the response body",
     },
     exchange: {
-      type: "string",
-      title: "Exchange",
+      $ref: "#/components/schemas/Exchange",
       description: "Exchange name",
     },
     api_key: {
@@ -522,19 +451,6 @@ export const ExchangeKeyModelSchema = {
       title: "Label",
       description: "Label for the API key",
     },
-    enabled: {
-      anyOf: [
-        {
-          type: "boolean",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Enabled",
-      description: "Status of the API key",
-      default: false,
-    },
     user_id: {
       anyOf: [
         {
@@ -556,12 +472,9 @@ export const ExchangeKeyModelSchema = {
 export const ExecutionIdsSchema = {
   properties: {
     main: {
-      items: {
-        type: "string",
-      },
-      type: "array",
+      type: "string",
       title: "Main",
-      description: "Main execution ID. List with one item.",
+      description: "Main execution ID.",
     },
     sl: {
       items: {
@@ -864,7 +777,6 @@ export const MarginModeSchema = {
 
 export const MarketTypeSchema = {
   type: "string",
-  enum: ["spot", "futures"],
   title: "MarketType",
   description: "Market types",
 } as const;
@@ -1209,7 +1121,8 @@ export const OrderModelSchema = {
         },
       ],
       title: "Filled Qty",
-      description: "Quantity filled. Needed for pnl calculation",
+      description:
+        "Quantity filled. Needed for pnl calculation. In the symbol's base currency.",
       default: 0,
     },
     fee: {
@@ -1302,6 +1215,176 @@ export const PostFuturesActionSchema = {
   type: "object",
   required: ["id", "execution_ids"],
   title: "PostFuturesAction",
+} as const;
+
+export const SpotTradingActionSchema = {
+  properties: {
+    id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Id",
+      description:
+        "Placeholder for the id of the trading action. Will be added by the system, therefore leave empty.",
+    },
+    execution_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Execution Id",
+      description:
+        "UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.",
+    },
+    open_order_execution_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Open Order Execution Id",
+      description:
+        "UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.",
+    },
+    client_order_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Client Order Id",
+      description: "UID for the client order. Leave empty.",
+    },
+    action_type: {
+      $ref: "#/components/schemas/TradingActionType",
+      description: "The type of action.",
+    },
+    market_type: {
+      $ref: "#/components/schemas/MarketType",
+      description: "The type of market the action is for.",
+    },
+    strategy_id: {
+      type: "string",
+      title: "Strategy Id",
+      description: "UID for the strategy.",
+    },
+    symbol: {
+      type: "string",
+      title: "Symbol",
+      description:
+        "Trading symbol or asset pair in format: 'symbol/quote_currency' (see market service for valid symbols)",
+    },
+    is_limit: {
+      anyOf: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Is Limit",
+      description: "Whether this is a limit order.",
+      default: false,
+    },
+    limit_price: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Limit Price",
+      description:
+        "The limit price for limit orders. If not set, the market price will be used.",
+    },
+    allocation: {
+      type: "number",
+      maximum: 1,
+      exclusiveMinimum: 0,
+      title: "Allocation",
+      description:
+        "How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.",
+    },
+    take_profit: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/TPSL",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Take Profit",
+      description:
+        "Take profit targets. Can be set for open actions only. Multiple can be set.",
+    },
+    stop_loss: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/TPSL",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Stop Loss",
+      description:
+        "Stop loss values. Can be set for open actions only. Multiple can be set.",
+    },
+    expiry_timestamp: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Expiry Timestamp",
+      description:
+        "Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.",
+    },
+    position_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Position Id",
+      description: "Extra Field. UID for the position to close. Leave empty.",
+    },
+  },
+  type: "object",
+  required: ["action_type", "market_type", "strategy_id", "symbol"],
+  title: "SpotTradingAction",
+  description: "Model for spot trading actions",
 } as const;
 
 export const StrategyExchangeInfoSchema = {
@@ -1553,7 +1636,8 @@ export const TPSLSchema = {
       maximum: 1,
       minimum: 0,
       title: "Allocation",
-      description: "Percentage of the order to sell",
+      description:
+        "Percentage of the open order to sell. All allocations must sum up to 1.",
     },
     execution_id: {
       anyOf: [

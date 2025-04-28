@@ -82,86 +82,17 @@ export type ActionModel = {
 /**
  * API error identifiers
  */
-export type ApiErrorIdentifier =
-  | "allocation_below_current_exposure"
-  | "allocation_below_min_amount"
-  | "black_swan"
-  | "bot_already_deleted"
-  | "bot_disabled"
-  | "bot_stopping_completed"
-  | "client_order_id_already_exists"
-  | "invalid_content_type"
-  | "delete_bot_error"
-  | "exchange_invalid_signature"
-  | "exchange_invalid_timestamp"
-  | "exchange_ip_address_is_not_authorized"
-  | "exchange_key_already_exists"
-  | "exchange_key_in_use"
-  | "exchange_system_under_maintenance"
-  | "exchange_rate_limit_exceeded"
-  | "insufficient_permissions_spot_and_futures_required"
-  | "exchange_service_temporarily_unavailable"
-  | "exchange_system_is_busy"
-  | "exchange_system_configuration_error"
-  | "exchange_internal_system_error"
-  | "exchange_user_account_is_frozen"
-  | "hedge_mode_not_active"
-  | "http_request_error"
-  | "insufficient_balance"
-  | "insufficient_margin"
-  | "insufficient_scopes"
-  | "invalid_api_key"
-  | "invalid_bearer"
-  | "invalid_exchange_key"
-  | "invalid_margin_mode"
-  | "invalid_parameter_provided"
-  | "jwt_expired"
-  | "leverage_limit_exceeded"
-  | "order_violates_liquidation_price_constraints"
-  | "no_credentials"
-  | "now_api_down"
-  | "object_not_found"
-  | "object_already_exists"
-  | "order_is_already_filled"
-  | "order_is_being_processed"
-  | "order_quantity_limit_exceeded"
-  | "order_does_not_exist"
-  | "order_price_is_invalid"
-  | "order_size_too_large"
-  | "order_size_too_small"
-  | "position_limit_exceeded"
-  | "position_does_not_exist"
-  | "position_opening_temporarily_suspended"
-  | "post_only_order_would_immediately_match"
-  | "request_scope_limit_exceeded"
-  | "risk_limit_exceeded"
-  | "rpc_timeout"
-  | "system_settlement_in_process"
-  | "strategy_disabled"
-  | "strategy_leverage_mismatch"
-  | "strategy_not_supporting_exchange"
-  | "success"
-  | "symbol_does_not_exist"
-  | "trading_action_expired"
-  | "trading_action_skipped"
-  | "trading_has_been_locked"
-  | "trading_is_suspended"
-  | "unknown_error_occurred"
-  | "requested_resource_not_found";
+export type ApiErrorIdentifier = string;
 
 /**
  * API error levels
  */
-export type ApiErrorLevel = "error" | "info" | "success" | "warning";
+export type ApiErrorLevel = string;
 
 /**
  * Type of API error
  */
-export type ApiErrorType =
-  | "user error"
-  | "exchange error"
-  | "server error"
-  | "no error";
+export type ApiErrorType = string;
 
 export type BotModel = {
   /**
@@ -219,7 +150,7 @@ export type BotStatus = "running" | "stopping" | "stopped" | "deleted";
 /**
  * Supported exchanges for trading
  */
-export type Exchange = "kucoin" | "bingx";
+export type Exchange = string;
 
 export type ExchangeKeyModel = {
   /**
@@ -237,7 +168,7 @@ export type ExchangeKeyModel = {
   /**
    * Exchange name
    */
-  exchange: string;
+  exchange: Exchange;
   /**
    * API key
    */
@@ -255,10 +186,6 @@ export type ExchangeKeyModel = {
    */
   label: string;
   /**
-   * Status of the API key
-   */
-  enabled?: boolean | null;
-  /**
    * UID for the user
    */
   user_id?: string | null;
@@ -266,9 +193,9 @@ export type ExchangeKeyModel = {
 
 export type ExecutionIds = {
   /**
-   * Main execution ID. List with one item.
+   * Main execution ID.
    */
-  main: Array<string>;
+  main: string;
   /**
    * Stop loss execution IDs. List with multiple items ordered by the next stop loss, e.g. price = 10000 => SLs: ['900', '700', '500'].
    */
@@ -399,7 +326,7 @@ export type MarginMode = "isolated" | "cross";
 /**
  * Market types
  */
-export type MarketType = "spot" | "futures";
+export type MarketType = string;
 
 export type NotificationModel = {
   /**
@@ -529,7 +456,7 @@ export type OrderModel = {
    */
   filled_perc?: number | null;
   /**
-   * Quantity filled. Needed for pnl calculation
+   * Quantity filled. Needed for pnl calculation. In the symbol's base currency.
    */
   filled_qty?: number | null;
   /**
@@ -573,6 +500,72 @@ export type PostFuturesAction = {
    * Execution IDs for the action.
    */
   execution_ids: ExecutionIds;
+};
+
+/**
+ * Model for spot trading actions
+ */
+export type SpotTradingAction = {
+  /**
+   * Placeholder for the id of the trading action. Will be added by the system, therefore leave empty.
+   */
+  id?: string | null;
+  /**
+   * UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.
+   */
+  execution_id?: string | null;
+  /**
+   * UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.
+   */
+  open_order_execution_id?: string | null;
+  /**
+   * UID for the client order. Leave empty.
+   */
+  client_order_id?: string | null;
+  /**
+   * The type of action.
+   */
+  action_type: TradingActionType;
+  /**
+   * The type of market the action is for.
+   */
+  market_type: MarketType;
+  /**
+   * UID for the strategy.
+   */
+  strategy_id: string;
+  /**
+   * Trading symbol or asset pair in format: 'symbol/quote_currency' (see market service for valid symbols)
+   */
+  symbol: string;
+  /**
+   * Whether this is a limit order.
+   */
+  is_limit?: boolean | null;
+  /**
+   * The limit price for limit orders. If not set, the market price will be used.
+   */
+  limit_price?: number | null;
+  /**
+   * How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.
+   */
+  allocation?: number;
+  /**
+   * Take profit targets. Can be set for open actions only. Multiple can be set.
+   */
+  take_profit?: Array<TPSL> | null;
+  /**
+   * Stop loss values. Can be set for open actions only. Multiple can be set.
+   */
+  stop_loss?: Array<TPSL> | null;
+  /**
+   * Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.
+   */
+  expiry_timestamp?: number | null;
+  /**
+   * Extra Field. UID for the position to close. Leave empty.
+   */
+  position_id?: string | null;
 };
 
 export type StrategyExchangeInfo = {
@@ -693,7 +686,7 @@ export type TPSL = {
    */
   price?: number | null;
   /**
-   * Percentage of the order to sell
+   * Percentage of the open order to sell. All allocations must sum up to 1.
    */
   allocation: number;
   /**
@@ -821,7 +814,7 @@ export type PostFuturesActionResponse = PostFuturesAction;
 export type PostFuturesActionError = HTTPValidationError;
 
 export type PostSpotActionData = {
-  body: FuturesTradingAction;
+  body: SpotTradingAction;
 };
 
 export type PostSpotActionResponse = unknown;

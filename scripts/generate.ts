@@ -36,7 +36,7 @@ const host =
       ? "https://api.crypticorn.dev"
       : "https://api.crypticorn.com";
 
-// if you run this script the first time for a service, comment out lines 20-62
+// if you run this script the first time for a service, comment out lines 20-62 (might not be needed)
 
 async function main() {
   try {
@@ -46,9 +46,12 @@ async function main() {
     const res = await createClient({
       // @ts-ignore
       client: "@hey-api/client-fetch",
-      // plugins: ['@hey-api/client-fetch'],
-      input: path,
-      output: `src/${service}`,
+      input: {
+        path,
+      },
+      output: {
+        path: `src/${service}`,
+      },
     }).catch((err) => {
       console.error("Could not find openapi.json file at path:", path);
       process.exit(1);
@@ -68,23 +71,25 @@ async function main() {
 
     // replace "import { createClient" with "import { createClient as createNativeClient"
     sdkGen = sdkGen.replace(
-      "import { createClient",
-      "import { createClient as createNativeClient"
+      "createClient,",
+      "createClient as createNativeClient,"
     );
 
-    // replace all "export " with ""
-    sdkGen = sdkGen.replace(/export /g, "");
+    // Remove all "export " keywords (but preserve named functions/consts)
+    sdkGen = sdkGen.replace(/\bexport\s+/g, "");
 
-    // split into imports (first 4 lines) and rest
-    const imports = sdkGen.split("\n").slice(0, 4).join("\n");
-    const rest = sdkGen.split("\n").slice(4).join("\n");
+    // Now find all import statements robustly
+    const importRegex = /^import[\s\S]+?from\s+["'][^"']+["'];?/gm;
+    const imports = sdkGen.match(importRegex)?.join("\n\n").trim() ?? "";
+    const rest = sdkGen.replace(importRegex, "").trim();
 
-    const tsTemplate = /*ts*/ `
-    ${imports}
+    const tsTemplate = /* ts */ `
+${imports}
+
 export function createClient(
   baseUrl: string,
   headers: any,
-  fetch = globalThis.fetch
+  fetch = globalThis.fetch,
 ) {
   const client = createNativeClient(
     createConfig({
@@ -98,9 +103,10 @@ export function createClient(
 
   return {
 ${ops.map((op) => `    ${op},`).join("\n")}
-  }
+  };
 }
-  `;
+`;
+
     await fs.writeFile(`src/${service}/sdk.gen.ts`, tsTemplate);
 
     // format files with prettier
@@ -122,7 +128,7 @@ ${ops.map((op) => `    ${op},`).join("\n")}
       `
 =========================================================
 If you are adding a new module, you need to do the following:
-- Edit the generated src/index.ts file to export the new module. You might need to update the exports due to name clashes.
+- Edit the generated src/index.ts file to export the new module.
 - Edit the src/api.ts file to add the new module to the return type of the createClient function.
 =========================================================
 `
