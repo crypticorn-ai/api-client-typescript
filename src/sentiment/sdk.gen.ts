@@ -12,16 +12,16 @@ import type {
   GetTimeResponse,
   GetConfigError,
   GetConfigResponse,
-  GetSentimentByCoinData,
-  GetSentimentByCoinError,
-  GetSentimentByCoinResponse,
-  GetSentimentByKeywordData,
-  GetSentimentByKeywordError,
-  GetSentimentByKeywordResponse,
-  GetUniqueSymbolsError,
-  GetUniqueSymbolsResponse,
-  GetUniqueKeywordsError,
-  GetUniqueKeywordsResponse,
+  GetSentimentData,
+  GetSentimentError,
+  GetSentimentResponse,
+  GetSymbolsError,
+  GetSymbolsResponse,
+  GetVolatilityIndexSymbolsError,
+  GetVolatilityIndexSymbolsResponse,
+  GetVolatilityIndexData,
+  GetVolatilityIndexError,
+  GetVolatilityIndexResponse,
 } from "./types.gen";
 
 export function createClient(
@@ -91,46 +91,32 @@ export function createClient(
   };
 
   /**
-   * Read Sentiment Coin
+   * Get Sentiment Coin
+   * Retrieve sentiment data for a specific coin with pagination.
    */
-  const getSentimentByCoin = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetSentimentByCoinData, ThrowOnError>,
+  const getSentiment = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetSentimentData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetSentimentByCoinResponse,
-      GetSentimentByCoinError,
+      GetSentimentResponse,
+      GetSentimentError,
       ThrowOnError
     >({
       ...options,
-      url: "/coin/{coin}",
+      url: "/{coin}",
     });
   };
 
   /**
-   * Read Sentiment Keyword
+   * Get Symbols
+   * Retrieve a list of unique symbols.
    */
-  const getSentimentByKeyword = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetSentimentByKeywordData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetSentimentByKeywordResponse,
-      GetSentimentByKeywordError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/keyword/{keyword}",
-    });
-  };
-
-  /**
-   * Read Symbols
-   */
-  const getUniqueSymbols = <ThrowOnError extends boolean = false>(
+  const getSymbols = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetUniqueSymbolsResponse,
-      GetUniqueSymbolsError,
+      GetSymbolsResponse,
+      GetSymbolsError,
       ThrowOnError
     >({
       ...options,
@@ -139,18 +125,36 @@ export function createClient(
   };
 
   /**
-   * Read Keywords
+   * Get Volatility Index Symbols
+   * Retrieve a list of unique volatility index symbols.
    */
-  const getUniqueKeywords = <ThrowOnError extends boolean = false>(
+  const getVolatilityIndexSymbols = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetUniqueKeywordsResponse,
-      GetUniqueKeywordsError,
+      GetVolatilityIndexSymbolsResponse,
+      GetVolatilityIndexSymbolsError,
       ThrowOnError
     >({
       ...options,
-      url: "/keywords",
+      url: "/volatility_index/symbols",
+    });
+  };
+
+  /**
+   * Get Volatility Index
+   * Retrieve volatility index data for a specific symbol and timeframe with pagination.
+   */
+  const getVolatilityIndex = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetVolatilityIndexData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetVolatilityIndexResponse,
+      GetVolatilityIndexError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/volatility_index/{symbol}",
     });
   };
 
@@ -158,9 +162,9 @@ export function createClient(
     ping,
     getTime,
     getConfig,
-    getSentimentByCoin,
-    getSentimentByKeyword,
-    getUniqueSymbols,
-    getUniqueKeywords,
+    getSentiment,
+    getSymbols,
+    getVolatilityIndexSymbols,
+    getVolatilityIndex,
   };
 }

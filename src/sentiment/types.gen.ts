@@ -15,6 +15,16 @@ export type ApiErrorLevel = string;
  */
 export type ApiErrorType = string;
 
+export type Coins =
+  | "BTC"
+  | "ETH"
+  | "XRP"
+  | "SOL"
+  | "LINK"
+  | "BCH"
+  | "LTC"
+  | "BNB";
+
 /**
  * This is the detail of the exception. It is used to enrich the exception with additional information by unwrapping the ApiError into its components.
  */
@@ -45,7 +55,119 @@ export type ExceptionDetail = {
   details?: unknown;
 };
 
+export type HistoricalSentimentCoin = {
+  /**
+   * The timestamp of the entry
+   */
+  timestamp: string;
+  /**
+   * The symbol of the coin
+   */
+  symbol: string;
+  /**
+   * The opening price of the coin
+   */
+  open: number;
+  /**
+   * The closing price of the coin
+   */
+  close: number;
+  /**
+   * The highest price of the coin
+   */
+  high: number;
+  /**
+   * The lowest price of the coin
+   */
+  low: number;
+  /**
+   * The volume of the coin in the last 24 hours
+   */
+  volume_24h: number;
+  /**
+   * The market cap of the coin
+   */
+  market_cap: number;
+  /**
+   * The circulating supply of the coin
+   */
+  circulating_supply: number;
+  /**
+   * The sentiment value
+   */
+  sentiment: number;
+  /**
+   * The spam rating
+   */
+  spam: number;
+  /**
+   * The galaxy score
+   */
+  galaxy_score: number;
+  /**
+   * The volatility
+   */
+  volatility: number;
+  /**
+   * The alt rank
+   */
+  alt_rank: number;
+  /**
+   * The number of active contributors
+   */
+  contributors_active: number;
+  /**
+   * The number of contributors created
+   */
+  contributors_created: number;
+  /**
+   * The number of active posts
+   */
+  posts_active: number;
+  /**
+   * The number of posts created
+   */
+  posts_created: number;
+  /**
+   * The number of interactions
+   */
+  interactions: number;
+  /**
+   * The social dominance percentage
+   */
+  social_dominance: number;
+};
+
 export type OrderEnum = "DESC" | "ASC";
+
+export type Pagination = {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+};
+
+export type SentimentCoinResponse = {
+  data: Array<HistoricalSentimentCoin>;
+  pagination: Pagination;
+};
+
+export type VITimeframeEnum = "1h" | "1d";
+
+export type VolatilityIndex = {
+  timestamp: string;
+  symbol: string;
+  timeframe: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+};
+
+export type VolatilityIndexResponse = {
+  data: Array<VolatilityIndex>;
+  pagination: Pagination;
+};
 
 export type PingResponse = string;
 
@@ -67,12 +189,12 @@ export type GetConfigResponse = {
 
 export type GetConfigError = ExceptionDetail;
 
-export type GetSentimentByCoinData = {
+export type GetSentimentData = {
   path: {
     /**
      * Coin symbol
      */
-    coin: string;
+    coin: Coins;
   };
   query?: {
     /**
@@ -80,13 +202,17 @@ export type GetSentimentByCoinData = {
      */
     end?: number | null;
     /**
-     * Number of results to return
+     * Items per page
      */
-    limit?: number | null;
+    limit?: number;
     /**
      * Sort order
      */
     order?: OrderEnum;
+    /**
+     * Page number
+     */
+    page?: number;
     /**
      * Start timestamp
      */
@@ -94,16 +220,24 @@ export type GetSentimentByCoinData = {
   };
 };
 
-export type GetSentimentByCoinResponse = unknown;
+export type GetSentimentResponse = SentimentCoinResponse;
 
-export type GetSentimentByCoinError = ExceptionDetail;
+export type GetSentimentError = ExceptionDetail;
 
-export type GetSentimentByKeywordData = {
+export type GetSymbolsResponse = Array<Coins>;
+
+export type GetSymbolsError = ExceptionDetail;
+
+export type GetVolatilityIndexSymbolsResponse = Array<string>;
+
+export type GetVolatilityIndexSymbolsError = ExceptionDetail;
+
+export type GetVolatilityIndexData = {
   path: {
     /**
-     * Keyword
+     * Symbol
      */
-    keyword: string;
+    symbol: string;
   };
   query?: {
     /**
@@ -111,28 +245,28 @@ export type GetSentimentByKeywordData = {
      */
     end?: number | null;
     /**
-     * Number of results to return
+     * Items per page
      */
-    limit?: number | null;
+    limit?: number;
     /**
      * Sort order
      */
-    order?: OrderEnum;
+    order?: OrderEnum | null;
+    /**
+     * Page number
+     */
+    page?: number;
     /**
      * Start timestamp
      */
     start?: number | null;
+    /**
+     * Timeframe
+     */
+    timeframe?: VITimeframeEnum;
   };
 };
 
-export type GetSentimentByKeywordResponse = unknown;
+export type GetVolatilityIndexResponse = VolatilityIndexResponse;
 
-export type GetSentimentByKeywordError = ExceptionDetail;
-
-export type GetUniqueSymbolsResponse = Array<string>;
-
-export type GetUniqueSymbolsError = ExceptionDetail;
-
-export type GetUniqueKeywordsResponse = Array<string>;
-
-export type GetUniqueKeywordsError = ExceptionDetail;
+export type GetVolatilityIndexError = ExceptionDetail;
