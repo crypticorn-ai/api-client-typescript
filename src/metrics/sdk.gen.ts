@@ -7,6 +7,11 @@ import {
 import type {
   PingError,
   PingResponse,
+  GetTimeData,
+  GetTimeError,
+  GetTimeResponse,
+  GetConfigError,
+  GetConfigResponse,
   GetCurrentMarketcapData,
   GetCurrentMarketcapError,
   GetCurrentMarketcapResponse,
@@ -65,6 +70,7 @@ export function createClient(
 
   /**
    * Ping
+   * Returns 'OK' if the API is running.
    */
   const ping = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
@@ -76,6 +82,40 @@ export function createClient(
     >({
       ...options,
       url: "/",
+    });
+  };
+
+  /**
+   * Time
+   * Returns the current time in the specified format.
+   */
+  const getTime = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetTimeData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetTimeResponse,
+      GetTimeError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/time",
+    });
+  };
+
+  /**
+   * Config
+   * Returns the version of the crypticorn library and the environment.
+   */
+  const getConfig = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetConfigResponse,
+      GetConfigError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/config",
     });
   };
 
@@ -314,6 +354,8 @@ export function createClient(
 
   return {
     ping,
+    getTime,
+    getConfig,
     getCurrentMarketcap,
     getMarketcapSymbols,
     getMarketcapSymbolsWithOhlcv,

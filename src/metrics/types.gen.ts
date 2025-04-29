@@ -65,6 +65,22 @@ export type PingResponse = string;
 
 export type PingError = ExceptionDetail;
 
+export type GetTimeData = {
+  query?: {
+    type?: "iso" | "unix";
+  };
+};
+
+export type GetTimeResponse = string;
+
+export type GetTimeError = ExceptionDetail;
+
+export type GetConfigResponse = {
+  [key: string]: unknown;
+};
+
+export type GetConfigError = ExceptionDetail;
+
 export type GetCurrentMarketcapData = {
   query?: {
     /**
