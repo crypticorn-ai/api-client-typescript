@@ -25,6 +25,10 @@ export { MetricsSchemas, MetricsTypes };
 import * as KlinesSchemas from "./klines/schemas.gen";
 import * as KlinesTypes from "./klines/types.gen";
 export { KlinesSchemas, KlinesTypes };
+// hive
+import * as HiveSchemas from "./hive/schemas.gen";
+import * as HiveTypes from "./hive/types.gen";
+export { HiveSchemas, HiveTypes };
 
 export {
   isValidationError,
@@ -39,4 +43,3 @@ export {
   GetApiKeysResponse,
 } from "@crypticorn-ai/auth-service";
 
-export * from "./hive";
