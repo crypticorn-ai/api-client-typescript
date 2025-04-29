@@ -146,6 +146,26 @@ export type UDFConfig = {
   supported_markets: Array<string>;
 };
 
+export type PingResponse = string;
+
+export type PingError = ExceptionDetail;
+
+export type GetTimeData = {
+  query?: {
+    type?: "iso" | "unix";
+  };
+};
+
+export type GetTimeResponse = string;
+
+export type GetTimeError = ExceptionDetail;
+
+export type GetConfigResponse = {
+  [key: string]: unknown;
+};
+
+export type GetConfigError = ExceptionDetail;
+
 export type GetUdfConfigResponse = UDFConfig;
 
 export type GetUdfConfigError = ExceptionDetail;
@@ -185,10 +205,6 @@ export type GetUdfHistoryResponse = OHLCVHistory;
 
 export type GetUdfHistoryError = ExceptionDetail;
 
-export type GetServerTimeResponse = number;
-
-export type GetServerTimeError = ExceptionDetail;
-
 export type GetSymbolInfoData = {
   query: {
     group: string;
@@ -208,10 +224,6 @@ export type OptionsHandlerData = {
 export type OptionsHandlerResponse = unknown;
 
 export type OptionsHandlerError = ExceptionDetail;
-
-export type PingResponse = unknown;
-
-export type PingError = ExceptionDetail;
 
 export type GetOhlcvData = {
   path: {
