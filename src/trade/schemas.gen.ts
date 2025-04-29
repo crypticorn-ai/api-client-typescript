@@ -362,6 +362,49 @@ export const BotStatusSchema = {
   title: "BotStatus",
 } as const;
 
+export const ExceptionDetailSchema = {
+  properties: {
+    message: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Message",
+      description: "An additional error message",
+    },
+    code: {
+      $ref: "#/components/schemas/ApiErrorIdentifier",
+      description: "The unique error code",
+    },
+    type: {
+      $ref: "#/components/schemas/ApiErrorType",
+      description: "The type of error",
+    },
+    level: {
+      $ref: "#/components/schemas/ApiErrorLevel",
+      description: "The level of the error",
+    },
+    status_code: {
+      type: "integer",
+      title: "Status Code",
+      description: "The HTTP status code",
+    },
+    details: {
+      title: "Details",
+      description: "Additional details about the error",
+    },
+  },
+  type: "object",
+  required: ["code", "type", "level", "status_code"],
+  title: "ExceptionDetail",
+  description:
+    "This is the detail of the exception. It is used to enrich the exception with additional information by unwrapping the ApiError into its components.",
+} as const;
+
 export const ExchangeSchema = {
   type: "string",
   title: "Exchange",
@@ -752,20 +795,6 @@ export const FuturesTradingActionSchema = {
   required: ["action_type", "market_type", "strategy_id", "symbol", "leverage"],
   title: "FuturesTradingAction",
   description: "Model for futures trading actions",
-} as const;
-
-export const HTTPValidationErrorSchema = {
-  properties: {
-    detail: {
-      items: {
-        $ref: "#/components/schemas/ValidationError",
-      },
-      type: "array",
-      title: "Detail",
-    },
-  },
-  type: "object",
-  title: "HTTPValidationError",
 } as const;
 
 export const MarginModeSchema = {
@@ -1675,34 +1704,4 @@ export const TradingActionTypeSchema = {
   enum: ["open_long", "open_short", "close_long", "close_short"],
   title: "TradingActionType",
   description: "Type of trading action",
-} as const;
-
-export const ValidationErrorSchema = {
-  properties: {
-    loc: {
-      items: {
-        anyOf: [
-          {
-            type: "string",
-          },
-          {
-            type: "integer",
-          },
-        ],
-      },
-      type: "array",
-      title: "Location",
-    },
-    msg: {
-      type: "string",
-      title: "Message",
-    },
-    type: {
-      type: "string",
-      title: "Error Type",
-    },
-  },
-  type: "object",
-  required: ["loc", "msg", "type"],
-  title: "ValidationError",
 } as const;

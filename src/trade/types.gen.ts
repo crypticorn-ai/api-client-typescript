@@ -148,6 +148,36 @@ export type BotModel = {
 export type BotStatus = "running" | "stopping" | "stopped" | "deleted";
 
 /**
+ * This is the detail of the exception. It is used to enrich the exception with additional information by unwrapping the ApiError into its components.
+ */
+export type ExceptionDetail = {
+  /**
+   * An additional error message
+   */
+  message?: string | null;
+  /**
+   * The unique error code
+   */
+  code: ApiErrorIdentifier;
+  /**
+   * The type of error
+   */
+  type: ApiErrorType;
+  /**
+   * The level of the error
+   */
+  level: ApiErrorLevel;
+  /**
+   * The HTTP status code
+   */
+  status_code: number;
+  /**
+   * Additional details about the error
+   */
+  details?: unknown;
+};
+
+/**
  * Supported exchanges for trading
  */
 export type Exchange = string;
@@ -312,10 +342,6 @@ export type FuturesTradingAction = {
    * Margin mode for futures trades.
    */
   margin_mode?: MarginMode | null;
-};
-
-export type HTTPValidationError = {
-  detail?: Array<ValidationError>;
 };
 
 /**
@@ -708,11 +734,25 @@ export type TradingActionType =
   | "close_long"
   | "close_short";
 
-export type ValidationError = {
-  loc: Array<string | number>;
-  msg: string;
-  type: string;
+export type PingResponse = string;
+
+export type PingError = ExceptionDetail;
+
+export type GetTimeData = {
+  query?: {
+    type?: "iso" | "unix";
+  };
 };
+
+export type GetTimeResponse = string;
+
+export type GetTimeError = ExceptionDetail;
+
+export type GetConfigResponse = {
+  [key: string]: unknown;
+};
+
+export type GetConfigError = ExceptionDetail;
 
 export type GetBotsData = {
   query?: {
@@ -724,7 +764,7 @@ export type GetBotsData = {
 
 export type GetBotsResponse = Array<BotModel>;
 
-export type GetBotsError = HTTPValidationError;
+export type GetBotsError = ExceptionDetail;
 
 export type CreateBotData = {
   body: BotModel;
@@ -732,7 +772,7 @@ export type CreateBotData = {
 
 export type CreateBotResponse = unknown;
 
-export type CreateBotError = HTTPValidationError;
+export type CreateBotError = ExceptionDetail;
 
 export type UpdateBotData = {
   body: BotModel;
@@ -743,7 +783,7 @@ export type UpdateBotData = {
 
 export type UpdateBotResponse = unknown;
 
-export type UpdateBotError = HTTPValidationError;
+export type UpdateBotError = ExceptionDetail;
 
 export type DeleteBotData = {
   path: {
@@ -751,9 +791,9 @@ export type DeleteBotData = {
   };
 };
 
-export type DeleteBotResponse = unknown;
+export type DeleteBotResponse = void;
 
-export type DeleteBotError = HTTPValidationError;
+export type DeleteBotError = ExceptionDetail;
 
 export type GetExchangeKeysData = {
   query?: {
@@ -764,7 +804,7 @@ export type GetExchangeKeysData = {
 
 export type GetExchangeKeysResponse = Array<ExchangeKeyModel>;
 
-export type GetExchangeKeysError = HTTPValidationError;
+export type GetExchangeKeysError = ExceptionDetail;
 
 export type CreateExchangeKeyData = {
   body: ExchangeKeyModel;
@@ -772,7 +812,7 @@ export type CreateExchangeKeyData = {
 
 export type CreateExchangeKeyResponse = unknown;
 
-export type CreateExchangeKeyError = HTTPValidationError;
+export type CreateExchangeKeyError = ExceptionDetail;
 
 export type GetExchangeKeyByIdData = {
   path: {
@@ -782,7 +822,7 @@ export type GetExchangeKeyByIdData = {
 
 export type GetExchangeKeyByIdResponse = ExchangeKeyModel;
 
-export type GetExchangeKeyByIdError = HTTPValidationError;
+export type GetExchangeKeyByIdError = ExceptionDetail;
 
 export type DeleteExchangeKeyData = {
   path: {
@@ -792,7 +832,7 @@ export type DeleteExchangeKeyData = {
 
 export type DeleteExchangeKeyResponse = unknown;
 
-export type DeleteExchangeKeyError = HTTPValidationError;
+export type DeleteExchangeKeyError = ExceptionDetail;
 
 export type UpdateExchangeKeyData = {
   body: ExchangeKeyModel;
@@ -803,7 +843,7 @@ export type UpdateExchangeKeyData = {
 
 export type UpdateExchangeKeyResponse = unknown;
 
-export type UpdateExchangeKeyError = HTTPValidationError;
+export type UpdateExchangeKeyError = ExceptionDetail;
 
 export type PostFuturesActionData = {
   body: FuturesTradingAction;
@@ -811,7 +851,7 @@ export type PostFuturesActionData = {
 
 export type PostFuturesActionResponse = PostFuturesAction;
 
-export type PostFuturesActionError = HTTPValidationError;
+export type PostFuturesActionError = ExceptionDetail;
 
 export type PostSpotActionData = {
   body: SpotTradingAction;
@@ -819,7 +859,7 @@ export type PostSpotActionData = {
 
 export type PostSpotActionResponse = unknown;
 
-export type PostSpotActionError = HTTPValidationError;
+export type PostSpotActionError = ExceptionDetail;
 
 export type GetActionsData = {
   query?: {
@@ -830,7 +870,7 @@ export type GetActionsData = {
 
 export type GetActionsResponse = Array<ActionModel>;
 
-export type GetActionsError = HTTPValidationError;
+export type GetActionsError = ExceptionDetail;
 
 export type GetOrdersData = {
   query?: {
@@ -841,11 +881,11 @@ export type GetOrdersData = {
 
 export type GetOrdersResponse = Array<OrderModel>;
 
-export type GetOrdersError = HTTPValidationError;
+export type GetOrdersError = ExceptionDetail;
 
 export type GetFuturesBalanceResponse = Array<FuturesBalance>;
 
-export type GetFuturesBalanceError = unknown;
+export type GetFuturesBalanceError = ExceptionDetail;
 
 export type GetFuturesLedgerData = {
   query: {
@@ -855,7 +895,7 @@ export type GetFuturesLedgerData = {
 
 export type GetFuturesLedgerResponse = unknown;
 
-export type GetFuturesLedgerError = HTTPValidationError;
+export type GetFuturesLedgerError = ExceptionDetail;
 
 export type GetHistoricalFuturesOrdersData = {
   query: {
@@ -865,7 +905,7 @@ export type GetHistoricalFuturesOrdersData = {
 
 export type GetHistoricalFuturesOrdersResponse = unknown;
 
-export type GetHistoricalFuturesOrdersError = HTTPValidationError;
+export type GetHistoricalFuturesOrdersError = ExceptionDetail;
 
 export type PlaceFuturesOrderData = {
   body: {
@@ -878,7 +918,7 @@ export type PlaceFuturesOrderData = {
 
 export type PlaceFuturesOrderResponse = unknown;
 
-export type PlaceFuturesOrderError = HTTPValidationError;
+export type PlaceFuturesOrderError = ExceptionDetail;
 
 export type CancelFuturesOrderData = {
   query: {
@@ -888,9 +928,9 @@ export type CancelFuturesOrderData = {
   };
 };
 
-export type CancelFuturesOrderResponse = unknown;
+export type CancelFuturesOrderResponse = void;
 
-export type CancelFuturesOrderError = HTTPValidationError;
+export type CancelFuturesOrderError = ExceptionDetail;
 
 export type GetStrategiesData = {
   query?: {
@@ -901,7 +941,7 @@ export type GetStrategiesData = {
 
 export type GetStrategiesResponse = Array<StrategyModel_Output>;
 
-export type GetStrategiesError = HTTPValidationError;
+export type GetStrategiesError = ExceptionDetail;
 
 export type CreateStrategyData = {
   body: StrategyModel_Input;
@@ -909,7 +949,7 @@ export type CreateStrategyData = {
 
 export type CreateStrategyResponse = unknown;
 
-export type CreateStrategyError = HTTPValidationError;
+export type CreateStrategyError = ExceptionDetail;
 
 export type KillStrategyData = {
   path: {
@@ -919,7 +959,7 @@ export type KillStrategyData = {
 
 export type KillStrategyResponse = unknown;
 
-export type KillStrategyError = HTTPValidationError;
+export type KillStrategyError = ExceptionDetail;
 
 export type UpdateStrategyData = {
   body: StrategyModel_Input;
@@ -930,7 +970,7 @@ export type UpdateStrategyData = {
 
 export type UpdateStrategyResponse = unknown;
 
-export type UpdateStrategyError = HTTPValidationError;
+export type UpdateStrategyError = ExceptionDetail;
 
 export type GetNotificationsData = {
   query?: {
@@ -941,7 +981,7 @@ export type GetNotificationsData = {
 
 export type GetNotificationsResponse = Array<NotificationModel>;
 
-export type GetNotificationsError = HTTPValidationError;
+export type GetNotificationsError = ExceptionDetail;
 
 export type CreateNotificationData = {
   body: NotificationModel;
@@ -949,7 +989,7 @@ export type CreateNotificationData = {
 
 export type CreateNotificationResponse = unknown;
 
-export type CreateNotificationError = HTTPValidationError;
+export type CreateNotificationError = ExceptionDetail;
 
 export type UpdateNotificationsData = {
   query: {
@@ -960,11 +1000,11 @@ export type UpdateNotificationsData = {
 
 export type UpdateNotificationsResponse = unknown;
 
-export type UpdateNotificationsError = HTTPValidationError;
+export type UpdateNotificationsError = ExceptionDetail;
 
 export type DeleteNotificationsResponse = unknown;
 
-export type DeleteNotificationsError = unknown;
+export type DeleteNotificationsError = ExceptionDetail;
 
 export type UpdateNotificationData = {
   path: {
@@ -978,7 +1018,7 @@ export type UpdateNotificationData = {
 
 export type UpdateNotificationResponse = unknown;
 
-export type UpdateNotificationError = HTTPValidationError;
+export type UpdateNotificationError = ExceptionDetail;
 
 export type DeleteNotificationData = {
   path: {
@@ -986,14 +1026,10 @@ export type DeleteNotificationData = {
   };
 };
 
-export type DeleteNotificationResponse = unknown;
+export type DeleteNotificationResponse = void;
 
-export type DeleteNotificationError = HTTPValidationError;
+export type DeleteNotificationError = ExceptionDetail;
 
 export type GetExchangesResponse = Array<Exchange>;
 
-export type GetExchangesError = unknown;
-
-export type PingResponse = unknown;
-
-export type PingError = unknown;
+export type GetExchangesError = ExceptionDetail;
