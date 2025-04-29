@@ -70,6 +70,7 @@ export enum ApiErrorIdentifier {
   RISK_LIMIT_EXCEEDED = "risk_limit_exceeded",
   RPC_TIMEOUT = "rpc_timeout",
   SETTLEMENT_IN_PROGRESS = "system_settlement_in_process",
+  STRATEGY_ALREADY_EXISTS = "strategy_already_exists",
   STRATEGY_DISABLED = "strategy_disabled",
   STRATEGY_LEVERAGE_MISMATCH = "strategy_leverage_mismatch",
   STRATEGY_NOT_SUPPORTING_EXCHANGE = "strategy_not_supporting_exchange",
