@@ -189,6 +189,10 @@ export type GetConfigResponse = {
 
 export type GetConfigError = ExceptionDetail;
 
+export type GetSymbolsResponse = Array<Coins>;
+
+export type GetSymbolsError = ExceptionDetail;
+
 export type GetSentimentData = {
   path: {
     /**
@@ -223,10 +227,6 @@ export type GetSentimentData = {
 export type GetSentimentResponse = SentimentCoinResponse;
 
 export type GetSentimentError = ExceptionDetail;
-
-export type GetSymbolsResponse = Array<Coins>;
-
-export type GetSymbolsError = ExceptionDetail;
 
 export type GetVolatilityIndexSymbolsResponse = Array<string>;
 

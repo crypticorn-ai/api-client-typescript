@@ -12,11 +12,11 @@ import type {
   GetTimeResponse,
   GetConfigError,
   GetConfigResponse,
+  GetSymbolsError,
+  GetSymbolsResponse,
   GetSentimentData,
   GetSentimentError,
   GetSentimentResponse,
-  GetSymbolsError,
-  GetSymbolsResponse,
   GetVolatilityIndexSymbolsError,
   GetVolatilityIndexSymbolsResponse,
   GetVolatilityIndexData,
@@ -91,23 +91,6 @@ export function createClient(
   };
 
   /**
-   * Get Sentiment Coin
-   * Retrieve sentiment data for a specific coin with pagination.
-   */
-  const getSentiment = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetSentimentData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetSentimentResponse,
-      GetSentimentError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/{coin}",
-    });
-  };
-
-  /**
    * Get Symbols
    * Retrieve a list of unique symbols.
    */
@@ -121,6 +104,23 @@ export function createClient(
     >({
       ...options,
       url: "/symbols",
+    });
+  };
+
+  /**
+   * Get Sentiment Coin
+   * Retrieve sentiment data for a specific coin with pagination.
+   */
+  const getSentiment = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetSentimentData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetSentimentResponse,
+      GetSentimentError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/{coin}",
     });
   };
 
@@ -162,8 +162,8 @@ export function createClient(
     ping,
     getTime,
     getConfig,
-    getSentiment,
     getSymbols,
+    getSentiment,
     getVolatilityIndexSymbols,
     getVolatilityIndex,
   };

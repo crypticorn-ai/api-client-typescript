@@ -66,6 +66,9 @@ export const DataInfoSchema = {
             },
             type: "array",
           },
+          propertyNames: {
+            enum: ["targets", "feature_sizes"],
+          },
           type: "object",
         },
         propertyNames: {
@@ -94,27 +97,25 @@ export const DataInfoSchema = {
       title: "Feature Sizes",
     },
     targets: {
-      additionalProperties: {
-        $ref: "#/components/schemas/TargetType",
+      items: {
+        $ref: "#/components/schemas/TargetInfo",
       },
-      propertyNames: {
-        $ref: "#/components/schemas/Target",
-      },
-      type: "object",
+      type: "array",
       title: "Targets",
     },
-    versions: {
-      additionalProperties: {
-        type: "number",
+    all_versions: {
+      items: {
+        $ref: "#/components/schemas/DataVersionInfo",
       },
-      propertyNames: {
-        $ref: "#/components/schemas/DataVersion",
-      },
-      type: "object",
-      title: "Versions",
+      type: "array",
+      title: "All Versions",
     },
-    latest_version: {
-      $ref: "#/components/schemas/DataVersion",
+    available_versions: {
+      items: {
+        $ref: "#/components/schemas/DataVersionInfo",
+      },
+      type: "array",
+      title: "Available Versions",
     },
   },
   type: "object",
@@ -123,8 +124,8 @@ export const DataInfoSchema = {
     "coins",
     "feature_sizes",
     "targets",
-    "versions",
-    "latest_version",
+    "all_versions",
+    "available_versions",
   ],
   title: "DataInfo",
 } as const;
@@ -134,6 +135,23 @@ export const DataVersionSchema = {
   enum: ["1.0"],
   title: "DataVersion",
   description: "All ever existing data versions",
+} as const;
+
+export const DataVersionInfoSchema = {
+  properties: {
+    version: {
+      $ref: "#/components/schemas/DataVersion",
+      description: "Data version",
+    },
+    release_date: {
+      type: "integer",
+      title: "Release Date",
+      description: "Release date of the data version in unix timestamp",
+    },
+  },
+  type: "object",
+  required: ["version", "release_date"],
+  title: "DataVersionInfo",
 } as const;
 
 export const DownloadLinksSchema = {
@@ -284,16 +302,14 @@ export const ModelSchema = {
       description: "Developer user ID",
     },
     created_at: {
-      type: "string",
-      format: "date-time",
+      type: "integer",
       title: "Created At",
-      description: "Model creation timestamp",
+      description: "Model creation unix timestamp",
     },
     updated_at: {
-      type: "string",
-      format: "date-time",
+      type: "integer",
       title: "Updated At",
-      description: "Model update timestamp",
+      description: "Model update unix timestamp",
     },
   },
   type: "object",
@@ -361,6 +377,26 @@ export const TargetSchema = {
   enum: ["Tatooine", "Alderaan", "Hoth"],
   title: "Target",
   description: "All ever existing targets",
+} as const;
+
+export const TargetInfoSchema = {
+  properties: {
+    name: {
+      $ref: "#/components/schemas/Target",
+      description: "Target name",
+    },
+    type: {
+      $ref: "#/components/schemas/TargetType",
+      description: "Target type",
+    },
+    version: {
+      $ref: "#/components/schemas/DataVersion",
+      description: "Data version",
+    },
+  },
+  type: "object",
+  required: ["name", "type", "version"],
+  title: "TargetInfo",
 } as const;
 
 export const TargetTypeSchema = {

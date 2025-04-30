@@ -21,14 +21,18 @@ import type {
   GetModelData,
   GetModelError,
   GetModelResponse,
-  GetAllModelsError,
-  GetAllModelsResponse,
   DeleteModelData,
   DeleteModelError,
   DeleteModelResponse,
   UpdateModelData,
   UpdateModelError,
   UpdateModelResponse,
+  GetModelByNameData,
+  GetModelByNameError,
+  GetModelByNameResponse,
+  GetModelsData,
+  GetModelsError,
+  GetModelsResponse,
   DownloadDataData,
   DownloadDataError,
   DownloadDataResponse,
@@ -138,10 +142,10 @@ export function createClient(
 
   /**
    * Get Model
-   * Get a model by ID or name
+   * Get a model by ID
    */
   const getModel = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetModelData, ThrowOnError>,
+    options: OptionsLegacyParser<GetModelData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
       GetModelResponse,
@@ -149,24 +153,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/model",
-    });
-  };
-
-  /**
-   * Get All Models
-   * List all models
-   */
-  const getAllModels = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetAllModelsResponse,
-      GetAllModelsError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/model/all",
+      url: "/model/{id}",
     });
   };
 
@@ -201,6 +188,40 @@ export function createClient(
     >({
       ...options,
       url: "/model/{id}",
+    });
+  };
+
+  /**
+   * Get Model By Name
+   * Get a model by name
+   */
+  const getModelByName = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetModelByNameData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetModelByNameResponse,
+      GetModelByNameError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/model/by-name/{name}",
+    });
+  };
+
+  /**
+   * Get All Models
+   * List all models
+   */
+  const getModels = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetModelsData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetModelsResponse,
+      GetModelsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/model",
     });
   };
 
@@ -245,9 +266,10 @@ export function createClient(
     createModel,
     evaluateModel,
     getModel,
-    getAllModels,
     deleteModel,
     updateModel,
+    getModelByName,
+    getModels,
     downloadData,
     getDataInfo,
   };

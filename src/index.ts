@@ -29,17 +29,8 @@ export { KlinesSchemas, KlinesTypes };
 import * as HiveSchemas from "./hive/schemas.gen";
 import * as HiveTypes from "./hive/types.gen";
 export { HiveSchemas, HiveTypes };
-
-export {
-  isValidationError,
-  type ValidationErrorData,
-  type CustomErrorCode,
-  type ValidationError,
-  Scope,
-  getDefaultJwtAdminScopes,
-  getDefaultJwtScopes,
-  AuthContext,
-  User,
-  GetApiKeysResponse,
-} from "@crypticorn-ai/auth-service";
+// auth
+import * as AuthSchemas from "@crypticorn-ai/auth-service";
+import * as AuthTypes from "@crypticorn-ai/auth-service";
+export { AuthSchemas, AuthTypes };
 

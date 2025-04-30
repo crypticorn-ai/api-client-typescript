@@ -38,19 +38,26 @@ export type DataInfo = {
   };
   coins: Array<Coins>;
   feature_sizes: Array<FeatureSize>;
-  targets: {
-    [key: string]: TargetType;
-  };
-  versions: {
-    [key: string]: number;
-  };
-  latest_version: DataVersion;
+  targets: Array<TargetInfo>;
+  all_versions: Array<DataVersionInfo>;
+  available_versions: Array<DataVersionInfo>;
 };
 
 /**
  * All ever existing data versions
  */
 export type DataVersion = "1.0";
+
+export type DataVersionInfo = {
+  /**
+   * Data version
+   */
+  version: DataVersion;
+  /**
+   * Release date of the data version in unix timestamp
+   */
+  release_date: number;
+};
 
 export type DownloadLinks = {
   y_train: string;
@@ -156,13 +163,13 @@ export type Model = {
    */
   user_id: string;
   /**
-   * Model creation timestamp
+   * Model creation unix timestamp
    */
-  created_at: string;
+  created_at: number;
   /**
-   * Model update timestamp
+   * Model update unix timestamp
    */
-  updated_at: string;
+  updated_at: number;
 };
 
 /**
@@ -202,6 +209,21 @@ export type ModelUpdate = {
  * All ever existing targets
  */
 export type Target = "Tatooine" | "Alderaan" | "Hoth";
+
+export type TargetInfo = {
+  /**
+   * Target name
+   */
+  name: Target;
+  /**
+   * Target type
+   */
+  type: TargetType;
+  /**
+   * Data version
+   */
+  version: DataVersion;
+};
 
 export type TargetType = "continuous" | "binary";
 
@@ -254,19 +276,17 @@ export type EvaluateModelResponse = EvaluationResponse;
 export type EvaluateModelError = ExceptionDetail;
 
 export type GetModelData = {
-  query?: {
-    id?: number | null;
-    name?: string | null;
+  path: {
+    /**
+     * Model ID to get
+     */
+    id: number;
   };
 };
 
 export type GetModelResponse = Model;
 
 export type GetModelError = ExceptionDetail;
-
-export type GetAllModelsResponse = Array<Model>;
-
-export type GetAllModelsError = ExceptionDetail;
 
 export type DeleteModelData = {
   path: {
@@ -294,6 +314,36 @@ export type UpdateModelData = {
 export type UpdateModelResponse = unknown;
 
 export type UpdateModelError = ExceptionDetail;
+
+export type GetModelByNameData = {
+  path: {
+    /**
+     * Model name to get
+     */
+    name: string;
+  };
+};
+
+export type GetModelByNameResponse = Model;
+
+export type GetModelByNameError = ExceptionDetail;
+
+export type GetModelsData = {
+  query?: {
+    /**
+     * Whether to get models by user. Else all models are returned.
+     */
+    by_user?: boolean;
+    /**
+     * User ID to get models for. Only used if by_user is true. Default is current user.
+     */
+    user_id?: string;
+  };
+};
+
+export type GetModelsResponse = Array<Model>;
+
+export type GetModelsError = ExceptionDetail;
 
 export type DownloadDataData = {
   query: {

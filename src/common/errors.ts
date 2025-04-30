@@ -9,7 +9,6 @@ export enum ApiErrorType {
 export enum ApiErrorIdentifier {
   ALLOCATION_BELOW_EXPOSURE = "allocation_below_current_exposure",
   ALLOCATION_BELOW_MINIMUM = "allocation_below_min_amount",
-  ALPHANUMERIC_CHARACTERS_ONLY = "alphanumeric_characters_only",
   BLACK_SWAN = "black_swan",
   BOT_ALREADY_DELETED = "bot_already_deleted",
   BOT_DISABLED = "bot_disabled",
@@ -45,6 +44,7 @@ export enum ApiErrorIdentifier {
   INVALID_DATA_RESPONSE = "invalid_data_response",
   INVALID_EXCHANGE_KEY = "invalid_exchange_key",
   INVALID_MARGIN_MODE = "invalid_margin_mode",
+  INVALID_MODEL_NAME = "invalid_model_name",
   INVALID_PARAMETER = "invalid_parameter_provided",
   LEVERAGE_EXCEEDED = "leverage_limit_exceeded",
   LIQUIDATION_PRICE_VIOLATION = "order_violates_liquidation_price_constraints",
