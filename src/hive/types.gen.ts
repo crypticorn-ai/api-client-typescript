@@ -348,7 +348,7 @@ export type GetModelsError = ExceptionDetail;
 export type DownloadDataData = {
   query: {
     /**
-     * Feature size
+     * The number of features in the data. Default is LARGE.
      */
     feature_size?: FeatureSize | null;
     /**
@@ -358,7 +358,7 @@ export type DownloadDataData = {
     /**
      * Data version. Default is the latest public version.
      */
-    version: DataVersion | null;
+    version?: DataVersion | null;
   };
 };
 
