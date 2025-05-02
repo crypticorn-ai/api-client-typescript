@@ -48,6 +48,7 @@ export enum ApiErrorIdentifier {
   INVALID_PARAMETER = "invalid_parameter_provided",
   LEVERAGE_EXCEEDED = "leverage_limit_exceeded",
   LIQUIDATION_PRICE_VIOLATION = "order_violates_liquidation_price_constraints",
+  MODEL_NAME_NOT_UNIQUE = "model_name_not_unique",
   NO_CREDENTIALS = "no_credentials",
   NOW_API_DOWN = "now_api_down",
   OBJECT_ALREADY_EXISTS = "object_already_exists",

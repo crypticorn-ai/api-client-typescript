@@ -16,19 +16,40 @@ export type ApiErrorLevel = string;
 export type ApiErrorType = string;
 
 /**
- * All ever existing coins
+ * All existing coins. Some might no be available in the latest data version, but kept for older versions.
  */
 export type Coins = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
 
+/**
+ * The response for a data download request
+ */
 export type DataDownloadResponse = {
+  /**
+   * The coin the data is for
+   */
   coin: Coins;
+  /**
+   * The feature size the data is for
+   */
   feature_size: FeatureSize;
+  /**
+   * The version of the data
+   */
   version: DataVersion;
+  /**
+   * The target of the data
+   */
   target: Target;
   links: DownloadLinks;
 };
 
+/**
+ * The complete data information for all versions, coins, feature sizes and targets
+ */
 export type DataInfo = {
+  /**
+   * The complete data information for all versions, coins, feature sizes and targets.
+   */
   data: {
     [key: string]: {
       [key: string]: {
@@ -36,15 +57,30 @@ export type DataInfo = {
       };
     };
   };
+  /**
+   * The coins available on the latest data version.
+   */
   coins: Array<Coins>;
+  /**
+   * The feature sizes available on the latest data version.
+   */
   feature_sizes: Array<FeatureSize>;
+  /**
+   * The targets available on the latest data version.
+   */
   targets: Array<TargetInfo>;
+  /**
+   * All ever existing data versions. Some may not be publicly available yet.
+   */
   all_versions: Array<DataVersionInfo>;
+  /**
+   * All publicly available data versions.
+   */
   available_versions: Array<DataVersionInfo>;
 };
 
 /**
- * All ever existing data versions
+ * All existing data versions
  */
 export type DataVersion = "1.0";
 
@@ -59,9 +95,21 @@ export type DataVersionInfo = {
   release_date: number;
 };
 
+/**
+ * The download links for the data
+ */
 export type DownloadLinks = {
+  /**
+   * The download link for the y_train data
+   */
   y_train: string;
+  /**
+   * The download link for the X_test data
+   */
   X_test: string;
+  /**
+   * The download link for the X_train data
+   */
   X_train: string;
 };
 
@@ -122,7 +170,7 @@ export type ExceptionDetail = {
 };
 
 /**
- * All ever existing feature sizes
+ * All existing feature sizes. Some might no be available in the latest data version, but kept for older versions.
  */
 export type FeatureSize = "small" | "medium" | "large";
 
@@ -206,10 +254,13 @@ export type ModelUpdate = {
 };
 
 /**
- * All ever existing targets
+ * All existing targets. Some might no be available in the latest data version, but kept for older versions.
  */
 export type Target = "Tatooine" | "Alderaan" | "Hoth";
 
+/**
+ * Information about a target
+ */
 export type TargetInfo = {
   /**
    * Target name
@@ -225,6 +276,9 @@ export type TargetInfo = {
   version: DataVersion;
 };
 
+/**
+ * The type of the target
+ */
 export type TargetType = "continuous" | "binary";
 
 export type PingResponse = string;

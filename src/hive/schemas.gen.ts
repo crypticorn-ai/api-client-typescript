@@ -22,22 +22,27 @@ export const CoinsSchema = {
   type: "string",
   enum: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
   title: "Coins",
-  description: "All ever existing coins",
+  description:
+    "All existing coins. Some might no be available in the latest data version, but kept for older versions.",
 } as const;
 
 export const DataDownloadResponseSchema = {
   properties: {
     coin: {
       $ref: "#/components/schemas/Coins",
+      description: "The coin the data is for",
     },
     feature_size: {
       $ref: "#/components/schemas/FeatureSize",
+      description: "The feature size the data is for",
     },
     version: {
       $ref: "#/components/schemas/DataVersion",
+      description: "The version of the data",
     },
     target: {
       $ref: "#/components/schemas/Target",
+      description: "The target of the data",
     },
     links: {
       $ref: "#/components/schemas/DownloadLinks",
@@ -46,6 +51,7 @@ export const DataDownloadResponseSchema = {
   type: "object",
   required: ["coin", "feature_size", "version", "target", "links"],
   title: "DataDownloadResponse",
+  description: "The response for a data download request",
 } as const;
 
 export const DataInfoSchema = {
@@ -81,6 +87,8 @@ export const DataInfoSchema = {
       },
       type: "object",
       title: "Data",
+      description:
+        "The complete data information for all versions, coins, feature sizes and targets.",
     },
     coins: {
       items: {
@@ -88,6 +96,7 @@ export const DataInfoSchema = {
       },
       type: "array",
       title: "Coins",
+      description: "The coins available on the latest data version.",
     },
     feature_sizes: {
       items: {
@@ -95,6 +104,7 @@ export const DataInfoSchema = {
       },
       type: "array",
       title: "Feature Sizes",
+      description: "The feature sizes available on the latest data version.",
     },
     targets: {
       items: {
@@ -102,6 +112,7 @@ export const DataInfoSchema = {
       },
       type: "array",
       title: "Targets",
+      description: "The targets available on the latest data version.",
     },
     all_versions: {
       items: {
@@ -109,6 +120,8 @@ export const DataInfoSchema = {
       },
       type: "array",
       title: "All Versions",
+      description:
+        "All ever existing data versions. Some may not be publicly available yet.",
     },
     available_versions: {
       items: {
@@ -116,6 +129,7 @@ export const DataInfoSchema = {
       },
       type: "array",
       title: "Available Versions",
+      description: "All publicly available data versions.",
     },
   },
   type: "object",
@@ -128,13 +142,15 @@ export const DataInfoSchema = {
     "available_versions",
   ],
   title: "DataInfo",
+  description:
+    "The complete data information for all versions, coins, feature sizes and targets",
 } as const;
 
 export const DataVersionSchema = {
   type: "string",
   enum: ["1.0"],
   title: "DataVersion",
-  description: "All ever existing data versions",
+  description: "All existing data versions",
 } as const;
 
 export const DataVersionInfoSchema = {
@@ -159,19 +175,23 @@ export const DownloadLinksSchema = {
     y_train: {
       type: "string",
       title: "Y Train",
+      description: "The download link for the y_train data",
     },
     X_test: {
       type: "string",
       title: "X Test",
+      description: "The download link for the X_test data",
     },
     X_train: {
       type: "string",
       title: "X Train",
+      description: "The download link for the X_train data",
     },
   },
   type: "object",
   required: ["y_train", "X_test", "X_train"],
   title: "DownloadLinks",
+  description: "The download links for the data",
 } as const;
 
 export const EvaluationSchema = {
@@ -257,7 +277,8 @@ export const FeatureSizeSchema = {
   type: "string",
   enum: ["small", "medium", "large"],
   title: "FeatureSize",
-  description: "All ever existing feature sizes",
+  description:
+    "All existing feature sizes. Some might no be available in the latest data version, but kept for older versions.",
 } as const;
 
 export const ModelSchema = {
@@ -376,7 +397,8 @@ export const TargetSchema = {
   type: "string",
   enum: ["Tatooine", "Alderaan", "Hoth"],
   title: "Target",
-  description: "All ever existing targets",
+  description:
+    "All existing targets. Some might no be available in the latest data version, but kept for older versions.",
 } as const;
 
 export const TargetInfoSchema = {
@@ -397,10 +419,12 @@ export const TargetInfoSchema = {
   type: "object",
   required: ["name", "type", "version"],
   title: "TargetInfo",
+  description: "Information about a target",
 } as const;
 
 export const TargetTypeSchema = {
   type: "string",
   enum: ["continuous", "binary"],
   title: "TargetType",
+  description: "The type of the target",
 } as const;
