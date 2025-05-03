@@ -201,9 +201,9 @@ export type Payment = {
   currency: string;
   status: PaymentStatus;
   /**
-   * Payment service
+   * Payment provider
    */
-  service: Services;
+  provider: Provider;
   /**
    * Payment market
    */
@@ -343,6 +343,11 @@ export type ProductUpdate = {
 };
 
 /**
+ * Available payment providers
+ */
+export type Provider = "now";
+
+/**
  * The permission scopes for the API.
  */
 export type Scope =
@@ -373,12 +378,8 @@ export type Scope =
   | "read:metrics:indicators"
   | "read:metrics:exchanges"
   | "read:metrics:tokens"
-  | "read:metrics:markets";
-
-/**
- * Available payment services
- */
-export type Services = "now";
+  | "read:metrics:markets"
+  | "read:sentiment";
 
 export type PingResponse = string;
 

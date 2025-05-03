@@ -385,9 +385,9 @@ export const PaymentSchema = {
     status: {
       $ref: "#/components/schemas/PaymentStatus",
     },
-    service: {
-      $ref: "#/components/schemas/Services",
-      description: "Payment service",
+    provider: {
+      $ref: "#/components/schemas/Provider",
+      description: "Payment provider",
     },
     market: {
       type: "string",
@@ -403,7 +403,7 @@ export const PaymentSchema = {
     "amount",
     "currency",
     "status",
-    "service",
+    "provider",
     "market",
   ],
   title: "Payment",
@@ -645,6 +645,13 @@ export const ProductUpdateSchema = {
   description: "Model for updating a product",
 } as const;
 
+export const ProviderSchema = {
+  type: "string",
+  enum: ["now"],
+  title: "Provider",
+  description: "Available payment providers",
+} as const;
+
 export const ScopeSchema = {
   type: "string",
   enum: [
@@ -676,14 +683,8 @@ export const ScopeSchema = {
     "read:metrics:exchanges",
     "read:metrics:tokens",
     "read:metrics:markets",
+    "read:sentiment",
   ],
   title: "Scope",
   description: "The permission scopes for the API.",
-} as const;
-
-export const ServicesSchema = {
-  type: "string",
-  enum: ["now"],
-  title: "Services",
-  description: "Available payment services",
 } as const;
