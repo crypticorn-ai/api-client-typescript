@@ -281,6 +281,12 @@ export const FeatureSizeSchema = {
     "All existing feature sizes. Some might no be available in the latest data version, but kept for older versions.",
 } as const;
 
+export const LogLevelSchema = {
+  type: "string",
+  enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+  title: "LogLevel",
+} as const;
+
 export const ModelSchema = {
   properties: {
     model_id: {

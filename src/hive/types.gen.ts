@@ -174,6 +174,8 @@ export type ExceptionDetail = {
  */
 export type FeatureSize = "small" | "medium" | "large";
 
+export type LogLevel = "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL";
+
 /**
  * Pydantic model for model response
  */
@@ -294,12 +296,6 @@ export type GetTimeData = {
 export type GetTimeResponse = string;
 
 export type GetTimeError = ExceptionDetail;
-
-export type GetConfigResponse = {
-  [key: string]: unknown;
-};
-
-export type GetConfigError = ExceptionDetail;
 
 export type CreateModelData = {
   body: ModelCreate;
@@ -423,3 +419,46 @@ export type DownloadDataError = ExceptionDetail;
 export type GetDataInfoResponse = DataInfo;
 
 export type GetDataInfoError = ExceptionDetail;
+
+export type GetLogLevelResponse = LogLevel;
+
+export type GetLogLevelError = ExceptionDetail;
+
+export type GetUptimeData = {
+  query?: {
+    type?: "seconds" | "human";
+  };
+};
+
+export type GetUptimeResponse = number | string;
+
+export type GetUptimeError = ExceptionDetail;
+
+export type GetMemoryUsageResponse = number;
+
+export type GetMemoryUsageError = ExceptionDetail;
+
+export type GetThreadsResponse = {
+  [key: string]: unknown;
+};
+
+export type GetThreadsError = ExceptionDetail;
+
+export type GetContainerLimitsResponse = {
+  [key: string]: unknown;
+};
+
+export type GetContainerLimitsError = ExceptionDetail;
+
+export type GetDependenciesData = {
+  query?: {
+    /**
+     * List of dependencies to include in the response. If not provided, all installed packages will be returned.
+     */
+    include?: Array<string>;
+  };
+};
+
+export type GetDependenciesResponse = Array<unknown>;
+
+export type GetDependenciesError = ExceptionDetail;
