@@ -61,6 +61,12 @@ export const ExceptionDetailSchema = {
     "This is the detail of the exception. It is used to enrich the exception with additional information by unwrapping the ApiError into its components.",
 } as const;
 
+export const LogLevelSchema = {
+  type: "string",
+  enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+  title: "LogLevel",
+} as const;
+
 export const NowCreateInvoiceReqSchema = {
   properties: {
     price_amount: {
@@ -655,6 +661,8 @@ export const ProviderSchema = {
 export const ScopeSchema = {
   type: "string",
   enum: [
+    "write:admin",
+    "read:admin",
     "read:predictions",
     "read:hive:model",
     "read:hive:data",

@@ -10,8 +10,6 @@ import type {
   GetTimeData,
   GetTimeError,
   GetTimeResponse,
-  GetConfigError,
-  GetConfigResponse,
   GetNowApiStatusError,
   GetNowApiStatusResponse,
   CreateNowInvoiceData,
@@ -37,6 +35,20 @@ import type {
   GetSubscriptionsData,
   GetSubscriptionsError,
   GetSubscriptionsResponse,
+  GetLogLevelError,
+  GetLogLevelResponse,
+  GetUptimeData,
+  GetUptimeError,
+  GetUptimeResponse,
+  GetMemoryUsageError,
+  GetMemoryUsageResponse,
+  GetThreadsError,
+  GetThreadsResponse,
+  GetContainerLimitsError,
+  GetContainerLimitsResponse,
+  GetDependenciesData,
+  GetDependenciesError,
+  GetDependenciesResponse,
 } from "./types.gen";
 
 export function createClient(
@@ -73,7 +85,7 @@ export function createClient(
 
   /**
    * Time
-   * Returns the current time in the specified format.
+   * Returns the current time in either ISO or Unix timestamp (seconds) format.
    */
   const getTime = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetTimeData, ThrowOnError>,
@@ -85,23 +97,6 @@ export function createClient(
     >({
       ...options,
       url: "/time",
-    });
-  };
-
-  /**
-   * Config
-   * Returns the version of the crypticorn library and the environment.
-   */
-  const getConfig = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetConfigResponse,
-      GetConfigError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/config",
     });
   };
 
@@ -259,10 +254,112 @@ export function createClient(
     });
   };
 
+  /**
+   * Get Logging Level
+   * Get the log level of the server logger.
+   */
+  const getLogLevel = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetLogLevelResponse,
+      GetLogLevelError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/log-level",
+    });
+  };
+
+  /**
+   * Get Uptime
+   * Return the server uptime in seconds or human-readable form.
+   */
+  const getUptime = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetUptimeData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetUptimeResponse,
+      GetUptimeError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/uptime",
+    });
+  };
+
+  /**
+   * Get Memory Usage
+   * Resident Set Size (RSS) in MB — the actual memory used by the process in RAM.
+   * Represents the physical memory footprint. Important for monitoring real usage.
+   */
+  const getMemoryUsage = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetMemoryUsageResponse,
+      GetMemoryUsageError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/memory",
+    });
+  };
+
+  /**
+   * Get Threads
+   * Return count and names of active threads.
+   */
+  const getThreads = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetThreadsResponse,
+      GetThreadsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/threads",
+    });
+  };
+
+  /**
+   * Get Container Limits
+   * Return container resource limits from cgroup.
+   */
+  const getContainerLimits = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetContainerLimitsResponse,
+      GetContainerLimitsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/limits",
+    });
+  };
+
+  /**
+   * List Installed Packages
+   * Return a list of installed packages and versions.
+   */
+  const getDependencies = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetDependenciesData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetDependenciesResponse,
+      GetDependenciesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/dependencies",
+    });
+  };
+
   return {
     ping,
     getTime,
-    getConfig,
     getNowApiStatus,
     createNowInvoice,
     handleNowWebhook,
@@ -272,5 +369,11 @@ export function createClient(
     getLatestPaymentFromInvoice,
     getPaymentHistory,
     getSubscriptions,
+    getLogLevel,
+    getUptime,
+    getMemoryUsage,
+    getThreads,
+    getContainerLimits,
+    getDependencies,
   };
 }

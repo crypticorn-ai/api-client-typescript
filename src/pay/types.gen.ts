@@ -45,6 +45,8 @@ export type ExceptionDetail = {
   details?: unknown;
 };
 
+export type LogLevel = "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL";
+
 /**
  * Request model for creating a payment invoice.
  *
@@ -351,6 +353,8 @@ export type Provider = "now";
  * The permission scopes for the API.
  */
 export type Scope =
+  | "write:admin"
+  | "read:admin"
   | "read:predictions"
   | "read:hive:model"
   | "read:hive:data"
@@ -394,12 +398,6 @@ export type GetTimeData = {
 export type GetTimeResponse = string;
 
 export type GetTimeError = ExceptionDetail;
-
-export type GetConfigResponse = {
-  [key: string]: unknown;
-};
-
-export type GetConfigError = ExceptionDetail;
 
 export type GetNowApiStatusResponse = string;
 
@@ -498,3 +496,46 @@ export type GetSubscriptionsData = {
 export type GetSubscriptionsResponse = Array<ProductSubRead>;
 
 export type GetSubscriptionsError = ExceptionDetail;
+
+export type GetLogLevelResponse = LogLevel;
+
+export type GetLogLevelError = ExceptionDetail;
+
+export type GetUptimeData = {
+  query?: {
+    type?: "seconds" | "human";
+  };
+};
+
+export type GetUptimeResponse = number | string;
+
+export type GetUptimeError = ExceptionDetail;
+
+export type GetMemoryUsageResponse = number;
+
+export type GetMemoryUsageError = ExceptionDetail;
+
+export type GetThreadsResponse = {
+  [key: string]: unknown;
+};
+
+export type GetThreadsError = ExceptionDetail;
+
+export type GetContainerLimitsResponse = {
+  [key: string]: unknown;
+};
+
+export type GetContainerLimitsError = ExceptionDetail;
+
+export type GetDependenciesData = {
+  query?: {
+    /**
+     * List of dependencies to include in the response. If not provided, all installed packages will be returned.
+     */
+    include?: Array<string>;
+  };
+};
+
+export type GetDependenciesResponse = Array<unknown>;
+
+export type GetDependenciesError = ExceptionDetail;
