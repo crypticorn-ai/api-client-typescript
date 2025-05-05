@@ -1,11 +1,11 @@
+/** Supported exchanges for trading */
 export enum Exchange {
-  /** Supported exchanges for trading */
   KUCOIN = "kucoin",
   BINGX = "bingx",
 }
 
+/** All exchanges we are using, including public (Exchange) */
 export enum InternalExchange {
-  /** All exchanges we are using, including public (Exchange) */
   KUCOIN = "kucoin",
   BINGX = "bingx",
   BINANCE = "binance",
@@ -14,8 +14,8 @@ export enum InternalExchange {
   BITGET = "bitget",
 }
 
+/** Market types */
 export enum MarketType {
-  /** Market types */
   SPOT = "spot",
   FUTURES = "futures",
 }
