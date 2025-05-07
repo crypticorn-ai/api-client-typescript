@@ -3,17 +3,97 @@
 /**
  * API error identifiers
  */
-export type ApiErrorIdentifier = string;
+export type ApiErrorIdentifier =
+  | "allocation_below_current_exposure"
+  | "allocation_below_min_amount"
+  | "black_swan"
+  | "bot_already_deleted"
+  | "bot_disabled"
+  | "bot_stopping_completed"
+  | "bot_stopping_started"
+  | "client_order_id_already_exists"
+  | "invalid_content_type"
+  | "delete_bot_error"
+  | "exchange_invalid_signature"
+  | "exchange_invalid_timestamp"
+  | "exchange_ip_address_is_not_authorized"
+  | "exchange_key_already_exists"
+  | "exchange_key_in_use"
+  | "exchange_system_under_maintenance"
+  | "exchange_rate_limit_exceeded"
+  | "insufficient_permissions_spot_and_futures_required"
+  | "exchange_service_temporarily_unavailable"
+  | "exchange_system_is_busy"
+  | "exchange_system_configuration_error"
+  | "exchange_internal_system_error"
+  | "exchange_user_account_is_frozen"
+  | "api_key_expired"
+  | "bearer_token_expired"
+  | "forbidden"
+  | "hedge_mode_not_active"
+  | "http_request_error"
+  | "insufficient_balance"
+  | "insufficient_margin"
+  | "insufficient_scopes"
+  | "invalid_api_key"
+  | "invalid_bearer"
+  | "invalid_data"
+  | "invalid_data_response"
+  | "invalid_exchange_key"
+  | "invalid_margin_mode"
+  | "invalid_model_name"
+  | "invalid_parameter_provided"
+  | "leverage_limit_exceeded"
+  | "order_violates_liquidation_price_constraints"
+  | "model_name_not_unique"
+  | "no_credentials"
+  | "now_api_down"
+  | "object_already_exists"
+  | "object_created"
+  | "object_deleted"
+  | "object_not_found"
+  | "object_updated"
+  | "order_is_already_filled"
+  | "order_is_being_processed"
+  | "order_quantity_limit_exceeded"
+  | "order_does_not_exist"
+  | "order_price_is_invalid"
+  | "order_size_too_large"
+  | "order_size_too_small"
+  | "position_limit_exceeded"
+  | "position_does_not_exist"
+  | "position_opening_temporarily_suspended"
+  | "post_only_order_would_immediately_match"
+  | "request_scope_limit_exceeded"
+  | "risk_limit_exceeded"
+  | "rpc_timeout"
+  | "system_settlement_in_process"
+  | "strategy_already_exists"
+  | "strategy_disabled"
+  | "strategy_leverage_mismatch"
+  | "strategy_not_supporting_exchange"
+  | "success"
+  | "symbol_does_not_exist"
+  | "trading_action_expired"
+  | "trading_action_skipped"
+  | "trading_has_been_locked"
+  | "trading_is_suspended"
+  | "unknown_error_occurred"
+  | "requested_resource_not_found";
 
 /**
  * API error levels
  */
-export type ApiErrorLevel = string;
+export type ApiErrorLevel = "error" | "info" | "success" | "warning";
 
 /**
  * Type of API error
  */
-export type ApiErrorType = string;
+export type ApiErrorType =
+  | "user error"
+  | "exchange error"
+  | "server error"
+  | "no error";
 
 /**
  * This is the detail of the exception. It is used to enrich the exception with additional information by unwrapping the ApiError into its components.
@@ -45,15 +125,73 @@ export type ExceptionDetail = {
   details?: unknown;
 };
 
+export type ExchangeMapping = {
+  /**
+   * The name of the exchange
+   */
+  exchange_name: string;
+  /**
+   * The symbol of the exchange
+   */
+  symbol: string;
+  /**
+   * The quote currency of the exchange
+   */
+  quote_currency: string;
+  /**
+   * The pair of the exchange
+   */
+  pair: string;
+  /**
+   * The first trade timestamp of the exchange
+   */
+  first_trade_timestamp: number;
+  /**
+   * The last trade timestamp of the exchange
+   */
+  last_trade_timestamp: number;
+  /**
+   * The status of the exchange
+   */
+  status: TradingStatus;
+  /**
+   * The market type of the exchange
+   */
+  market_type?: MarketType | null;
+};
+
 /**
  * All exchanges we are using, including public (Exchange)
  */
-export type InternalExchange = string;
+export type InternalExchange =
+  | "kucoin"
+  | "bingx"
+  | "binance"
+  | "bybit"
+  | "hyperliquid"
+  | "bitget";
+
+export type LogLevel = "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL";
+
+export type MarketcapRanking = {
+  timestamp: string;
+  symbols: Array<string>;
+};
 
 /**
  * Market types
  */
-export type MarketType = string;
+export type MarketType = "spot" | "futures";
+
+export type OHLCV = {
+  timestamp: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  marketcap?: number | null;
+};
 
 export type Severity = "ERROR" | "WARNING" | "CRITICAL";
 
@@ -75,11 +213,48 @@ export type GetTimeResponse = string;
 
 export type GetTimeError = ExceptionDetail;
 
-export type GetConfigResponse = {
+export type GetLogLevelResponse = LogLevel;
+
+export type GetLogLevelError = ExceptionDetail;
+
+export type GetUptimeData = {
+  query?: {
+    type?: "seconds" | "human";
+  };
+};
+
+export type GetUptimeResponse = string;
+
+export type GetUptimeError = ExceptionDetail;
+
+export type GetMemoryUsageResponse = number;
+
+export type GetMemoryUsageError = ExceptionDetail;
+
+export type GetThreadsResponse = {
   [key: string]: unknown;
 };
 
-export type GetConfigError = ExceptionDetail;
+export type GetThreadsError = ExceptionDetail;
+
+export type GetContainerLimitsResponse = {
+  [key: string]: unknown;
+};
+
+export type GetContainerLimitsError = ExceptionDetail;
+
+export type GetDependenciesData = {
+  query?: {
+    /**
+     * List of dependencies to include in the response. If not provided, all installed packages will be returned.
+     */
+    include?: Array<string>;
+  };
+};
+
+export type GetDependenciesResponse = Array<unknown>;
+
+export type GetDependenciesError = ExceptionDetail;
 
 export type GetCurrentMarketcapData = {
   query?: {
@@ -121,9 +296,7 @@ export type GetMarketcapSymbolsData = {
   };
 };
 
-export type GetMarketcapSymbolsResponse = Array<{
-  [key: string]: unknown;
-}>;
+export type GetMarketcapSymbolsResponse = Array<MarketcapRanking>;
 
 export type GetMarketcapSymbolsError = ExceptionDetail;
 
@@ -152,9 +325,9 @@ export type GetMarketcapSymbolsWithOhlcvData = {
   };
 };
 
-export type GetMarketcapSymbolsWithOhlcvResponse = Array<{
-  [key: string]: unknown;
-}>;
+export type GetMarketcapSymbolsWithOhlcvResponse = {
+  [key: string]: Array<OHLCV>;
+};
 
 export type GetMarketcapSymbolsWithOhlcvError = ExceptionDetail;
 
@@ -178,10 +351,7 @@ export type GetMarketcapBetweenTimestampsResponse = Array<{
 export type GetMarketcapBetweenTimestampsError = ExceptionDetail;
 
 export type GetKerIndicatorData = {
-  path: {
-    symbol: string;
-  };
-  query?: {
+  query: {
     /**
      * Market
      */
@@ -190,6 +360,10 @@ export type GetKerIndicatorData = {
      * KER indicator period
      */
     period?: number;
+    /**
+     * Symbol to fetch KER indicator for
+     */
+    symbol: string;
     /**
      * Timestamp for which to fetch KER indicator
      */
@@ -204,10 +378,7 @@ export type GetKerIndicatorResponse = {
 export type GetKerIndicatorError = ExceptionDetail;
 
 export type GetSmaIndicatorData = {
-  path: {
-    symbol: string;
-  };
-  query?: {
+  query: {
     /**
      * The market type to use for the SMA indicator
      */
@@ -216,6 +387,10 @@ export type GetSmaIndicatorData = {
      * The period to use for the SMA indicator
      */
     period?: number;
+    /**
+     * Symbol to fetch SMA indicator for
+     */
+    symbol: string;
     /**
      * The timestamp for which to fetch the SMA indicator
      */
@@ -230,17 +405,7 @@ export type GetSmaIndicatorResponse = {
 export type GetSmaIndicatorError = ExceptionDetail;
 
 export type GetAvailableExchangesData = {
-  path: {
-    /**
-     * Market type (spot or futures)
-     */
-    market: MarketType;
-    /**
-     * Symbol to fetch available exchanges for
-     */
-    symbol: string;
-  };
-  query?: {
+  query: {
     /**
      * End timestamp for which to fetch available exchanges
      */
@@ -249,6 +414,10 @@ export type GetAvailableExchangesData = {
      * Interval for which to fetch available exchanges
      */
     interval?: TimeInterval;
+    /**
+     * Market type (spot or futures)
+     */
+    market: MarketType;
     /**
      * Quote currency for which to fetch available exchanges (Use quote currencies endpoint to get available quote currencies)
      */
@@ -261,6 +430,10 @@ export type GetAvailableExchangesData = {
      * Trading pair status for which to fetch available exchanges
      */
     status?: TradingStatus;
+    /**
+     * Symbol to fetch available exchanges for
+     */
+    symbol: string;
   };
 };
 
@@ -270,23 +443,50 @@ export type GetAvailableExchangesResponse = Array<{
 
 export type GetAvailableExchangesError = ExceptionDetail;
 
-export type GetStableAndWrappedTokensData = {
-  path: {
+export type GetExchangeMappingsData = {
+  query: {
     /**
-     * Token type (stable or wrapped)
+     * Exchange name for which to fetch exchange mappings
      */
-    token_type: "stable" | "wrapped";
+    exchange?: InternalExchange;
+    /**
+     * Market type (spot or futures)
+     */
+    market: MarketType;
   };
 };
 
-export type GetStableAndWrappedTokensResponse = Array<{
+export type GetExchangeMappingsResponse = Array<ExchangeMapping>;
+
+export type GetExchangeMappingsError = ExceptionDetail;
+
+export type GetAvailableExchangesForMarketData = {
+  query: {
+    /**
+     * Market type (spot or futures)
+     */
+    market: MarketType;
+  };
+};
+
+export type GetAvailableExchangesForMarketResponse = Array<string>;
+
+export type GetAvailableExchangesForMarketError = ExceptionDetail;
+
+export type GetStableTokensResponse = Array<{
   [key: string]: unknown;
 }>;
 
-export type GetStableAndWrappedTokensError = ExceptionDetail;
+export type GetStableTokensError = ExceptionDetail;
+
+export type GetWrappedTokensResponse = Array<{
+  [key: string]: unknown;
+}>;
+
+export type GetWrappedTokensError = ExceptionDetail;
 
 export type GetQuoteCurrenciesData = {
-  path: {
+  query: {
     /**
      * Market type (spot or futures)
      */
@@ -298,37 +498,12 @@ export type GetQuoteCurrenciesResponse = Array<string>;
 
 export type GetQuoteCurrenciesError = ExceptionDetail;
 
-export type GetExchangeMappingsData = {
-  path: {
-    /**
-     * Market type (spot or futures)
-     */
-    market: MarketType;
-  };
-  query?: {
-    /**
-     * Exchange name for which to fetch exchange mappings
-     */
-    exchange?: InternalExchange;
-  };
-};
-
-export type GetExchangeMappingsResponse = Array<string>;
-
-export type GetExchangeMappingsError = ExceptionDetail;
-
 export type GetAvailableMarketsForSymbolData = {
-  path: {
+  query: {
     /**
      * Market type (spot or futures)
      */
     market: MarketType;
-    /**
-     * Symbol to fetch markets for
-     */
-    symbol: string;
-  };
-  query?: {
     /**
      * Quote currency for which to fetch markets
      */
@@ -337,25 +512,18 @@ export type GetAvailableMarketsForSymbolData = {
      * Trading pair status for which to fetch markets
      */
     status?: TradingStatus;
+    /**
+     * Ticker to fetch markets for. Strip the quote currency from the ticker.
+     */
+    ticker: string;
   };
 };
 
-export type GetAvailableMarketsForSymbolResponse = Array<string>;
+export type GetAvailableMarketsForSymbolResponse = Array<{
+  [key: string]: unknown;
+}>;
 
 export type GetAvailableMarketsForSymbolError = ExceptionDetail;
-
-export type GetAvailableExchangesForMarketData = {
-  path: {
-    /**
-     * Market type (spot or futures)
-     */
-    market: MarketType;
-  };
-};
-
-export type GetAvailableExchangesForMarketResponse = Array<string>;
-
-export type GetAvailableExchangesForMarketError = ExceptionDetail;
 
 export type GetMetricsErrorLogsData = {
   query?: {
@@ -374,6 +542,8 @@ export type GetMetricsErrorLogsData = {
   };
 };
 
-export type GetMetricsErrorLogsResponse = Array<string>;
+export type GetMetricsErrorLogsResponse = Array<{
+  [key: string]: unknown;
+}>;
 
 export type GetMetricsErrorLogsError = ExceptionDetail;

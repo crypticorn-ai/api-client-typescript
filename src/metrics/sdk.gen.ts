@@ -10,8 +10,20 @@ import type {
   GetTimeData,
   GetTimeError,
   GetTimeResponse,
-  GetConfigError,
-  GetConfigResponse,
+  GetLogLevelError,
+  GetLogLevelResponse,
+  GetUptimeData,
+  GetUptimeError,
+  GetUptimeResponse,
+  GetMemoryUsageError,
+  GetMemoryUsageResponse,
+  GetThreadsError,
+  GetThreadsResponse,
+  GetContainerLimitsError,
+  GetContainerLimitsResponse,
+  GetDependenciesData,
+  GetDependenciesError,
+  GetDependenciesResponse,
   GetCurrentMarketcapData,
   GetCurrentMarketcapError,
   GetCurrentMarketcapResponse,
@@ -33,21 +45,22 @@ import type {
   GetAvailableExchangesData,
   GetAvailableExchangesError,
   GetAvailableExchangesResponse,
-  GetStableAndWrappedTokensData,
-  GetStableAndWrappedTokensError,
-  GetStableAndWrappedTokensResponse,
-  GetQuoteCurrenciesData,
-  GetQuoteCurrenciesError,
-  GetQuoteCurrenciesResponse,
   GetExchangeMappingsData,
   GetExchangeMappingsError,
   GetExchangeMappingsResponse,
-  GetAvailableMarketsForSymbolData,
-  GetAvailableMarketsForSymbolError,
-  GetAvailableMarketsForSymbolResponse,
   GetAvailableExchangesForMarketData,
   GetAvailableExchangesForMarketError,
   GetAvailableExchangesForMarketResponse,
+  GetStableTokensError,
+  GetStableTokensResponse,
+  GetWrappedTokensError,
+  GetWrappedTokensResponse,
+  GetQuoteCurrenciesData,
+  GetQuoteCurrenciesError,
+  GetQuoteCurrenciesResponse,
+  GetAvailableMarketsForSymbolData,
+  GetAvailableMarketsForSymbolError,
+  GetAvailableMarketsForSymbolResponse,
   GetMetricsErrorLogsData,
   GetMetricsErrorLogsError,
   GetMetricsErrorLogsResponse,
@@ -87,7 +100,7 @@ export function createClient(
 
   /**
    * Time
-   * Returns the current time in the specified format.
+   * Returns the current time in either ISO or Unix timestamp (seconds) format.
    */
   const getTime = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetTimeData, ThrowOnError>,
@@ -103,19 +116,105 @@ export function createClient(
   };
 
   /**
-   * Config
-   * Returns the version of the crypticorn library and the environment.
+   * Get Logging Level
+   * Get the log level of the server logger.
    */
-  const getConfig = <ThrowOnError extends boolean = false>(
+  const getLogLevel = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetConfigResponse,
-      GetConfigError,
+      GetLogLevelResponse,
+      GetLogLevelError,
       ThrowOnError
     >({
       ...options,
-      url: "/config",
+      url: "/admin/log-level",
+    });
+  };
+
+  /**
+   * Get Uptime
+   * Return the server uptime in seconds or human-readable form.
+   */
+  const getUptime = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetUptimeData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetUptimeResponse,
+      GetUptimeError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/uptime",
+    });
+  };
+
+  /**
+   * Get Memory Usage
+   * Resident Set Size (RSS) in MB — the actual memory used by the process in RAM.
+   * Represents the physical memory footprint. Important for monitoring real usage.
+   */
+  const getMemoryUsage = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetMemoryUsageResponse,
+      GetMemoryUsageError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/memory",
+    });
+  };
+
+  /**
+   * Get Threads
+   * Return count and names of active threads.
+   */
+  const getThreads = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetThreadsResponse,
+      GetThreadsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/threads",
+    });
+  };
+
+  /**
+   * Get Container Limits
+   * Return container resource limits from cgroup.
+   */
+  const getContainerLimits = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetContainerLimitsResponse,
+      GetContainerLimitsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/limits",
+    });
+  };
+
+  /**
+   * List Installed Packages
+   * Return a list of installed packages and versions.
+   */
+  const getDependencies = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetDependenciesData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetDependenciesResponse,
+      GetDependenciesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/dependencies",
     });
   };
 
@@ -132,7 +231,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/get_current_marketcap",
+      url: "/marketcap/current",
     });
   };
 
@@ -206,7 +305,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/ker/{symbol}",
+      url: "/indicators/ker",
     });
   };
 
@@ -223,7 +322,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/sma/{symbol}",
+      url: "/indicators/sma",
     });
   };
 
@@ -240,41 +339,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/available_exchanges/{market}/{symbol}",
-    });
-  };
-
-  /**
-   * Get Stable Wrapped Tokens
-   * Get list of stable or wrapped tokens.
-   */
-  const getStableAndWrappedTokens = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetStableAndWrappedTokensData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetStableAndWrappedTokensResponse,
-      GetStableAndWrappedTokensError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/tokens/{token_type}",
-    });
-  };
-
-  /**
-   * Get Quote Currencies
-   * Get available quote currencies for a market.
-   */
-  const getQuoteCurrencies = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetQuoteCurrenciesData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetQuoteCurrenciesResponse,
-      GetQuoteCurrenciesError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/quote_currencies/{market}",
+      url: "/exchanges/available",
     });
   };
 
@@ -291,27 +356,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/exchange_mappings/{market}",
-    });
-  };
-
-  /**
-   * Get Markets For Symbol
-   * Get markets for a symbol with filtering options.
-   */
-  const getAvailableMarketsForSymbol = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<
-      GetAvailableMarketsForSymbolData,
-      ThrowOnError
-    >,
-  ) => {
-    return (options?.client ?? client).get<
-      GetAvailableMarketsForSymbolResponse,
-      GetAvailableMarketsForSymbolError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/markets/{market}/{symbol}",
+      url: "/exchanges/mappings",
     });
   };
 
@@ -331,7 +376,78 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/exchange_list/{market}",
+      url: "/exchanges/list",
+    });
+  };
+
+  /**
+   * Get Stable Tokens
+   * Get list of stable tokens.
+   */
+  const getStableTokens = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetStableTokensResponse,
+      GetStableTokensError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/tokens/stables",
+    });
+  };
+
+  /**
+   * Get Wrapped Tokens
+   * Get list of wrapped tokens.
+   */
+  const getWrappedTokens = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetWrappedTokensResponse,
+      GetWrappedTokensError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/tokens/wrapped",
+    });
+  };
+
+  /**
+   * Get Quote Currencies
+   * Get available quote currencies for a market.
+   */
+  const getQuoteCurrencies = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetQuoteCurrenciesData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetQuoteCurrenciesResponse,
+      GetQuoteCurrenciesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/quote-currencies",
+    });
+  };
+
+  /**
+   * Get Markets For Symbol
+   * Get markets for a symbol with filtering options.
+   */
+  const getAvailableMarketsForSymbol = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<
+      GetAvailableMarketsForSymbolData,
+      ThrowOnError
+    >,
+  ) => {
+    return (options?.client ?? client).get<
+      GetAvailableMarketsForSymbolResponse,
+      GetAvailableMarketsForSymbolError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/markets",
     });
   };
 
@@ -355,7 +471,12 @@ export function createClient(
   return {
     ping,
     getTime,
-    getConfig,
+    getLogLevel,
+    getUptime,
+    getMemoryUsage,
+    getThreads,
+    getContainerLimits,
+    getDependencies,
     getCurrentMarketcap,
     getMarketcapSymbols,
     getMarketcapSymbolsWithOhlcv,
@@ -363,11 +484,12 @@ export function createClient(
     getKerIndicator,
     getSmaIndicator,
     getAvailableExchanges,
-    getStableAndWrappedTokens,
-    getQuoteCurrencies,
     getExchangeMappings,
-    getAvailableMarketsForSymbol,
     getAvailableExchangesForMarket,
+    getStableTokens,
+    getWrappedTokens,
+    getQuoteCurrencies,
+    getAvailableMarketsForSymbol,
     getMetricsErrorLogs,
   };
 }
