@@ -10,8 +10,6 @@ import type {
   GetTimeData,
   GetTimeError,
   GetTimeResponse,
-  GetConfigError,
-  GetConfigResponse,
   GetUdfConfigError,
   GetUdfConfigResponse,
   SearchSymbolsData,
@@ -29,6 +27,20 @@ import type {
   OptionsHandlerData,
   OptionsHandlerError,
   OptionsHandlerResponse,
+  GetLogLevelError,
+  GetLogLevelResponse,
+  GetUptimeData,
+  GetUptimeError,
+  GetUptimeResponse,
+  GetMemoryUsageError,
+  GetMemoryUsageResponse,
+  GetThreadsError,
+  GetThreadsResponse,
+  GetContainerLimitsError,
+  GetContainerLimitsResponse,
+  GetDependenciesData,
+  GetDependenciesError,
+  GetDependenciesResponse,
   GetOhlcvData,
   GetOhlcvError,
   GetOhlcvResponse,
@@ -77,7 +89,7 @@ export function createClient(
 
   /**
    * Time
-   * Returns the current time in the specified format.
+   * Returns the current time in either ISO or Unix timestamp (seconds) format.
    */
   const getTime = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetTimeData, ThrowOnError>,
@@ -89,23 +101,6 @@ export function createClient(
     >({
       ...options,
       url: "/time",
-    });
-  };
-
-  /**
-   * Config
-   * Returns the version of the crypticorn library and the environment.
-   */
-  const getConfig = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetConfigResponse,
-      GetConfigError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/config",
     });
   };
 
@@ -210,6 +205,110 @@ export function createClient(
   };
 
   /**
+   * @deprecated
+   * Get Logging Level
+   * Get the log level of the server logger. Will be removed in a future release.
+   */
+  const getLogLevel = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetLogLevelResponse,
+      GetLogLevelError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/log-level",
+    });
+  };
+
+  /**
+   * Get Uptime
+   * Return the server uptime in seconds or human-readable form.
+   */
+  const getUptime = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetUptimeData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetUptimeResponse,
+      GetUptimeError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/uptime",
+    });
+  };
+
+  /**
+   * Get Memory Usage
+   * Resident Set Size (RSS) in MB — the actual memory used by the process in RAM.
+   * Represents the physical memory footprint. Important for monitoring real usage.
+   */
+  const getMemoryUsage = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetMemoryUsageResponse,
+      GetMemoryUsageError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/memory",
+    });
+  };
+
+  /**
+   * Get Threads
+   * Return count and names of active threads.
+   */
+  const getThreads = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetThreadsResponse,
+      GetThreadsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/threads",
+    });
+  };
+
+  /**
+   * Get Container Limits
+   * Return container resource limits from cgroup.
+   */
+  const getContainerLimits = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetContainerLimitsResponse,
+      GetContainerLimitsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/limits",
+    });
+  };
+
+  /**
+   * List Installed Packages
+   * Return a list of installed packages and versions.
+   */
+  const getDependencies = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetDependenciesData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetDependenciesResponse,
+      GetDependenciesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/dependencies",
+    });
+  };
+
+  /**
    * Get Ohlcv
    * Retrieve OHLCV (Open, High, Low, Close, Volume) data for a specific market, timeframe, and symbol.
    */
@@ -222,7 +321,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/{market}/{timeframe}/{symbol}",
+      url: "/ohlcv",
     });
   };
 
@@ -239,7 +338,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/funding_rates/{symbol}",
+      url: "/funding",
     });
   };
 
@@ -256,16 +355,13 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/symbols/{market}",
+      url: "/symbols",
     });
   };
 
   /**
    * Get Change In Timeframe
    * Retrieve price change percentage between last two completed timestamps for all pairs.
-   *
-   * Valid markets: spot, futures
-   * Valid timeframes: 15m, 30m, 1h, 4h, 1d
    */
   const getChangeInTimeframe = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetChangeInTimeframeData, ThrowOnError>,
@@ -283,13 +379,18 @@ export function createClient(
   return {
     ping,
     getTime,
-    getConfig,
     getUdfConfig,
     searchSymbols,
     getSymbol,
     getUdfHistory,
     getSymbolInfo,
     optionsHandler,
+    getLogLevel,
+    getUptime,
+    getMemoryUsage,
+    getThreads,
+    getContainerLimits,
+    getDependencies,
     getOhlcv,
     getFundingRates,
     getKlinesSymbols,

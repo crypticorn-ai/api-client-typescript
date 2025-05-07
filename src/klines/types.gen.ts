@@ -3,17 +3,97 @@
 /**
  * API error identifiers
  */
-export type ApiErrorIdentifier = string;
+export type ApiErrorIdentifier =
+  | "allocation_below_current_exposure"
+  | "allocation_below_min_amount"
+  | "black_swan"
+  | "bot_already_deleted"
+  | "bot_disabled"
+  | "bot_stopping_completed"
+  | "bot_stopping_started"
+  | "client_order_id_already_exists"
+  | "invalid_content_type"
+  | "delete_bot_error"
+  | "exchange_invalid_signature"
+  | "exchange_invalid_timestamp"
+  | "exchange_ip_address_is_not_authorized"
+  | "exchange_key_already_exists"
+  | "exchange_key_in_use"
+  | "exchange_system_under_maintenance"
+  | "exchange_rate_limit_exceeded"
+  | "insufficient_permissions_spot_and_futures_required"
+  | "exchange_service_temporarily_unavailable"
+  | "exchange_system_is_busy"
+  | "exchange_system_configuration_error"
+  | "exchange_internal_system_error"
+  | "exchange_user_account_is_frozen"
+  | "api_key_expired"
+  | "bearer_token_expired"
+  | "forbidden"
+  | "hedge_mode_not_active"
+  | "http_request_error"
+  | "insufficient_balance"
+  | "insufficient_margin"
+  | "insufficient_scopes"
+  | "invalid_api_key"
+  | "invalid_bearer"
+  | "invalid_data"
+  | "invalid_data_response"
+  | "invalid_exchange_key"
+  | "invalid_margin_mode"
+  | "invalid_model_name"
+  | "invalid_parameter_provided"
+  | "leverage_limit_exceeded"
+  | "order_violates_liquidation_price_constraints"
+  | "model_name_not_unique"
+  | "no_credentials"
+  | "now_api_down"
+  | "object_already_exists"
+  | "object_created"
+  | "object_deleted"
+  | "object_not_found"
+  | "object_updated"
+  | "order_is_already_filled"
+  | "order_is_being_processed"
+  | "order_quantity_limit_exceeded"
+  | "order_does_not_exist"
+  | "order_price_is_invalid"
+  | "order_size_too_large"
+  | "order_size_too_small"
+  | "position_limit_exceeded"
+  | "position_does_not_exist"
+  | "position_opening_temporarily_suspended"
+  | "post_only_order_would_immediately_match"
+  | "request_scope_limit_exceeded"
+  | "risk_limit_exceeded"
+  | "rpc_timeout"
+  | "system_settlement_in_process"
+  | "strategy_already_exists"
+  | "strategy_disabled"
+  | "strategy_leverage_mismatch"
+  | "strategy_not_supporting_exchange"
+  | "success"
+  | "symbol_does_not_exist"
+  | "trading_action_expired"
+  | "trading_action_skipped"
+  | "trading_has_been_locked"
+  | "trading_is_suspended"
+  | "unknown_error_occurred"
+  | "requested_resource_not_found";
 
 /**
  * API error levels
  */
-export type ApiErrorLevel = string;
+export type ApiErrorLevel = "error" | "info" | "success" | "warning";
 
 /**
  * Type of API error
  */
-export type ApiErrorType = string;
+export type ApiErrorType =
+  | "user error"
+  | "exchange error"
+  | "server error"
+  | "no error";
 
 export type ChangeInTimeframe = {
   pair: string;
@@ -50,47 +130,81 @@ export type ExceptionDetail = {
   details?: unknown;
 };
 
+/**
+ * Model for a single funding rate
+ */
 export type FundingRate = {
-  symbol: string;
-  timestamp: string;
+  /**
+   * The timestamp of the funding rate
+   */
+  timestamp: number;
+  /**
+   * The funding rate
+   */
   funding_rate: number;
+};
+
+/**
+ * Response model for fetching funding rates
+ */
+export type FundingRateResponse = {
+  /**
+   * The symbol of the funding rate
+   */
+  symbol: string;
+  /**
+   * The funding interval
+   */
+  funding_interval: string;
+  /**
+   * The funding rates
+   */
+  funding_rates: Array<FundingRate>;
 };
 
 /**
  * All exchanges we are using, including public (Exchange)
  */
-export type InternalExchange = string;
+export type InternalExchange =
+  | "kucoin"
+  | "bingx"
+  | "binance"
+  | "bybit"
+  | "hyperliquid"
+  | "bitget";
+
+export type LogLevel = "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL";
 
 /**
  * Market types
  */
-export type MarketType = string;
+export type MarketType = "spot" | "futures";
 
-export type OHLCVHistory = {
+export type OHLCV = {
   /**
-   * Timestamps in seconds
+   * Timestamp in seconds
    */
-  timestamps: Array<string>;
+  timestamp: number;
   /**
    * Open prices
    */
-  open: Array<number>;
+  open: number;
   /**
    * High prices
    */
-  high: Array<number>;
+  high: number;
   /**
    * Low prices
    */
-  low: Array<number>;
+  low: number;
   /**
    * Close prices
    */
-  close: Array<number>;
+  close: number;
   /**
    * Volume
    */
-  volume: Array<number>;
+  volume: number;
 };
 
 export type Resolution = "15" | "30" | "60" | "240" | "1D";
@@ -146,7 +260,9 @@ export type UDFConfig = {
   supported_markets: Array<string>;
 };
 
-export type PingResponse = string;
+export type PingResponse = {
+  [key: string]: unknown;
+};
 
 export type PingError = ExceptionDetail;
 
@@ -159,12 +275,6 @@ export type GetTimeData = {
 export type GetTimeResponse = string;
 
 export type GetTimeError = ExceptionDetail;
-
-export type GetConfigResponse = {
-  [key: string]: unknown;
-};
-
-export type GetConfigError = ExceptionDetail;
 
 export type GetUdfConfigResponse = UDFConfig;
 
@@ -201,7 +311,7 @@ export type GetUdfHistoryData = {
   };
 };
 
-export type GetUdfHistoryResponse = OHLCVHistory;
+export type GetUdfHistoryResponse = OHLCV;
 
 export type GetUdfHistoryError = ExceptionDetail;
 
@@ -225,22 +335,51 @@ export type OptionsHandlerResponse = unknown;
 
 export type OptionsHandlerError = ExceptionDetail;
 
-export type GetOhlcvData = {
-  path: {
-    /**
-     * Market type
-     */
-    market: MarketType;
-    /**
-     * Trading pair symbol (e.g., BTCUSDT)
-     */
-    symbol: string;
-    /**
-     * Timeframe for the candles
-     */
-    timeframe: Timeframe;
-  };
+export type GetLogLevelResponse = LogLevel;
+
+export type GetLogLevelError = ExceptionDetail;
+
+export type GetUptimeData = {
   query?: {
+    type?: "seconds" | "human";
+  };
+};
+
+export type GetUptimeResponse = string;
+
+export type GetUptimeError = ExceptionDetail;
+
+export type GetMemoryUsageResponse = number;
+
+export type GetMemoryUsageError = ExceptionDetail;
+
+export type GetThreadsResponse = {
+  [key: string]: unknown;
+};
+
+export type GetThreadsError = ExceptionDetail;
+
+export type GetContainerLimitsResponse = {
+  [key: string]: unknown;
+};
+
+export type GetContainerLimitsError = ExceptionDetail;
+
+export type GetDependenciesData = {
+  query?: {
+    /**
+     * List of dependencies to include in the response. If not provided, all installed packages will be returned.
+     */
+    include?: Array<string>;
+  };
+};
+
+export type GetDependenciesResponse = Array<unknown>;
+
+export type GetDependenciesError = ExceptionDetail;
+
+export type GetOhlcvData = {
+  query: {
     /**
      * End timestamp in milliseconds
      */
@@ -250,28 +389,34 @@ export type GetOhlcvData = {
      */
     limit?: number | null;
     /**
-     * Klines sort direction (asc or desc)
+     * Market type
+     */
+    market: MarketType;
+    /**
+     * Sort by timestamp in ascending or descending order. Default is descending.
      */
     sort_direction?: SortDirection;
     /**
      * Start timestamp in milliseconds
      */
     start?: number | null;
-  };
-};
-
-export type GetOhlcvResponse = OHLCVHistory;
-
-export type GetOhlcvError = ExceptionDetail;
-
-export type GetFundingRatesData = {
-  path: {
     /**
      * Trading pair symbol (e.g., BTCUSDT)
      */
     symbol: string;
+    /**
+     * Timeframe for the candles
+     */
+    timeframe: Timeframe;
   };
-  query?: {
+};
+
+export type GetOhlcvResponse = Array<OHLCV>;
+
+export type GetOhlcvError = ExceptionDetail;
+
+export type GetFundingRatesData = {
+  query: {
     /**
      * End timestamp in milliseconds
      */
@@ -284,15 +429,19 @@ export type GetFundingRatesData = {
      * Start timestamp in milliseconds
      */
     start?: number | null;
+    /**
+     * Trading pair symbol (e.g., BTCUSDT)
+     */
+    symbol: string;
   };
 };
 
-export type GetFundingRatesResponse = Array<FundingRate>;
+export type GetFundingRatesResponse = FundingRateResponse;
 
 export type GetFundingRatesError = ExceptionDetail;
 
 export type GetKlinesSymbolsData = {
-  path: {
+  query: {
     /**
      * Market type
      */
@@ -307,11 +456,11 @@ export type GetKlinesSymbolsError = ExceptionDetail;
 export type GetChangeInTimeframeData = {
   query?: {
     /**
-     * Market type: 'spot' or 'futures'
+     * The market to calculate the change in
      */
     market?: MarketType;
     /**
-     * Timeframe: '15m', '30m', '1h', '4h', '1d'
+     * The timeframe to calculate the change in
      */
     timeframe?: Timeframe;
   };

@@ -2,18 +2,98 @@
 
 export const ApiErrorIdentifierSchema = {
   type: "string",
+  enum: [
+    "allocation_below_current_exposure",
+    "allocation_below_min_amount",
+    "black_swan",
+    "bot_already_deleted",
+    "bot_disabled",
+    "bot_stopping_completed",
+    "bot_stopping_started",
+    "client_order_id_already_exists",
+    "invalid_content_type",
+    "delete_bot_error",
+    "exchange_invalid_signature",
+    "exchange_invalid_timestamp",
+    "exchange_ip_address_is_not_authorized",
+    "exchange_key_already_exists",
+    "exchange_key_in_use",
+    "exchange_system_under_maintenance",
+    "exchange_rate_limit_exceeded",
+    "insufficient_permissions_spot_and_futures_required",
+    "exchange_service_temporarily_unavailable",
+    "exchange_system_is_busy",
+    "exchange_system_configuration_error",
+    "exchange_internal_system_error",
+    "exchange_user_account_is_frozen",
+    "api_key_expired",
+    "bearer_token_expired",
+    "forbidden",
+    "hedge_mode_not_active",
+    "http_request_error",
+    "insufficient_balance",
+    "insufficient_margin",
+    "insufficient_scopes",
+    "invalid_api_key",
+    "invalid_bearer",
+    "invalid_data",
+    "invalid_data_response",
+    "invalid_exchange_key",
+    "invalid_margin_mode",
+    "invalid_model_name",
+    "invalid_parameter_provided",
+    "leverage_limit_exceeded",
+    "order_violates_liquidation_price_constraints",
+    "model_name_not_unique",
+    "no_credentials",
+    "now_api_down",
+    "object_already_exists",
+    "object_created",
+    "object_deleted",
+    "object_not_found",
+    "object_updated",
+    "order_is_already_filled",
+    "order_is_being_processed",
+    "order_quantity_limit_exceeded",
+    "order_does_not_exist",
+    "order_price_is_invalid",
+    "order_size_too_large",
+    "order_size_too_small",
+    "position_limit_exceeded",
+    "position_does_not_exist",
+    "position_opening_temporarily_suspended",
+    "post_only_order_would_immediately_match",
+    "request_scope_limit_exceeded",
+    "risk_limit_exceeded",
+    "rpc_timeout",
+    "system_settlement_in_process",
+    "strategy_already_exists",
+    "strategy_disabled",
+    "strategy_leverage_mismatch",
+    "strategy_not_supporting_exchange",
+    "success",
+    "symbol_does_not_exist",
+    "trading_action_expired",
+    "trading_action_skipped",
+    "trading_has_been_locked",
+    "trading_is_suspended",
+    "unknown_error_occurred",
+    "requested_resource_not_found",
+  ],
   title: "ApiErrorIdentifier",
   description: "API error identifiers",
 } as const;
 
 export const ApiErrorLevelSchema = {
   type: "string",
+  enum: ["error", "info", "success", "warning"],
   title: "ApiErrorLevel",
   description: "API error levels",
 } as const;
 
 export const ApiErrorTypeSchema = {
   type: "string",
+  enum: ["user error", "exchange error", "server error", "no error"],
   title: "ApiErrorType",
   description: "Type of API error",
 } as const;
@@ -79,92 +159,106 @@ export const ExceptionDetailSchema = {
 
 export const FundingRateSchema = {
   properties: {
-    symbol: {
-      type: "string",
-      title: "Symbol",
-    },
     timestamp: {
-      type: "string",
-      format: "date-time",
+      type: "integer",
       title: "Timestamp",
+      description: "The timestamp of the funding rate",
     },
     funding_rate: {
       type: "number",
       title: "Funding Rate",
+      description: "The funding rate",
     },
   },
   type: "object",
-  required: ["symbol", "timestamp", "funding_rate"],
+  required: ["timestamp", "funding_rate"],
   title: "FundingRate",
+  description: "Model for a single funding rate",
+} as const;
+
+export const FundingRateResponseSchema = {
+  properties: {
+    symbol: {
+      type: "string",
+      title: "Symbol",
+      description: "The symbol of the funding rate",
+    },
+    funding_interval: {
+      type: "string",
+      title: "Funding Interval",
+      description: "The funding interval",
+    },
+    funding_rates: {
+      items: {
+        $ref: "#/components/schemas/FundingRate",
+      },
+      type: "array",
+      title: "Funding Rates",
+      description: "The funding rates",
+    },
+  },
+  type: "object",
+  required: ["symbol", "funding_interval", "funding_rates"],
+  title: "FundingRateResponse",
+  description: "Response model for fetching funding rates",
 } as const;
 
 export const InternalExchangeSchema = {
   type: "string",
+  enum: ["kucoin", "bingx", "binance", "bybit", "hyperliquid", "bitget"],
   title: "InternalExchange",
   description: "All exchanges we are using, including public (Exchange)",
 } as const;
 
+export const LogLevelSchema = {
+  type: "string",
+  enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+  title: "LogLevel",
+} as const;
+
 export const MarketTypeSchema = {
   type: "string",
+  enum: ["spot", "futures"],
   title: "MarketType",
   description: "Market types",
 } as const;
 
-export const OHLCVHistorySchema = {
+export const OHLCVSchema = {
   properties: {
-    timestamps: {
-      items: {
-        type: "string",
-        format: "date-time",
-      },
-      type: "array",
-      title: "Timestamps",
-      description: "Timestamps in seconds",
+    timestamp: {
+      type: "integer",
+      title: "Timestamp",
+      description: "Timestamp in seconds",
     },
     open: {
-      items: {
-        type: "number",
-      },
-      type: "array",
+      type: "number",
       title: "Open",
       description: "Open prices",
     },
     high: {
-      items: {
-        type: "number",
-      },
-      type: "array",
+      type: "number",
       title: "High",
       description: "High prices",
     },
     low: {
-      items: {
-        type: "number",
-      },
-      type: "array",
+      type: "number",
       title: "Low",
       description: "Low prices",
     },
     close: {
-      items: {
-        type: "number",
-      },
-      type: "array",
+      type: "number",
       title: "Close",
       description: "Close prices",
     },
     volume: {
-      items: {
-        type: "number",
-      },
-      type: "array",
+      type: "number",
       title: "Volume",
       description: "Volume",
     },
   },
   type: "object",
-  required: ["timestamps", "open", "high", "low", "close", "volume"],
-  title: "OHLCVHistory",
+  required: ["timestamp", "open", "high", "low", "close", "volume"],
+  title: "OHLCV",
 } as const;
 
 export const ResolutionSchema = {
