@@ -81,21 +81,21 @@ export const ApiErrorIdentifierSchema = {
     "requested_resource_not_found",
   ],
   title: "ApiErrorIdentifier",
-  description: "API error identifiers",
+  description: "Unique identifier of the API error.",
 } as const;
 
 export const ApiErrorLevelSchema = {
   type: "string",
   enum: ["error", "info", "success", "warning"],
   title: "ApiErrorLevel",
-  description: "API error levels",
+  description: "Level of the API error.",
 } as const;
 
 export const ApiErrorTypeSchema = {
   type: "string",
   enum: ["user error", "exchange error", "server error", "no error"],
   title: "ApiErrorType",
-  description: "Type of API error",
+  description: "Type of the API error.",
 } as const;
 
 export const CoinsSchema = {
@@ -357,8 +357,7 @@ export const ExceptionDetailSchema = {
   type: "object",
   required: ["code", "type", "level", "status_code"],
   title: "ExceptionDetail",
-  description:
-    "This is the detail of the exception. It is used to enrich the exception with additional information by unwrapping the ApiError into its components.",
+  description: "Exception details returned to the client.",
 } as const;
 
 export const FeatureSizeSchema = {
@@ -375,7 +374,29 @@ export const LogLevelSchema = {
   title: "LogLevel",
 } as const;
 
-export const ModelSchema = {
+export const ModelCreateSchema = {
+  properties: {
+    coin_id: {
+      $ref: "#/components/schemas/Coins",
+      description: "Coin ID for the model",
+    },
+    target: {
+      $ref: "#/components/schemas/Target",
+      description: "Target variable for the model",
+    },
+    name: {
+      type: "string",
+      title: "Name",
+      description: "Model name",
+    },
+  },
+  type: "object",
+  required: ["coin_id", "target", "name"],
+  title: "ModelCreate",
+  description: "Base Pydantic model for model data",
+} as const;
+
+export const ModelReadSchema = {
   properties: {
     id: {
       type: "integer",
@@ -440,30 +461,8 @@ export const ModelSchema = {
     "created_at",
     "updated_at",
   ],
-  title: "Model",
+  title: "ModelRead",
   description: "Pydantic model for model response",
-} as const;
-
-export const ModelCreateSchema = {
-  properties: {
-    coin_id: {
-      $ref: "#/components/schemas/Coins",
-      description: "Coin ID for the model",
-    },
-    target: {
-      $ref: "#/components/schemas/Target",
-      description: "Target variable for the model",
-    },
-    name: {
-      type: "string",
-      title: "Name",
-      description: "Model name",
-    },
-  },
-  type: "object",
-  required: ["coin_id", "target", "name"],
-  title: "ModelCreate",
-  description: "Base Pydantic model for model data",
 } as const;
 
 export const ModelStatusSchema = {

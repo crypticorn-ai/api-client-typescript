@@ -120,7 +120,7 @@ export function createClient(
 
   /**
    * Evaluate Model
-   * Evaluate a model's predictions
+   * Evaluate a model's predictions against the internal `y_test` data. Returns metrics based on the type of the model.
    */
   const evaluateModel = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<EvaluateModelData, ThrowOnError>,
@@ -255,8 +255,9 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Get Logging Level
-   * Get the log level of the server logger.
+   * Get the log level of the server logger. Will be removed in a future release.
    */
   const getLogLevel = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
@@ -343,6 +344,11 @@ export function createClient(
   /**
    * List Installed Packages
    * Return a list of installed packages and versions.
+   *
+   * The include parameter accepts regex patterns to match against package names.
+   * For example:
+   * - crypticorn.* will match all packages starting with 'crypticorn'
+   * - .*tic.* will match all packages containing 'tic' in their name
    */
   const getDependencies = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetDependenciesData, ThrowOnError>,
