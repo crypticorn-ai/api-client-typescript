@@ -16,6 +16,9 @@ import type {
   CreateBotData,
   CreateBotError,
   CreateBotResponse,
+  GetBotData,
+  GetBotError,
+  GetBotResponse,
   UpdateBotData,
   UpdateBotError,
   UpdateBotResponse,
@@ -92,8 +95,12 @@ import type {
   DeleteNotificationData,
   DeleteNotificationError,
   DeleteNotificationResponse,
-  GetExchangesError,
-  GetExchangesResponse,
+  GetTradeableExchangesError,
+  GetTradeableExchangesResponse,
+  GetPlannedExchangesError,
+  GetPlannedExchangesResponse,
+  GetAllExchangesError,
+  GetAllExchangesResponse,
   GetLogLevelError,
   GetLogLevelResponse,
   GetUptimeData,
@@ -189,6 +196,22 @@ export function createClient(
     >({
       ...options,
       url: "/bots",
+    });
+  };
+
+  /**
+   * Get Bot
+   */
+  const getBot = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetBotData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotResponse,
+      GetBotError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/{id}",
     });
   };
 
@@ -619,14 +642,49 @@ export function createClient(
   };
 
   /**
-   * Get Exchanges
+   * Get Tradeable Exchanges
+   * Returns a list of exchanges that are tradeable.
    */
-  const getExchanges = <ThrowOnError extends boolean = false>(
+  const getTradeableExchanges = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetExchangesResponse,
-      GetExchangesError,
+      GetTradeableExchangesResponse,
+      GetTradeableExchangesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/exchanges/tradeable",
+    });
+  };
+
+  /**
+   * Get Planned Exchanges
+   * Returns a list of exchanges that are planned to be added for trading.
+   */
+  const getPlannedExchanges = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetPlannedExchangesResponse,
+      GetPlannedExchangesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/exchanges/planned",
+    });
+  };
+
+  /**
+   * Get All Exchanges
+   * Returns a list of all exchanges.
+   */
+  const getAllExchanges = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetAllExchangesResponse,
+      GetAllExchangesError,
       ThrowOnError
     >({
       ...options,
@@ -748,6 +806,7 @@ export function createClient(
     getTime,
     getBots,
     createBot,
+    getBot,
     updateBot,
     deleteBot,
     getExchangeKeys,
@@ -774,7 +833,9 @@ export function createClient(
     deleteNotifications,
     updateNotification,
     deleteNotification,
-    getExchanges,
+    getTradeableExchanges,
+    getPlannedExchanges,
+    getAllExchanges,
     getLogLevel,
     getUptime,
     getMemoryUsage,
