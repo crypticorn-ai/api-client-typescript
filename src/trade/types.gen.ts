@@ -52,6 +52,7 @@ export type ApiErrorIdentifier =
   | "object_already_exists"
   | "object_created"
   | "object_deleted"
+  | "object_locked"
   | "object_not_found"
   | "object_updated"
   | "order_is_already_filled"
@@ -1218,11 +1219,11 @@ export type UpdateNotificationsData = {
   body: NotificationUpdate;
 };
 
-export type UpdateNotificationsResponse = unknown;
+export type UpdateNotificationsResponse = void;
 
 export type UpdateNotificationsError = ExceptionDetail;
 
-export type DeleteNotificationsResponse = unknown;
+export type DeleteNotificationsResponse = void;
 
 export type DeleteNotificationsError = ExceptionDetail;
 
@@ -1233,7 +1234,7 @@ export type UpdateNotificationData = {
   };
 };
 
-export type UpdateNotificationResponse = Notification;
+export type UpdateNotificationResponse = void;
 
 export type UpdateNotificationError = ExceptionDetail;
 

@@ -331,7 +331,7 @@ export function createClient(
 
   /**
    * Post Futures Action
-   * Endpoint to receive futures trading actions from the trading strategy
+   * Endpoint to receive futures trading actions. The action is queued for processing and the response is returned immediately.
    */
   const postFuturesAction = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<PostFuturesActionData, ThrowOnError>,

@@ -51,6 +51,7 @@ export const ApiErrorIdentifierSchema = {
     "object_already_exists",
     "object_created",
     "object_deleted",
+    "object_locked",
     "object_not_found",
     "object_updated",
     "order_is_already_filled",
