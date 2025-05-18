@@ -55,6 +55,7 @@ export enum ApiErrorIdentifier {
   OBJECT_ALREADY_EXISTS = "object_already_exists",
   OBJECT_CREATED = "object_created",
   OBJECT_DELETED = "object_deleted",
+  OBJECT_LOCKED = "object_locked",
   OBJECT_NOT_FOUND = "object_not_found",
   OBJECT_UPDATED = "object_updated",
   ORDER_ALREADY_FILLED = "order_is_already_filled",
