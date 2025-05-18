@@ -683,15 +683,15 @@ export type Order = {
   /**
    * Percentage of the order filled
    */
-  filled_perc?: number | null;
+  filled_perc?: number;
   /**
    * Quantity filled. Needed for pnl calculation. In the symbol's base currency.
    */
-  filled_qty?: number | null;
+  filled_qty?: number;
   /**
    * Fees for the order
    */
-  fee?: number | null;
+  fee?: number;
   /**
    * Leverage for the order
    */
@@ -703,7 +703,7 @@ export type Order = {
   /**
    * Profit and loss for the order
    */
-  pnl?: number | null;
+  pnl?: number;
   /**
    * Timestamp of order creation on the exchange.
    */
@@ -826,6 +826,10 @@ export type Strategy = {
    */
   identifier: string;
   /**
+   * Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.
+   */
+  margin_mode?: MarginMode | null;
+  /**
    * Leverage for the strategy
    */
   leverage: number;
@@ -863,6 +867,10 @@ export type StrategyCreate = {
    * Unique human readable identifier for the strategy e.g. 'daily_trend_momentum'
    */
   identifier: string;
+  /**
+   * Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.
+   */
+  margin_mode?: MarginMode | null;
   /**
    * Leverage for the strategy
    */
@@ -1172,7 +1180,7 @@ export type KillStrategyData = {
   };
 };
 
-export type KillStrategyResponse = unknown;
+export type KillStrategyResponse = void;
 
 export type KillStrategyError = ExceptionDetail;
 

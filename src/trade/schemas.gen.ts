@@ -1265,41 +1265,23 @@ export const OrderSchema = {
       description: "Trade status of the order. Of type OrderStatus",
     },
     filled_perc: {
-      anyOf: [
-        {
-          type: "number",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "number",
+      maximum: 1,
+      minimum: 0,
       title: "Filled Perc",
       description: "Percentage of the order filled",
       default: 0,
     },
     filled_qty: {
-      anyOf: [
-        {
-          type: "number",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "number",
+      minimum: 0,
       title: "Filled Qty",
       description:
         "Quantity filled. Needed for pnl calculation. In the symbol's base currency.",
       default: 0,
     },
     fee: {
-      anyOf: [
-        {
-          type: "number",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "number",
       title: "Fee",
       description: "Fees for the order",
       default: 0,
@@ -1328,14 +1310,7 @@ export const OrderSchema = {
       default: {},
     },
     pnl: {
-      anyOf: [
-        {
-          type: "number",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "number",
       title: "Pnl",
       description: "Profit and loss for the order",
       default: 0,
@@ -1570,6 +1545,18 @@ export const StrategySchema = {
       description:
         "Unique human readable identifier for the strategy e.g. 'daily_trend_momentum'",
     },
+    margin_mode: {
+      anyOf: [
+        {
+          $ref: "#/components/schemas/MarginMode",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description:
+        "Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.",
+    },
     leverage: {
       type: "integer",
       title: "Leverage",
@@ -1634,6 +1621,18 @@ export const StrategyCreateSchema = {
       title: "Identifier",
       description:
         "Unique human readable identifier for the strategy e.g. 'daily_trend_momentum'",
+    },
+    margin_mode: {
+      anyOf: [
+        {
+          $ref: "#/components/schemas/MarginMode",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description:
+        "Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.",
     },
     leverage: {
       type: "integer",
