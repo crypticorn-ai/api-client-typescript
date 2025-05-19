@@ -125,7 +125,18 @@ ${ops.map((op) => `    ${op},`).join("\n")}
     }
 
     console.log("Client generation complete!");
-    console.log(`!!! Remember to run: pnpm run build`);
+    
+    // Run build command
+    console.log("Running build...");
+    const { execSync } = await import('child_process');
+    try {
+      execSync('pnpm run build', { stdio: 'inherit' });
+      console.log("Build completed successfully!");
+    } catch (error) {
+      console.error("Build failed:", error);
+      process.exit(1);
+    }
+    
     console.log(
       `
 =========================================================
