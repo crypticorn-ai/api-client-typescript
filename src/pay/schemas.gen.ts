@@ -2,20 +2,102 @@
 
 export const ApiErrorIdentifierSchema = {
   type: "string",
+  enum: [
+    "allocation_below_current_exposure",
+    "allocation_below_min_amount",
+    "black_swan",
+    "bot_already_deleted",
+    "bot_disabled",
+    "bot_stopping_completed",
+    "bot_stopping_started",
+    "client_order_id_already_exists",
+    "invalid_content_type",
+    "delete_bot_error",
+    "exchange_invalid_signature",
+    "exchange_invalid_timestamp",
+    "exchange_ip_address_is_not_authorized",
+    "exchange_key_already_exists",
+    "exchange_key_in_use",
+    "exchange_system_under_maintenance",
+    "exchange_rate_limit_exceeded",
+    "insufficient_permissions_spot_and_futures_required",
+    "exchange_service_temporarily_unavailable",
+    "exchange_system_is_busy",
+    "exchange_system_configuration_error",
+    "exchange_internal_system_error",
+    "exchange_user_account_is_frozen",
+    "api_key_expired",
+    "bearer_token_expired",
+    "forbidden",
+    "hedge_mode_not_active",
+    "http_request_error",
+    "insufficient_balance",
+    "insufficient_margin",
+    "insufficient_scopes",
+    "invalid_api_key",
+    "invalid_bearer",
+    "invalid_data",
+    "invalid_data_response",
+    "invalid_exchange_key",
+    "invalid_margin_mode",
+    "invalid_model_name",
+    "invalid_parameter_provided",
+    "leverage_limit_exceeded",
+    "order_violates_liquidation_price_constraints",
+    "margin_mode_clash",
+    "model_name_not_unique",
+    "no_credentials",
+    "now_api_down",
+    "object_already_exists",
+    "object_created",
+    "object_deleted",
+    "object_locked",
+    "object_not_found",
+    "object_updated",
+    "order_is_already_filled",
+    "order_is_being_processed",
+    "order_quantity_limit_exceeded",
+    "order_does_not_exist",
+    "order_price_is_invalid",
+    "order_size_too_large",
+    "order_size_too_small",
+    "position_limit_exceeded",
+    "position_does_not_exist",
+    "position_opening_temporarily_suspended",
+    "post_only_order_would_immediately_match",
+    "request_scope_limit_exceeded",
+    "risk_limit_exceeded",
+    "rpc_timeout",
+    "system_settlement_in_process",
+    "strategy_already_exists",
+    "strategy_disabled",
+    "strategy_leverage_mismatch",
+    "strategy_not_supporting_exchange",
+    "success",
+    "symbol_does_not_exist",
+    "trading_action_expired",
+    "trading_action_skipped",
+    "trading_has_been_locked",
+    "trading_is_suspended",
+    "unknown_error_occurred",
+    "requested_resource_not_found",
+  ],
   title: "ApiErrorIdentifier",
-  description: "API error identifiers",
+  description: "Unique identifier of the API error.",
 } as const;
 
 export const ApiErrorLevelSchema = {
   type: "string",
+  enum: ["error", "info", "success", "warning"],
   title: "ApiErrorLevel",
-  description: "API error levels",
+  description: "Level of the API error.",
 } as const;
 
 export const ApiErrorTypeSchema = {
   type: "string",
+  enum: ["user error", "exchange error", "server error", "no error"],
   title: "ApiErrorType",
-  description: "Type of API error",
+  description: "Type of the API error.",
 } as const;
 
 export const ExceptionDetailSchema = {
@@ -57,8 +139,7 @@ export const ExceptionDetailSchema = {
   type: "object",
   required: ["code", "type", "level", "status_code"],
   title: "ExceptionDetail",
-  description:
-    "This is the detail of the exception. It is used to enrich the exception with additional information by unwrapping the ApiError into its components.",
+  description: "Exception details returned to the client.",
 } as const;
 
 export const LogLevelSchema = {
@@ -431,6 +512,60 @@ export const PaymentStatusSchema = {
   description: "Payment status",
 } as const;
 
+export const ProductSchema = {
+  properties: {
+    name: {
+      type: "string",
+      title: "Name",
+      description: "Product name",
+    },
+    price: {
+      type: "number",
+      title: "Price",
+      description: "Product price",
+    },
+    scopes: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/Scope",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Scopes",
+      description: "Scopes that product provides",
+    },
+    duration: {
+      type: "integer",
+      title: "Duration",
+      description: "Product duration in days. 0 means forever.",
+    },
+    description: {
+      type: "string",
+      title: "Description",
+      description: "Product description",
+    },
+    is_active: {
+      type: "boolean",
+      title: "Is Active",
+      description: "Product is active",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "UID of the product",
+    },
+  },
+  type: "object",
+  required: ["name", "price", "duration", "description", "is_active", "id"],
+  title: "Product",
+  description: "Model for reading a product",
+} as const;
+
 export const ProductCreateSchema = {
   properties: {
     name: {
@@ -461,7 +596,7 @@ export const ProductCreateSchema = {
     duration: {
       type: "integer",
       title: "Duration",
-      description: "Product duration in days. 0 means unlimited.",
+      description: "Product duration in days. 0 means forever.",
     },
     description: {
       type: "string",
@@ -478,94 +613,6 @@ export const ProductCreateSchema = {
   required: ["name", "price", "duration", "description", "is_active"],
   title: "ProductCreate",
   description: "Model for creating a product",
-} as const;
-
-export const ProductReadSchema = {
-  properties: {
-    name: {
-      type: "string",
-      title: "Name",
-      description: "Product name",
-    },
-    price: {
-      type: "number",
-      title: "Price",
-      description: "Product price",
-    },
-    scopes: {
-      anyOf: [
-        {
-          items: {
-            $ref: "#/components/schemas/Scope",
-          },
-          type: "array",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Scopes",
-      description: "Scopes that product provides",
-    },
-    duration: {
-      type: "integer",
-      title: "Duration",
-      description: "Product duration in days. 0 means unlimited.",
-    },
-    description: {
-      type: "string",
-      title: "Description",
-      description: "Product description",
-    },
-    is_active: {
-      type: "boolean",
-      title: "Is Active",
-      description: "Product is active",
-    },
-    id: {
-      type: "string",
-      title: "Id",
-      description: "UID of the product",
-    },
-  },
-  type: "object",
-  required: ["name", "price", "duration", "description", "is_active", "id"],
-  title: "ProductRead",
-  description: "Model for reading a product",
-} as const;
-
-export const ProductSubReadSchema = {
-  properties: {
-    user_id: {
-      type: "string",
-      title: "User Id",
-      description: "User ID",
-    },
-    product_id: {
-      type: "string",
-      title: "Product Id",
-      description: "Product ID",
-    },
-    access_from: {
-      type: "integer",
-      title: "Access From",
-      description: "Access from timestamp in milliseconds",
-    },
-    access_until: {
-      type: "integer",
-      title: "Access Until",
-      description: "Access until timestamp in milliseconds. 0 means unlimited.",
-    },
-    id: {
-      type: "string",
-      title: "Id",
-      description: "UID of the product subscription",
-    },
-  },
-  type: "object",
-  required: ["user_id", "product_id", "access_from", "access_until", "id"],
-  title: "ProductSubRead",
-  description: "Model for reading a product subscription",
 } as const;
 
 export const ProductUpdateSchema = {
@@ -619,7 +666,7 @@ export const ProductUpdateSchema = {
         },
       ],
       title: "Duration",
-      description: "Product duration in days. 0 means unlimited.",
+      description: "Product duration in days. 0 means forever.",
     },
     description: {
       anyOf: [
@@ -692,7 +739,42 @@ export const ScopeSchema = {
     "read:metrics:tokens",
     "read:metrics:markets",
     "read:sentiment",
+    "read:klines",
   ],
   title: "Scope",
   description: "The permission scopes for the API.",
+} as const;
+
+export const SubscriptionSchema = {
+  properties: {
+    user_id: {
+      type: "string",
+      title: "User Id",
+      description: "User ID",
+    },
+    product_id: {
+      type: "string",
+      title: "Product Id",
+      description: "Product ID",
+    },
+    access_from: {
+      type: "integer",
+      title: "Access From",
+      description: "Access from timestamp in seconds",
+    },
+    access_until: {
+      type: "integer",
+      title: "Access Until",
+      description: "Access until timestamp in seconds. 0 means unlimited.",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "UID of the product subscription",
+    },
+  },
+  type: "object",
+  required: ["user_id", "product_id", "access_from", "access_until", "id"],
+  title: "Subscription",
+  description: "Model for reading a product subscription",
 } as const;
