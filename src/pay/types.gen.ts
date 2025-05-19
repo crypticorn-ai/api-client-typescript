@@ -498,6 +498,23 @@ export type HandleNowWebhookResponse = unknown;
 
 export type HandleNowWebhookError = ExceptionDetail;
 
+export type GetNowPaymentsResponse = Array<Payment>;
+
+export type GetNowPaymentsError = ExceptionDetail;
+
+export type GetNowPaymentByInvoiceData = {
+  path: {
+    /**
+     * The invoice ID
+     */
+    id: string;
+  };
+};
+
+export type GetNowPaymentByInvoiceResponse = Payment;
+
+export type GetNowPaymentByInvoiceError = ExceptionDetail;
+
 export type GetProductsData = {
   query?: {
     /**

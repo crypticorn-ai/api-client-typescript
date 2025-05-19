@@ -17,6 +17,11 @@ import type {
   CreateNowInvoiceResponse,
   HandleNowWebhookError,
   HandleNowWebhookResponse,
+  GetNowPaymentsError,
+  GetNowPaymentsResponse,
+  GetNowPaymentByInvoiceData,
+  GetNowPaymentByInvoiceError,
+  GetNowPaymentByInvoiceResponse,
   GetProductsData,
   GetProductsError,
   GetProductsResponse,
@@ -116,7 +121,7 @@ export function createClient(
 
   /**
    * Create Invoice
-   * Create a payment invoice with a payment link for customer completion
+   * Create a payment invoice with a payment link for customer completion. Only JWT authentication is supported.
    */
   const createNowInvoice = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<CreateNowInvoiceData, ThrowOnError>,
@@ -146,6 +151,40 @@ export function createClient(
     >({
       ...options,
       url: "/now/webhook",
+    });
+  };
+
+  /**
+   * Get Now Payments
+   * Get all of the user's NOW payments
+   */
+  const getNowPayments = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetNowPaymentsResponse,
+      GetNowPaymentsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/now/payments",
+    });
+  };
+
+  /**
+   * Get Now Payment By Invoice
+   * Get a NOW payment by invoice ID
+   */
+  const getNowPaymentByInvoice = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetNowPaymentByInvoiceData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetNowPaymentByInvoiceResponse,
+      GetNowPaymentByInvoiceError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/now/payments/by-invoice/{id}",
     });
   };
 
@@ -349,6 +388,8 @@ export function createClient(
     getNowApiStatus,
     createNowInvoice,
     handleNowWebhook,
+    getNowPayments,
+    getNowPaymentByInvoice,
     getProducts,
     createProduct,
     updateProduct,
