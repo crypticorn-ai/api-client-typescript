@@ -507,7 +507,7 @@ export type GetNowPaymentByInvoiceData = {
     /**
      * The invoice ID
      */
-    id: string;
+    id: number;
   };
 };
 
