@@ -45,12 +45,14 @@ export type ApiErrorIdentifier =
   | "invalid_parameter_provided"
   | "leverage_limit_exceeded"
   | "order_violates_liquidation_price_constraints"
+  | "margin_mode_clash"
   | "model_name_not_unique"
   | "no_credentials"
   | "now_api_down"
   | "object_already_exists"
   | "object_created"
   | "object_deleted"
+  | "object_locked"
   | "object_not_found"
   | "object_updated"
   | "order_is_already_filled"
@@ -96,6 +98,24 @@ export type ApiErrorType =
   | "no error";
 
 /**
+ * Information about a coin
+ */
+export type CoinInfo = {
+  /**
+   * The identifier of the coin. Obfuscated for public use.
+   */
+  identifier: Coins;
+  /**
+   * The data version the coin got introduced in
+   */
+  version_added: DataVersion;
+  /**
+   * The data version the coin got removed in. If None, the coin is still available.
+   */
+  version_removed?: DataVersion | null;
+};
+
+/**
  * All existing coins. Some might no be available in the latest data version, but kept for older versions.
  */
 export type Coins = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
@@ -136,15 +156,15 @@ export type DataInfo = {
     };
   };
   /**
-   * The coins available on the latest data version.
+   * The coins available for all data versions.
    */
-  coins: Array<Coins>;
+  coins: Array<CoinInfo>;
   /**
-   * The feature sizes available on the latest data version.
+   * The feature sizes available for all data versions.
    */
   feature_sizes: Array<FeatureSize>;
   /**
-   * The targets available on the latest data version.
+   * The targets available for all data versions.
    */
   targets: Array<TargetInfo>;
   /**
@@ -354,17 +374,21 @@ export type Target = "Tatooine" | "Alderaan" | "Hoth";
  */
 export type TargetInfo = {
   /**
-   * Target name
+   * The name of the target.
    */
   name: Target;
   /**
-   * Target type
+   * The type of the target.
    */
   type: TargetType;
   /**
-   * Data version
+   * The data version the target got introduced in.
    */
-  version: DataVersion;
+  version_added: DataVersion;
+  /**
+   * The data version the target got removed in. If None, the target is still available.
+   */
+  version_removed?: DataVersion | null;
 };
 
 /**

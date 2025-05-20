@@ -44,12 +44,14 @@ export const ApiErrorIdentifierSchema = {
     "invalid_parameter_provided",
     "leverage_limit_exceeded",
     "order_violates_liquidation_price_constraints",
+    "margin_mode_clash",
     "model_name_not_unique",
     "no_credentials",
     "now_api_down",
     "object_already_exists",
     "object_created",
     "object_deleted",
+    "object_locked",
     "object_not_found",
     "object_updated",
     "order_is_already_filled",
@@ -96,6 +98,35 @@ export const ApiErrorTypeSchema = {
   enum: ["user error", "exchange error", "server error", "no error"],
   title: "ApiErrorType",
   description: "Type of the API error.",
+} as const;
+
+export const CoinInfoSchema = {
+  properties: {
+    identifier: {
+      $ref: "#/components/schemas/Coins",
+      description: "The identifier of the coin. Obfuscated for public use.",
+    },
+    version_added: {
+      $ref: "#/components/schemas/DataVersion",
+      description: "The data version the coin got introduced in",
+    },
+    version_removed: {
+      anyOf: [
+        {
+          $ref: "#/components/schemas/DataVersion",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description:
+        "The data version the coin got removed in. If None, the coin is still available.",
+    },
+  },
+  type: "object",
+  required: ["identifier", "version_added"],
+  title: "CoinInfo",
+  description: "Information about a coin",
 } as const;
 
 export const CoinsSchema = {
@@ -156,11 +187,11 @@ export const DataInfoSchema = {
     },
     coins: {
       items: {
-        $ref: "#/components/schemas/Coins",
+        $ref: "#/components/schemas/CoinInfo",
       },
       type: "array",
       title: "Coins",
-      description: "The coins available on the latest data version.",
+      description: "The coins available for all data versions.",
     },
     feature_sizes: {
       items: {
@@ -168,7 +199,7 @@ export const DataInfoSchema = {
       },
       type: "array",
       title: "Feature Sizes",
-      description: "The feature sizes available on the latest data version.",
+      description: "The feature sizes available for all data versions.",
     },
     targets: {
       items: {
@@ -176,7 +207,7 @@ export const DataInfoSchema = {
       },
       type: "array",
       title: "Targets",
-      description: "The targets available on the latest data version.",
+      description: "The targets available for all data versions.",
     },
     all_versions: {
       items: {
@@ -498,19 +529,31 @@ export const TargetInfoSchema = {
   properties: {
     name: {
       $ref: "#/components/schemas/Target",
-      description: "Target name",
+      description: "The name of the target.",
     },
     type: {
       $ref: "#/components/schemas/TargetType",
-      description: "Target type",
+      description: "The type of the target.",
     },
-    version: {
+    version_added: {
       $ref: "#/components/schemas/DataVersion",
-      description: "Data version",
+      description: "The data version the target got introduced in.",
+    },
+    version_removed: {
+      anyOf: [
+        {
+          $ref: "#/components/schemas/DataVersion",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description:
+        "The data version the target got removed in. If None, the target is still available.",
     },
   },
   type: "object",
-  required: ["name", "type", "version"],
+  required: ["name", "type", "version_added"],
   title: "TargetInfo",
   description: "Information about a target",
 } as const;
