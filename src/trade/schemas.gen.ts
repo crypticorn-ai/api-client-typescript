@@ -45,7 +45,7 @@ export const ApiErrorIdentifierSchema = {
     "leverage_limit_exceeded",
     "order_violates_liquidation_price_constraints",
     "margin_mode_clash",
-    "model_name_not_unique",
+    "name_not_unique",
     "no_credentials",
     "now_api_down",
     "object_already_exists",
@@ -107,11 +107,6 @@ export const BotSchema = {
       title: "User Id",
       description: "UID for the user",
     },
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
-    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -121,6 +116,11 @@ export const BotSchema = {
       type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
     },
     name: {
       type: "string",
@@ -331,11 +331,6 @@ export const ExchangeKeySchema = {
       title: "User Id",
       description: "UID for the user",
     },
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
-    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -346,10 +341,21 @@ export const ExchangeKeySchema = {
       title: "Updated At",
       description: "Timestamp of last update",
     },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
+    },
     label: {
       type: "string",
       title: "Label",
       description: "Label for the API key",
+    },
+    deleted: {
+      type: "boolean",
+      title: "Deleted",
+      description: "Whether the API key has been deleted.",
+      default: false,
     },
     exchange: {
       $ref: "#/components/schemas/Exchange",
@@ -552,11 +558,6 @@ export const FuturesBalanceSchema = {
 
 export const FuturesTradingActionSchema = {
   properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
-    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -566,6 +567,11 @@ export const FuturesTradingActionSchema = {
       type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
     },
     execution_id: {
       anyOf: [
@@ -934,11 +940,6 @@ export const NotificationSchema = {
       title: "User Id",
       description: "UID for the user",
     },
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
-    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -948,6 +949,11 @@ export const NotificationSchema = {
       type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
     },
     viewed: {
       type: "boolean",
@@ -1052,11 +1058,6 @@ export const NotificationUpdateSchema = {
 
 export const OrderSchema = {
   properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
-    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -1066,6 +1067,11 @@ export const OrderSchema = {
       type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
     },
     trading_action_id: {
       anyOf: [
@@ -1494,11 +1500,6 @@ export const SpotTradingActionCreateSchema = {
 
 export const StrategySchema = {
   properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
-    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -1508,6 +1509,11 @@ export const StrategySchema = {
       type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
     },
     name: {
       type: "string",

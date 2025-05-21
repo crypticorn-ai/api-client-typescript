@@ -46,7 +46,7 @@ export type ApiErrorIdentifier =
   | "leverage_limit_exceeded"
   | "order_violates_liquidation_price_constraints"
   | "margin_mode_clash"
-  | "model_name_not_unique"
+  | "name_not_unique"
   | "no_credentials"
   | "now_api_down"
   | "object_already_exists"
@@ -106,10 +106,6 @@ export type Bot = {
    */
   user_id: string;
   /**
-   * Unique identifier for the resource
-   */
-  id?: string;
-  /**
    * Timestamp of creation
    */
   created_at?: number;
@@ -117,6 +113,10 @@ export type Bot = {
    * Timestamp of last update
    */
   updated_at?: number;
+  /**
+   * Unique identifier for the resource
+   */
+  id?: string;
   /**
    * Name of the bot
    */
@@ -241,10 +241,6 @@ export type ExchangeKey = {
    */
   user_id: string;
   /**
-   * Unique identifier for the resource
-   */
-  id?: string;
-  /**
    * Timestamp of creation
    */
   created_at?: number;
@@ -253,9 +249,17 @@ export type ExchangeKey = {
    */
   updated_at?: number;
   /**
+   * Unique identifier for the resource
+   */
+  id?: string;
+  /**
    * Label for the API key
    */
   label: string;
+  /**
+   * Whether the API key has been deleted.
+   */
+  deleted?: boolean;
   /**
    * The exchange the API key is for.
    */
@@ -364,10 +368,6 @@ export type FuturesBalance = {
  */
 export type FuturesTradingAction = {
   /**
-   * Unique identifier for the resource
-   */
-  id?: string;
-  /**
    * Timestamp of creation
    */
   created_at?: number;
@@ -375,6 +375,10 @@ export type FuturesTradingAction = {
    * Timestamp of last update
    */
   updated_at?: number;
+  /**
+   * Unique identifier for the resource
+   */
+  id?: string;
   /**
    * UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.
    */
@@ -524,10 +528,6 @@ export type Notification = {
    */
   user_id: string;
   /**
-   * Unique identifier for the resource
-   */
-  id?: string;
-  /**
    * Timestamp of creation
    */
   created_at?: number;
@@ -535,6 +535,10 @@ export type Notification = {
    * Timestamp of last update
    */
   updated_at?: number;
+  /**
+   * Unique identifier for the resource
+   */
+  id?: string;
   /**
    * Whether the notification has been marked as seen
    */
@@ -602,10 +606,6 @@ export type NotificationUpdate = {
  */
 export type Order = {
   /**
-   * Unique identifier for the resource
-   */
-  id?: string;
-  /**
    * Timestamp of creation
    */
   created_at?: number;
@@ -613,6 +613,10 @@ export type Order = {
    * Timestamp of last update
    */
   updated_at?: number;
+  /**
+   * Unique identifier for the resource
+   */
+  id?: string;
   /**
    * UID for the trading action that placed the order
    */
@@ -791,10 +795,6 @@ export type SpotTradingActionCreate = {
  */
 export type Strategy = {
   /**
-   * Unique identifier for the resource
-   */
-  id?: string;
-  /**
    * Timestamp of creation
    */
   created_at?: number;
@@ -802,6 +802,10 @@ export type Strategy = {
    * Timestamp of last update
    */
   updated_at?: number;
+  /**
+   * Unique identifier for the resource
+   */
+  id?: string;
   /**
    * Name of the strategy
    */
@@ -1021,6 +1025,10 @@ export type DeleteBotError = ExceptionDetail;
 
 export type GetExchangeKeysData = {
   query?: {
+    /**
+     * Whether to include deleted API keys.
+     */
+    include_deleted?: boolean;
     limit?: number;
     offset?: number;
   };
@@ -1040,6 +1048,9 @@ export type CreateExchangeKeyError = ExceptionDetail;
 
 export type GetExchangeKeyByIdData = {
   path: {
+    /**
+     * The ID of the API key to get.
+     */
     id: string;
   };
 };
@@ -1050,6 +1061,9 @@ export type GetExchangeKeyByIdError = ExceptionDetail;
 
 export type DeleteExchangeKeyData = {
   path: {
+    /**
+     * The ID of the API key to delete.
+     */
     id: string;
   };
 };
@@ -1061,6 +1075,9 @@ export type DeleteExchangeKeyError = ExceptionDetail;
 export type UpdateExchangeKeyData = {
   body: ExchangeKeyUpdate;
   path: {
+    /**
+     * The ID of the API key to update.
+     */
     id: string;
   };
 };

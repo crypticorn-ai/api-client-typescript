@@ -251,6 +251,7 @@ export function createClient(
 
   /**
    * Get Exchange Keys
+   * Get all exchange keys. If include_deleted is true, all API keys will be returned, including deleted ones.
    */
   const getExchangeKeys = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetExchangeKeysData, ThrowOnError>,
@@ -267,6 +268,7 @@ export function createClient(
 
   /**
    * Post Exchange Key
+   * Create a new exchange key.
    */
   const createExchangeKey = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<CreateExchangeKeyData, ThrowOnError>,
@@ -283,6 +285,7 @@ export function createClient(
 
   /**
    * Get Exchange Key By Id
+   * Get an exchange key by ID.
    */
   const getExchangeKeyById = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<GetExchangeKeyByIdData, ThrowOnError>,
@@ -299,6 +302,7 @@ export function createClient(
 
   /**
    * Delete Exchange Key
+   * Delete an API key. This will set the deleted field to true.
    */
   const deleteExchangeKey = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<DeleteExchangeKeyData, ThrowOnError>,
@@ -315,6 +319,7 @@ export function createClient(
 
   /**
    * Put Exchange Key
+   * Update an exchange key.
    */
   const updateExchangeKey = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<UpdateExchangeKeyData, ThrowOnError>,
@@ -380,6 +385,7 @@ export function createClient(
 
   /**
    * Get Orders
+   * Get all orders for a user
    */
   const getOrders = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetOrdersData, ThrowOnError>,
