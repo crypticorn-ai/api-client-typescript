@@ -51,6 +51,9 @@ import type {
   GetAvailableExchangesForMarketData,
   GetAvailableExchangesForMarketError,
   GetAvailableExchangesForMarketResponse,
+  GetExchangeMappingsForPairData,
+  GetExchangeMappingsForPairError,
+  GetExchangeMappingsForPairResponse,
   GetStableTokensError,
   GetStableTokensResponse,
   GetWrappedTokensError,
@@ -116,8 +119,9 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Get Logging Level
-   * Get the log level of the server logger.
+   * Get the log level of the server logger. Will be removed in a future release.
    */
   const getLogLevel = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
@@ -204,6 +208,11 @@ export function createClient(
   /**
    * List Installed Packages
    * Return a list of installed packages and versions.
+   *
+   * The include parameter accepts regex patterns to match against package names.
+   * For example:
+   * - crypticorn.* will match all packages starting with 'crypticorn'
+   * - .*tic.* will match all packages containing 'tic' in their name
    */
   const getDependencies = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetDependenciesData, ThrowOnError>,
@@ -237,7 +246,7 @@ export function createClient(
 
   /**
    * Get Symbols Marketcap Between Timestamps
-   * Retrieve marketcap data for symbols between timestamps with optional filtering.
+   * Retrieve a ranking of symbols by marketcap between timestamps.
    */
   const getMarketcapSymbols = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetMarketcapSymbolsData, ThrowOnError>,
@@ -381,6 +390,25 @@ export function createClient(
   };
 
   /**
+   * Get Exchange Mappings For Pair
+   * Get exchange mappings for a specific trading pair across all exchanges or a specific exchange.
+   * This endpoint finds the underlying symbol for a given pair and returns all perpetual contracts
+   * (excluding quarterly/dated contracts) with the specified quote currency.
+   */
+  const getExchangeMappingsForPair = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetExchangeMappingsForPairData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetExchangeMappingsForPairResponse,
+      GetExchangeMappingsForPairError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/exchanges/pair-mappings",
+    });
+  };
+
+  /**
    * Get Stable Tokens
    * Get list of stable tokens.
    */
@@ -486,6 +514,7 @@ export function createClient(
     getAvailableExchanges,
     getExchangeMappings,
     getAvailableExchangesForMarket,
+    getExchangeMappingsForPair,
     getStableTokens,
     getWrappedTokens,
     getQuoteCurrencies,

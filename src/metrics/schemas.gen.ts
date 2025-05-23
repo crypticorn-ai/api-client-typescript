@@ -10,6 +10,7 @@ export const ApiErrorIdentifierSchema = {
     "bot_disabled",
     "bot_stopping_completed",
     "bot_stopping_started",
+    "cancelled_open_order",
     "client_order_id_already_exists",
     "invalid_content_type",
     "delete_bot_error",
@@ -28,6 +29,7 @@ export const ApiErrorIdentifierSchema = {
     "exchange_user_account_is_frozen",
     "api_key_expired",
     "bearer_token_expired",
+    "open_order_expired",
     "forbidden",
     "hedge_mode_not_active",
     "http_request_error",
@@ -44,12 +46,14 @@ export const ApiErrorIdentifierSchema = {
     "invalid_parameter_provided",
     "leverage_limit_exceeded",
     "order_violates_liquidation_price_constraints",
-    "model_name_not_unique",
+    "margin_mode_clash",
+    "name_not_unique",
     "no_credentials",
     "now_api_down",
     "object_already_exists",
     "object_created",
     "object_deleted",
+    "object_locked",
     "object_not_found",
     "object_updated",
     "order_is_already_filled",
@@ -59,6 +63,8 @@ export const ApiErrorIdentifierSchema = {
     "order_price_is_invalid",
     "order_size_too_large",
     "order_size_too_small",
+    "orphan_open_order",
+    "orphan_close_order",
     "position_limit_exceeded",
     "position_does_not_exist",
     "position_opening_temporarily_suspended",
@@ -74,28 +80,28 @@ export const ApiErrorIdentifierSchema = {
     "success",
     "symbol_does_not_exist",
     "trading_action_expired",
-    "trading_action_skipped",
+    "TRADING_ACTION_SKIPPED_BOT_STOPPING",
     "trading_has_been_locked",
     "trading_is_suspended",
     "unknown_error_occurred",
     "requested_resource_not_found",
   ],
   title: "ApiErrorIdentifier",
-  description: "API error identifiers",
+  description: "Unique identifier of the API error.",
 } as const;
 
 export const ApiErrorLevelSchema = {
   type: "string",
   enum: ["error", "info", "success", "warning"],
   title: "ApiErrorLevel",
-  description: "API error levels",
+  description: "Level of the API error.",
 } as const;
 
 export const ApiErrorTypeSchema = {
   type: "string",
   enum: ["user error", "exchange error", "server error", "no error"],
   title: "ApiErrorType",
-  description: "Type of API error",
+  description: "Type of the API error.",
 } as const;
 
 export const ExceptionDetailSchema = {
@@ -137,8 +143,29 @@ export const ExceptionDetailSchema = {
   type: "object",
   required: ["code", "type", "level", "status_code"],
   title: "ExceptionDetail",
-  description:
-    "This is the detail of the exception. It is used to enrich the exception with additional information by unwrapping the ApiError into its components.",
+  description: "Exception details returned to the client.",
+} as const;
+
+export const ExchangeAvailabilitySchema = {
+  properties: {
+    timestamp: {
+      type: "integer",
+      title: "Timestamp",
+      description: "The timestamp of the availability",
+    },
+    exchanges: {
+      additionalProperties: {
+        type: "boolean",
+      },
+      type: "object",
+      title: "Exchanges",
+      description:
+        "The availability of the exchange. Returns a dictionary of exchange names and their availability as a boolean.",
+    },
+  },
+  type: "object",
+  required: ["timestamp", "exchanges"],
+  title: "ExchangeAvailability",
 } as const;
 
 export const ExchangeMappingSchema = {
@@ -225,13 +252,46 @@ export const MarketTypeSchema = {
 export const MarketcapRankingSchema = {
   properties: {
     timestamp: {
-      type: "string",
-      format: "date-time",
+      type: "integer",
+      title: "Timestamp",
+    },
+    marketcap_values: {
+      items: {
+        anyOf: [
+          {
+            type: "number",
+          },
+          {
+            type: "null",
+          },
+        ],
+      },
+      type: "array",
+      title: "Marketcap Values",
+    },
+  },
+  type: "object",
+  required: ["timestamp", "marketcap_values"],
+  title: "MarketcapRanking",
+  description: "A ranking of symbols by marketcap at a given timestamp.",
+} as const;
+
+export const MarketcapSymbolRankingSchema = {
+  properties: {
+    timestamp: {
+      type: "integer",
       title: "Timestamp",
     },
     symbols: {
       items: {
-        type: "string",
+        anyOf: [
+          {
+            type: "string",
+          },
+          {
+            type: "null",
+          },
+        ],
       },
       type: "array",
       title: "Symbols",
@@ -239,14 +299,14 @@ export const MarketcapRankingSchema = {
   },
   type: "object",
   required: ["timestamp", "symbols"],
-  title: "MarketcapRanking",
+  title: "MarketcapSymbolRanking",
+  description: "A ranking of marketcap values at a given timestamp.",
 } as const;
 
 export const OHLCVSchema = {
   properties: {
     timestamp: {
-      type: "string",
-      format: "date-time",
+      type: "integer",
       title: "Timestamp",
     },
     open: {
