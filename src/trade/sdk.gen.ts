@@ -72,6 +72,8 @@ import type {
   CreateStrategyData,
   CreateStrategyError,
   CreateStrategyResponse,
+  GetStrategyUsageError,
+  GetStrategyUsageResponse,
   KillStrategyData,
   KillStrategyError,
   KillStrategyResponse,
@@ -482,6 +484,7 @@ export function createClient(
 
   /**
    * Get Strategies
+   * Get all strategies.
    */
   const getStrategies = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetStrategiesData, ThrowOnError>,
@@ -498,6 +501,7 @@ export function createClient(
 
   /**
    * Create Strategy
+   * Creates a new strategy.
    */
   const createStrategy = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<CreateStrategyData, ThrowOnError>,
@@ -509,6 +513,23 @@ export function createClient(
     >({
       ...options,
       url: "/strategies",
+    });
+  };
+
+  /**
+   * Get Strategy Usage
+   * Get the usage count of each strategy.
+   */
+  const getStrategyUsage = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetStrategyUsageResponse,
+      GetStrategyUsageError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/strategies/usage",
     });
   };
 
@@ -831,6 +852,7 @@ export function createClient(
     cancelFuturesOrder,
     getStrategies,
     createStrategy,
+    getStrategyUsage,
     killStrategy,
     updateStrategy,
     getNotifications,

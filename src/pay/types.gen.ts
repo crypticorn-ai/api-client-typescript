@@ -11,6 +11,7 @@ export type ApiErrorIdentifier =
   | "bot_disabled"
   | "bot_stopping_completed"
   | "bot_stopping_started"
+  | "cancelled_open_order"
   | "client_order_id_already_exists"
   | "invalid_content_type"
   | "delete_bot_error"
@@ -29,6 +30,7 @@ export type ApiErrorIdentifier =
   | "exchange_user_account_is_frozen"
   | "api_key_expired"
   | "bearer_token_expired"
+  | "open_order_expired"
   | "forbidden"
   | "hedge_mode_not_active"
   | "http_request_error"
@@ -46,7 +48,7 @@ export type ApiErrorIdentifier =
   | "leverage_limit_exceeded"
   | "order_violates_liquidation_price_constraints"
   | "margin_mode_clash"
-  | "model_name_not_unique"
+  | "name_not_unique"
   | "no_credentials"
   | "now_api_down"
   | "object_already_exists"
@@ -62,6 +64,8 @@ export type ApiErrorIdentifier =
   | "order_price_is_invalid"
   | "order_size_too_large"
   | "order_size_too_small"
+  | "orphan_open_order"
+  | "orphan_close_order"
   | "position_limit_exceeded"
   | "position_does_not_exist"
   | "position_opening_temporarily_suspended"
@@ -77,7 +81,7 @@ export type ApiErrorIdentifier =
   | "success"
   | "symbol_does_not_exist"
   | "trading_action_expired"
-  | "trading_action_skipped"
+  | "TRADING_ACTION_SKIPPED_BOT_STOPPING"
   | "trading_has_been_locked"
   | "trading_is_suspended"
   | "unknown_error_occurred"
@@ -539,6 +543,10 @@ export type CreateProductData = {
 export type CreateProductResponse = Product;
 
 export type CreateProductError = ExceptionDetail;
+
+export type GetProductUsageResponse = Array<[string, number]>;
+
+export type GetProductUsageError = ExceptionDetail;
 
 export type UpdateProductData = {
   body: ProductUpdate;

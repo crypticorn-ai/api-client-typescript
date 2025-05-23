@@ -28,6 +28,8 @@ import type {
   CreateProductData,
   CreateProductError,
   CreateProductResponse,
+  GetProductUsageError,
+  GetProductUsageResponse,
   UpdateProductData,
   UpdateProductError,
   UpdateProductResponse,
@@ -223,6 +225,23 @@ export function createClient(
   };
 
   /**
+   * Get Product Usage
+   * Get the usage count of each product.
+   */
+  const getProductUsage = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetProductUsageResponse,
+      GetProductUsageError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/products/usage",
+    });
+  };
+
+  /**
    * Update Product
    * Update an existing product
    */
@@ -392,6 +411,7 @@ export function createClient(
     getNowPaymentByInvoice,
     getProducts,
     createProduct,
+    getProductUsage,
     updateProduct,
     getPaymentHistory,
     getSubscriptions,
