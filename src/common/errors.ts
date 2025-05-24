@@ -646,4 +646,8 @@ export class ApiError {
     ApiErrorType.SERVER_ERROR,
     ApiErrorLevel.ERROR
   );
+
+  static getApiError(identifier: ApiErrorIdentifier): ApiError {
+    return (ApiError as any)[identifier];
+  }
 }
