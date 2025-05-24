@@ -648,6 +648,14 @@ export class ApiError {
   );
 
   static getApiError(identifier: ApiErrorIdentifier): ApiError {
-    return (ApiError as any)[identifier];
+    const error = (ApiError as any)[Object.keys(ApiError).find(key => {
+      const val = (ApiError as any)[key];
+      return val instanceof ApiError && val.identifier === identifier;
+    })!];
+    if (!error) {
+      console.error(`Unknown error identifier: ${identifier}`);
+      return ApiError.UNKNOWN_ERROR;
+    }
+    return error;
   }
 }
