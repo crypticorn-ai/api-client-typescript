@@ -1,11 +1,24 @@
+/**
+ * Comprehensive error handling system defining various API error types, HTTP exceptions, and error content structures.
+ */
+
+/**
+ * Type of the API error.
+ */
 export enum ApiErrorType {
-  /** The error type */
+  /** User error by people using our services */
   USER_ERROR = "user error",
+  /** Re-tryable error by the exchange or network conditions */
   EXCHANGE_ERROR = "exchange error",
+  /** Server error that needs a new version rollout for a fix */
   SERVER_ERROR = "server error",
-  NO_ERROR = "no error",
+  /** Error that does not need to be handled or does not affect the program or is a placeholder */
+  NO_ERROR = "no error"
 }
 
+/**
+ * Unique identifier of the API error.
+ */
 export enum ApiErrorIdentifier {
   ALLOCATION_BELOW_EXPOSURE = "allocation_below_current_exposure",
   ALLOCATION_BELOW_MINIMUM = "allocation_below_min_amount",
@@ -86,16 +99,551 @@ export enum ApiErrorIdentifier {
   SUCCESS = "success",
   SYMBOL_NOT_FOUND = "symbol_does_not_exist",
   TRADING_ACTION_EXPIRED = "trading_action_expired",
-  TRADING_ACTION_SKIPPED_BOT_STOPPING = "TRADING_ACTION_SKIPPED_BOT_STOPPING",
+  TRADING_ACTION_SKIPPED_BOT_STOPPING = "trading_action_skipped_bot_stopping",
   TRADING_LOCKED = "trading_has_been_locked",
   TRADING_SUSPENDED = "trading_is_suspended",
   UNKNOWN_ERROR = "unknown_error_occurred",
-  URL_NOT_FOUND = "requested_resource_not_found",
+  URL_NOT_FOUND = "requested_resource_not_found"
 }
 
+/**
+ * Level of the API error.
+ */
 export enum ApiErrorLevel {
   ERROR = "error",
   INFO = "info",
   SUCCESS = "success",
-  WARNING = "warning",
+  WARNING = "warning"
+}
+
+/**
+ * Crypticorn API error enumeration.
+ */
+export class ApiError {
+  constructor(
+    public readonly identifier: ApiErrorIdentifier,
+    public readonly type: ApiErrorType,
+    public readonly level: ApiErrorLevel
+  ) {}
+
+  // Allocation Errors
+  static readonly ALLOCATION_BELOW_EXPOSURE = new ApiError(
+    ApiErrorIdentifier.ALLOCATION_BELOW_EXPOSURE,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly ALLOCATION_BELOW_MINIMUM = new ApiError(
+    ApiErrorIdentifier.ALLOCATION_BELOW_MINIMUM,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Bot Related Errors
+  static readonly BLACK_SWAN = new ApiError(
+    ApiErrorIdentifier.BLACK_SWAN,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly BOT_ALREADY_DELETED = new ApiError(
+    ApiErrorIdentifier.BOT_ALREADY_DELETED,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly BOT_DISABLED = new ApiError(
+    ApiErrorIdentifier.BOT_DISABLED,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.WARNING
+  );
+
+  static readonly BOT_STOPPING_COMPLETED = new ApiError(
+    ApiErrorIdentifier.BOT_STOPPING_COMPLETED,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly BOT_STOPPING_STARTED = new ApiError(
+    ApiErrorIdentifier.BOT_STOPPING_STARTED,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  // Order Related Errors
+  static readonly CANCELLED_OPEN_ORDER = new ApiError(
+    ApiErrorIdentifier.CANCELLED_OPEN_ORDER,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly CLIENT_ORDER_ID_REPEATED = new ApiError(
+    ApiErrorIdentifier.CLIENT_ORDER_ID_REPEATED,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly CONTENT_TYPE_ERROR = new ApiError(
+    ApiErrorIdentifier.CONTENT_TYPE_ERROR,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly DELETE_BOT_ERROR = new ApiError(
+    ApiErrorIdentifier.DELETE_BOT_ERROR,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Exchange Related Errors
+  static readonly EXCHANGE_INVALID_SIGNATURE = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_INVALID_SIGNATURE,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_INVALID_TIMESTAMP = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_INVALID_TIMESTAMP,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_IP_RESTRICTED = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_IP_RESTRICTED,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_KEY_ALREADY_EXISTS = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_KEY_ALREADY_EXISTS,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_KEY_IN_USE = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_KEY_IN_USE,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_MAINTENANCE = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_MAINTENANCE,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_RATE_LIMIT = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_RATE_LIMIT,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_PERMISSION_DENIED = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_PERMISSION_DENIED,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_SERVICE_UNAVAILABLE = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_SERVICE_UNAVAILABLE,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_SYSTEM_BUSY = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_SYSTEM_BUSY,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_SYSTEM_CONFIG_ERROR = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_SYSTEM_CONFIG_ERROR,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_SYSTEM_ERROR = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_SYSTEM_ERROR,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXCHANGE_USER_FROZEN = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_USER_FROZEN,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Authentication Errors
+  static readonly EXPIRED_API_KEY = new ApiError(
+    ApiErrorIdentifier.EXPIRED_API_KEY,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly EXPIRED_BEARER = new ApiError(
+    ApiErrorIdentifier.EXPIRED_BEARER,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly FAILED_OPEN_ORDER = new ApiError(
+    ApiErrorIdentifier.FAILED_OPEN_ORDER,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly FORBIDDEN = new ApiError(
+    ApiErrorIdentifier.FORBIDDEN,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly HEDGE_MODE_NOT_ACTIVE = new ApiError(
+    ApiErrorIdentifier.HEDGE_MODE_NOT_ACTIVE,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly HTTP_ERROR = new ApiError(
+    ApiErrorIdentifier.HTTP_ERROR,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Balance and Margin Errors
+  static readonly INSUFFICIENT_BALANCE = new ApiError(
+    ApiErrorIdentifier.INSUFFICIENT_BALANCE,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly INSUFFICIENT_MARGIN = new ApiError(
+    ApiErrorIdentifier.INSUFFICIENT_MARGIN,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly INSUFFICIENT_SCOPES = new ApiError(
+    ApiErrorIdentifier.INSUFFICIENT_SCOPES,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Validation Errors
+  static readonly INVALID_API_KEY = new ApiError(
+    ApiErrorIdentifier.INVALID_API_KEY,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly INVALID_BEARER = new ApiError(
+    ApiErrorIdentifier.INVALID_BEARER,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly INVALID_DATA_REQUEST = new ApiError(
+    ApiErrorIdentifier.INVALID_DATA_REQUEST,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly INVALID_DATA_RESPONSE = new ApiError(
+    ApiErrorIdentifier.INVALID_DATA_RESPONSE,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly INVALID_EXCHANGE_KEY = new ApiError(
+    ApiErrorIdentifier.INVALID_EXCHANGE_KEY,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly INVALID_MARGIN_MODE = new ApiError(
+    ApiErrorIdentifier.INVALID_MARGIN_MODE,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly INVALID_MODEL_NAME = new ApiError(
+    ApiErrorIdentifier.INVALID_MODEL_NAME,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly INVALID_PARAMETER = new ApiError(
+    ApiErrorIdentifier.INVALID_PARAMETER,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Trading Related Errors
+  static readonly LEVERAGE_EXCEEDED = new ApiError(
+    ApiErrorIdentifier.LEVERAGE_EXCEEDED,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly LIQUIDATION_PRICE_VIOLATION = new ApiError(
+    ApiErrorIdentifier.LIQUIDATION_PRICE_VIOLATION,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly MARGIN_MODE_CLASH = new ApiError(
+    ApiErrorIdentifier.MARGIN_MODE_CLASH,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly NAME_NOT_UNIQUE = new ApiError(
+    ApiErrorIdentifier.NAME_NOT_UNIQUE,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Authentication Errors
+  static readonly NO_API_KEY = new ApiError(
+    ApiErrorIdentifier.NO_API_KEY,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly NO_BEARER = new ApiError(
+    ApiErrorIdentifier.NO_BEARER,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly NO_CREDENTIALS = new ApiError(
+    ApiErrorIdentifier.NO_CREDENTIALS,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly NOW_API_DOWN = new ApiError(
+    ApiErrorIdentifier.NOW_API_DOWN,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Object Related Errors
+  static readonly OBJECT_ALREADY_EXISTS = new ApiError(
+    ApiErrorIdentifier.OBJECT_ALREADY_EXISTS,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly OBJECT_CREATED = new ApiError(
+    ApiErrorIdentifier.OBJECT_CREATED,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly OBJECT_DELETED = new ApiError(
+    ApiErrorIdentifier.OBJECT_DELETED,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly OBJECT_LOCKED = new ApiError(
+    ApiErrorIdentifier.OBJECT_LOCKED,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly OBJECT_NOT_FOUND = new ApiError(
+    ApiErrorIdentifier.OBJECT_NOT_FOUND,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly OBJECT_UPDATED = new ApiError(
+    ApiErrorIdentifier.OBJECT_UPDATED,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  // Order Related Errors
+  static readonly ORDER_ALREADY_FILLED = new ApiError(
+    ApiErrorIdentifier.ORDER_ALREADY_FILLED,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly ORDER_IN_PROCESS = new ApiError(
+    ApiErrorIdentifier.ORDER_IN_PROCESS,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly ORDER_LIMIT_EXCEEDED = new ApiError(
+    ApiErrorIdentifier.ORDER_LIMIT_EXCEEDED,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly ORDER_NOT_FOUND = new ApiError(
+    ApiErrorIdentifier.ORDER_NOT_FOUND,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly ORDER_PRICE_INVALID = new ApiError(
+    ApiErrorIdentifier.ORDER_PRICE_INVALID,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly ORDER_SIZE_TOO_LARGE = new ApiError(
+    ApiErrorIdentifier.ORDER_SIZE_TOO_LARGE,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.WARNING
+  );
+
+  static readonly ORDER_SIZE_TOO_SMALL = new ApiError(
+    ApiErrorIdentifier.ORDER_SIZE_TOO_SMALL,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.WARNING
+  );
+
+  static readonly ORPHAN_OPEN_ORDER = new ApiError(
+    ApiErrorIdentifier.ORPHAN_OPEN_ORDER,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly ORPHAN_CLOSE_ORDER = new ApiError(
+    ApiErrorIdentifier.ORPHAN_CLOSE_ORDER,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  // Position Related Errors
+  static readonly POSITION_LIMIT_EXCEEDED = new ApiError(
+    ApiErrorIdentifier.POSITION_LIMIT_EXCEEDED,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly POSITION_NOT_FOUND = new ApiError(
+    ApiErrorIdentifier.POSITION_NOT_FOUND,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly POSITION_SUSPENDED = new ApiError(
+    ApiErrorIdentifier.POSITION_SUSPENDED,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly POST_ONLY_REJECTED = new ApiError(
+    ApiErrorIdentifier.POST_ONLY_REJECTED,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Rate Limit Errors
+  static readonly REQUEST_SCOPE_EXCEEDED = new ApiError(
+    ApiErrorIdentifier.REQUEST_SCOPE_EXCEEDED,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly RISK_LIMIT_EXCEEDED = new ApiError(
+    ApiErrorIdentifier.RISK_LIMIT_EXCEEDED,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly RPC_TIMEOUT = new ApiError(
+    ApiErrorIdentifier.RPC_TIMEOUT,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly SETTLEMENT_IN_PROGRESS = new ApiError(
+    ApiErrorIdentifier.SETTLEMENT_IN_PROGRESS,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Strategy Related Errors
+  static readonly STRATEGY_ALREADY_EXISTS = new ApiError(
+    ApiErrorIdentifier.STRATEGY_ALREADY_EXISTS,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly STRATEGY_DISABLED = new ApiError(
+    ApiErrorIdentifier.STRATEGY_DISABLED,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly STRATEGY_LEVERAGE_MISMATCH = new ApiError(
+    ApiErrorIdentifier.STRATEGY_LEVERAGE_MISMATCH,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly STRATEGY_NOT_SUPPORTING_EXCHANGE = new ApiError(
+    ApiErrorIdentifier.STRATEGY_NOT_SUPPORTING_EXCHANGE,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Success and Not Found Errors
+  static readonly SUCCESS = new ApiError(
+    ApiErrorIdentifier.SUCCESS,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.SUCCESS
+  );
+
+  static readonly SYMBOL_NOT_FOUND = new ApiError(
+    ApiErrorIdentifier.SYMBOL_NOT_FOUND,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Trading Action Errors
+  static readonly TRADING_ACTION_EXPIRED = new ApiError(
+    ApiErrorIdentifier.TRADING_ACTION_EXPIRED,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly TRADING_ACTION_SKIPPED_BOT_STOPPING = new ApiError(
+    ApiErrorIdentifier.TRADING_ACTION_SKIPPED_BOT_STOPPING,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.INFO
+  );
+
+  static readonly TRADING_LOCKED = new ApiError(
+    ApiErrorIdentifier.TRADING_LOCKED,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly TRADING_SUSPENDED = new ApiError(
+    ApiErrorIdentifier.TRADING_SUSPENDED,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  // Unknown and URL Errors
+  static readonly UNKNOWN_ERROR = new ApiError(
+    ApiErrorIdentifier.UNKNOWN_ERROR,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly URL_NOT_FOUND = new ApiError(
+    ApiErrorIdentifier.URL_NOT_FOUND,
+    ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
 }
