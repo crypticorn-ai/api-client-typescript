@@ -338,7 +338,7 @@ export function createClient(
 
   /**
    * Post Futures Action
-   * Endpoint to receive futures trading actions. The action is queued for processing and the response is returned immediately.
+   * Endpoint to send futures trading actions. The action is queued for processing and the response is returned immediately. Only API key authentication is supported.
    */
   const postFuturesAction = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<PostFuturesActionData, ThrowOnError>,

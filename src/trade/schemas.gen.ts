@@ -562,6 +562,32 @@ export const FuturesBalanceSchema = {
 
 export const FuturesTradingActionSchema = {
   properties: {
+    leverage: {
+      anyOf: [
+        {
+          type: "integer",
+          minimum: 1,
+          default: 1,
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Leverage",
+      description: "Leverage to use for futures trades.",
+    },
+    margin_mode: {
+      anyOf: [
+        {
+          $ref: "#/components/schemas/MarginMode",
+        },
+        {
+          type: "null",
+        },
+      ],
+      description: "Margin mode for futures trades.",
+      default: "isolated",
+    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -638,7 +664,7 @@ export const FuturesTradingActionSchema = {
     limit_price: {
       anyOf: [
         {
-          type: "number",
+          type: "string",
         },
         {
           type: "null",
@@ -649,9 +675,7 @@ export const FuturesTradingActionSchema = {
         "The limit price for limit orders. If not set, the market price will be used.",
     },
     allocation: {
-      type: "number",
-      maximum: 1,
-      exclusiveMinimum: 0,
+      type: "string",
       title: "Allocation",
       description:
         "How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.",
@@ -725,6 +749,22 @@ export const FuturesTradingActionSchema = {
       title: "Position Id",
       description: "Extra Field. UID for the position to close.",
     },
+  },
+  type: "object",
+  required: [
+    "leverage",
+    "action_type",
+    "market_type",
+    "strategy_id",
+    "symbol",
+    "allocation",
+  ],
+  title: "FuturesTradingAction",
+  description: "Model for futures trading actions",
+} as const;
+
+export const FuturesTradingActionCreateSchema = {
+  properties: {
     leverage: {
       anyOf: [
         {
@@ -751,15 +791,6 @@ export const FuturesTradingActionSchema = {
       description: "Margin mode for futures trades.",
       default: "isolated",
     },
-  },
-  type: "object",
-  required: ["action_type", "market_type", "strategy_id", "symbol", "leverage"],
-  title: "FuturesTradingAction",
-  description: "Model for futures trading actions",
-} as const;
-
-export const FuturesTradingActionCreateSchema = {
-  properties: {
     execution_id: {
       anyOf: [
         {
@@ -821,7 +852,7 @@ export const FuturesTradingActionCreateSchema = {
     limit_price: {
       anyOf: [
         {
-          type: "number",
+          type: "string",
         },
         {
           type: "null",
@@ -832,9 +863,7 @@ export const FuturesTradingActionCreateSchema = {
         "The limit price for limit orders. If not set, the market price will be used.",
     },
     allocation: {
-      type: "number",
-      maximum: 1,
-      exclusiveMinimum: 0,
+      type: "string",
       title: "Allocation",
       description:
         "How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.",
@@ -843,7 +872,7 @@ export const FuturesTradingActionCreateSchema = {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TPSL",
+            $ref: "#/components/schemas/TPSLCreate",
           },
           type: "array",
         },
@@ -859,7 +888,7 @@ export const FuturesTradingActionCreateSchema = {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TPSL",
+            $ref: "#/components/schemas/TPSLCreate",
           },
           type: "array",
         },
@@ -884,35 +913,16 @@ export const FuturesTradingActionCreateSchema = {
       description:
         "Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.",
     },
-    leverage: {
-      anyOf: [
-        {
-          type: "integer",
-          minimum: 1,
-          default: 1,
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Leverage",
-      description: "Leverage to use for futures trades.",
-    },
-    margin_mode: {
-      anyOf: [
-        {
-          $ref: "#/components/schemas/MarginMode",
-        },
-        {
-          type: "null",
-        },
-      ],
-      description: "Margin mode for futures trades.",
-      default: "isolated",
-    },
   },
   type: "object",
-  required: ["action_type", "market_type", "strategy_id", "symbol", "leverage"],
+  required: [
+    "leverage",
+    "action_type",
+    "market_type",
+    "strategy_id",
+    "symbol",
+    "allocation",
+  ],
   title: "FuturesTradingActionCreate",
   description: "Model for sending futures trading actions",
 } as const;
@@ -1211,7 +1221,7 @@ export const OrderSchema = {
     price: {
       anyOf: [
         {
-          type: "number",
+          type: "string",
         },
         {
           type: "null",
@@ -1276,39 +1286,59 @@ export const OrderSchema = {
       description: "Trade status of the order. Of type OrderStatus",
     },
     filled_perc: {
-      type: "number",
-      maximum: 1,
-      minimum: 0,
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Filled Perc",
       description: "Percentage of the order filled",
-      default: 0,
     },
     filled_qty: {
-      type: "number",
-      minimum: 0,
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Filled Qty",
       description:
         "Quantity filled. Needed for pnl calculation. In the symbol's base currency.",
-      default: 0,
     },
     sent_qty: {
-      type: "number",
-      minimum: 0,
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Sent Qty",
       description:
         "Quantity sent to the exchange. In the symbol's base currency.",
-      default: 0,
     },
     fee: {
-      type: "number",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Fee",
       description: "Fees for the order",
-      default: 0,
     },
     leverage: {
       anyOf: [
         {
-          type: "number",
+          type: "integer",
         },
         {
           type: "null",
@@ -1329,10 +1359,16 @@ export const OrderSchema = {
       default: {},
     },
     pnl: {
-      type: "number",
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Pnl",
       description: "Profit and loss for the order",
-      default: 0,
     },
     order_time: {
       anyOf: [
@@ -1440,7 +1476,7 @@ export const SpotTradingActionCreateSchema = {
     limit_price: {
       anyOf: [
         {
-          type: "number",
+          type: "string",
         },
         {
           type: "null",
@@ -1451,9 +1487,7 @@ export const SpotTradingActionCreateSchema = {
         "The limit price for limit orders. If not set, the market price will be used.",
     },
     allocation: {
-      type: "number",
-      maximum: 1,
-      exclusiveMinimum: 0,
+      type: "string",
       title: "Allocation",
       description:
         "How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.",
@@ -1462,7 +1496,7 @@ export const SpotTradingActionCreateSchema = {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TPSL",
+            $ref: "#/components/schemas/TPSLCreate",
           },
           type: "array",
         },
@@ -1478,7 +1512,7 @@ export const SpotTradingActionCreateSchema = {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TPSL",
+            $ref: "#/components/schemas/TPSLCreate",
           },
           type: "array",
         },
@@ -1505,7 +1539,13 @@ export const SpotTradingActionCreateSchema = {
     },
   },
   type: "object",
-  required: ["action_type", "market_type", "strategy_id", "symbol"],
+  required: [
+    "action_type",
+    "market_type",
+    "strategy_id",
+    "symbol",
+    "allocation",
+  ],
   title: "SpotTradingActionCreate",
   description: "Model for sending spot trading actions",
 } as const;
@@ -1686,7 +1726,7 @@ export const StrategyExchangeInfoSchema = {
       description: "Exchange name. Of type Exchange",
     },
     min_amount: {
-      type: "number",
+      type: "integer",
       title: "Min Amount",
       description: "Minimum amount for the strategy on the exchange",
     },
@@ -1776,8 +1816,7 @@ export const TPSLSchema = {
     price_delta: {
       anyOf: [
         {
-          type: "number",
-          minimum: 0,
+          type: "string",
         },
         {
           type: "null",
@@ -1790,7 +1829,7 @@ export const TPSLSchema = {
     price: {
       anyOf: [
         {
-          type: "number",
+          type: "string",
         },
         {
           type: "null",
@@ -1801,12 +1840,10 @@ export const TPSLSchema = {
         "The limit price to set the target at. If not set, the limit price will be calculated from the current market price.",
     },
     allocation: {
-      type: "number",
-      maximum: 1,
-      minimum: 0,
+      type: "string",
       title: "Allocation",
       description:
-        "Percentage of the open order to sell. All allocations must sum up to 1.",
+        "Percentage of the open order to sell. All allocations must sum up to 1. Use this allocation again when closing the order.",
     },
     execution_id: {
       anyOf: [
@@ -1818,7 +1855,7 @@ export const TPSLSchema = {
         },
       ],
       title: "Execution Id",
-      description: "Execution ID of the order. Leave empty.",
+      description: "Execution ID of the order.",
     },
     client_order_id: {
       anyOf: [
@@ -1830,13 +1867,54 @@ export const TPSLSchema = {
         },
       ],
       title: "Client Order Id",
-      description: "Client order ID of the order. Leave empty.",
+      description: "Client order ID of the order.",
     },
   },
   type: "object",
   required: ["allocation"],
   title: "TPSL",
-  description: "Model for take profit and stop loss targets",
+  description: "Runtime fields for take profit and stop loss",
+} as const;
+
+export const TPSLCreateSchema = {
+  properties: {
+    price_delta: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Price Delta",
+      description:
+        "The price delta to calculate the limit price from the current market price, e.g. for a SL of 1% the it would be 0.99",
+    },
+    price: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Price",
+      description:
+        "The limit price to set the target at. If not set, the limit price will be calculated from the current market price.",
+    },
+    allocation: {
+      type: "string",
+      title: "Allocation",
+      description:
+        "Percentage of the open order to sell. All allocations must sum up to 1. Use this allocation again when closing the order.",
+    },
+  },
+  type: "object",
+  required: ["allocation"],
+  title: "TPSLCreate",
+  description: "Model for take profit and stop loss",
 } as const;
 
 export const TradingActionTypeSchema = {

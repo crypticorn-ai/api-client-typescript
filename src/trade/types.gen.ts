@@ -372,6 +372,14 @@ export type FuturesBalance = {
  */
 export type FuturesTradingAction = {
   /**
+   * Leverage to use for futures trades.
+   */
+  leverage: number | null;
+  /**
+   * Margin mode for futures trades.
+   */
+  margin_mode?: MarginMode | null;
+  /**
    * Timestamp of creation
    */
   created_at?: number;
@@ -414,11 +422,11 @@ export type FuturesTradingAction = {
   /**
    * The limit price for limit orders. If not set, the market price will be used.
    */
-  limit_price?: number | null;
+  limit_price?: string | null;
   /**
    * How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.
    */
-  allocation?: number;
+  allocation: string;
   /**
    * Take profit targets. Can be set for open actions only. Multiple can be set.
    */
@@ -439,6 +447,12 @@ export type FuturesTradingAction = {
    * Extra Field. UID for the position to close.
    */
   position_id?: string | null;
+};
+
+/**
+ * Model for sending futures trading actions
+ */
+export type FuturesTradingActionCreate = {
   /**
    * Leverage to use for futures trades.
    */
@@ -447,12 +461,6 @@ export type FuturesTradingAction = {
    * Margin mode for futures trades.
    */
   margin_mode?: MarginMode | null;
-};
-
-/**
- * Model for sending futures trading actions
- */
-export type FuturesTradingActionCreate = {
   /**
    * UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.
    */
@@ -484,31 +492,23 @@ export type FuturesTradingActionCreate = {
   /**
    * The limit price for limit orders. If not set, the market price will be used.
    */
-  limit_price?: number | null;
+  limit_price?: string | null;
   /**
    * How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.
    */
-  allocation?: number;
+  allocation: string;
   /**
    * Take profit targets. Can be set for open actions only. Multiple can be set.
    */
-  take_profit?: Array<TPSL> | null;
+  take_profit?: Array<TPSLCreate> | null;
   /**
    * Stop loss values. Can be set for open actions only. Multiple can be set.
    */
-  stop_loss?: Array<TPSL> | null;
+  stop_loss?: Array<TPSLCreate> | null;
   /**
    * Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.
    */
   expiry_timestamp?: number | null;
-  /**
-   * Leverage to use for futures trades.
-   */
-  leverage: number | null;
-  /**
-   * Margin mode for futures trades.
-   */
-  margin_mode?: MarginMode | null;
 };
 
 export type LogLevel = "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL";
@@ -668,7 +668,7 @@ export type Order = {
   /**
    * Price of the order
    */
-  price?: number | null;
+  price?: string | null;
   /**
    * Type of trading action. Of type TradingActionType
    */
@@ -692,19 +692,19 @@ export type Order = {
   /**
    * Percentage of the order filled
    */
-  filled_perc?: number;
+  filled_perc?: string | null;
   /**
    * Quantity filled. Needed for pnl calculation. In the symbol's base currency.
    */
-  filled_qty?: number;
+  filled_qty?: string | null;
   /**
    * Quantity sent to the exchange. In the symbol's base currency.
    */
-  sent_qty?: number;
+  sent_qty?: string | null;
   /**
    * Fees for the order
    */
-  fee?: number;
+  fee?: string | null;
   /**
    * Leverage for the order
    */
@@ -716,7 +716,7 @@ export type Order = {
   /**
    * Profit and loss for the order
    */
-  pnl?: number;
+  pnl?: string | null;
   /**
    * Timestamp of order creation on the exchange.
    */
@@ -779,19 +779,19 @@ export type SpotTradingActionCreate = {
   /**
    * The limit price for limit orders. If not set, the market price will be used.
    */
-  limit_price?: number | null;
+  limit_price?: string | null;
   /**
    * How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.
    */
-  allocation?: number;
+  allocation: string;
   /**
    * Take profit targets. Can be set for open actions only. Multiple can be set.
    */
-  take_profit?: Array<TPSL> | null;
+  take_profit?: Array<TPSLCreate> | null;
   /**
    * Stop loss values. Can be set for open actions only. Multiple can be set.
    */
-  stop_loss?: Array<TPSL> | null;
+  stop_loss?: Array<TPSLCreate> | null;
   /**
    * Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.
    */
@@ -932,29 +932,47 @@ export type StrategyUpdate = {
 };
 
 /**
- * Model for take profit and stop loss targets
+ * Runtime fields for take profit and stop loss
  */
 export type TPSL = {
   /**
    * The price delta to calculate the limit price from the current market price, e.g. for a SL of 1% the it would be 0.99
    */
-  price_delta?: number | null;
+  price_delta?: string | null;
   /**
    * The limit price to set the target at. If not set, the limit price will be calculated from the current market price.
    */
-  price?: number | null;
+  price?: string | null;
   /**
-   * Percentage of the open order to sell. All allocations must sum up to 1.
+   * Percentage of the open order to sell. All allocations must sum up to 1. Use this allocation again when closing the order.
    */
-  allocation: number;
+  allocation: string;
   /**
-   * Execution ID of the order. Leave empty.
+   * Execution ID of the order.
    */
   execution_id?: string | null;
   /**
-   * Client order ID of the order. Leave empty.
+   * Client order ID of the order.
    */
   client_order_id?: string | null;
+};
+
+/**
+ * Model for take profit and stop loss
+ */
+export type TPSLCreate = {
+  /**
+   * The price delta to calculate the limit price from the current market price, e.g. for a SL of 1% the it would be 0.99
+   */
+  price_delta?: string | null;
+  /**
+   * The limit price to set the target at. If not set, the limit price will be calculated from the current market price.
+   */
+  price?: string | null;
+  /**
+   * Percentage of the open order to sell. All allocations must sum up to 1. Use this allocation again when closing the order.
+   */
+  allocation: string;
 };
 
 /**
