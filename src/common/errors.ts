@@ -22,6 +22,7 @@ export enum ApiErrorType {
 export enum ApiErrorIdentifier {
   ALLOCATION_BELOW_EXPOSURE = "allocation_below_current_exposure",
   ALLOCATION_BELOW_MINIMUM = "allocation_below_min_amount",
+  ALLOCATION_LIMIT_EXCEEDED = "allocation_limit_exceeded",
   BLACK_SWAN = "black_swan",
   BOT_ALREADY_DELETED = "bot_already_deleted",
   BOT_DISABLED = "bot_disabled",
@@ -99,7 +100,7 @@ export enum ApiErrorIdentifier {
   SUCCESS = "success",
   SYMBOL_NOT_FOUND = "symbol_does_not_exist",
   TRADING_ACTION_EXPIRED = "trading_action_expired",
-  TRADING_ACTION_SKIPPED_BOT_STOPPING = "trading_action_skipped_bot_stopping",
+  TRADING_ACTION_SKIPPED_BOT_STOPPING = "TRADING_ACTION_SKIPPED_BOT_STOPPING",
   TRADING_LOCKED = "trading_has_been_locked",
   TRADING_SUSPENDED = "trading_is_suspended",
   UNKNOWN_ERROR = "unknown_error_occurred",
@@ -137,6 +138,12 @@ export class ApiError {
     ApiErrorIdentifier.ALLOCATION_BELOW_MINIMUM,
     ApiErrorType.USER_ERROR,
     ApiErrorLevel.ERROR
+  );
+
+  static readonly ALLOCATION_LIMIT_EXCEEDED = new ApiError(
+    ApiErrorIdentifier.ALLOCATION_LIMIT_EXCEEDED,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.INFO
   );
 
   // Bot Related Errors
