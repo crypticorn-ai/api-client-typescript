@@ -45,7 +45,7 @@ export const ApiErrorIdentifierSchema = {
     "leverage_limit_exceeded",
     "order_violates_liquidation_price_constraints",
     "margin_mode_clash",
-    "model_name_not_unique",
+    "name_not_unique",
     "no_credentials",
     "now_api_down",
     "object_already_exists",
