@@ -13,7 +13,7 @@ export enum ApiErrorType {
   /** Server error that needs a new version rollout for a fix */
   SERVER_ERROR = "server error",
   /** Error that does not need to be handled or does not affect the program or is a placeholder */
-  NO_ERROR = "no error"
+  NO_ERROR = "no error",
 }
 
 /**
@@ -25,13 +25,14 @@ export enum ApiErrorIdentifier {
   ALLOCATION_LIMIT_EXCEEDED = "allocation_limit_exceeded",
   BLACK_SWAN = "black_swan",
   BOT_ALREADY_DELETED = "bot_already_deleted",
-  BOT_DISABLED = "bot_disabled",
   BOT_STOPPING_COMPLETED = "bot_stopping_completed",
   BOT_STOPPING_STARTED = "bot_stopping_started",
   CANCELLED_OPEN_ORDER = "cancelled_open_order",
   CLIENT_ORDER_ID_REPEATED = "client_order_id_already_exists",
   CONTENT_TYPE_ERROR = "invalid_content_type",
   DELETE_BOT_ERROR = "delete_bot_error",
+  EXCHANGE_HTTP_ERROR = "exchange_http_request_error",
+  EXCHANGE_INVALID_PARAMETER = "exchange_invalid_parameter",
   EXCHANGE_INVALID_SIGNATURE = "exchange_invalid_signature",
   EXCHANGE_INVALID_TIMESTAMP = "exchange_invalid_timestamp",
   EXCHANGE_IP_RESTRICTED = "exchange_ip_address_is_not_authorized",
@@ -50,7 +51,6 @@ export enum ApiErrorIdentifier {
   FAILED_OPEN_ORDER = "open_order_expired",
   FORBIDDEN = "forbidden",
   HEDGE_MODE_NOT_ACTIVE = "hedge_mode_not_active",
-  HTTP_ERROR = "http_request_error",
   INSUFFICIENT_BALANCE = "insufficient_balance",
   INSUFFICIENT_MARGIN = "insufficient_margin",
   INSUFFICIENT_SCOPES = "insufficient_scopes",
@@ -59,9 +59,7 @@ export enum ApiErrorIdentifier {
   INVALID_DATA_REQUEST = "invalid_data",
   INVALID_DATA_RESPONSE = "invalid_data_response",
   INVALID_EXCHANGE_KEY = "invalid_exchange_key",
-  INVALID_MARGIN_MODE = "invalid_margin_mode",
   INVALID_MODEL_NAME = "invalid_model_name",
-  INVALID_PARAMETER = "invalid_parameter_provided",
   LEVERAGE_EXCEEDED = "leverage_limit_exceeded",
   LIQUIDATION_PRICE_VIOLATION = "order_violates_liquidation_price_constraints",
   MARGIN_MODE_CLASH = "margin_mode_clash",
@@ -93,7 +91,6 @@ export enum ApiErrorIdentifier {
   RISK_LIMIT_EXCEEDED = "risk_limit_exceeded",
   RPC_TIMEOUT = "rpc_timeout",
   SETTLEMENT_IN_PROGRESS = "system_settlement_in_process",
-  STRATEGY_ALREADY_EXISTS = "strategy_already_exists",
   STRATEGY_DISABLED = "strategy_disabled",
   STRATEGY_LEVERAGE_MISMATCH = "strategy_leverage_mismatch",
   STRATEGY_NOT_SUPPORTING_EXCHANGE = "strategy_not_supporting_exchange",
@@ -104,7 +101,7 @@ export enum ApiErrorIdentifier {
   TRADING_LOCKED = "trading_has_been_locked",
   TRADING_SUSPENDED = "trading_is_suspended",
   UNKNOWN_ERROR = "unknown_error_occurred",
-  URL_NOT_FOUND = "requested_resource_not_found"
+  URL_NOT_FOUND = "requested_resource_not_found",
 }
 
 /**
@@ -114,7 +111,7 @@ export enum ApiErrorLevel {
   ERROR = "error",
   INFO = "info",
   SUCCESS = "success",
-  WARNING = "warning"
+  WARNING = "warning",
 }
 
 /**
@@ -149,7 +146,7 @@ export class ApiError {
   // Bot Related Errors
   static readonly BLACK_SWAN = new ApiError(
     ApiErrorIdentifier.BLACK_SWAN,
-    ApiErrorType.USER_ERROR,
+    ApiErrorType.EXCHANGE_ERROR,
     ApiErrorLevel.INFO
   );
 
@@ -159,22 +156,16 @@ export class ApiError {
     ApiErrorLevel.INFO
   );
 
-  static readonly BOT_DISABLED = new ApiError(
-    ApiErrorIdentifier.BOT_DISABLED,
-    ApiErrorType.USER_ERROR,
-    ApiErrorLevel.WARNING
-  );
-
   static readonly BOT_STOPPING_COMPLETED = new ApiError(
     ApiErrorIdentifier.BOT_STOPPING_COMPLETED,
     ApiErrorType.NO_ERROR,
-    ApiErrorLevel.INFO
+    ApiErrorLevel.SUCCESS
   );
 
   static readonly BOT_STOPPING_STARTED = new ApiError(
     ApiErrorIdentifier.BOT_STOPPING_STARTED,
     ApiErrorType.NO_ERROR,
-    ApiErrorLevel.INFO
+    ApiErrorLevel.SUCCESS
   );
 
   // Order Related Errors
@@ -203,6 +194,12 @@ export class ApiError {
   );
 
   // Exchange Related Errors
+  static readonly EXCHANGE_HTTP_ERROR = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_HTTP_ERROR,
+    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
   static readonly EXCHANGE_INVALID_SIGNATURE = new ApiError(
     ApiErrorIdentifier.EXCHANGE_INVALID_SIGNATURE,
     ApiErrorType.SERVER_ERROR,
@@ -217,7 +214,7 @@ export class ApiError {
 
   static readonly EXCHANGE_IP_RESTRICTED = new ApiError(
     ApiErrorIdentifier.EXCHANGE_IP_RESTRICTED,
-    ApiErrorType.SERVER_ERROR,
+    ApiErrorType.USER_ERROR,
     ApiErrorLevel.ERROR
   );
 
@@ -229,7 +226,7 @@ export class ApiError {
 
   static readonly EXCHANGE_KEY_IN_USE = new ApiError(
     ApiErrorIdentifier.EXCHANGE_KEY_IN_USE,
-    ApiErrorType.SERVER_ERROR,
+    ApiErrorType.USER_ERROR,
     ApiErrorLevel.ERROR
   );
 
@@ -241,7 +238,7 @@ export class ApiError {
 
   static readonly EXCHANGE_RATE_LIMIT = new ApiError(
     ApiErrorIdentifier.EXCHANGE_RATE_LIMIT,
-    ApiErrorType.EXCHANGE_ERROR,
+    ApiErrorType.SERVER_ERROR,
     ApiErrorLevel.ERROR
   );
 
@@ -312,12 +309,6 @@ export class ApiError {
     ApiErrorLevel.ERROR
   );
 
-  static readonly HTTP_ERROR = new ApiError(
-    ApiErrorIdentifier.HTTP_ERROR,
-    ApiErrorType.EXCHANGE_ERROR,
-    ApiErrorLevel.ERROR
-  );
-
   // Balance and Margin Errors
   static readonly INSUFFICIENT_BALANCE = new ApiError(
     ApiErrorIdentifier.INSUFFICIENT_BALANCE,
@@ -358,7 +349,7 @@ export class ApiError {
 
   static readonly INVALID_DATA_RESPONSE = new ApiError(
     ApiErrorIdentifier.INVALID_DATA_RESPONSE,
-    ApiErrorType.USER_ERROR,
+    ApiErrorType.SERVER_ERROR,
     ApiErrorLevel.ERROR
   );
 
@@ -368,20 +359,14 @@ export class ApiError {
     ApiErrorLevel.ERROR
   );
 
-  static readonly INVALID_MARGIN_MODE = new ApiError(
-    ApiErrorIdentifier.INVALID_MARGIN_MODE,
-    ApiErrorType.SERVER_ERROR,
-    ApiErrorLevel.ERROR
-  );
-
   static readonly INVALID_MODEL_NAME = new ApiError(
     ApiErrorIdentifier.INVALID_MODEL_NAME,
     ApiErrorType.USER_ERROR,
     ApiErrorLevel.ERROR
   );
 
-  static readonly INVALID_PARAMETER = new ApiError(
-    ApiErrorIdentifier.INVALID_PARAMETER,
+  static readonly EXCHANGE_INVALID_PARAMETER = new ApiError(
+    ApiErrorIdentifier.EXCHANGE_INVALID_PARAMETER,
     ApiErrorType.SERVER_ERROR,
     ApiErrorLevel.ERROR
   );
@@ -439,20 +424,20 @@ export class ApiError {
   // Object Related Errors
   static readonly OBJECT_ALREADY_EXISTS = new ApiError(
     ApiErrorIdentifier.OBJECT_ALREADY_EXISTS,
-    ApiErrorType.SERVER_ERROR,
+    ApiErrorType.USER_ERROR,
     ApiErrorLevel.ERROR
   );
 
   static readonly OBJECT_CREATED = new ApiError(
     ApiErrorIdentifier.OBJECT_CREATED,
-    ApiErrorType.SERVER_ERROR,
-    ApiErrorLevel.INFO
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.SUCCESS
   );
 
   static readonly OBJECT_DELETED = new ApiError(
     ApiErrorIdentifier.OBJECT_DELETED,
-    ApiErrorType.SERVER_ERROR,
-    ApiErrorLevel.INFO
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.SUCCESS
   );
 
   static readonly OBJECT_LOCKED = new ApiError(
@@ -463,14 +448,14 @@ export class ApiError {
 
   static readonly OBJECT_NOT_FOUND = new ApiError(
     ApiErrorIdentifier.OBJECT_NOT_FOUND,
-    ApiErrorType.SERVER_ERROR,
+    ApiErrorType.USER_ERROR,
     ApiErrorLevel.ERROR
   );
 
   static readonly OBJECT_UPDATED = new ApiError(
     ApiErrorIdentifier.OBJECT_UPDATED,
-    ApiErrorType.SERVER_ERROR,
-    ApiErrorLevel.INFO
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.SUCCESS
   );
 
   // Order Related Errors
@@ -518,14 +503,14 @@ export class ApiError {
 
   static readonly ORPHAN_OPEN_ORDER = new ApiError(
     ApiErrorIdentifier.ORPHAN_OPEN_ORDER,
-    ApiErrorType.SERVER_ERROR,
-    ApiErrorLevel.INFO
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.WARNING
   );
 
   static readonly ORPHAN_CLOSE_ORDER = new ApiError(
     ApiErrorIdentifier.ORPHAN_CLOSE_ORDER,
     ApiErrorType.NO_ERROR,
-    ApiErrorLevel.INFO
+    ApiErrorLevel.WARNING
   );
 
   // Position Related Errors
@@ -538,7 +523,7 @@ export class ApiError {
   static readonly POSITION_NOT_FOUND = new ApiError(
     ApiErrorIdentifier.POSITION_NOT_FOUND,
     ApiErrorType.NO_ERROR,
-    ApiErrorLevel.INFO
+    ApiErrorLevel.WARNING
   );
 
   static readonly POSITION_SUSPENDED = new ApiError(
@@ -579,29 +564,23 @@ export class ApiError {
   );
 
   // Strategy Related Errors
-  static readonly STRATEGY_ALREADY_EXISTS = new ApiError(
-    ApiErrorIdentifier.STRATEGY_ALREADY_EXISTS,
-    ApiErrorType.USER_ERROR,
-    ApiErrorLevel.ERROR
-  );
-
   static readonly STRATEGY_DISABLED = new ApiError(
     ApiErrorIdentifier.STRATEGY_DISABLED,
-    ApiErrorType.USER_ERROR,
-    ApiErrorLevel.ERROR
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.WARNING
   );
-
+  
   static readonly STRATEGY_LEVERAGE_MISMATCH = new ApiError(
     ApiErrorIdentifier.STRATEGY_LEVERAGE_MISMATCH,
     ApiErrorType.USER_ERROR,
     ApiErrorLevel.ERROR
   );
-
   static readonly STRATEGY_NOT_SUPPORTING_EXCHANGE = new ApiError(
     ApiErrorIdentifier.STRATEGY_NOT_SUPPORTING_EXCHANGE,
-    ApiErrorType.USER_ERROR,
-    ApiErrorLevel.ERROR
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.WARNING
   );
+
 
   // Success and Not Found Errors
   static readonly SUCCESS = new ApiError(
@@ -655,10 +634,12 @@ export class ApiError {
   );
 
   static getApiError(identifier: ApiErrorIdentifier): ApiError {
-    const error = (ApiError as any)[Object.keys(ApiError).find(key => {
-      const val = (ApiError as any)[key];
-      return val instanceof ApiError && val.identifier === identifier;
-    })!];
+    const error = (ApiError as any)[
+      Object.keys(ApiError).find((key) => {
+        const val = (ApiError as any)[key];
+        return val instanceof ApiError && val.identifier === identifier;
+      })!
+    ];
     if (!error) {
       console.error(`Unknown error identifier: ${identifier}`);
       return ApiError.UNKNOWN_ERROR;

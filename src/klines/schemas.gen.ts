@@ -41,15 +41,17 @@ export const ApiErrorIdentifierSchema = {
     "invalid_exchange_key",
     "invalid_margin_mode",
     "invalid_model_name",
-    "invalid_parameter_provided",
+    "exchange_invalid_parameter",
     "leverage_limit_exceeded",
     "order_violates_liquidation_price_constraints",
+    "margin_mode_clash",
     "model_name_not_unique",
     "no_credentials",
     "now_api_down",
     "object_already_exists",
     "object_created",
     "object_deleted",
+    "object_locked",
     "object_not_found",
     "object_updated",
     "order_is_already_filled",
@@ -81,21 +83,21 @@ export const ApiErrorIdentifierSchema = {
     "requested_resource_not_found",
   ],
   title: "ApiErrorIdentifier",
-  description: "API error identifiers",
+  description: "Unique identifier of the API error.",
 } as const;
 
 export const ApiErrorLevelSchema = {
   type: "string",
   enum: ["error", "info", "success", "warning"],
   title: "ApiErrorLevel",
-  description: "API error levels",
+  description: "Level of the API error.",
 } as const;
 
 export const ApiErrorTypeSchema = {
   type: "string",
   enum: ["user error", "exchange error", "server error", "no error"],
   title: "ApiErrorType",
-  description: "Type of API error",
+  description: "Type of the API error.",
 } as const;
 
 export const ChangeInTimeframeSchema = {
@@ -153,8 +155,7 @@ export const ExceptionDetailSchema = {
   type: "object",
   required: ["code", "type", "level", "status_code"],
   title: "ExceptionDetail",
-  description:
-    "This is the detail of the exception. It is used to enrich the exception with additional information by unwrapping the ApiError into its components.",
+  description: "Exception details returned to the client.",
 } as const;
 
 export const FundingRateSchema = {
@@ -231,27 +232,62 @@ export const OHLCVSchema = {
       description: "Timestamp in seconds",
     },
     open: {
-      type: "number",
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Open",
       description: "Open prices",
     },
     high: {
-      type: "number",
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "High",
       description: "High prices",
     },
     low: {
-      type: "number",
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Low",
       description: "Low prices",
     },
     close: {
-      type: "number",
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Close",
       description: "Close prices",
     },
     volume: {
-      type: "number",
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Volume",
       description: "Volume",
     },
