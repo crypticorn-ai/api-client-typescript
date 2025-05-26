@@ -42,7 +42,7 @@ export type ApiErrorIdentifier =
   | "invalid_exchange_key"
   | "invalid_margin_mode"
   | "invalid_model_name"
-  | "invalid_parameter_provided"
+  | "exchange_invalid_parameter"
   | "leverage_limit_exceeded"
   | "order_violates_liquidation_price_constraints"
   | "margin_mode_clash"
