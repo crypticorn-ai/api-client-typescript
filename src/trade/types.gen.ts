@@ -6,15 +6,17 @@
 export type ApiErrorIdentifier =
   | "allocation_below_current_exposure"
   | "allocation_below_min_amount"
+  | "allocation_limit_exceeded"
   | "black_swan"
   | "bot_already_deleted"
-  | "bot_disabled"
   | "bot_stopping_completed"
   | "bot_stopping_started"
   | "cancelled_open_order"
   | "client_order_id_already_exists"
   | "invalid_content_type"
   | "delete_bot_error"
+  | "exchange_http_request_error"
+  | "exchange_invalid_parameter"
   | "exchange_invalid_signature"
   | "exchange_invalid_timestamp"
   | "exchange_ip_address_is_not_authorized"
@@ -30,10 +32,9 @@ export type ApiErrorIdentifier =
   | "exchange_user_account_is_frozen"
   | "api_key_expired"
   | "bearer_token_expired"
-  | "open_order_expired"
+  | "failed_open_order"
   | "forbidden"
   | "hedge_mode_not_active"
-  | "http_request_error"
   | "insufficient_balance"
   | "insufficient_margin"
   | "insufficient_scopes"
@@ -42,13 +43,13 @@ export type ApiErrorIdentifier =
   | "invalid_data"
   | "invalid_data_response"
   | "invalid_exchange_key"
-  | "invalid_margin_mode"
   | "invalid_model_name"
-  | "exchange_invalid_parameter"
   | "leverage_limit_exceeded"
   | "order_violates_liquidation_price_constraints"
   | "margin_mode_clash"
   | "name_not_unique"
+  | "no_api_key"
+  | "no_bearer"
   | "no_credentials"
   | "now_api_down"
   | "object_already_exists"
@@ -74,14 +75,13 @@ export type ApiErrorIdentifier =
   | "risk_limit_exceeded"
   | "rpc_timeout"
   | "system_settlement_in_process"
-  | "strategy_already_exists"
   | "strategy_disabled"
   | "strategy_leverage_mismatch"
   | "strategy_not_supporting_exchange"
   | "success"
   | "symbol_does_not_exist"
   | "trading_action_expired"
-  | "TRADING_ACTION_SKIPPED_BOT_STOPPING"
+  | "trading_action_skipped_bot_stopping"
   | "trading_has_been_locked"
   | "trading_is_suspended"
   | "unknown_error_occurred"
@@ -232,9 +232,17 @@ export type ExceptionDetail = {
 };
 
 /**
- * Supported exchanges for trading
+ * All exchanges used in the crypticorn ecosystem. Refer to the APIs for support for a specific usecase (data, trading, etc.).
  */
-export type Exchange = "kucoin" | "bingx" | "hyperliquid";
+export type Exchange =
+  | "kucoin"
+  | "bingx"
+  | "binance"
+  | "bybit"
+  | "hyperliquid"
+  | "bitget"
+  | "gateio"
+  | "bitstamp";
 
 /**
  * Exchange key model not containing sensitive information for read operations.
@@ -268,6 +276,21 @@ export type ExchangeKey = {
    * The exchange the API key is for.
    */
   exchange: Exchange;
+};
+
+export type ExchangeKeyBalance = {
+  /**
+   * API key ID.
+   */
+  api_key_id: string;
+  /**
+   * Futures balance information.
+   */
+  futures: FuturesBalance;
+  /**
+   * Spot balance information.
+   */
+  spot: Array<SpotBalance>;
 };
 
 /**
@@ -338,15 +361,15 @@ export type ExecutionIds = {
  */
 export type FuturesBalance = {
   /**
-   * API key ID
-   */
-  apiKeyId: string;
-  /**
-   * Asset/Currency code
+   * Asset the balance values are in
    */
   asset: string;
   /**
-   * Total balance/equity
+   * Net asset value including unrealized profit and loss
+   */
+  equity: number;
+  /**
+   * Actual account balance (equity - unrealized)
    */
   balance: number;
   /**
@@ -356,15 +379,19 @@ export type FuturesBalance = {
   /**
    * Unrealized profit and loss
    */
-  unrealizedPnl: number;
+  unrealized: number;
   /**
-   * Used/Position margin
+   * Margin used in open positions
    */
-  usedMargin?: number | null;
+  used: number;
   /**
-   * Frozen/Hold funds
+   * Frozen funds not available for use
    */
-  frozenAmount?: number | null;
+  frozen: number;
+  /**
+   * Allocated balance for bots. Added on runtime.
+   */
+  allocated?: number | null;
 };
 
 /**
@@ -372,13 +399,13 @@ export type FuturesBalance = {
  */
 export type FuturesTradingAction = {
   /**
-   * Leverage to use for futures trades.
+   * Leverage to use for futures trades. Default is 1.
    */
-  leverage: number | null;
+  leverage?: number;
   /**
-   * Margin mode for futures trades.
+   * Margin mode for futures trades. Default is isolated.
    */
-  margin_mode?: MarginMode | null;
+  margin_mode?: MarginMode;
   /**
    * Timestamp of creation
    */
@@ -439,14 +466,6 @@ export type FuturesTradingAction = {
    * Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.
    */
   expiry_timestamp?: number | null;
-  /**
-   * UID for the client order.
-   */
-  client_order_id?: string | null;
-  /**
-   * Extra Field. UID for the position to close.
-   */
-  position_id?: string | null;
 };
 
 /**
@@ -454,13 +473,13 @@ export type FuturesTradingAction = {
  */
 export type FuturesTradingActionCreate = {
   /**
-   * Leverage to use for futures trades.
+   * Leverage to use for futures trades. Default is 1.
    */
-  leverage: number | null;
+  leverage?: number;
   /**
-   * Margin mode for futures trades.
+   * Margin mode for futures trades. Default is isolated.
    */
-  margin_mode?: MarginMode | null;
+  margin_mode?: MarginMode;
   /**
    * UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.
    */
@@ -474,9 +493,9 @@ export type FuturesTradingActionCreate = {
    */
   action_type: TradingActionType;
   /**
-   * The type of market the action is for.
+   * The type of market the action is for. Must be set to futures.
    */
-  market_type: MarketType;
+  market_type?: MarketType;
   /**
    * UID for the strategy.
    */
@@ -712,13 +731,15 @@ export type Order = {
   /**
    * Exchange specific details of the order
    */
-  order_details?: unknown | null;
+  order_details?: {
+    [key: string]: unknown;
+  };
   /**
    * Profit and loss for the order
    */
   pnl?: string | null;
   /**
-   * Timestamp of order creation on the exchange.
+   * Timestamp of order creation on the exchange in seconds since epoch.
    */
   order_time?: number | null;
 };
@@ -745,6 +766,32 @@ export type PostFuturesAction = {
 };
 
 /**
+ * Model for spot balance
+ */
+export type SpotBalance = {
+  /**
+   * Asset/Currency code
+   */
+  asset: string;
+  /**
+   * Balance of the asset
+   */
+  balance: number;
+  /**
+   * Available balance for trading/withdrawal
+   */
+  available: number;
+  /**
+   * Frozen funds not available for use
+   */
+  frozen: number;
+  /**
+   * Allocated balance for bots. Added on runtime.
+   */
+  allocated?: number | null;
+};
+
+/**
  * Model for sending spot trading actions
  */
 export type SpotTradingActionCreate = {
@@ -761,9 +808,9 @@ export type SpotTradingActionCreate = {
    */
   action_type: TradingActionType;
   /**
-   * The type of market the action is for.
+   * The type of market the action is for. Must be set to spot.
    */
-  market_type: MarketType;
+  market_type?: MarketType;
   /**
    * UID for the strategy.
    */
@@ -900,6 +947,10 @@ export type StrategyExchangeInfo = {
    */
   exchange: Exchange;
   /**
+   * Base asset for the strategy. This is the asset that will be used to trade with. Default is USDT.
+   */
+  base_asset?: string;
+  /**
    * Minimum amount for the strategy on the exchange
    */
   min_amount: number;
@@ -951,10 +1002,6 @@ export type TPSL = {
    * Execution ID of the order.
    */
   execution_id?: string | null;
-  /**
-   * Client order ID of the order.
-   */
-  client_order_id?: string | null;
 };
 
 /**
@@ -1072,6 +1119,10 @@ export type CreateExchangeKeyResponse = ExchangeKey;
 
 export type CreateExchangeKeyError = ExceptionDetail;
 
+export type GetExchangeKeyBalancesResponse = Array<ExchangeKeyBalance>;
+
+export type GetExchangeKeyBalancesError = ExceptionDetail;
+
 export type GetExchangeKeyByIdData = {
   path: {
     /**
@@ -1149,55 +1200,6 @@ export type GetOrdersData = {
 export type GetOrdersResponse = Array<Order>;
 
 export type GetOrdersError = ExceptionDetail;
-
-export type GetFuturesBalanceResponse = Array<FuturesBalance>;
-
-export type GetFuturesBalanceError = ExceptionDetail;
-
-export type GetFuturesLedgerData = {
-  query: {
-    key: string;
-  };
-};
-
-export type GetFuturesLedgerResponse = unknown;
-
-export type GetFuturesLedgerError = ExceptionDetail;
-
-export type GetHistoricalFuturesOrdersData = {
-  query: {
-    key: string;
-  };
-};
-
-export type GetHistoricalFuturesOrdersResponse = unknown;
-
-export type GetHistoricalFuturesOrdersError = ExceptionDetail;
-
-export type PlaceFuturesOrderData = {
-  body: {
-    [key: string]: unknown;
-  };
-  query: {
-    key: string;
-  };
-};
-
-export type PlaceFuturesOrderResponse = unknown;
-
-export type PlaceFuturesOrderError = ExceptionDetail;
-
-export type CancelFuturesOrderData = {
-  query: {
-    key: string;
-    orderId: string;
-    symbol: string;
-  };
-};
-
-export type CancelFuturesOrderResponse = void;
-
-export type CancelFuturesOrderError = ExceptionDetail;
 
 export type GetStrategiesData = {
   query?: {
@@ -1363,3 +1365,7 @@ export type GetDependenciesResponse = {
 };
 
 export type GetDependenciesError = ExceptionDetail;
+
+export type GetMetricsResponse = unknown;
+
+export type GetMetricsError = ExceptionDetail;

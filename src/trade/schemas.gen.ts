@@ -5,15 +5,17 @@ export const ApiErrorIdentifierSchema = {
   enum: [
     "allocation_below_current_exposure",
     "allocation_below_min_amount",
+    "allocation_limit_exceeded",
     "black_swan",
     "bot_already_deleted",
-    "bot_disabled",
     "bot_stopping_completed",
     "bot_stopping_started",
     "cancelled_open_order",
     "client_order_id_already_exists",
     "invalid_content_type",
     "delete_bot_error",
+    "exchange_http_request_error",
+    "exchange_invalid_parameter",
     "exchange_invalid_signature",
     "exchange_invalid_timestamp",
     "exchange_ip_address_is_not_authorized",
@@ -29,10 +31,9 @@ export const ApiErrorIdentifierSchema = {
     "exchange_user_account_is_frozen",
     "api_key_expired",
     "bearer_token_expired",
-    "open_order_expired",
+    "failed_open_order",
     "forbidden",
     "hedge_mode_not_active",
-    "http_request_error",
     "insufficient_balance",
     "insufficient_margin",
     "insufficient_scopes",
@@ -41,13 +42,13 @@ export const ApiErrorIdentifierSchema = {
     "invalid_data",
     "invalid_data_response",
     "invalid_exchange_key",
-    "invalid_margin_mode",
     "invalid_model_name",
-    "exchange_invalid_parameter",
     "leverage_limit_exceeded",
     "order_violates_liquidation_price_constraints",
     "margin_mode_clash",
     "name_not_unique",
+    "no_api_key",
+    "no_bearer",
     "no_credentials",
     "now_api_down",
     "object_already_exists",
@@ -73,14 +74,13 @@ export const ApiErrorIdentifierSchema = {
     "risk_limit_exceeded",
     "rpc_timeout",
     "system_settlement_in_process",
-    "strategy_already_exists",
     "strategy_disabled",
     "strategy_leverage_mismatch",
     "strategy_not_supporting_exchange",
     "success",
     "symbol_does_not_exist",
     "trading_action_expired",
-    "TRADING_ACTION_SKIPPED_BOT_STOPPING",
+    "trading_action_skipped_bot_stopping",
     "trading_has_been_locked",
     "trading_is_suspended",
     "unknown_error_occurred",
@@ -323,9 +323,19 @@ export const ExceptionDetailSchema = {
 
 export const ExchangeSchema = {
   type: "string",
-  enum: ["kucoin", "bingx", "hyperliquid"],
+  enum: [
+    "kucoin",
+    "bingx",
+    "binance",
+    "bybit",
+    "hyperliquid",
+    "bitget",
+    "gateio",
+    "bitstamp",
+  ],
   title: "Exchange",
-  description: "Supported exchanges for trading",
+  description:
+    "All exchanges used in the crypticorn ecosystem. Refer to the APIs for support for a specific usecase (data, trading, etc.).",
 } as const;
 
 export const ExchangeKeySchema = {
@@ -371,6 +381,31 @@ export const ExchangeKeySchema = {
   title: "ExchangeKey",
   description:
     "Exchange key model not containing sensitive information for read operations.",
+} as const;
+
+export const ExchangeKeyBalanceSchema = {
+  properties: {
+    api_key_id: {
+      type: "string",
+      title: "Api Key Id",
+      description: "API key ID.",
+    },
+    futures: {
+      $ref: "#/components/schemas/FuturesBalance",
+      description: "Futures balance information.",
+    },
+    spot: {
+      items: {
+        $ref: "#/components/schemas/SpotBalance",
+      },
+      type: "array",
+      title: "Spot",
+      description: "Spot balance information.",
+    },
+  },
+  type: "object",
+  required: ["api_key_id", "futures", "spot"],
+  title: "ExchangeKeyBalance",
 } as const;
 
 export const ExchangeKeyCreateSchema = {
@@ -504,44 +539,42 @@ export const ExecutionIdsSchema = {
 
 export const FuturesBalanceSchema = {
   properties: {
-    apiKeyId: {
-      type: "string",
-      title: "Apikeyid",
-      description: "API key ID",
-    },
     asset: {
       type: "string",
       title: "Asset",
-      description: "Asset/Currency code",
+      description: "Asset the balance values are in",
+    },
+    equity: {
+      type: "number",
+      title: "Equity",
+      description: "Net asset value including unrealized profit and loss",
     },
     balance: {
       type: "number",
       title: "Balance",
-      description: "Total balance/equity",
+      description: "Actual account balance (equity - unrealized)",
     },
     available: {
       type: "number",
       title: "Available",
       description: "Available balance for trading/withdrawal",
     },
-    unrealizedPnl: {
+    unrealized: {
       type: "number",
-      title: "Unrealizedpnl",
+      title: "Unrealized",
       description: "Unrealized profit and loss",
     },
-    usedMargin: {
-      anyOf: [
-        {
-          type: "number",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Usedmargin",
-      description: "Used/Position margin",
+    used: {
+      type: "number",
+      title: "Used",
+      description: "Margin used in open positions",
     },
-    frozenAmount: {
+    frozen: {
+      type: "number",
+      title: "Frozen",
+      description: "Frozen funds not available for use",
+    },
+    allocated: {
       anyOf: [
         {
           type: "number",
@@ -550,12 +583,20 @@ export const FuturesBalanceSchema = {
           type: "null",
         },
       ],
-      title: "Frozenamount",
-      description: "Frozen/Hold funds",
+      title: "Allocated",
+      description: "Allocated balance for bots. Added on runtime.",
     },
   },
   type: "object",
-  required: ["apiKeyId", "asset", "balance", "available", "unrealizedPnl"],
+  required: [
+    "asset",
+    "equity",
+    "balance",
+    "available",
+    "unrealized",
+    "used",
+    "frozen",
+  ],
   title: "FuturesBalance",
   description: "Model for futures balance",
 } as const;
@@ -563,29 +604,15 @@ export const FuturesBalanceSchema = {
 export const FuturesTradingActionSchema = {
   properties: {
     leverage: {
-      anyOf: [
-        {
-          type: "integer",
-          minimum: 1,
-          default: 1,
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
+      minimum: 1,
       title: "Leverage",
-      description: "Leverage to use for futures trades.",
+      description: "Leverage to use for futures trades. Default is 1.",
+      default: 1,
     },
     margin_mode: {
-      anyOf: [
-        {
-          $ref: "#/components/schemas/MarginMode",
-        },
-        {
-          type: "null",
-        },
-      ],
-      description: "Margin mode for futures trades.",
+      $ref: "#/components/schemas/MarginMode",
+      description: "Margin mode for futures trades. Default is isolated.",
       default: "isolated",
     },
     created_at: {
@@ -725,34 +752,9 @@ export const FuturesTradingActionSchema = {
       description:
         "Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.",
     },
-    client_order_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Client Order Id",
-      description: "UID for the client order.",
-    },
-    position_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Position Id",
-      description: "Extra Field. UID for the position to close.",
-    },
   },
   type: "object",
   required: [
-    "leverage",
     "action_type",
     "market_type",
     "strategy_id",
@@ -766,29 +768,15 @@ export const FuturesTradingActionSchema = {
 export const FuturesTradingActionCreateSchema = {
   properties: {
     leverage: {
-      anyOf: [
-        {
-          type: "integer",
-          minimum: 1,
-          default: 1,
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
+      minimum: 1,
       title: "Leverage",
-      description: "Leverage to use for futures trades.",
+      description: "Leverage to use for futures trades. Default is 1.",
+      default: 1,
     },
     margin_mode: {
-      anyOf: [
-        {
-          $ref: "#/components/schemas/MarginMode",
-        },
-        {
-          type: "null",
-        },
-      ],
-      description: "Margin mode for futures trades.",
+      $ref: "#/components/schemas/MarginMode",
+      description: "Margin mode for futures trades. Default is isolated.",
       default: "isolated",
     },
     execution_id: {
@@ -823,7 +811,9 @@ export const FuturesTradingActionCreateSchema = {
     },
     market_type: {
       $ref: "#/components/schemas/MarketType",
-      description: "The type of market the action is for.",
+      description:
+        "The type of market the action is for. Must be set to futures.",
+      default: "futures",
     },
     strategy_id: {
       type: "string",
@@ -915,14 +905,7 @@ export const FuturesTradingActionCreateSchema = {
     },
   },
   type: "object",
-  required: [
-    "leverage",
-    "action_type",
-    "market_type",
-    "strategy_id",
-    "symbol",
-    "allocation",
-  ],
+  required: ["action_type", "strategy_id", "symbol", "allocation"],
   title: "FuturesTradingActionCreate",
   description: "Model for sending futures trading actions",
 } as const;
@@ -1348,12 +1331,8 @@ export const OrderSchema = {
       description: "Leverage for the order",
     },
     order_details: {
-      anyOf: [
-        {},
-        {
-          type: "null",
-        },
-      ],
+      additionalProperties: true,
+      type: "object",
       title: "Order Details",
       description: "Exchange specific details of the order",
       default: {},
@@ -1380,7 +1359,8 @@ export const OrderSchema = {
         },
       ],
       title: "Order Time",
-      description: "Timestamp of order creation on the exchange.",
+      description:
+        "Timestamp of order creation on the exchange in seconds since epoch.",
     },
   },
   type: "object",
@@ -1411,6 +1391,47 @@ export const PostFuturesActionSchema = {
   type: "object",
   required: ["id", "execution_ids"],
   title: "PostFuturesAction",
+} as const;
+
+export const SpotBalanceSchema = {
+  properties: {
+    asset: {
+      type: "string",
+      title: "Asset",
+      description: "Asset/Currency code",
+    },
+    balance: {
+      type: "number",
+      title: "Balance",
+      description: "Balance of the asset",
+    },
+    available: {
+      type: "number",
+      title: "Available",
+      description: "Available balance for trading/withdrawal",
+    },
+    frozen: {
+      type: "number",
+      title: "Frozen",
+      description: "Frozen funds not available for use",
+    },
+    allocated: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Allocated",
+      description: "Allocated balance for bots. Added on runtime.",
+    },
+  },
+  type: "object",
+  required: ["asset", "balance", "available", "frozen"],
+  title: "SpotBalance",
+  description: "Model for spot balance",
 } as const;
 
 export const SpotTradingActionCreateSchema = {
@@ -1447,7 +1468,8 @@ export const SpotTradingActionCreateSchema = {
     },
     market_type: {
       $ref: "#/components/schemas/MarketType",
-      description: "The type of market the action is for.",
+      description: "The type of market the action is for. Must be set to spot.",
+      default: "spot",
     },
     strategy_id: {
       type: "string",
@@ -1539,13 +1561,7 @@ export const SpotTradingActionCreateSchema = {
     },
   },
   type: "object",
-  required: [
-    "action_type",
-    "market_type",
-    "strategy_id",
-    "symbol",
-    "allocation",
-  ],
+  required: ["action_type", "strategy_id", "symbol", "allocation"],
   title: "SpotTradingActionCreate",
   description: "Model for sending spot trading actions",
 } as const;
@@ -1594,7 +1610,7 @@ export const StrategySchema = {
     performance_fee: {
       type: "number",
       maximum: 1,
-      exclusiveMinimum: 0,
+      minimum: 0,
       title: "Performance Fee",
       description: "Performance fee for the strategy",
     },
@@ -1618,6 +1634,7 @@ export const StrategySchema = {
     },
     leverage: {
       type: "integer",
+      minimum: 1,
       title: "Leverage",
       description: "Leverage for the strategy",
     },
@@ -1671,7 +1688,7 @@ export const StrategyCreateSchema = {
     performance_fee: {
       type: "number",
       maximum: 1,
-      exclusiveMinimum: 0,
+      minimum: 0,
       title: "Performance Fee",
       description: "Performance fee for the strategy",
     },
@@ -1695,6 +1712,7 @@ export const StrategyCreateSchema = {
     },
     leverage: {
       type: "integer",
+      minimum: 1,
       title: "Leverage",
       description: "Leverage for the strategy",
     },
@@ -1724,6 +1742,13 @@ export const StrategyExchangeInfoSchema = {
     exchange: {
       $ref: "#/components/schemas/Exchange",
       description: "Exchange name. Of type Exchange",
+    },
+    base_asset: {
+      type: "string",
+      title: "Base Asset",
+      description:
+        "Base asset for the strategy. This is the asset that will be used to trade with. Default is USDT.",
+      default: "USDT",
     },
     min_amount: {
       type: "integer",
@@ -1795,7 +1820,7 @@ export const StrategyUpdateSchema = {
         {
           type: "number",
           maximum: 1,
-          exclusiveMinimum: 0,
+          minimum: 0,
         },
         {
           type: "null",
@@ -1856,18 +1881,6 @@ export const TPSLSchema = {
       ],
       title: "Execution Id",
       description: "Execution ID of the order.",
-    },
-    client_order_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Client Order Id",
-      description: "Client order ID of the order.",
     },
   },
   type: "object",

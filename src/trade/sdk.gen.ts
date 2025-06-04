@@ -31,6 +31,8 @@ import type {
   CreateExchangeKeyData,
   CreateExchangeKeyError,
   CreateExchangeKeyResponse,
+  GetExchangeKeyBalancesError,
+  GetExchangeKeyBalancesResponse,
   GetExchangeKeyByIdData,
   GetExchangeKeyByIdError,
   GetExchangeKeyByIdResponse,
@@ -52,20 +54,6 @@ import type {
   GetOrdersData,
   GetOrdersError,
   GetOrdersResponse,
-  GetFuturesBalanceError,
-  GetFuturesBalanceResponse,
-  GetFuturesLedgerData,
-  GetFuturesLedgerError,
-  GetFuturesLedgerResponse,
-  GetHistoricalFuturesOrdersData,
-  GetHistoricalFuturesOrdersError,
-  GetHistoricalFuturesOrdersResponse,
-  PlaceFuturesOrderData,
-  PlaceFuturesOrderError,
-  PlaceFuturesOrderResponse,
-  CancelFuturesOrderData,
-  CancelFuturesOrderError,
-  CancelFuturesOrderResponse,
   GetStrategiesData,
   GetStrategiesError,
   GetStrategiesResponse,
@@ -117,6 +105,8 @@ import type {
   GetDependenciesData,
   GetDependenciesError,
   GetDependenciesResponse,
+  GetMetricsError,
+  GetMetricsResponse,
 } from "./types.gen";
 
 export function createClient(
@@ -286,6 +276,23 @@ export function createClient(
   };
 
   /**
+   * Get Exchange Key Balances
+   * Get the balances of all exchange keys.
+   */
+  const getExchangeKeyBalances = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetExchangeKeyBalancesResponse,
+      GetExchangeKeyBalancesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/api-keys/balances",
+    });
+  };
+
+  /**
    * Get Exchange Key By Id
    * Get an exchange key by ID.
    */
@@ -399,86 +406,6 @@ export function createClient(
     >({
       ...options,
       url: "/orders",
-    });
-  };
-
-  /**
-   * Get Futures Balance
-   */
-  const getFuturesBalance = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetFuturesBalanceResponse,
-      GetFuturesBalanceError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/futures/balance",
-    });
-  };
-
-  /**
-   * Get Futures Ledger
-   */
-  const getFuturesLedger = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetFuturesLedgerData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetFuturesLedgerResponse,
-      GetFuturesLedgerError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/futures/ledger",
-    });
-  };
-
-  /**
-   * Get Historical Futures Orders
-   */
-  const getHistoricalFuturesOrders = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetHistoricalFuturesOrdersData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetHistoricalFuturesOrdersResponse,
-      GetHistoricalFuturesOrdersError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/futures/orders",
-    });
-  };
-
-  /**
-   * Place Order
-   */
-  const placeFuturesOrder = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<PlaceFuturesOrderData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).post<
-      PlaceFuturesOrderResponse,
-      PlaceFuturesOrderError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/futures/orders",
-    });
-  };
-
-  /**
-   * Cancel Order
-   */
-  const cancelFuturesOrder = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<CancelFuturesOrderData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).delete<
-      CancelFuturesOrderResponse,
-      CancelFuturesOrderError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/futures/orders",
     });
   };
 
@@ -828,6 +755,23 @@ export function createClient(
     });
   };
 
+  /**
+   * Metrics
+   * Get Prometheus metrics for the application. Returns plain text.
+   */
+  const getMetrics = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetMetricsResponse,
+      GetMetricsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/metrics",
+    });
+  };
+
   return {
     ping,
     getTime,
@@ -838,6 +782,7 @@ export function createClient(
     deleteBot,
     getExchangeKeys,
     createExchangeKey,
+    getExchangeKeyBalances,
     getExchangeKeyById,
     deleteExchangeKey,
     updateExchangeKey,
@@ -845,11 +790,6 @@ export function createClient(
     postSpotAction,
     getActions,
     getOrders,
-    getFuturesBalance,
-    getFuturesLedger,
-    getHistoricalFuturesOrders,
-    placeFuturesOrder,
-    cancelFuturesOrder,
     getStrategies,
     createStrategy,
     getStrategyUsage,
@@ -870,5 +810,6 @@ export function createClient(
     getThreads,
     getContainerLimits,
     getDependencies,
+    getMetrics,
   };
 }
