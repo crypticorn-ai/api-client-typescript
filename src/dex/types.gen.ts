@@ -176,6 +176,52 @@ export type Risk = {
 };
 
 /**
+ * Model for signal statistics response
+ */
+export type SignalOverviewStats = {
+  /**
+   * The timestamp of the stats
+   */
+  timestamp: number;
+  /**
+   * Total number of tokens analyzed
+   */
+  total: number;
+  /**
+   * Overall win rate as a percentage
+   */
+  win_rate: number;
+  /**
+   * Average performance as a percentage
+   */
+  avg_performance: number;
+  /**
+   * Median performance as a percentage
+   */
+  median_performance: number;
+  /**
+   * Best performing risk category
+   */
+  best_risk_category?: string | null;
+  /**
+   * Best performing month
+   */
+  best_month?: string | null;
+  /**
+   * Best holding period
+   */
+  best_holding_period?: string | null;
+  /**
+   * Best launch hour (UTC)
+   */
+  best_launch_hour?: number | null;
+  /**
+   * Best launch day of the week
+   */
+  best_launch_day?: string | null;
+};
+
+/**
  * Model for the volume of the signal
  */
 export type SignalVolume = {
@@ -206,7 +252,7 @@ export type SignalWithToken = {
   /**
    * The performance in percent as a string. e.g. +100%
    */
-  performance?: string | null;
+  performance: string;
   /**
    * The price of the signal
    */
@@ -242,7 +288,7 @@ export type SignalWithToken = {
   /**
    * The performance in float. e.g. +100% -> 2.0
    */
-  readonly performance_float: number | null;
+  readonly performance_float: number;
 };
 
 /**
@@ -372,6 +418,10 @@ export type GetTopSignalsData = {
 export type GetTopSignalsResponse = PaginatedResponse_SignalWithToken_;
 
 export type GetTopSignalsError = ExceptionDetail;
+
+export type GetSignalStatsResponse = SignalOverviewStats;
+
+export type GetSignalStatsError = ExceptionDetail;
 
 export type PingResponse = string;
 

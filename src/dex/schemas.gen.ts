@@ -237,6 +237,106 @@ export const RiskSchema = {
   description: "Model for risk assessment",
 } as const;
 
+export const SignalOverviewStatsSchema = {
+  properties: {
+    timestamp: {
+      type: "integer",
+      title: "Timestamp",
+      description: "The timestamp of the stats",
+    },
+    total: {
+      type: "integer",
+      title: "Total",
+      description: "Total number of tokens analyzed",
+    },
+    win_rate: {
+      type: "number",
+      title: "Win Rate",
+      description: "Overall win rate as a percentage",
+    },
+    avg_performance: {
+      type: "number",
+      title: "Avg Performance",
+      description: "Average performance as a percentage",
+    },
+    median_performance: {
+      type: "number",
+      title: "Median Performance",
+      description: "Median performance as a percentage",
+    },
+    best_risk_category: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Best Risk Category",
+      description: "Best performing risk category",
+    },
+    best_month: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Best Month",
+      description: "Best performing month",
+    },
+    best_holding_period: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Best Holding Period",
+      description: "Best holding period",
+    },
+    best_launch_hour: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Best Launch Hour",
+      description: "Best launch hour (UTC)",
+    },
+    best_launch_day: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Best Launch Day",
+      description: "Best launch day of the week",
+    },
+  },
+  type: "object",
+  required: [
+    "timestamp",
+    "total",
+    "win_rate",
+    "avg_performance",
+    "median_performance",
+  ],
+  title: "SignalOverviewStats",
+  description: "Model for signal statistics response",
+} as const;
+
 export const SignalVolumeSchema = {
   properties: {
     day: {
@@ -284,14 +384,7 @@ export const SignalWithTokenSchema = {
       description: "The risk level of the signal",
     },
     performance: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Performance",
       description: "The performance in percent as a string. e.g. +100%",
     },
@@ -341,14 +434,7 @@ export const SignalWithTokenSchema = {
       description: "The token info",
     },
     performance_float: {
-      anyOf: [
-        {
-          type: "number",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "number",
       title: "Performance Float",
       description: "The performance in float. e.g. +100% -> 2.0",
       readOnly: true,
@@ -359,6 +445,7 @@ export const SignalWithTokenSchema = {
     "ca",
     "name",
     "type",
+    "performance",
     "price",
     "volume",
     "liquidity",

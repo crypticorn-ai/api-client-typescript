@@ -11,6 +11,8 @@ import type {
   GetTopSignalsData,
   GetTopSignalsError,
   GetTopSignalsResponse,
+  GetSignalStatsError,
+  GetSignalStatsResponse,
   PingError,
   PingResponse,
   GetTimeData,
@@ -51,7 +53,7 @@ export function createClient(
 
   /**
    * Get Signals
-   * Get all signals. Returns the latest 100 signals by default.
+   * Get all signals. Returns the latest 10 signals by default.
    * The default sort is `called_at` and the default order is `desc`.
    */
   const getSignals = <ThrowOnError extends boolean = false>(
@@ -69,8 +71,7 @@ export function createClient(
 
   /**
    * Get Top Signals
-   * Get the top performing signals from the last X hours.
-   * The default is from the last 24 hours.
+   * Get the top performing signals from the last X hours.The default is from the last 24 hours.
    */
   const getTopSignals = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetTopSignalsData, ThrowOnError>,
@@ -82,6 +83,23 @@ export function createClient(
     >({
       ...options,
       url: "/signals/top",
+    });
+  };
+
+  /**
+   * Get Stats
+   * Get comprehensive statistics for all signals.
+   */
+  const getSignalStats = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetSignalStatsResponse,
+      GetSignalStatsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/signals/stats",
     });
   };
 
@@ -248,6 +266,7 @@ export function createClient(
   return {
     getSignals,
     getTopSignals,
+    getSignalStats,
     ping,
     getTime,
     getLogLevel,
