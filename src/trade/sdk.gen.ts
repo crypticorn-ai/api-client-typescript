@@ -16,6 +16,12 @@ import type {
   CreateBotData,
   CreateBotError,
   CreateBotResponse,
+  GetBotPnlData,
+  GetBotPnlError,
+  GetBotPnlResponse,
+  GetBotsPnlData,
+  GetBotsPnlError,
+  GetBotsPnlResponse,
   GetBotData,
   GetBotError,
   GetBotResponse,
@@ -188,6 +194,42 @@ export function createClient(
     >({
       ...options,
       url: "/bots",
+    });
+  };
+
+  /**
+   * Get Bot Pnl
+   * Get the list of PnLs for a bot over time in ascending order.
+   * The default sort is `timestamp` and the default order is `asc`. To get the latest cumulated PnL in a given time window for a bot, use `timestamp` and `desc` with page_size=1.
+   */
+  const getBotPnl = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetBotPnlData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotPnlResponse,
+      GetBotPnlError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/{id}/pnl",
+    });
+  };
+
+  /**
+   * Get Bots Pnl
+   * Get the list of PnLs for all bots over time in ascending order.
+   * The default sort is `timestamp` and the default order is `asc`. To get the latest cumulated PnL in a given time window, use `timestamp` and `desc` with page_size=1.
+   */
+  const getBotsPnl = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetBotsPnlData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotsPnlResponse,
+      GetBotsPnlError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/pnl",
     });
   };
 
@@ -777,6 +819,8 @@ export function createClient(
     getTime,
     getBots,
     createBot,
+    getBotPnl,
+    getBotsPnl,
     getBot,
     updateBot,
     deleteBot,

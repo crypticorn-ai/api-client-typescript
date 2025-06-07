@@ -148,11 +148,11 @@ export type Bot = {
   /**
    * Initial allocation for the bot + accumulated PnL of the orders after the last allocation change
    */
-  current_allocation?: number;
+  current_allocation?: string;
   /**
    * Current exposure of the bot, aka. the sum of the absolute values of the open positions
    */
-  current_exposure?: number;
+  current_exposure?: string;
 };
 
 /**
@@ -754,6 +754,49 @@ export type OrderStatus =
   | "cancelled"
   | "failed";
 
+export type PaginatedResponse_PnL_ = {
+  data: Array<PnL>;
+  /**
+   * The total number of items
+   */
+  total: number;
+  /**
+   * The current page number
+   */
+  page: number;
+  /**
+   * The number of items per page
+   */
+  page_size: number;
+  /**
+   * The previous page number
+   */
+  prev?: number | null;
+  /**
+   * The next page number
+   */
+  next?: number | null;
+  /**
+   * The last page number
+   */
+  last?: number | null;
+};
+
+export type PnL = {
+  /**
+   * Timestamp of the order
+   */
+  timestamp: number;
+  /**
+   * The profit and loss of the order
+   */
+  pnl: string;
+  /**
+   * The cumulative profit and loss of the bot until the order (inclusive)
+   */
+  cum_pnl: string;
+};
+
 export type PostFuturesAction = {
   /**
    * Action ID.
@@ -1048,8 +1091,6 @@ export type GetTimeError = ExceptionDetail;
 export type GetBotsData = {
   query?: {
     include_deleted?: boolean;
-    limit?: number;
-    offset?: number;
   };
 };
 
@@ -1065,8 +1106,91 @@ export type CreateBotResponse = Bot;
 
 export type CreateBotError = ExceptionDetail;
 
+export type GetBotPnlData = {
+  path: {
+    /**
+     * The ID of the bot
+     */
+    id: string;
+  };
+  query?: {
+    /**
+     * The current page number
+     */
+    page?: number | null;
+    /**
+     * The number of items per page. Default is 100, max is 1000.
+     */
+    page_size?: number;
+    /**
+     * The number of days to return the PnL for. Only used if `window` is `period`. Default is 30.
+     */
+    period?: number;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+    /**
+     * The ID of the user. Defaults to the authenticated user, unless user is an admin.
+     */
+    user_id?: string | null;
+    /**
+     * Time window for PnL. Defaults to period (last X days), or use month, quarter, or year for values since the start of that range.
+     */
+    window?: "period" | "month" | "quarter" | "year";
+  };
+};
+
+export type GetBotPnlResponse = PaginatedResponse_PnL_;
+
+export type GetBotPnlError = ExceptionDetail;
+
+export type GetBotsPnlData = {
+  query?: {
+    /**
+     * The current page number
+     */
+    page?: number | null;
+    /**
+     * The number of items per page. Default is 100, max is 1000.
+     */
+    page_size?: number;
+    /**
+     * The number of days to return the PnL for. Only used if `window` is `period`. Default is 30.
+     */
+    period?: number;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+    /**
+     * The ID of the user. Defaults to the authenticated user, unless user is an admin.
+     */
+    user_id?: string | null;
+    /**
+     * Time window for PnL. Defaults to period (last X days), or use month, quarter, or year for values since the start of that range.
+     */
+    window?: "period" | "month" | "quarter" | "year";
+  };
+};
+
+export type GetBotsPnlResponse = PaginatedResponse_PnL_;
+
+export type GetBotsPnlError = ExceptionDetail;
+
 export type GetBotData = {
   path: {
+    /**
+     * The ID of the bot
+     */
     id: string;
   };
 };
@@ -1078,6 +1202,9 @@ export type GetBotError = ExceptionDetail;
 export type UpdateBotData = {
   body: BotUpdate;
   path: {
+    /**
+     * The ID of the bot
+     */
     id: string;
   };
 };
@@ -1088,6 +1215,9 @@ export type UpdateBotError = ExceptionDetail;
 
 export type DeleteBotData = {
   path: {
+    /**
+     * The ID of the bot
+     */
     id: string;
   };
 };

@@ -164,20 +164,18 @@ export const BotSchema = {
         "Status code of the bot. Set if the bot is stopped by an error.",
     },
     current_allocation: {
-      type: "number",
-      minimum: 0,
+      type: "string",
       title: "Current Allocation",
       description:
         "Initial allocation for the bot + accumulated PnL of the orders after the last allocation change",
-      default: 0,
+      default: "0",
     },
     current_exposure: {
-      type: "number",
-      minimum: 0,
+      type: "string",
       title: "Current Exposure",
       description:
         "Current exposure of the bot, aka. the sum of the absolute values of the open positions",
-      default: 0,
+      default: "0",
     },
   },
   type: "object",
@@ -1374,6 +1372,96 @@ export const OrderStatusSchema = {
   enum: ["new", "filled", "partially_filled", "cancelled", "failed"],
   title: "OrderStatus",
   description: "Status of the order",
+} as const;
+
+export const PaginatedResponse_PnL_Schema = {
+  properties: {
+    data: {
+      items: {
+        $ref: "#/components/schemas/PnL",
+      },
+      type: "array",
+      title: "Data",
+    },
+    total: {
+      type: "integer",
+      title: "Total",
+      description: "The total number of items",
+    },
+    page: {
+      type: "integer",
+      title: "Page",
+      description: "The current page number",
+    },
+    page_size: {
+      type: "integer",
+      title: "Page Size",
+      description: "The number of items per page",
+    },
+    prev: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Prev",
+      description: "The previous page number",
+    },
+    next: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Next",
+      description: "The next page number",
+    },
+    last: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Last",
+      description: "The last page number",
+    },
+  },
+  type: "object",
+  required: ["data", "total", "page", "page_size"],
+  title: "PaginatedResponse[PnL]",
+} as const;
+
+export const PnLSchema = {
+  properties: {
+    timestamp: {
+      type: "integer",
+      title: "Timestamp",
+      description: "Timestamp of the order",
+    },
+    pnl: {
+      type: "string",
+      title: "Pnl",
+      description: "The profit and loss of the order",
+    },
+    cum_pnl: {
+      type: "string",
+      title: "Cum Pnl",
+      description:
+        "The cumulative profit and loss of the bot until the order (inclusive)",
+    },
+  },
+  type: "object",
+  required: ["timestamp", "pnl", "cum_pnl"],
+  title: "PnL",
 } as const;
 
 export const PostFuturesActionSchema = {
