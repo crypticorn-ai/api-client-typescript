@@ -10,18 +10,24 @@ import type {
   GetTimeData,
   GetTimeError,
   GetTimeResponse,
+  GetBotOrdersCountData,
+  GetBotOrdersCountError,
+  GetBotOrdersCountResponse,
+  GetBotsOrdersCountData,
+  GetBotsOrdersCountError,
+  GetBotsOrdersCountResponse,
+  GetBotOrdersPnlData,
+  GetBotOrdersPnlError,
+  GetBotOrdersPnlResponse,
+  GetBotsOrdersPnlData,
+  GetBotsOrdersPnlError,
+  GetBotsOrdersPnlResponse,
   GetBotsData,
   GetBotsError,
   GetBotsResponse,
   CreateBotData,
   CreateBotError,
   CreateBotResponse,
-  GetBotPnlData,
-  GetBotPnlError,
-  GetBotPnlResponse,
-  GetBotsPnlData,
-  GetBotsPnlError,
-  GetBotsPnlResponse,
   GetBotData,
   GetBotError,
   GetBotResponse,
@@ -60,6 +66,9 @@ import type {
   GetOrdersData,
   GetOrdersError,
   GetOrdersResponse,
+  GetOrdersCountData,
+  GetOrdersCountError,
+  GetOrdersCountResponse,
   GetStrategiesData,
   GetStrategiesError,
   GetStrategiesResponse,
@@ -165,6 +174,80 @@ export function createClient(
   };
 
   /**
+   * Get Bot Orders Count
+   * Get the number of orders for a bot by day, week, month, or year. The default sort is `timestamp` and the default order is `asc`.
+   */
+  const getBotOrdersCount = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetBotOrdersCountData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotOrdersCountResponse,
+      GetBotOrdersCountError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/{id}/orders/count",
+    });
+  };
+
+  /**
+   * Get Bots Orders Count
+   * Get the number of orders for all bots of the user by day, week, month, or year. The default sort is `timestamp` and the default order is `asc`.
+   */
+  const getBotsOrdersCount = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetBotsOrdersCountData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotsOrdersCountResponse,
+      GetBotsOrdersCountError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/orders/count",
+    });
+  };
+
+  /**
+   * Get Bot Pnl
+   * Returns a list of PnLs for a bot over time, sorted by `timestamp` ascending by default.
+   *
+   * If more than 1000 points exist, PnLs are grouped by day.
+   * To get the latest cumulative PnL in a time window, use `sort_by=timestamp`, `sort_order=desc`, and `limit=1`.
+   */
+  const getBotOrdersPnl = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetBotOrdersPnlData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotOrdersPnlResponse,
+      GetBotOrdersPnlError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/{id}/orders/pnl",
+    });
+  };
+
+  /**
+   * Get Bots Pnl
+   * Returns a list of PnLs for all bots of the user over time, sorted by `timestamp` ascending by default.
+   *
+   * If more than 1000 points exist, PnLs are grouped by day.
+   * To get the latest cumulative PnL in a time window, use `sort_by=timestamp`, `sort_order=desc`, and `limit=1`.
+   */
+  const getBotsOrdersPnl = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetBotsOrdersPnlData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotsOrdersPnlResponse,
+      GetBotsOrdersPnlError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/orders/pnl",
+    });
+  };
+
+  /**
    * Get Bots
    */
   const getBots = <ThrowOnError extends boolean = false>(
@@ -194,42 +277,6 @@ export function createClient(
     >({
       ...options,
       url: "/bots",
-    });
-  };
-
-  /**
-   * Get Bot Pnl
-   * Get the list of PnLs for a bot over time in ascending order.
-   * The default sort is `timestamp` and the default order is `asc`. To get the latest cumulated PnL in a given time window for a bot, use `timestamp` and `desc` with page_size=1.
-   */
-  const getBotPnl = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetBotPnlData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetBotPnlResponse,
-      GetBotPnlError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/bots/{id}/pnl",
-    });
-  };
-
-  /**
-   * Get Bots Pnl
-   * Get the list of PnLs for all bots over time in ascending order.
-   * The default sort is `timestamp` and the default order is `asc`. To get the latest cumulated PnL in a given time window, use `timestamp` and `desc` with page_size=1.
-   */
-  const getBotsPnl = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetBotsPnlData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetBotsPnlResponse,
-      GetBotsPnlError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/bots/pnl",
     });
   };
 
@@ -448,6 +495,23 @@ export function createClient(
     >({
       ...options,
       url: "/orders",
+    });
+  };
+
+  /**
+   * Get Orders Count
+   * Get the number of orders for all users by day, week, month, or year. The default sort is `timestamp` and the default order is `asc`..
+   */
+  const getOrdersCount = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetOrdersCountData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetOrdersCountResponse,
+      GetOrdersCountError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/orders/count",
     });
   };
 
@@ -817,10 +881,12 @@ export function createClient(
   return {
     ping,
     getTime,
+    getBotOrdersCount,
+    getBotsOrdersCount,
+    getBotOrdersPnl,
+    getBotsOrdersPnl,
     getBots,
     createBot,
-    getBotPnl,
-    getBotsPnl,
     getBot,
     updateBot,
     deleteBot,
@@ -834,6 +900,7 @@ export function createClient(
     postSpotAction,
     getActions,
     getOrders,
+    getOrdersCount,
     getStrategies,
     createStrategy,
     getStrategyUsage,

@@ -1374,70 +1374,23 @@ export const OrderStatusSchema = {
   description: "Status of the order",
 } as const;
 
-export const PaginatedResponse_PnL_Schema = {
+export const OrdersCountSchema = {
   properties: {
-    data: {
-      items: {
-        $ref: "#/components/schemas/PnL",
-      },
-      type: "array",
-      title: "Data",
-    },
-    total: {
+    timestamp: {
       type: "integer",
-      title: "Total",
-      description: "The total number of items",
+      title: "Timestamp",
+      description: "Timestamp of the latest order for the day",
     },
-    page: {
+    count: {
       type: "integer",
-      title: "Page",
-      description: "The current page number",
-    },
-    page_size: {
-      type: "integer",
-      title: "Page Size",
-      description: "The number of items per page",
-    },
-    prev: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Prev",
-      description: "The previous page number",
-    },
-    next: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Next",
-      description: "The next page number",
-    },
-    last: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Last",
-      description: "The last page number",
+      title: "Count",
+      description: "The number of orders for the day",
     },
   },
   type: "object",
-  required: ["data", "total", "page", "page_size"],
-  title: "PaginatedResponse[PnL]",
+  required: ["timestamp", "count"],
+  title: "OrdersCount",
+  description: "The number of orders for a user by day",
 } as const;
 
 export const PnLSchema = {
@@ -1448,12 +1401,12 @@ export const PnLSchema = {
       description: "Timestamp of the order",
     },
     pnl: {
-      type: "string",
+      type: "number",
       title: "Pnl",
       description: "The profit and loss of the order",
     },
     cum_pnl: {
-      type: "string",
+      type: "number",
       title: "Cum Pnl",
       description:
         "The cumulative profit and loss of the bot until the order (inclusive)",
@@ -1462,6 +1415,8 @@ export const PnLSchema = {
   type: "object",
   required: ["timestamp", "pnl", "cum_pnl"],
   title: "PnL",
+  description:
+    "The profit and loss of a bot by timestamp. In the case of sampling, the PnL is the sum of the PnLs between the prior timestamp and the current timestamp.",
 } as const;
 
 export const PostFuturesActionSchema = {

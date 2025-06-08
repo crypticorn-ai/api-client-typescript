@@ -745,6 +745,20 @@ export type Order = {
 };
 
 /**
+ * The number of orders for a user by day
+ */
+export type OrdersCount = {
+  /**
+   * Timestamp of the latest order for the day
+   */
+  timestamp: number;
+  /**
+   * The number of orders for the day
+   */
+  count: number;
+};
+
+/**
  * Status of the order
  */
 export type OrderStatus =
@@ -754,34 +768,9 @@ export type OrderStatus =
   | "cancelled"
   | "failed";
 
-export type PaginatedResponse_PnL_ = {
-  data: Array<PnL>;
-  /**
-   * The total number of items
-   */
-  total: number;
-  /**
-   * The current page number
-   */
-  page: number;
-  /**
-   * The number of items per page
-   */
-  page_size: number;
-  /**
-   * The previous page number
-   */
-  prev?: number | null;
-  /**
-   * The next page number
-   */
-  next?: number | null;
-  /**
-   * The last page number
-   */
-  last?: number | null;
-};
-
+/**
+ * The profit and loss of a bot by timestamp. In the case of sampling, the PnL is the sum of the PnLs between the prior timestamp and the current timestamp.
+ */
 export type PnL = {
   /**
    * Timestamp of the order
@@ -790,11 +779,11 @@ export type PnL = {
   /**
    * The profit and loss of the order
    */
-  pnl: string;
+  pnl: number;
   /**
    * The cumulative profit and loss of the bot until the order (inclusive)
    */
-  cum_pnl: string;
+  cum_pnl: number;
 };
 
 export type PostFuturesAction = {
@@ -1088,9 +1077,136 @@ export type GetTimeResponse = string;
 
 export type GetTimeError = ExceptionDetail;
 
+export type GetBotOrdersCountData = {
+  path: {
+    /**
+     * The ID of the bot
+     */
+    id: string;
+  };
+  query?: {
+    /**
+     * The group by period for the orders count. Defaults to day.
+     */
+    group_by?: "day" | "week" | "month" | "year";
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+  };
+};
+
+export type GetBotOrdersCountResponse = Array<OrdersCount>;
+
+export type GetBotOrdersCountError = ExceptionDetail;
+
+export type GetBotsOrdersCountData = {
+  query?: {
+    /**
+     * The group by period for the orders count. Defaults to day.
+     */
+    group_by?: "day" | "week" | "month" | "year";
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+  };
+};
+
+export type GetBotsOrdersCountResponse = Array<OrdersCount>;
+
+export type GetBotsOrdersCountError = ExceptionDetail;
+
+export type GetBotOrdersPnlData = {
+  path: {
+    /**
+     * The ID of the bot
+     */
+    id: string;
+  };
+  query?: {
+    /**
+     * The number of items to return. Defaults to None, meaning no limit.
+     */
+    limit?: number | null;
+    /**
+     * The number of days to return the PnL for. Only used if `window` is `period`. Default is 30.
+     */
+    period?: number | null;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+    /**
+     * The ID of the user. Defaults to the authenticated user, unless user is an admin.
+     */
+    user_id?: string | null;
+    /**
+     * Time window for PnL. Defaults to full (all time), or use period (last X days), month, quarter, or year for values since the start of that range.
+     */
+    window?: "period" | "month" | "quarter" | "year" | "full";
+  };
+};
+
+export type GetBotOrdersPnlResponse = Array<PnL>;
+
+export type GetBotOrdersPnlError = ExceptionDetail;
+
+export type GetBotsOrdersPnlData = {
+  query?: {
+    /**
+     * The number of items to return. Defaults to None, meaning no limit.
+     */
+    limit?: number | null;
+    /**
+     * The number of days to return the PnL for. Only used if `window` is `period`. Default is 30.
+     */
+    period?: number | null;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+    /**
+     * The ID of the user. Defaults to the authenticated user, unless user is an admin.
+     */
+    user_id?: string | null;
+    /**
+     * Time window for PnL. Defaults to full (all time), or use period (last X days), month, quarter, or year for values since the start of that range.
+     */
+    window?: "period" | "month" | "quarter" | "year" | "full";
+  };
+};
+
+export type GetBotsOrdersPnlResponse = Array<PnL>;
+
+export type GetBotsOrdersPnlError = ExceptionDetail;
+
 export type GetBotsData = {
   query?: {
+    /**
+     * Whether to include deleted bots
+     */
     include_deleted?: boolean;
+    /**
+     * Whether to validate the bots
+     */
+    validate?: boolean;
   };
 };
 
@@ -1105,86 +1221,6 @@ export type CreateBotData = {
 export type CreateBotResponse = Bot;
 
 export type CreateBotError = ExceptionDetail;
-
-export type GetBotPnlData = {
-  path: {
-    /**
-     * The ID of the bot
-     */
-    id: string;
-  };
-  query?: {
-    /**
-     * The current page number
-     */
-    page?: number | null;
-    /**
-     * The number of items per page. Default is 100, max is 1000.
-     */
-    page_size?: number;
-    /**
-     * The number of days to return the PnL for. Only used if `window` is `period`. Default is 30.
-     */
-    period?: number;
-    /**
-     * The field to sort by
-     */
-    sort_by?: string | null;
-    /**
-     * The order to sort by
-     */
-    sort_order?: "asc" | "desc" | null;
-    /**
-     * The ID of the user. Defaults to the authenticated user, unless user is an admin.
-     */
-    user_id?: string | null;
-    /**
-     * Time window for PnL. Defaults to period (last X days), or use month, quarter, or year for values since the start of that range.
-     */
-    window?: "period" | "month" | "quarter" | "year";
-  };
-};
-
-export type GetBotPnlResponse = PaginatedResponse_PnL_;
-
-export type GetBotPnlError = ExceptionDetail;
-
-export type GetBotsPnlData = {
-  query?: {
-    /**
-     * The current page number
-     */
-    page?: number | null;
-    /**
-     * The number of items per page. Default is 100, max is 1000.
-     */
-    page_size?: number;
-    /**
-     * The number of days to return the PnL for. Only used if `window` is `period`. Default is 30.
-     */
-    period?: number;
-    /**
-     * The field to sort by
-     */
-    sort_by?: string | null;
-    /**
-     * The order to sort by
-     */
-    sort_order?: "asc" | "desc" | null;
-    /**
-     * The ID of the user. Defaults to the authenticated user, unless user is an admin.
-     */
-    user_id?: string | null;
-    /**
-     * Time window for PnL. Defaults to period (last X days), or use month, quarter, or year for values since the start of that range.
-     */
-    window?: "period" | "month" | "quarter" | "year";
-  };
-};
-
-export type GetBotsPnlResponse = PaginatedResponse_PnL_;
-
-export type GetBotsPnlError = ExceptionDetail;
 
 export type GetBotData = {
   path: {
@@ -1330,6 +1366,27 @@ export type GetOrdersData = {
 export type GetOrdersResponse = Array<Order>;
 
 export type GetOrdersError = ExceptionDetail;
+
+export type GetOrdersCountData = {
+  query?: {
+    /**
+     * The group by period for the orders count. Defaults to day.
+     */
+    group_by?: "day" | "week" | "month" | "year";
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+  };
+};
+
+export type GetOrdersCountResponse = Array<OrdersCount>;
+
+export type GetOrdersCountError = ExceptionDetail;
 
 export type GetStrategiesData = {
   query?: {
