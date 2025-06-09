@@ -97,7 +97,7 @@ export enum ApiErrorIdentifier {
   SUCCESS = "success",
   SYMBOL_NOT_FOUND = "symbol_does_not_exist",
   TRADING_ACTION_EXPIRED = "trading_action_expired",
-  TRADING_ACTION_SKIPPED_BOT_STOPPING = "TRADING_ACTION_SKIPPED_BOT_STOPPING",
+  TRADING_ACTION_SKIPPED_BOT_STOPPING = "trading_action_skipped_bot_stopping",
   TRADING_LOCKED = "trading_has_been_locked",
   TRADING_SUSPENDED = "trading_is_suspended",
   UNKNOWN_ERROR = "unknown_error_occurred",

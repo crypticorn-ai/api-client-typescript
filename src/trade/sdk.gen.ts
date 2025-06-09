@@ -22,6 +22,12 @@ import type {
   GetBotsOrdersPnlData,
   GetBotsOrdersPnlError,
   GetBotsOrdersPnlResponse,
+  GetBotsOrdersData,
+  GetBotsOrdersError,
+  GetBotsOrdersResponse,
+  GetBotOrdersData,
+  GetBotOrdersError,
+  GetBotOrdersResponse,
   GetBotsData,
   GetBotsError,
   GetBotsResponse,
@@ -63,9 +69,6 @@ import type {
   GetActionsData,
   GetActionsError,
   GetActionsResponse,
-  GetOrdersData,
-  GetOrdersError,
-  GetOrdersResponse,
   GetOrdersCountData,
   GetOrdersCountError,
   GetOrdersCountResponse,
@@ -244,6 +247,40 @@ export function createClient(
     >({
       ...options,
       url: "/bots/orders/pnl",
+    });
+  };
+
+  /**
+   * Get Bots Orders
+   * Get all orders for all bots of the user
+   */
+  const getBotsOrders = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetBotsOrdersData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotsOrdersResponse,
+      GetBotsOrdersError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/orders",
+    });
+  };
+
+  /**
+   * Get Bot Orders
+   * Get all orders for a bot of the user
+   */
+  const getBotOrders = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetBotOrdersData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotOrdersResponse,
+      GetBotOrdersError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/{id}/orders",
     });
   };
 
@@ -478,23 +515,6 @@ export function createClient(
     >({
       ...options,
       url: "/actions",
-    });
-  };
-
-  /**
-   * Get Orders
-   * Get all orders for a user
-   */
-  const getOrders = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetOrdersData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetOrdersResponse,
-      GetOrdersError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/orders",
     });
   };
 
@@ -885,6 +905,8 @@ export function createClient(
     getBotsOrdersCount,
     getBotOrdersPnl,
     getBotsOrdersPnl,
+    getBotsOrders,
+    getBotOrders,
     getBots,
     createBot,
     getBot,
@@ -899,7 +921,6 @@ export function createClient(
     postFuturesAction,
     postSpotAction,
     getActions,
-    getOrders,
     getOrdersCount,
     getStrategies,
     createStrategy,

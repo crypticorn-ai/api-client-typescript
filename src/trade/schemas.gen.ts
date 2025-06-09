@@ -1393,6 +1393,72 @@ export const OrdersCountSchema = {
   description: "The number of orders for a user by day",
 } as const;
 
+export const PaginatedResponse_Order_Schema = {
+  properties: {
+    data: {
+      items: {
+        $ref: "#/components/schemas/Order",
+      },
+      type: "array",
+      title: "Data",
+    },
+    total: {
+      type: "integer",
+      title: "Total",
+      description: "The total number of items",
+    },
+    page: {
+      type: "integer",
+      title: "Page",
+      description: "The current page number",
+    },
+    page_size: {
+      type: "integer",
+      title: "Page Size",
+      description: "The number of items per page",
+    },
+    prev: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Prev",
+      description: "The previous page number",
+    },
+    next: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Next",
+      description: "The next page number",
+    },
+    last: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Last",
+      description: "The last page number",
+    },
+  },
+  type: "object",
+  required: ["data", "total", "page", "page_size"],
+  title: "PaginatedResponse[Order]",
+} as const;
+
 export const PnLSchema = {
   properties: {
     timestamp: {

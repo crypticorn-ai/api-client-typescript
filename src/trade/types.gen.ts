@@ -768,6 +768,34 @@ export type OrderStatus =
   | "cancelled"
   | "failed";
 
+export type PaginatedResponse_Order_ = {
+  data: Array<Order>;
+  /**
+   * The total number of items
+   */
+  total: number;
+  /**
+   * The current page number
+   */
+  page: number;
+  /**
+   * The number of items per page
+   */
+  page_size: number;
+  /**
+   * The previous page number
+   */
+  prev?: number | null;
+  /**
+   * The next page number
+   */
+  next?: number | null;
+  /**
+   * The last page number
+   */
+  last?: number | null;
+};
+
 /**
  * The profit and loss of a bot by timestamp. In the case of sampling, the PnL is the sum of the PnLs between the prior timestamp and the current timestamp.
  */
@@ -1197,6 +1225,86 @@ export type GetBotsOrdersPnlResponse = Array<PnL>;
 
 export type GetBotsOrdersPnlError = ExceptionDetail;
 
+export type GetBotsOrdersData = {
+  query?: {
+    /**
+     * The field to filter by
+     */
+    filter_by?: string | null;
+    /**
+     * The value to filter with
+     */
+    filter_value?: string | null;
+    /**
+     * The current page number
+     */
+    page?: number | null;
+    /**
+     * The number of items per page. Default is 100, max is 1000.
+     */
+    page_size?: number;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+    /**
+     * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+     */
+    user_id?: string | null;
+  };
+};
+
+export type GetBotsOrdersResponse = PaginatedResponse_Order_;
+
+export type GetBotsOrdersError = ExceptionDetail;
+
+export type GetBotOrdersData = {
+  path: {
+    /**
+     * The ID of the bot
+     */
+    id: string;
+  };
+  query?: {
+    /**
+     * The field to filter by
+     */
+    filter_by?: string | null;
+    /**
+     * The value to filter with
+     */
+    filter_value?: string | null;
+    /**
+     * The current page number
+     */
+    page?: number | null;
+    /**
+     * The number of items per page. Default is 100, max is 1000.
+     */
+    page_size?: number;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+    /**
+     * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+     */
+    user_id?: string | null;
+  };
+};
+
+export type GetBotOrdersResponse = PaginatedResponse_Order_;
+
+export type GetBotOrdersError = ExceptionDetail;
+
 export type GetBotsData = {
   query?: {
     /**
@@ -1355,17 +1463,6 @@ export type GetActionsData = {
 export type GetActionsResponse = Array<FuturesTradingAction>;
 
 export type GetActionsError = ExceptionDetail;
-
-export type GetOrdersData = {
-  query?: {
-    limit?: number;
-    offset?: number;
-  };
-};
-
-export type GetOrdersResponse = Array<Order>;
-
-export type GetOrdersError = ExceptionDetail;
 
 export type GetOrdersCountData = {
   query?: {
