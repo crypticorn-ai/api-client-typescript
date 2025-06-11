@@ -1393,6 +1393,72 @@ export const OrdersCountSchema = {
   description: "The number of orders for a user by day",
 } as const;
 
+export const PaginatedResponse_FuturesTradingAction_Schema = {
+  properties: {
+    data: {
+      items: {
+        $ref: "#/components/schemas/FuturesTradingAction",
+      },
+      type: "array",
+      title: "Data",
+    },
+    total: {
+      type: "integer",
+      title: "Total",
+      description: "The total number of items",
+    },
+    page: {
+      type: "integer",
+      title: "Page",
+      description: "The current page number",
+    },
+    page_size: {
+      type: "integer",
+      title: "Page Size",
+      description: "The number of items per page",
+    },
+    prev: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Prev",
+      description: "The previous page number",
+    },
+    next: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Next",
+      description: "The next page number",
+    },
+    last: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Last",
+      description: "The last page number",
+    },
+  },
+  type: "object",
+  required: ["data", "total", "page", "page_size"],
+  title: "PaginatedResponse[FuturesTradingAction]",
+} as const;
+
 export const PaginatedResponse_Order_Schema = {
   properties: {
     data: {
@@ -1458,6 +1524,80 @@ export const PaginatedResponse_Order_Schema = {
   required: ["data", "total", "page", "page_size"],
   title: "PaginatedResponse[Order]",
 } as const;
+
+export const PaginatedResponse_Union_FuturesTradingAction__SpotTradingAction__Schema =
+  {
+    properties: {
+      data: {
+        items: {
+          anyOf: [
+            {
+              $ref: "#/components/schemas/FuturesTradingAction",
+            },
+            {
+              $ref: "#/components/schemas/SpotTradingAction",
+            },
+          ],
+        },
+        type: "array",
+        title: "Data",
+      },
+      total: {
+        type: "integer",
+        title: "Total",
+        description: "The total number of items",
+      },
+      page: {
+        type: "integer",
+        title: "Page",
+        description: "The current page number",
+      },
+      page_size: {
+        type: "integer",
+        title: "Page Size",
+        description: "The number of items per page",
+      },
+      prev: {
+        anyOf: [
+          {
+            type: "integer",
+          },
+          {
+            type: "null",
+          },
+        ],
+        title: "Prev",
+        description: "The previous page number",
+      },
+      next: {
+        anyOf: [
+          {
+            type: "integer",
+          },
+          {
+            type: "null",
+          },
+        ],
+        title: "Next",
+        description: "The next page number",
+      },
+      last: {
+        anyOf: [
+          {
+            type: "integer",
+          },
+          {
+            type: "null",
+          },
+        ],
+        title: "Last",
+        description: "The last page number",
+      },
+    },
+    type: "object",
+    required: ["data", "total", "page", "page_size"],
+    title: "PaginatedResponse[Union[FuturesTradingAction, SpotTradingAction]]",
+  } as const;
 
 export const PnLSchema = {
   properties: {
@@ -1541,6 +1681,158 @@ export const SpotBalanceSchema = {
   required: ["asset", "balance", "available", "frozen"],
   title: "SpotBalance",
   description: "Model for spot balance",
+} as const;
+
+export const SpotTradingActionSchema = {
+  properties: {
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
+    },
+    execution_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Execution Id",
+      description:
+        "UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.",
+    },
+    open_order_execution_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Open Order Execution Id",
+      description:
+        "UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.",
+    },
+    action_type: {
+      $ref: "#/components/schemas/TradingActionType",
+      description: "The type of action.",
+    },
+    market_type: {
+      $ref: "#/components/schemas/MarketType",
+      description: "The type of market the action is for.",
+    },
+    strategy_id: {
+      type: "string",
+      title: "Strategy Id",
+      description: "UID for the strategy.",
+    },
+    symbol: {
+      type: "string",
+      title: "Symbol",
+      description:
+        "Trading symbol or asset pair in format: 'symbol/quote_currency' (see market service for valid symbols)",
+    },
+    is_limit: {
+      anyOf: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Is Limit",
+      description: "Whether this is a limit order. Default is False.",
+      default: false,
+    },
+    limit_price: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Limit Price",
+      description:
+        "The limit price for limit orders. If not set, the market price will be used.",
+    },
+    allocation: {
+      type: "string",
+      title: "Allocation",
+      description:
+        "How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.",
+    },
+    take_profit: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/TPSL",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Take Profit",
+      description:
+        "Take profit targets. Can be set for open actions only. Multiple can be set.",
+    },
+    stop_loss: {
+      anyOf: [
+        {
+          items: {
+            $ref: "#/components/schemas/TPSL",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Stop Loss",
+      description:
+        "Stop loss values. Can be set for open actions only. Multiple can be set.",
+    },
+    expiry_timestamp: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Expiry Timestamp",
+      description:
+        "Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.",
+    },
+  },
+  type: "object",
+  required: [
+    "action_type",
+    "market_type",
+    "strategy_id",
+    "symbol",
+    "allocation",
+  ],
+  title: "SpotTradingAction",
+  description: "Model for spot trading actions",
 } as const;
 
 export const SpotTradingActionCreateSchema = {

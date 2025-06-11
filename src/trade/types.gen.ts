@@ -768,6 +768,34 @@ export type OrderStatus =
   | "cancelled"
   | "failed";
 
+export type PaginatedResponse_FuturesTradingAction_ = {
+  data: Array<FuturesTradingAction>;
+  /**
+   * The total number of items
+   */
+  total: number;
+  /**
+   * The current page number
+   */
+  page: number;
+  /**
+   * The number of items per page
+   */
+  page_size: number;
+  /**
+   * The previous page number
+   */
+  prev?: number | null;
+  /**
+   * The next page number
+   */
+  next?: number | null;
+  /**
+   * The last page number
+   */
+  last?: number | null;
+};
+
 export type PaginatedResponse_Order_ = {
   data: Array<Order>;
   /**
@@ -795,6 +823,35 @@ export type PaginatedResponse_Order_ = {
    */
   last?: number | null;
 };
+
+export type PaginatedResponse_Union_FuturesTradingAction__SpotTradingAction__ =
+  {
+    data: Array<FuturesTradingAction | SpotTradingAction>;
+    /**
+     * The total number of items
+     */
+    total: number;
+    /**
+     * The current page number
+     */
+    page: number;
+    /**
+     * The number of items per page
+     */
+    page_size: number;
+    /**
+     * The previous page number
+     */
+    prev?: number | null;
+    /**
+     * The next page number
+     */
+    next?: number | null;
+    /**
+     * The last page number
+     */
+    last?: number | null;
+  };
 
 /**
  * The profit and loss of a bot by timestamp. In the case of sampling, the PnL is the sum of the PnLs between the prior timestamp and the current timestamp.
@@ -849,6 +906,72 @@ export type SpotBalance = {
    * Allocated balance for bots. Added on runtime.
    */
   allocated?: number | null;
+};
+
+/**
+ * Model for spot trading actions
+ */
+export type SpotTradingAction = {
+  /**
+   * Timestamp of creation
+   */
+  created_at?: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at?: number;
+  /**
+   * Unique identifier for the resource
+   */
+  id?: string;
+  /**
+   * UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.
+   */
+  execution_id?: string | null;
+  /**
+   * UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.
+   */
+  open_order_execution_id?: string | null;
+  /**
+   * The type of action.
+   */
+  action_type: TradingActionType;
+  /**
+   * The type of market the action is for.
+   */
+  market_type: MarketType;
+  /**
+   * UID for the strategy.
+   */
+  strategy_id: string;
+  /**
+   * Trading symbol or asset pair in format: 'symbol/quote_currency' (see market service for valid symbols)
+   */
+  symbol: string;
+  /**
+   * Whether this is a limit order. Default is False.
+   */
+  is_limit?: boolean | null;
+  /**
+   * The limit price for limit orders. If not set, the market price will be used.
+   */
+  limit_price?: string | null;
+  /**
+   * How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.
+   */
+  allocation: string;
+  /**
+   * Take profit targets. Can be set for open actions only. Multiple can be set.
+   */
+  take_profit?: Array<TPSL> | null;
+  /**
+   * Stop loss values. Can be set for open actions only. Multiple can be set.
+   */
+  stop_loss?: Array<TPSL> | null;
+  /**
+   * Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.
+   */
+  expiry_timestamp?: number | null;
 };
 
 /**
@@ -1305,16 +1428,112 @@ export type GetBotOrdersResponse = PaginatedResponse_Order_;
 
 export type GetBotOrdersError = ExceptionDetail;
 
+export type GetBotsActionsData = {
+  query?: {
+    /**
+     * The field to filter by
+     */
+    filter_by?: string | null;
+    /**
+     * The value to filter with
+     */
+    filter_value?: string | null;
+    /**
+     * The current page number
+     */
+    page?: number | null;
+    /**
+     * The number of items per page. Default is 100, max is 1000.
+     */
+    page_size?: number;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+    /**
+     * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+     */
+    user_id?: string | null;
+  };
+};
+
+export type GetBotsActionsResponse = PaginatedResponse_FuturesTradingAction_;
+
+export type GetBotsActionsError = ExceptionDetail;
+
+export type GetBotActionsData = {
+  path: {
+    /**
+     * The ID of the bot
+     */
+    id: string;
+  };
+  query?: {
+    /**
+     * The field to filter by
+     */
+    filter_by?: string | null;
+    /**
+     * The value to filter with
+     */
+    filter_value?: string | null;
+    /**
+     * The current page number
+     */
+    page?: number | null;
+    /**
+     * The number of items per page. Default is 100, max is 1000.
+     */
+    page_size?: number;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+    /**
+     * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+     */
+    user_id?: string | null;
+  };
+};
+
+export type GetBotActionsResponse = PaginatedResponse_FuturesTradingAction_;
+
+export type GetBotActionsError = ExceptionDetail;
+
 export type GetBotsData = {
   query?: {
     /**
-     * Whether to include deleted bots
+     * The field to filter by
+     */
+    filter_by?: string | null;
+    /**
+     * The value to filter with
+     */
+    filter_value?: string | null;
+    /**
+     * Whether to include deleted bots. Filter by status takes precedence over this.
      */
     include_deleted?: boolean;
     /**
      * Whether to validate the bots
      */
-    validate?: boolean;
+    should_validate?: boolean;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
   };
 };
 
@@ -1373,11 +1592,21 @@ export type DeleteBotError = ExceptionDetail;
 export type GetExchangeKeysData = {
   query?: {
     /**
-     * Whether to include deleted API keys.
+     * The field to filter by
      */
-    include_deleted?: boolean;
-    limit?: number;
-    offset?: number;
+    filter_by?: string | null;
+    /**
+     * The value to filter with
+     */
+    filter_value?: string | null;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
   };
 };
 
@@ -1455,12 +1684,39 @@ export type PostSpotActionError = ExceptionDetail;
 
 export type GetActionsData = {
   query?: {
-    limit?: number;
-    offset?: number;
+    /**
+     * The field to filter by
+     */
+    filter_by?: string | null;
+    /**
+     * The value to filter with
+     */
+    filter_value?: string | null;
+    /**
+     * The current page number
+     */
+    page?: number | null;
+    /**
+     * The number of items per page. Default is 100, max is 1000.
+     */
+    page_size?: number;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+    /**
+     * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+     */
+    user_id?: string | null;
   };
 };
 
-export type GetActionsResponse = Array<FuturesTradingAction>;
+export type GetActionsResponse =
+  PaginatedResponse_Union_FuturesTradingAction__SpotTradingAction__;
 
 export type GetActionsError = ExceptionDetail;
 

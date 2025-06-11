@@ -28,6 +28,12 @@ import type {
   GetBotOrdersData,
   GetBotOrdersError,
   GetBotOrdersResponse,
+  GetBotsActionsData,
+  GetBotsActionsError,
+  GetBotsActionsResponse,
+  GetBotActionsData,
+  GetBotActionsError,
+  GetBotActionsResponse,
   GetBotsData,
   GetBotsError,
   GetBotsResponse,
@@ -285,6 +291,40 @@ export function createClient(
   };
 
   /**
+   * Get Bots Actions
+   * Get all actions for all bots of the user
+   */
+  const getBotsActions = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetBotsActionsData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotsActionsResponse,
+      GetBotsActionsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/actions",
+    });
+  };
+
+  /**
+   * Get Bot Actions
+   * Get all orders for a bot of the user
+   */
+  const getBotActions = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetBotActionsData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBotActionsResponse,
+      GetBotActionsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/bots/{id}/actions",
+    });
+  };
+
+  /**
    * Get Bots
    */
   const getBots = <ThrowOnError extends boolean = false>(
@@ -369,7 +409,7 @@ export function createClient(
 
   /**
    * Get Exchange Keys
-   * Get all exchange keys. If include_deleted is true, all API keys will be returned, including deleted ones.
+   * Get all exchange keys. Returns all non-deleted API keys by default.
    */
   const getExchangeKeys = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetExchangeKeysData, ThrowOnError>,
@@ -504,6 +544,7 @@ export function createClient(
 
   /**
    * Get Actions
+   * Get all trading actions
    */
   const getActions = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetActionsData, ThrowOnError>,
@@ -907,6 +948,8 @@ export function createClient(
     getBotsOrdersPnl,
     getBotsOrders,
     getBotOrders,
+    getBotsActions,
+    getBotActions,
     getBots,
     createBot,
     getBot,
