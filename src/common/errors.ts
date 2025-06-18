@@ -55,6 +55,7 @@ export enum ApiErrorIdentifier {
   INSUFFICIENT_MARGIN = "insufficient_margin",
   INSUFFICIENT_SCOPES = "insufficient_scopes",
   INVALID_API_KEY = "invalid_api_key",
+  INVALID_BASIC_AUTH = "invalid_basic_auth",
   INVALID_BEARER = "invalid_bearer",
   INVALID_DATA_REQUEST = "invalid_data",
   INVALID_DATA_RESPONSE = "invalid_data_response",
@@ -331,6 +332,12 @@ export class ApiError {
   // Validation Errors
   static readonly INVALID_API_KEY = new ApiError(
     ApiErrorIdentifier.INVALID_API_KEY,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly INVALID_BASIC_AUTH = new ApiError(
+    ApiErrorIdentifier.INVALID_BASIC_AUTH,
     ApiErrorType.USER_ERROR,
     ApiErrorLevel.ERROR
   );
