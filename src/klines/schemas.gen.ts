@@ -5,14 +5,17 @@ export const ApiErrorIdentifierSchema = {
   enum: [
     "allocation_below_current_exposure",
     "allocation_below_min_amount",
+    "allocation_limit_exceeded",
     "black_swan",
     "bot_already_deleted",
-    "bot_disabled",
     "bot_stopping_completed",
     "bot_stopping_started",
+    "cancelled_open_order",
     "client_order_id_already_exists",
     "invalid_content_type",
     "delete_bot_error",
+    "exchange_http_request_error",
+    "exchange_invalid_parameter",
     "exchange_invalid_signature",
     "exchange_invalid_timestamp",
     "exchange_ip_address_is_not_authorized",
@@ -28,24 +31,23 @@ export const ApiErrorIdentifierSchema = {
     "exchange_user_account_is_frozen",
     "api_key_expired",
     "bearer_token_expired",
+    "failed_open_order",
     "forbidden",
     "hedge_mode_not_active",
-    "http_request_error",
     "insufficient_balance",
     "insufficient_margin",
     "insufficient_scopes",
     "invalid_api_key",
+    "invalid_basic_auth",
     "invalid_bearer",
     "invalid_data",
     "invalid_data_response",
     "invalid_exchange_key",
-    "invalid_margin_mode",
     "invalid_model_name",
-    "exchange_invalid_parameter",
     "leverage_limit_exceeded",
     "order_violates_liquidation_price_constraints",
     "margin_mode_clash",
-    "model_name_not_unique",
+    "name_not_unique",
     "no_credentials",
     "now_api_down",
     "object_already_exists",
@@ -61,6 +63,8 @@ export const ApiErrorIdentifierSchema = {
     "order_price_is_invalid",
     "order_size_too_large",
     "order_size_too_small",
+    "orphan_open_order",
+    "orphan_close_order",
     "position_limit_exceeded",
     "position_does_not_exist",
     "position_opening_temporarily_suspended",
@@ -69,14 +73,13 @@ export const ApiErrorIdentifierSchema = {
     "risk_limit_exceeded",
     "rpc_timeout",
     "system_settlement_in_process",
-    "strategy_already_exists",
     "strategy_disabled",
     "strategy_leverage_mismatch",
     "strategy_not_supporting_exchange",
     "success",
     "symbol_does_not_exist",
     "trading_action_expired",
-    "trading_action_skipped",
+    "trading_action_skipped_bot_stopping",
     "trading_has_been_locked",
     "trading_is_suspended",
     "unknown_error_occurred",
@@ -114,6 +117,8 @@ export const ChangeInTimeframeSchema = {
   type: "object",
   required: ["pair", "change"],
   title: "ChangeInTimeframe",
+  description:
+    "Price change data for a trading pair over a specific timeframe.",
 } as const;
 
 export const ExceptionDetailSchema = {
@@ -174,7 +179,8 @@ export const FundingRateSchema = {
   type: "object",
   required: ["timestamp", "funding_rate"],
   title: "FundingRate",
-  description: "Model for a single funding rate",
+  description:
+    "Individual funding rate entry with timestamp and rate value for futures trading.",
 } as const;
 
 export const FundingRateResponseSchema = {
@@ -201,7 +207,8 @@ export const FundingRateResponseSchema = {
   type: "object",
   required: ["symbol", "funding_interval", "funding_rates"],
   title: "FundingRateResponse",
-  description: "Response model for fetching funding rates",
+  description:
+    "Response containing historical funding rates for a specific trading symbol.",
 } as const;
 
 export const InternalExchangeSchema = {
@@ -308,28 +315,35 @@ export const SearchSymbolSchema = {
     symbol: {
       type: "string",
       title: "Symbol",
+      description: "Symbol identifier",
     },
     description: {
       type: "string",
       title: "Description",
+      description: "Human-readable symbol description",
     },
     exchange: {
       $ref: "#/components/schemas/InternalExchange",
+      description: "Exchange where symbol is traded",
     },
     type: {
       type: "string",
       title: "Type",
+      description: "Symbol type classification",
     },
   },
   type: "object",
   required: ["symbol", "description", "exchange", "type"],
   title: "SearchSymbol",
+  description: "Symbol search result for UDF symbol lookup functionality.",
 } as const;
 
 export const SortDirectionSchema = {
   type: "string",
   enum: ["asc", "desc"],
   title: "SortDirection",
+  description:
+    "Sort direction options for data ordering (ascending or descending).",
 } as const;
 
 export const SymbolGroupSchema = {
@@ -340,11 +354,13 @@ export const SymbolGroupSchema = {
       },
       type: "array",
       title: "Symbol",
+      description: "List of symbol identifiers in the group",
       default: [],
     },
   },
   type: "object",
   title: "SymbolGroup",
+  description: "Group of symbols for batch operations in UDF requests.",
 } as const;
 
 export const SymbolInfoSchema = {
@@ -352,50 +368,62 @@ export const SymbolInfoSchema = {
     name: {
       type: "string",
       title: "Name",
+      description: "Symbol name identifier",
     },
     "exchange-traded": {
       type: "string",
       title: "Exchange-Traded",
+      description: "Exchange where symbol is traded",
     },
     "exchange-listed": {
       type: "string",
       title: "Exchange-Listed",
+      description: "Exchange where symbol is listed",
     },
     timezone: {
       type: "string",
       title: "Timezone",
+      description: "Timezone for symbol trading hours",
     },
     minmov: {
       type: "integer",
       title: "Minmov",
+      description: "Minimum price movement",
     },
     minmov2: {
       type: "integer",
       title: "Minmov2",
+      description: "Secondary minimum price movement",
     },
     pointvalue: {
       type: "integer",
       title: "Pointvalue",
+      description: "Point value for price calculations",
     },
     session: {
       type: "string",
       title: "Session",
+      description: "Trading session hours",
     },
     has_intraday: {
       type: "boolean",
       title: "Has Intraday",
+      description: "Whether intraday data is available",
     },
     has_no_volume: {
       type: "boolean",
       title: "Has No Volume",
+      description: "Whether volume data is unavailable",
     },
     description: {
       type: "string",
       title: "Description",
+      description: "Human-readable symbol description",
     },
     type: {
       type: "string",
       title: "Type",
+      description: "Symbol type classification",
     },
     supported_resolutions: {
       items: {
@@ -403,14 +431,17 @@ export const SymbolInfoSchema = {
       },
       type: "array",
       title: "Supported Resolutions",
+      description: "List of supported time resolutions",
     },
     pricescale: {
       type: "integer",
       title: "Pricescale",
+      description: "Price scale factor for decimal places",
     },
     ticker: {
       type: "string",
       title: "Ticker",
+      description: "Symbol ticker identifier",
     },
   },
   type: "object",
@@ -432,6 +463,8 @@ export const SymbolInfoSchema = {
     "ticker",
   ],
   title: "SymbolInfo",
+  description:
+    "Comprehensive symbol information for UDF charting library compatibility.",
 } as const;
 
 export const SymbolTypeSchema = {
@@ -439,21 +472,26 @@ export const SymbolTypeSchema = {
     name: {
       type: "string",
       title: "Name",
+      description: "Display name of the symbol type",
     },
     value: {
       type: "string",
       title: "Value",
+      description: "Internal value identifier for the symbol type",
     },
   },
   type: "object",
   required: ["name", "value"],
   title: "SymbolType",
+  description: "Symbol type definition for UDF data feed configuration.",
 } as const;
 
 export const TimeframeSchema = {
   type: "string",
   enum: ["15m", "30m", "1h", "4h", "1d"],
   title: "Timeframe",
+  description:
+    "Available timeframes for candlestick and technical analysis data.",
 } as const;
 
 export const UDFConfigSchema = {
@@ -464,30 +502,36 @@ export const UDFConfigSchema = {
       },
       type: "array",
       title: "Supported Resolutions",
+      description: "List of supported time resolutions",
     },
     supports_group_request: {
       type: "boolean",
       title: "Supports Group Request",
+      description: "Whether grouped symbol requests are supported",
       default: false,
     },
     supports_marks: {
       type: "boolean",
       title: "Supports Marks",
+      description: "Whether chart marks are supported",
       default: false,
     },
     supports_search: {
       type: "boolean",
       title: "Supports Search",
+      description: "Whether symbol search is supported",
       default: true,
     },
     supports_timescale_marks: {
       type: "boolean",
       title: "Supports Timescale Marks",
+      description: "Whether timescale marks are supported",
       default: false,
     },
     supports_time: {
       type: "boolean",
       title: "Supports Time",
+      description: "Whether server time is supported",
       default: true,
     },
     exchanges: {
@@ -496,6 +540,7 @@ export const UDFConfigSchema = {
       },
       type: "array",
       title: "Exchanges",
+      description: "List of available exchanges",
     },
     symbols_types: {
       items: {
@@ -503,6 +548,7 @@ export const UDFConfigSchema = {
       },
       type: "array",
       title: "Symbols Types",
+      description: "List of supported symbol types",
     },
     currency_codes: {
       items: {
@@ -510,6 +556,7 @@ export const UDFConfigSchema = {
       },
       type: "array",
       title: "Currency Codes",
+      description: "List of supported currency codes",
     },
     supported_markets: {
       items: {
@@ -517,6 +564,7 @@ export const UDFConfigSchema = {
       },
       type: "array",
       title: "Supported Markets",
+      description: "List of supported market types",
     },
   },
   type: "object",
@@ -528,4 +576,6 @@ export const UDFConfigSchema = {
     "supported_markets",
   ],
   title: "UDFConfig",
+  description:
+    "Universal Data Feed configuration for charting library compatibility.",
 } as const;

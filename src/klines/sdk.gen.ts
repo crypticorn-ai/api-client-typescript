@@ -24,6 +24,8 @@ import type {
   GetDependenciesData,
   GetDependenciesError,
   GetDependenciesResponse,
+  GetMetricsError,
+  GetMetricsResponse,
   GetUdfConfigError,
   GetUdfConfigResponse,
   SearchSymbolsData,
@@ -214,6 +216,23 @@ export function createClient(
   };
 
   /**
+   * Metrics
+   * Get Prometheus metrics for the application. Returns plain text.
+   */
+  const getMetrics = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetMetricsResponse,
+      GetMetricsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/metrics",
+    });
+  };
+
+  /**
    * Get Config
    */
   const getUdfConfig = <ThrowOnError extends boolean = false>(
@@ -349,7 +368,10 @@ export function createClient(
 
   /**
    * Symbols
-   * Retrieve a list of whitelisted symbols for a specific market.
+   * Retrieve available trading symbols for a specific market.
+   *
+   * Returns a curated list of whitelisted trading pairs that have reliable data
+   * and are approved for use within the platform's trading and analysis systems.
    */
   const getKlinesSymbols = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<GetKlinesSymbolsData, ThrowOnError>,
@@ -390,6 +412,7 @@ export function createClient(
     getThreads,
     getContainerLimits,
     getDependencies,
+    getMetrics,
     getUdfConfig,
     searchSymbols,
     getSymbol,

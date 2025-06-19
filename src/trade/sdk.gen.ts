@@ -129,6 +129,8 @@ import type {
   GetDependenciesData,
   GetDependenciesError,
   GetDependenciesResponse,
+  GetMetricsError,
+  GetMetricsResponse,
 } from "./types.gen";
 
 export function createClient(
@@ -920,6 +922,23 @@ export function createClient(
     });
   };
 
+  /**
+   * Metrics
+   * Get Prometheus metrics for the application. Returns plain text.
+   */
+  const getMetrics = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetMetricsResponse,
+      GetMetricsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/metrics",
+    });
+  };
+
   return {
     getBotOrdersCount,
     getBotsOrdersCount,
@@ -966,5 +985,6 @@ export function createClient(
     getThreads,
     getContainerLimits,
     getDependencies,
+    getMetrics,
   };
 }

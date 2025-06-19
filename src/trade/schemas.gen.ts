@@ -67,8 +67,6 @@ export const ApiErrorIdentifierSchema = {
     "order_violates_liquidation_price_constraints",
     "margin_mode_clash",
     "name_not_unique",
-    "no_api_key",
-    "no_bearer",
     "no_credentials",
     "now_api_down",
     "object_already_exists",

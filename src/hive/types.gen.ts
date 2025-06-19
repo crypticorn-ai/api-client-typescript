@@ -6,14 +6,17 @@
 export type ApiErrorIdentifier =
   | "allocation_below_current_exposure"
   | "allocation_below_min_amount"
+  | "allocation_limit_exceeded"
   | "black_swan"
   | "bot_already_deleted"
-  | "bot_disabled"
   | "bot_stopping_completed"
   | "bot_stopping_started"
+  | "cancelled_open_order"
   | "client_order_id_already_exists"
   | "invalid_content_type"
   | "delete_bot_error"
+  | "exchange_http_request_error"
+  | "exchange_invalid_parameter"
   | "exchange_invalid_signature"
   | "exchange_invalid_timestamp"
   | "exchange_ip_address_is_not_authorized"
@@ -29,20 +32,19 @@ export type ApiErrorIdentifier =
   | "exchange_user_account_is_frozen"
   | "api_key_expired"
   | "bearer_token_expired"
+  | "failed_open_order"
   | "forbidden"
   | "hedge_mode_not_active"
-  | "http_request_error"
   | "insufficient_balance"
   | "insufficient_margin"
   | "insufficient_scopes"
   | "invalid_api_key"
+  | "invalid_basic_auth"
   | "invalid_bearer"
   | "invalid_data"
   | "invalid_data_response"
   | "invalid_exchange_key"
-  | "invalid_margin_mode"
   | "invalid_model_name"
-  | "exchange_invalid_parameter"
   | "leverage_limit_exceeded"
   | "order_violates_liquidation_price_constraints"
   | "margin_mode_clash"
@@ -62,6 +64,8 @@ export type ApiErrorIdentifier =
   | "order_price_is_invalid"
   | "order_size_too_large"
   | "order_size_too_small"
+  | "orphan_open_order"
+  | "orphan_close_order"
   | "position_limit_exceeded"
   | "position_does_not_exist"
   | "position_opening_temporarily_suspended"
@@ -70,14 +74,13 @@ export type ApiErrorIdentifier =
   | "risk_limit_exceeded"
   | "rpc_timeout"
   | "system_settlement_in_process"
-  | "strategy_already_exists"
   | "strategy_disabled"
   | "strategy_leverage_mismatch"
   | "strategy_not_supporting_exchange"
   | "success"
   | "symbol_does_not_exist"
   | "trading_action_expired"
-  | "trading_action_skipped"
+  | "trading_action_skipped_bot_stopping"
   | "trading_has_been_locked"
   | "trading_is_suspended"
   | "unknown_error_occurred"
@@ -98,7 +101,7 @@ export type ApiErrorType =
   | "no error";
 
 /**
- * Information about a coin
+ * Metadata about a cryptocurrency including availability across data versions.
  */
 export type CoinInfo = {
   /**
@@ -116,12 +119,12 @@ export type CoinInfo = {
 };
 
 /**
- * All existing coins. Some might no be available in the latest data version, but kept for older versions.
+ * Cryptocurrency identifiers for AI training data. Uses obfuscated identifiers for public API access.
  */
 export type Coins = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
 
 /**
- * The response for a data download request
+ * Response model containing download links and metadata for requested training data.
  */
 export type DataDownloadResponse = {
   /**
@@ -140,11 +143,14 @@ export type DataDownloadResponse = {
    * The target of the data
    */
   target: Target;
+  /**
+   * The download links for the data
+   */
   links: DownloadLinks;
 };
 
 /**
- * The complete data information for all versions, coins, feature sizes and targets
+ * Comprehensive data catalog including all available datasets, versions, and metadata.
  */
 export type DataInfo = {
   /**
@@ -177,6 +183,9 @@ export type DataInfo = {
   available_versions: Array<DataVersionInfo>;
 };
 
+/**
+ * Available options for targets and feature sizes in the latest data version.
+ */
 export type DataOptions = {
   /**
    * The targets available on the latest data version.
@@ -189,10 +198,13 @@ export type DataOptions = {
 };
 
 /**
- * All existing data versions
+ * Available data versions for AI model training datasets.
  */
 export type DataVersion = "1.0";
 
+/**
+ * Information about a specific data version including release metadata.
+ */
 export type DataVersionInfo = {
   /**
    * Data version
@@ -205,7 +217,7 @@ export type DataVersionInfo = {
 };
 
 /**
- * The download links for the data
+ * Collection of secure download URLs for different dataset splits.
  */
 export type DownloadLinks = {
   /**
@@ -279,7 +291,7 @@ export type ExceptionDetail = {
 };
 
 /**
- * All existing feature sizes. Some might no be available in the latest data version, but kept for older versions.
+ * Dataset feature size options determining the complexity and scope of training data.
  */
 export type FeatureSize = "small" | "medium" | "large";
 
@@ -365,12 +377,12 @@ export type ModelUpdate = {
 };
 
 /**
- * All existing targets. Some might no be available in the latest data version, but kept for older versions.
+ * AI model prediction targets with obfuscated names for public API access.
  */
 export type Target = "Tatooine" | "Alderaan" | "Hoth";
 
 /**
- * Information about a target
+ * Metadata about an AI prediction target including type and version availability.
  */
 export type TargetInfo = {
   /**
@@ -392,23 +404,9 @@ export type TargetInfo = {
 };
 
 /**
- * The type of the target
+ * Type classification for AI prediction targets (continuous vs binary outcomes).
  */
 export type TargetType = "continuous" | "binary";
-
-export type PingResponse = string;
-
-export type PingError = ExceptionDetail;
-
-export type GetTimeData = {
-  query?: {
-    type?: "iso" | "unix";
-  };
-};
-
-export type GetTimeResponse = string;
-
-export type GetTimeError = ExceptionDetail;
 
 export type CreateModelData = {
   body: ModelCreate;
@@ -533,6 +531,20 @@ export type GetDataInfoResponse = DataInfo;
 
 export type GetDataInfoError = ExceptionDetail;
 
+export type PingResponse = string;
+
+export type PingError = ExceptionDetail;
+
+export type GetTimeData = {
+  query?: {
+    type?: "iso" | "unix";
+  };
+};
+
+export type GetTimeResponse = string;
+
+export type GetTimeError = ExceptionDetail;
+
 export type GetLogLevelResponse = LogLevel;
 
 export type GetLogLevelError = ExceptionDetail;
@@ -577,3 +589,7 @@ export type GetDependenciesResponse = {
 };
 
 export type GetDependenciesError = ExceptionDetail;
+
+export type GetMetricsResponse = unknown;
+
+export type GetMetricsError = ExceptionDetail;

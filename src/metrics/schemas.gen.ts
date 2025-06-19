@@ -38,6 +38,7 @@ export const ApiErrorIdentifierSchema = {
     "insufficient_margin",
     "insufficient_scopes",
     "invalid_api_key",
+    "invalid_basic_auth",
     "invalid_bearer",
     "invalid_data",
     "invalid_data_response",
@@ -47,8 +48,6 @@ export const ApiErrorIdentifierSchema = {
     "order_violates_liquidation_price_constraints",
     "margin_mode_clash",
     "name_not_unique",
-    "no_api_key",
-    "no_bearer",
     "no_credentials",
     "now_api_down",
     "object_already_exists",
@@ -254,6 +253,7 @@ export const MarketcapRankingSchema = {
     timestamp: {
       type: "integer",
       title: "Timestamp",
+      description: "Unix timestamp of the ranking snapshot",
     },
     marketcap_values: {
       items: {
@@ -268,12 +268,14 @@ export const MarketcapRankingSchema = {
       },
       type: "array",
       title: "Marketcap Values",
+      description: "Ordered list of market cap values from highest to lowest",
     },
   },
   type: "object",
   required: ["timestamp", "marketcap_values"],
   title: "MarketcapRanking",
-  description: "A ranking of symbols by marketcap at a given timestamp.",
+  description:
+    "Market capitalization ranking showing sorted values at a specific timestamp.",
 } as const;
 
 export const MarketcapSymbolRankingSchema = {
@@ -281,6 +283,7 @@ export const MarketcapSymbolRankingSchema = {
     timestamp: {
       type: "integer",
       title: "Timestamp",
+      description: "Unix timestamp of the ranking snapshot",
     },
     symbols: {
       items: {
@@ -295,12 +298,14 @@ export const MarketcapSymbolRankingSchema = {
       },
       type: "array",
       title: "Symbols",
+      description: "Ordered list of symbols ranked by market cap",
     },
   },
   type: "object",
   required: ["timestamp", "symbols"],
   title: "MarketcapSymbolRanking",
-  description: "A ranking of marketcap values at a given timestamp.",
+  description:
+    "Symbol ranking ordered by market capitalization at a specific timestamp.",
 } as const;
 
 export const OHLCVSchema = {
@@ -308,26 +313,32 @@ export const OHLCVSchema = {
     timestamp: {
       type: "integer",
       title: "Timestamp",
+      description: "Unix timestamp of the candle period",
     },
     open: {
       type: "number",
       title: "Open",
+      description: "Opening price of the period",
     },
     high: {
       type: "number",
       title: "High",
+      description: "Highest price during the period",
     },
     low: {
       type: "number",
       title: "Low",
+      description: "Lowest price during the period",
     },
     close: {
       type: "number",
       title: "Close",
+      description: "Closing price of the period",
     },
     volume: {
       type: "number",
       title: "Volume",
+      description: "Trading volume during the period",
     },
     marketcap: {
       anyOf: [
@@ -339,27 +350,35 @@ export const OHLCVSchema = {
         },
       ],
       title: "Marketcap",
+      description: "Market capitalization at period close",
     },
   },
   type: "object",
   required: ["timestamp", "open", "high", "low", "close", "volume"],
   title: "OHLCV",
+  description:
+    "Open, High, Low, Close, Volume candlestick data with optional market cap information.",
 } as const;
 
 export const SeveritySchema = {
   type: "string",
   enum: ["ERROR", "WARNING", "CRITICAL"],
   title: "Severity",
+  description: "Error severity levels for logging and monitoring systems.",
 } as const;
 
 export const TimeIntervalSchema = {
   type: "string",
   enum: ["15m", "30m", "1h", "4h", "1d"],
   title: "TimeInterval",
+  description:
+    "Time interval options for aggregating market data and technical indicators.",
 } as const;
 
 export const TradingStatusSchema = {
   type: "string",
   enum: ["ACTIVE", "RETIRED", "EXPIRED"],
   title: "TradingStatus",
+  description:
+    "Trading status indicators for market availability and lifecycle management.",
 } as const;
