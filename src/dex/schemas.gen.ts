@@ -242,7 +242,7 @@ export const SignalOverviewStatsSchema = {
     timestamp: {
       type: "integer",
       title: "Timestamp",
-      description: "The timestamp of the stats",
+      description: "The unix timestamp of the stats calculation",
     },
     total: {
       type: "integer",
@@ -342,16 +342,18 @@ export const SignalVolumeSchema = {
     day: {
       type: "string",
       title: "Day",
+      description: "24-hour trading volume",
     },
     hour: {
       type: "string",
       title: "Hour",
+      description: "1-hour trading volume",
     },
   },
   type: "object",
   required: ["day", "hour"],
   title: "SignalVolume",
-  description: "Model for the volume of the signal",
+  description: "Trading volume data for a signal over different time periods.",
 } as const;
 
 export const SignalWithTokenSchema = {
@@ -457,7 +459,8 @@ export const SignalWithTokenSchema = {
     "performance_float",
   ],
   title: "SignalWithToken",
-  description: "Model for the signal with the token info",
+  description:
+    "Trading signal enriched with comprehensive token metadata and information.",
 } as const;
 
 export const TokenDataSchema = {

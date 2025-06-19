@@ -53,8 +53,9 @@ export function createClient(
 
   /**
    * Get Signals
-   * Get all signals. Returns the latest 10 signals by default.
-   * The default sort is `called_at` and the default order is `desc`.
+   * Retrieve all trading signals with pagination, filtering, and sorting support.
+   *
+   * Returns signals enriched with token metadata. Default sort is by call time (newest first).
    */
   const getSignals = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetSignalsData, ThrowOnError>,
@@ -71,7 +72,9 @@ export function createClient(
 
   /**
    * Get Top Signals
-   * Get the top performing signals from the last X hours.The default is from the last 24 hours.
+   * Retrieve top-performing signals ranked by performance within a specified time window.
+   *
+   * Returns the highest-performing signals from the last X hours (default: 24 hours).
    */
   const getTopSignals = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetTopSignalsData, ThrowOnError>,
@@ -88,7 +91,9 @@ export function createClient(
 
   /**
    * Get Stats
-   * Get comprehensive statistics for all signals.
+   * Retrieve comprehensive statistics and analytics for all trading signals.
+   *
+   * Returns hourly-updated aggregated metrics including performance summaries and trading volumes.
    */
   const getSignalStats = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,

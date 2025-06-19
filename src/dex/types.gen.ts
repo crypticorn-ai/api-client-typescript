@@ -180,7 +180,7 @@ export type Risk = {
  */
 export type SignalOverviewStats = {
   /**
-   * The timestamp of the stats
+   * The unix timestamp of the stats calculation
    */
   timestamp: number;
   /**
@@ -222,15 +222,21 @@ export type SignalOverviewStats = {
 };
 
 /**
- * Model for the volume of the signal
+ * Trading volume data for a signal over different time periods.
  */
 export type SignalVolume = {
+  /**
+   * 24-hour trading volume
+   */
   day: string;
+  /**
+   * 1-hour trading volume
+   */
   hour: string;
 };
 
 /**
- * Model for the signal with the token info
+ * Trading signal enriched with comprehensive token metadata and information.
  */
 export type SignalWithToken = {
   /**
@@ -374,7 +380,7 @@ export type GetSignalsData = {
     /**
      * The value to filter with
      */
-    filter_value?: unknown | null;
+    filter_value?: string | null;
     /**
      * The current page number
      */
