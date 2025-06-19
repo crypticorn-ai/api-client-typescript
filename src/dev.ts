@@ -67,9 +67,6 @@ export async function runBackfill() {
   }
 }
 
-const result = await client.hive.createAccount("mateh");
-console.log(result);
-
 // export async function runTests() {
 //   client.api.getApiKeys().then((res) => {
 //     console.log(res);

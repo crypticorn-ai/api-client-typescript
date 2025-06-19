@@ -55,6 +55,7 @@ export enum ApiErrorIdentifier {
   INSUFFICIENT_MARGIN = "insufficient_margin",
   INSUFFICIENT_SCOPES = "insufficient_scopes",
   INVALID_API_KEY = "invalid_api_key",
+  INVALID_BASIC_AUTH = "invalid_basic_auth",
   INVALID_BEARER = "invalid_bearer",
   INVALID_DATA_REQUEST = "invalid_data",
   INVALID_DATA_RESPONSE = "invalid_data_response",
@@ -97,7 +98,7 @@ export enum ApiErrorIdentifier {
   SUCCESS = "success",
   SYMBOL_NOT_FOUND = "symbol_does_not_exist",
   TRADING_ACTION_EXPIRED = "trading_action_expired",
-  TRADING_ACTION_SKIPPED_BOT_STOPPING = "TRADING_ACTION_SKIPPED_BOT_STOPPING",
+  TRADING_ACTION_SKIPPED_BOT_STOPPING = "trading_action_skipped_bot_stopping",
   TRADING_LOCKED = "trading_has_been_locked",
   TRADING_SUSPENDED = "trading_is_suspended",
   UNKNOWN_ERROR = "unknown_error_occurred",
@@ -331,6 +332,12 @@ export class ApiError {
   // Validation Errors
   static readonly INVALID_API_KEY = new ApiError(
     ApiErrorIdentifier.INVALID_API_KEY,
+    ApiErrorType.USER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly INVALID_BASIC_AUTH = new ApiError(
+    ApiErrorIdentifier.INVALID_BASIC_AUTH,
     ApiErrorType.USER_ERROR,
     ApiErrorLevel.ERROR
   );

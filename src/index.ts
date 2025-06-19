@@ -33,4 +33,7 @@ export { HiveSchemas, HiveTypes };
 import * as AuthSchemas from "@crypticorn-ai/auth-service";
 import * as AuthTypes from "@crypticorn-ai/auth-service";
 export { AuthSchemas, AuthTypes };
-
+// dex
+import * as DexSchemas from "./dex/schemas.gen";
+import * as DexTypes from "./dex/types.gen";
+export { DexSchemas, DexTypes };
