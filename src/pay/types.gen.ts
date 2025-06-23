@@ -101,6 +101,128 @@ export type ApiErrorType =
   | "no error";
 
 /**
+ * Model for reading a coupon
+ */
+export type Coupon = {
+  /**
+   * Coupon code. If not specified, a random code is generated.
+   */
+  code: string | null;
+  /**
+   * Discount percentage as a decimal
+   */
+  discount: number;
+  /**
+   * Coupon valid until timestamp in seconds. If not specified, the coupon is valid for 100 years.
+   */
+  valid_until: number | null;
+  /**
+   * Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.
+   */
+  valid_from: number | null;
+  /**
+   * Coupon usage limit. If not specified, the coupon can be used unlimited times.
+   */
+  usage_limit: number | null;
+  /**
+   * Products that the coupon can be used on. If not specified, the coupon can be used on all products.
+   */
+  products: Array<string> | null;
+  /**
+   * Coupon is active
+   */
+  is_active: boolean;
+  /**
+   * UID of the coupon
+   */
+  id: string;
+  /**
+   * Coupon creation timestamp in seconds
+   */
+  created_at: number;
+  /**
+   * Coupon usage count
+   */
+  usage_count: number;
+  /**
+   * Whether the coupon requires a payment. If the discount is not 100%, the coupon requires a payment.
+   */
+  readonly payment_required: boolean;
+  /**
+   * Coupon is valid if it is active, not expired, and has not reached the usage limit
+   */
+  readonly is_valid: boolean;
+};
+
+/**
+ * Model for creating a coupon
+ */
+export type CouponCreate = {
+  /**
+   * Coupon code. If not specified, a random code is generated.
+   */
+  code?: string | null;
+  /**
+   * Discount percentage as a decimal
+   */
+  discount: number;
+  /**
+   * Coupon valid until timestamp in seconds. If not specified, the coupon is valid for 100 years.
+   */
+  valid_until?: number | null;
+  /**
+   * Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.
+   */
+  valid_from?: number | null;
+  /**
+   * Coupon usage limit. If not specified, the coupon can be used unlimited times.
+   */
+  usage_limit?: number | null;
+  /**
+   * Products that the coupon can be used on. If not specified, the coupon can be used on all products.
+   */
+  products?: Array<string> | null;
+  /**
+   * Coupon is active
+   */
+  is_active?: boolean;
+};
+
+/**
+ * Model for updating a coupon
+ */
+export type CouponUpdate = {
+  /**
+   * Coupon code. If not specified, a random code is generated.
+   */
+  code?: string | null;
+  /**
+   * Discount percentage as a decimal
+   */
+  discount?: number | null;
+  /**
+   * Coupon valid until timestamp in seconds. If not specified, the coupon is valid for 100 years.
+   */
+  valid_until?: number | null;
+  /**
+   * Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.
+   */
+  valid_from?: number | null;
+  /**
+   * Coupon usage limit. If not specified, the coupon can be used unlimited times.
+   */
+  usage_limit?: number | null;
+  /**
+   * Products that the coupon can be used on. If empty, the coupon can be used on all products.
+   */
+  products?: Array<string> | null;
+  /**
+   * Coupon is active
+   */
+  is_active?: boolean | null;
+};
+
+/**
  * Exception details returned to the client.
  */
 export type ExceptionDetail = {
@@ -158,10 +280,6 @@ export type NowCreateInvoiceReq = {
    */
   ipn_callback_url?: string | null;
   /**
-   * Internal store order ID
-   */
-  order_id?: string | null;
-  /**
    * Internal store order description
    */
   order_description?: string | null;
@@ -185,6 +303,18 @@ export type NowCreateInvoiceReq = {
    * Enable fixed-rate exchanges with all fees paid by users
    */
   is_fee_paid_by_user?: boolean | null;
+  /**
+   * User ID to apply to the product
+   */
+  user_id: string;
+  /**
+   * Product ID to apply to the product
+   */
+  product_id: string;
+  /**
+   * Coupon ID to apply to the product
+   */
+  coupon_id?: string | null;
 };
 
 /**
@@ -472,63 +602,12 @@ export type Subscription = {
   id: string;
 };
 
-export type PingResponse = string;
-
-export type PingError = ExceptionDetail;
-
-export type GetTimeData = {
-  query?: {
-    type?: "iso" | "unix";
-  };
-};
-
-export type GetTimeResponse = string;
-
-export type GetTimeError = ExceptionDetail;
-
-export type GetNowApiStatusResponse = string;
-
-export type GetNowApiStatusError = ExceptionDetail;
-
-export type CreateNowInvoiceData = {
-  body: NowCreateInvoiceReq;
-};
-
-export type CreateNowInvoiceResponse = NowCreateInvoiceRes;
-
-export type CreateNowInvoiceError = ExceptionDetail;
-
-export type HandleNowWebhookResponse = unknown;
-
-export type HandleNowWebhookError = ExceptionDetail;
-
-export type GetNowPaymentsResponse = Array<Payment>;
-
-export type GetNowPaymentsError = ExceptionDetail;
-
-export type GetNowPaymentByInvoiceData = {
-  path: {
-    /**
-     * The invoice ID
-     */
-    id: number;
-  };
-};
-
-export type GetNowPaymentByInvoiceResponse = Payment;
-
-export type GetNowPaymentByInvoiceError = ExceptionDetail;
-
 export type GetProductsData = {
   query?: {
     /**
-     * Limit the number of products returned. 0 means no limit.
+     * The coupon code to apply to the products.
      */
-    limit?: number;
-    /**
-     * Offset the number of products returned. 0 means no offset.
-     */
-    offset?: number;
+    coupon?: string;
   };
 };
 
@@ -595,6 +674,88 @@ export type GetSubscriptionsData = {
 export type GetSubscriptionsResponse = Array<Subscription>;
 
 export type GetSubscriptionsError = ExceptionDetail;
+
+export type CreateCouponData = {
+  body: CouponCreate;
+};
+
+export type CreateCouponResponse = Coupon;
+
+export type CreateCouponError = ExceptionDetail;
+
+export type VerifyCouponData = {
+  query: {
+    /**
+     * The coupon code to verify
+     */
+    code: string;
+  };
+};
+
+export type VerifyCouponResponse = boolean;
+
+export type VerifyCouponError = ExceptionDetail;
+
+export type UpdateCouponData = {
+  body: CouponUpdate;
+  path: {
+    /**
+     * The coupon to update
+     */
+    id: string;
+  };
+};
+
+export type UpdateCouponResponse = Coupon;
+
+export type UpdateCouponError = ExceptionDetail;
+
+export type GetNowApiStatusResponse = string;
+
+export type GetNowApiStatusError = ExceptionDetail;
+
+export type CreateNowInvoiceData = {
+  body: NowCreateInvoiceReq;
+};
+
+export type CreateNowInvoiceResponse = NowCreateInvoiceRes;
+
+export type CreateNowInvoiceError = ExceptionDetail;
+
+export type HandleNowWebhookResponse = unknown;
+
+export type HandleNowWebhookError = ExceptionDetail;
+
+export type GetNowPaymentsResponse = Array<Payment>;
+
+export type GetNowPaymentsError = ExceptionDetail;
+
+export type GetNowPaymentByInvoiceData = {
+  path: {
+    /**
+     * The invoice ID
+     */
+    id: number;
+  };
+};
+
+export type GetNowPaymentByInvoiceResponse = Payment;
+
+export type GetNowPaymentByInvoiceError = ExceptionDetail;
+
+export type PingResponse = string;
+
+export type PingError = ExceptionDetail;
+
+export type GetTimeData = {
+  query?: {
+    type?: "iso" | "unix";
+  };
+};
+
+export type GetTimeResponse = string;
+
+export type GetTimeError = ExceptionDetail;
 
 export type GetLogLevelResponse = LogLevel;
 
