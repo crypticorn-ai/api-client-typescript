@@ -103,6 +103,340 @@ export const ApiErrorTypeSchema = {
   description: "Type of the API error.",
 } as const;
 
+export const CouponSchema = {
+  properties: {
+    code: {
+      anyOf: [
+        {
+          type: "string",
+          maxLength: 32,
+          minLength: 4,
+          pattern: "^[A-Z0-9]+$",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Code",
+      description: "Coupon code. If not specified, a random code is generated.",
+      default: "VL3A",
+    },
+    discount: {
+      type: "number",
+      maximum: 1,
+      minimum: 0,
+      title: "Discount",
+      description: "Discount percentage as a decimal",
+    },
+    valid_until: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Valid Until",
+      description:
+        "Coupon valid until timestamp in seconds. If not specified, the coupon is valid for 100 years.",
+    },
+    valid_from: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Valid From",
+      description:
+        "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
+      default: 1750596751,
+    },
+    usage_limit: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Usage Limit",
+      description:
+        "Coupon usage limit. If not specified, the coupon can be used unlimited times.",
+    },
+    products: {
+      anyOf: [
+        {
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Products",
+      description:
+        "Products that the coupon can be used on. If not specified, the coupon can be used on all products.",
+    },
+    is_active: {
+      type: "boolean",
+      title: "Is Active",
+      description: "Coupon is active",
+      default: true,
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "UID of the coupon",
+    },
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Coupon creation timestamp in seconds",
+    },
+    usage_count: {
+      type: "integer",
+      title: "Usage Count",
+      description: "Coupon usage count",
+    },
+    payment_required: {
+      type: "boolean",
+      title: "Payment Required",
+      description:
+        "Whether the coupon requires a payment. If the discount is not 100%, the coupon requires a payment.",
+      readOnly: true,
+    },
+    is_valid: {
+      type: "boolean",
+      title: "Is Valid",
+      description:
+        "Coupon is valid if it is active, not expired, and has not reached the usage limit",
+      readOnly: true,
+    },
+  },
+  type: "object",
+  required: [
+    "code",
+    "discount",
+    "valid_until",
+    "valid_from",
+    "usage_limit",
+    "products",
+    "is_active",
+    "id",
+    "created_at",
+    "usage_count",
+    "payment_required",
+    "is_valid",
+  ],
+  title: "Coupon",
+  description: "Model for reading a coupon",
+} as const;
+
+export const CouponCreateSchema = {
+  properties: {
+    code: {
+      anyOf: [
+        {
+          type: "string",
+          maxLength: 32,
+          minLength: 4,
+          pattern: "^[A-Z0-9]+$",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Code",
+      description: "Coupon code. If not specified, a random code is generated.",
+      default: "VL3A",
+    },
+    discount: {
+      type: "number",
+      maximum: 1,
+      minimum: 0,
+      title: "Discount",
+      description: "Discount percentage as a decimal",
+    },
+    valid_until: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Valid Until",
+      description:
+        "Coupon valid until timestamp in seconds. If not specified, the coupon is valid for 100 years.",
+    },
+    valid_from: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Valid From",
+      description:
+        "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
+      default: 1750596751,
+    },
+    usage_limit: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Usage Limit",
+      description:
+        "Coupon usage limit. If not specified, the coupon can be used unlimited times.",
+    },
+    products: {
+      anyOf: [
+        {
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Products",
+      description:
+        "Products that the coupon can be used on. If not specified, the coupon can be used on all products.",
+    },
+    is_active: {
+      type: "boolean",
+      title: "Is Active",
+      description: "Coupon is active",
+      default: true,
+    },
+  },
+  type: "object",
+  required: ["discount"],
+  title: "CouponCreate",
+  description: "Model for creating a coupon",
+} as const;
+
+export const CouponUpdateSchema = {
+  properties: {
+    code: {
+      anyOf: [
+        {
+          type: "string",
+          maxLength: 32,
+          minLength: 4,
+          pattern: "^[A-Z0-9]+$",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Code",
+      description: "Coupon code. If not specified, a random code is generated.",
+    },
+    discount: {
+      anyOf: [
+        {
+          type: "number",
+          maximum: 1,
+          minimum: 0,
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Discount",
+      description: "Discount percentage as a decimal",
+    },
+    valid_until: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Valid Until",
+      description:
+        "Coupon valid until timestamp in seconds. If not specified, the coupon is valid for 100 years.",
+    },
+    valid_from: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Valid From",
+      description:
+        "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
+    },
+    usage_limit: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Usage Limit",
+      description:
+        "Coupon usage limit. If not specified, the coupon can be used unlimited times.",
+    },
+    products: {
+      anyOf: [
+        {
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Products",
+      description:
+        "Products that the coupon can be used on. If empty, the coupon can be used on all products.",
+    },
+    is_active: {
+      anyOf: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Is Active",
+      description: "Coupon is active",
+    },
+  },
+  type: "object",
+  title: "CouponUpdate",
+  description: "Model for updating a coupon",
+} as const;
+
 export const ExceptionDetailSchema = {
   properties: {
     message: {
@@ -188,18 +522,6 @@ export const NowCreateInvoiceReqSchema = {
       title: "Ipn Callback Url",
       description: "URL to receive callbacks, must contain http/https",
     },
-    order_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Order Id",
-      description: "Internal store order ID",
-    },
     order_description: {
       anyOf: [
         {
@@ -272,9 +594,31 @@ export const NowCreateInvoiceReqSchema = {
       title: "Is Fee Paid By User",
       description: "Enable fixed-rate exchanges with all fees paid by users",
     },
+    user_id: {
+      type: "string",
+      title: "User Id",
+      description: "User ID to apply to the product",
+    },
+    product_id: {
+      type: "string",
+      title: "Product Id",
+      description: "Product ID to apply to the product",
+    },
+    coupon_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Coupon Id",
+      description: "Coupon ID to apply to the product",
+    },
   },
   type: "object",
-  required: ["price_amount", "price_currency"],
+  required: ["price_amount", "price_currency", "user_id", "product_id"],
   title: "NowCreateInvoiceReq",
   description: `Request model for creating a payment invoice.
 
@@ -612,7 +956,6 @@ export const ProductCreateSchema = {
       description: "Product is active",
     },
   },
-  additionalProperties: false,
   type: "object",
   required: ["name", "price", "duration", "description", "is_active"],
   title: "ProductCreate",
@@ -697,7 +1040,6 @@ export const ProductUpdateSchema = {
       description: "Product is active",
     },
   },
-  additionalProperties: false,
   type: "object",
   title: "ProductUpdate",
   description: "Model for updating a product",
