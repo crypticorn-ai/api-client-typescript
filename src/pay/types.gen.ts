@@ -338,6 +338,34 @@ export type PaginatedResponse_Coupon_ = {
   last?: number | null;
 };
 
+export type PaginatedResponse_Payment_ = {
+  data: Array<Payment>;
+  /**
+   * The total number of items
+   */
+  total: number;
+  /**
+   * The current page number
+   */
+  page: number;
+  /**
+   * The number of items per page
+   */
+  page_size: number;
+  /**
+   * The previous page number
+   */
+  prev?: number | null;
+  /**
+   * The next page number
+   */
+  next?: number | null;
+  /**
+   * The last page number
+   */
+  last?: number | null;
+};
+
 /**
  * Combined payment model across all services
  */
@@ -589,6 +617,10 @@ export type Subscription = {
 export type GetProductsCaptchaAuthData = {
   query?: {
     /**
+     * The captcha token to verify the request.
+     */
+    captcha_token?: string | null;
+    /**
      * The coupon code to apply to the products.
      */
     coupon?: string | null;
@@ -657,17 +689,37 @@ export type UpdateProductError = ExceptionDetail;
 export type GetPaymentHistoryData = {
   query?: {
     /**
-     * Limit the number of payments returned. 0 means no limit.
+     * The field to filter by
      */
-    limit?: number;
+    filter_by?: string | null;
     /**
-     * Offset the number of payments returned. 0 means no offset.
+     * The value to filter with
      */
-    offset?: number;
+    filter_value?: string | null;
+    /**
+     * The current page number
+     */
+    page?: number | null;
+    /**
+     * The number of items per page. Default is 10, max is 100.
+     */
+    page_size?: number;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+    /**
+     * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+     */
+    user_id?: string | null;
   };
 };
 
-export type GetPaymentHistoryResponse = Array<Payment>;
+export type GetPaymentHistoryResponse = PaginatedResponse_Payment_;
 
 export type GetPaymentHistoryError = ExceptionDetail;
 
@@ -768,7 +820,7 @@ export type VerifyCouponResponse = boolean;
 
 export type VerifyCouponError = ExceptionDetail;
 
-export type ListCouponsData = {
+export type GetCouponsData = {
   query?: {
     /**
      * The field to filter by
@@ -797,9 +849,9 @@ export type ListCouponsData = {
   };
 };
 
-export type ListCouponsResponse = PaginatedResponse_Coupon_;
+export type GetCouponsResponse = PaginatedResponse_Coupon_;
 
-export type ListCouponsError = ExceptionDetail;
+export type GetCouponsError = ExceptionDetail;
 
 export type CreateCouponData = {
   body: CouponCreate;

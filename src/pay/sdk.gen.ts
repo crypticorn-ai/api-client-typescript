@@ -43,9 +43,9 @@ import type {
   VerifyCouponData,
   VerifyCouponError,
   VerifyCouponResponse,
-  ListCouponsData,
-  ListCouponsError,
-  ListCouponsResponse,
+  GetCouponsData,
+  GetCouponsError,
+  GetCouponsResponse,
   CreateCouponData,
   CreateCouponError,
   CreateCouponResponse,
@@ -304,15 +304,15 @@ export function createClient(
   };
 
   /**
-   * List Coupons
+   * Get Coupons
    * List all coupons
    */
-  const listCoupons = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<ListCouponsData, ThrowOnError>,
+  const getCoupons = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetCouponsData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      ListCouponsResponse,
-      ListCouponsError,
+      GetCouponsResponse,
+      GetCouponsError,
       ThrowOnError
     >({
       ...options,
@@ -471,7 +471,7 @@ export function createClient(
     updateCoupon,
     deleteCoupon,
     verifyCoupon,
-    listCoupons,
+    getCoupons,
     createCoupon,
     getNowApiStatus,
     createNowInvoice,

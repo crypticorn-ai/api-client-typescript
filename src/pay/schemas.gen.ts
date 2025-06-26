@@ -173,7 +173,7 @@ export const CouponSchema = {
       title: "Valid From",
       description:
         "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
-      default: 1750961882,
+      default: 1750972551,
     },
     usage_limit: {
       anyOf: [
@@ -305,7 +305,7 @@ export const CouponCreateSchema = {
       title: "Valid From",
       description:
         "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
-      default: 1750961882,
+      default: 1750972551,
     },
     usage_limit: {
       anyOf: [
@@ -637,6 +637,72 @@ export const PaginatedResponse_Coupon_Schema = {
   type: "object",
   required: ["data", "total", "page", "page_size"],
   title: "PaginatedResponse[Coupon]",
+} as const;
+
+export const PaginatedResponse_Payment_Schema = {
+  properties: {
+    data: {
+      items: {
+        $ref: "#/components/schemas/Payment",
+      },
+      type: "array",
+      title: "Data",
+    },
+    total: {
+      type: "integer",
+      title: "Total",
+      description: "The total number of items",
+    },
+    page: {
+      type: "integer",
+      title: "Page",
+      description: "The current page number",
+    },
+    page_size: {
+      type: "integer",
+      title: "Page Size",
+      description: "The number of items per page",
+    },
+    prev: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Prev",
+      description: "The previous page number",
+    },
+    next: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Next",
+      description: "The next page number",
+    },
+    last: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Last",
+      description: "The last page number",
+    },
+  },
+  type: "object",
+  required: ["data", "total", "page", "page_size"],
+  title: "PaginatedResponse[Payment]",
 } as const;
 
 export const PaymentSchema = {
