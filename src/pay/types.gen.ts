@@ -14,6 +14,7 @@ export type ApiErrorIdentifier =
   | "cancelled_open_order"
   | "client_order_id_already_exists"
   | "invalid_content_type"
+  | "coupon_invalid"
   | "delete_bot_error"
   | "exchange_http_request_error"
   | "exchange_invalid_parameter"
@@ -105,9 +106,25 @@ export type ApiErrorType =
  */
 export type Coupon = {
   /**
+   * UID of the model
+   */
+  id: string;
+  /**
+   * Timestamp of creation
+   */
+  created_at: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at: number;
+  /**
    * Coupon code. If not specified, a random code is generated.
    */
   code: string | null;
+  /**
+   * A name for the coupon, e.g. 'Black Friday 2025'
+   */
+  name: string;
   /**
    * Discount percentage as a decimal
    */
@@ -133,14 +150,6 @@ export type Coupon = {
    */
   is_active: boolean;
   /**
-   * UID of the coupon
-   */
-  id: string;
-  /**
-   * Coupon creation timestamp in seconds
-   */
-  created_at: number;
-  /**
    * Coupon usage count
    */
   usage_count: number;
@@ -162,6 +171,10 @@ export type CouponCreate = {
    * Coupon code. If not specified, a random code is generated.
    */
   code?: string | null;
+  /**
+   * A name for the coupon, e.g. 'Black Friday 2025'
+   */
+  name: string;
   /**
    * Discount percentage as a decimal
    */
@@ -197,11 +210,15 @@ export type CouponUpdate = {
    */
   code?: string | null;
   /**
+   * Coupon name. If not specified, the name is not changed.
+   */
+  name?: string | null;
+  /**
    * Discount percentage as a decimal
    */
   discount?: number | null;
   /**
-   * Coupon valid until timestamp in seconds. If not specified, the coupon is valid for 100 years.
+   * Coupon valid until timestamp in seconds. If not specified, the valid until is not changed.
    */
   valid_until?: number | null;
   /**
@@ -209,11 +226,11 @@ export type CouponUpdate = {
    */
   valid_from?: number | null;
   /**
-   * Coupon usage limit. If not specified, the coupon can be used unlimited times.
+   * Coupon usage limit. If not specified, the usage limit is not changed.
    */
   usage_limit?: number | null;
   /**
-   * Products that the coupon can be used on. If empty, the coupon can be used on all products.
+   * Products that the coupon can be used on. If empty, the products are not changed.
    */
   products?: Array<string> | null;
   /**
@@ -252,7 +269,23 @@ export type ExceptionDetail = {
   details?: unknown;
 };
 
-export type LogLevel = "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL";
+/**
+ * Combined invoice model across all services
+ */
+export type Invoice = {
+  /**
+   * Invoice ID
+   */
+  id: string;
+  /**
+   * Payment provider
+   */
+  provider: Provider;
+  /**
+   * Invoice URL. If None, no external payment is required.
+   */
+  url?: string | null;
+};
 
 /**
  * Request model for creating a payment invoice.
@@ -262,134 +295,47 @@ export type LogLevel = "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL";
  *
  * https://documenter.getpostman.com/view/7907941/2s93JusNJt#f5e4e645-dce2-4b06-b2ca-2a29aaa5e845
  */
-export type NowCreateInvoiceReq = {
+export type NowNewInvoiceCreate = {
   /**
-   * Amount to pay in fiat currency
-   */
-  price_amount: number;
-  /**
-   * Fiat currency for the price (usd, eur, etc)
-   */
-  price_currency: string;
-  /**
-   * Specific cryptocurrency or enabled fiat currency. If not specified, can be chosen on invoice_url
-   */
-  pay_currency?: string | null;
-  /**
-   * URL to receive callbacks, must contain http/https
-   */
-  ipn_callback_url?: string | null;
-  /**
-   * Internal store order description
-   */
-  order_description?: string | null;
-  /**
-   * URL for redirect after successful payment
-   */
-  success_url?: string | null;
-  /**
-   * URL for redirect after failed payment
-   */
-  cancel_url?: string | null;
-  /**
-   * URL for redirect after partial payment
-   */
-  partially_paid_url?: string | null;
-  /**
-   * Enable fixed-rate exchanges (rate frozen for 20 minutes)
-   */
-  is_fixed_rate?: boolean | null;
-  /**
-   * Enable fixed-rate exchanges with all fees paid by users
-   */
-  is_fee_paid_by_user?: boolean | null;
-  /**
-   * User ID to apply to the product
+   * The user ID to associate with the purchase
    */
   user_id: string;
   /**
-   * Product ID to apply to the product
+   * The product ID to associate with the purchase
    */
   product_id: string;
   /**
-   * Coupon ID to apply to the product
+   * The coupon ID to associate with the purchase
    */
   coupon_id?: string | null;
 };
 
-/**
- * Response model for created invoice.
- * https://documenter.getpostman.com/view/7907941/2s93JusNJt#f5e4e645-dce2-4b06-b2ca-2a29aaa5e845
- */
-export type NowCreateInvoiceRes = {
+export type PaginatedResponse_Coupon_ = {
+  data: Array<Coupon>;
   /**
-   * Invoice ID
+   * The total number of items
    */
-  id: string;
+  total: number;
   /**
-   * Internal identifier
+   * The current page number
    */
-  token_id: string;
+  page: number;
   /**
-   * Order ID specified in request
+   * The number of items per page
    */
-  order_id?: string | null;
+  page_size: number;
   /**
-   * Order description specified in request
+   * The previous page number
    */
-  order_description?: string | null;
+  prev?: number | null;
   /**
-   * Base price in fiat
+   * The next page number
    */
-  price_amount: string;
+  next?: number | null;
   /**
-   * Ticker of base fiat currency
+   * The last page number
    */
-  price_currency: string;
-  /**
-   * Currency customer will pay with
-   */
-  pay_currency?: string | null;
-  /**
-   * Link to IPN notifications endpoint
-   */
-  ipn_callback_url?: string | null;
-  /**
-   * Link to the payment page
-   */
-  invoice_url: string;
-  /**
-   * Redirect URL for successful payment
-   */
-  success_url?: string | null;
-  /**
-   * Redirect URL for failed payment
-   */
-  cancel_url?: string | null;
-  /**
-   * Redirect URL for partial payment
-   */
-  partially_paid_url?: string | null;
-  /**
-   * Ticker of payout currency
-   */
-  payout_currency?: string | null;
-  /**
-   * Time of invoice creation
-   */
-  created_at: string;
-  /**
-   * Time of latest invoice update
-   */
-  updated_at: string;
-  /**
-   * Fixed Rate option status
-   */
-  is_fixed_rate: boolean;
-  /**
-   * Fee Paid By User option status
-   */
-  is_fee_paid_by_user: boolean;
+  last?: number | null;
 };
 
 /**
@@ -401,9 +347,17 @@ export type Payment = {
    */
   id: string;
   /**
-   * Product ID
+   * Product purchased
    */
   product_id: string;
+  /**
+   * Coupon used for the payment
+   */
+  coupon_id?: string | null;
+  /**
+   * User ID the payment is for
+   */
+  user_id: string;
   /**
    * Payment timestamp in seconds
    */
@@ -425,6 +379,14 @@ export type Payment = {
    * Payment market
    */
   market: string;
+  /**
+   * Payment updated at timestamp in seconds
+   */
+  updated_at: number;
+  /**
+   * Payment created at timestamp in seconds
+   */
+  created_at: number;
 };
 
 /**
@@ -444,6 +406,18 @@ export type PaymentStatus =
  */
 export type Product = {
   /**
+   * UID of the model
+   */
+  id: string;
+  /**
+   * Timestamp of creation
+   */
+  created_at: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at: number;
+  /**
    * Product name
    */
   name: string;
@@ -454,7 +428,7 @@ export type Product = {
   /**
    * Scopes that product provides
    */
-  scopes?: Array<Scope> | null;
+  scopes: Array<Scope> | null;
   /**
    * Product duration in days. 0 means forever.
    */
@@ -468,9 +442,9 @@ export type Product = {
    */
   is_active: boolean;
   /**
-   * UID of the product
+   * Original product price. This is the price before the coupon is applied. None if no coupon is applied.
    */
-  id: string;
+  original_price: number | null;
 };
 
 /**
@@ -568,6 +542,8 @@ export type Scope =
   | "write:pay:products"
   | "read:pay:now"
   | "write:pay:now"
+  | "write:pay:coupons"
+  | "read:pay:coupons"
   | "read:metrics:marketcap"
   | "read:metrics:indicators"
   | "read:metrics:exchanges"
@@ -580,6 +556,18 @@ export type Scope =
  * Model for reading a product subscription
  */
 export type Subscription = {
+  /**
+   * UID of the model
+   */
+  id: string;
+  /**
+   * Timestamp of creation
+   */
+  created_at: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at: number;
   /**
    * User ID
    */
@@ -596,18 +584,43 @@ export type Subscription = {
    * Access until timestamp in seconds. 0 means unlimited.
    */
   access_until: number;
-  /**
-   * UID of the product subscription
-   */
-  id: string;
 };
+
+export type GetProductsCaptchaAuthData = {
+  query?: {
+    /**
+     * The coupon code to apply to the products.
+     */
+    coupon?: string | null;
+  };
+};
+
+export type GetProductsCaptchaAuthResponse = Array<Product>;
+
+export type GetProductsCaptchaAuthError = ExceptionDetail;
 
 export type GetProductsData = {
   query?: {
     /**
      * The coupon code to apply to the products.
      */
-    coupon?: string;
+    coupon?: string | null;
+    /**
+     * The field to filter by
+     */
+    filter_by?: string | null;
+    /**
+     * The value to filter with
+     */
+    filter_value?: string | null;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
   };
 };
 
@@ -675,26 +688,45 @@ export type GetSubscriptionsResponse = Array<Subscription>;
 
 export type GetSubscriptionsError = ExceptionDetail;
 
-export type CreateCouponData = {
-  body: CouponCreate;
-};
-
-export type CreateCouponResponse = Coupon;
-
-export type CreateCouponError = ExceptionDetail;
-
-export type VerifyCouponData = {
+export type GetCouponByCodeCaptchaAuthData = {
   query: {
+    captcha_token: string;
     /**
-     * The coupon code to verify
+     * The coupon code to get
      */
     code: string;
   };
 };
 
-export type VerifyCouponResponse = boolean;
+export type GetCouponByCodeCaptchaAuthResponse = Coupon;
 
-export type VerifyCouponError = ExceptionDetail;
+export type GetCouponByCodeCaptchaAuthError = ExceptionDetail;
+
+export type GetCouponByCodeData = {
+  query: {
+    /**
+     * The coupon code to get
+     */
+    code: string;
+  };
+};
+
+export type GetCouponByCodeResponse = Coupon;
+
+export type GetCouponByCodeError = ExceptionDetail;
+
+export type GetCouponData = {
+  path: {
+    /**
+     * The coupon to get
+     */
+    id: string;
+  };
+};
+
+export type GetCouponResponse = Coupon;
+
+export type GetCouponError = ExceptionDetail;
 
 export type UpdateCouponData = {
   body: CouponUpdate;
@@ -710,15 +742,82 @@ export type UpdateCouponResponse = Coupon;
 
 export type UpdateCouponError = ExceptionDetail;
 
+export type DeleteCouponData = {
+  path: {
+    /**
+     * The coupon to delete
+     */
+    id: string;
+  };
+};
+
+export type DeleteCouponResponse = void;
+
+export type DeleteCouponError = ExceptionDetail;
+
+export type VerifyCouponData = {
+  query: {
+    /**
+     * The coupon code to verify
+     */
+    code: string;
+  };
+};
+
+export type VerifyCouponResponse = boolean;
+
+export type VerifyCouponError = ExceptionDetail;
+
+export type ListCouponsData = {
+  query?: {
+    /**
+     * The field to filter by
+     */
+    filter_by?: string | null;
+    /**
+     * The value to filter with
+     */
+    filter_value?: string | null;
+    /**
+     * The current page number
+     */
+    page?: number | null;
+    /**
+     * The number of items per page. Default is 10, max is 100.
+     */
+    page_size?: number;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: "asc" | "desc" | null;
+  };
+};
+
+export type ListCouponsResponse = PaginatedResponse_Coupon_;
+
+export type ListCouponsError = ExceptionDetail;
+
+export type CreateCouponData = {
+  body: CouponCreate;
+};
+
+export type CreateCouponResponse = Coupon;
+
+export type CreateCouponError = ExceptionDetail;
+
 export type GetNowApiStatusResponse = string;
 
 export type GetNowApiStatusError = ExceptionDetail;
 
 export type CreateNowInvoiceData = {
-  body: NowCreateInvoiceReq;
+  body: NowNewInvoiceCreate;
 };
 
-export type CreateNowInvoiceResponse = NowCreateInvoiceRes;
+export type CreateNowInvoiceResponse = Invoice;
 
 export type CreateNowInvoiceError = ExceptionDetail;
 
@@ -746,61 +845,6 @@ export type GetNowPaymentByInvoiceError = ExceptionDetail;
 export type PingResponse = string;
 
 export type PingError = ExceptionDetail;
-
-export type GetTimeData = {
-  query?: {
-    type?: "iso" | "unix";
-  };
-};
-
-export type GetTimeResponse = string;
-
-export type GetTimeError = ExceptionDetail;
-
-export type GetLogLevelResponse = LogLevel;
-
-export type GetLogLevelError = ExceptionDetail;
-
-export type GetUptimeData = {
-  query?: {
-    type?: "seconds" | "human";
-  };
-};
-
-export type GetUptimeResponse = string;
-
-export type GetUptimeError = ExceptionDetail;
-
-export type GetMemoryUsageResponse = number;
-
-export type GetMemoryUsageError = ExceptionDetail;
-
-export type GetThreadsResponse = {
-  [key: string]: unknown;
-};
-
-export type GetThreadsError = ExceptionDetail;
-
-export type GetContainerLimitsResponse = {
-  [key: string]: unknown;
-};
-
-export type GetContainerLimitsError = ExceptionDetail;
-
-export type GetDependenciesData = {
-  query?: {
-    /**
-     * List of regex patterns to match against package names. If not provided, all installed packages will be returned.
-     */
-    include?: Array<string>;
-  };
-};
-
-export type GetDependenciesResponse = {
-  [key: string]: string;
-};
-
-export type GetDependenciesError = ExceptionDetail;
 
 export type GetMetricsResponse = unknown;
 

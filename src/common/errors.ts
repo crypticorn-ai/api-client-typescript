@@ -30,6 +30,8 @@ export enum ApiErrorIdentifier {
   CANCELLED_OPEN_ORDER = "cancelled_open_order",
   CLIENT_ORDER_ID_REPEATED = "client_order_id_already_exists",
   CONTENT_TYPE_ERROR = "invalid_content_type",
+  COUPON_APPLIED = "coupon_applied",
+  COUPON_INVALID = "coupon_invalid",
   DELETE_BOT_ERROR = "delete_bot_error",
   EXCHANGE_HTTP_ERROR = "exchange_http_request_error",
   EXCHANGE_INVALID_PARAMETER = "exchange_invalid_parameter",
@@ -183,6 +185,18 @@ export class ApiError {
   static readonly CONTENT_TYPE_ERROR = new ApiError(
     ApiErrorIdentifier.CONTENT_TYPE_ERROR,
     ApiErrorType.SERVER_ERROR,
+    ApiErrorLevel.ERROR
+  );
+
+  static readonly COUPON_APPLIED = new ApiError(
+    ApiErrorIdentifier.COUPON_APPLIED,
+    ApiErrorType.NO_ERROR,
+    ApiErrorLevel.SUCCESS
+  );
+
+  static readonly COUPON_INVALID = new ApiError(
+    ApiErrorIdentifier.COUPON_INVALID,
+    ApiErrorType.USER_ERROR,
     ApiErrorLevel.ERROR
   );
 

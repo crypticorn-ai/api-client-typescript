@@ -13,6 +13,7 @@ export const ApiErrorIdentifierSchema = {
     "cancelled_open_order",
     "client_order_id_already_exists",
     "invalid_content_type",
+    "coupon_invalid",
     "delete_bot_error",
     "exchange_http_request_error",
     "exchange_invalid_parameter",
@@ -105,6 +106,21 @@ export const ApiErrorTypeSchema = {
 
 export const CouponSchema = {
   properties: {
+    id: {
+      type: "string",
+      title: "Id",
+      description: "UID of the model",
+    },
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+    },
     code: {
       anyOf: [
         {
@@ -119,7 +135,11 @@ export const CouponSchema = {
       ],
       title: "Code",
       description: "Coupon code. If not specified, a random code is generated.",
-      default: "VL3A",
+    },
+    name: {
+      type: "string",
+      title: "Name",
+      description: "A name for the coupon, e.g. 'Black Friday 2025'",
     },
     discount: {
       type: "number",
@@ -153,7 +173,7 @@ export const CouponSchema = {
       title: "Valid From",
       description:
         "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
-      default: 1750596751,
+      default: 1750961882,
     },
     usage_limit: {
       anyOf: [
@@ -190,16 +210,6 @@ export const CouponSchema = {
       description: "Coupon is active",
       default: true,
     },
-    id: {
-      type: "string",
-      title: "Id",
-      description: "UID of the coupon",
-    },
-    created_at: {
-      type: "integer",
-      title: "Created At",
-      description: "Coupon creation timestamp in seconds",
-    },
     usage_count: {
       type: "integer",
       title: "Usage Count",
@@ -222,15 +232,17 @@ export const CouponSchema = {
   },
   type: "object",
   required: [
+    "id",
+    "created_at",
+    "updated_at",
     "code",
+    "name",
     "discount",
     "valid_until",
     "valid_from",
     "usage_limit",
     "products",
     "is_active",
-    "id",
-    "created_at",
     "usage_count",
     "payment_required",
     "is_valid",
@@ -255,7 +267,11 @@ export const CouponCreateSchema = {
       ],
       title: "Code",
       description: "Coupon code. If not specified, a random code is generated.",
-      default: "VL3A",
+    },
+    name: {
+      type: "string",
+      title: "Name",
+      description: "A name for the coupon, e.g. 'Black Friday 2025'",
     },
     discount: {
       type: "number",
@@ -289,7 +305,7 @@ export const CouponCreateSchema = {
       title: "Valid From",
       description:
         "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
-      default: 1750596751,
+      default: 1750961882,
     },
     usage_limit: {
       anyOf: [
@@ -328,7 +344,7 @@ export const CouponCreateSchema = {
     },
   },
   type: "object",
-  required: ["discount"],
+  required: ["name", "discount"],
   title: "CouponCreate",
   description: "Model for creating a coupon",
 } as const;
@@ -349,6 +365,18 @@ export const CouponUpdateSchema = {
       ],
       title: "Code",
       description: "Coupon code. If not specified, a random code is generated.",
+    },
+    name: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Name",
+      description: "Coupon name. If not specified, the name is not changed.",
     },
     discount: {
       anyOf: [
@@ -375,7 +403,7 @@ export const CouponUpdateSchema = {
       ],
       title: "Valid Until",
       description:
-        "Coupon valid until timestamp in seconds. If not specified, the coupon is valid for 100 years.",
+        "Coupon valid until timestamp in seconds. If not specified, the valid until is not changed.",
     },
     valid_from: {
       anyOf: [
@@ -401,7 +429,7 @@ export const CouponUpdateSchema = {
       ],
       title: "Usage Limit",
       description:
-        "Coupon usage limit. If not specified, the coupon can be used unlimited times.",
+        "Coupon usage limit. If not specified, the usage limit is not changed.",
     },
     products: {
       anyOf: [
@@ -417,7 +445,7 @@ export const CouponUpdateSchema = {
       ],
       title: "Products",
       description:
-        "Products that the coupon can be used on. If empty, the coupon can be used on all products.",
+        "Products that the coupon can be used on. If empty, the products are not changed.",
     },
     is_active: {
       anyOf: [
@@ -479,130 +507,47 @@ export const ExceptionDetailSchema = {
   description: "Exception details returned to the client.",
 } as const;
 
-export const LogLevelSchema = {
-  type: "string",
-  enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-  title: "LogLevel",
+export const InvoiceSchema = {
+  properties: {
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Invoice ID",
+    },
+    provider: {
+      $ref: "#/components/schemas/Provider",
+      description: "Payment provider",
+    },
+    url: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Url",
+      description: "Invoice URL. If None, no external payment is required.",
+    },
+  },
+  type: "object",
+  required: ["id", "provider"],
+  title: "Invoice",
+  description: "Combined invoice model across all services",
 } as const;
 
-export const NowCreateInvoiceReqSchema = {
+export const NowNewInvoiceCreateSchema = {
   properties: {
-    price_amount: {
-      type: "number",
-      title: "Price Amount",
-      description: "Amount to pay in fiat currency",
-    },
-    price_currency: {
-      type: "string",
-      title: "Price Currency",
-      description: "Fiat currency for the price (usd, eur, etc)",
-    },
-    pay_currency: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Pay Currency",
-      description:
-        "Specific cryptocurrency or enabled fiat currency. If not specified, can be chosen on invoice_url",
-    },
-    ipn_callback_url: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Ipn Callback Url",
-      description: "URL to receive callbacks, must contain http/https",
-    },
-    order_description: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Order Description",
-      description: "Internal store order description",
-    },
-    success_url: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Success Url",
-      description: "URL for redirect after successful payment",
-    },
-    cancel_url: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Cancel Url",
-      description: "URL for redirect after failed payment",
-    },
-    partially_paid_url: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Partially Paid Url",
-      description: "URL for redirect after partial payment",
-    },
-    is_fixed_rate: {
-      anyOf: [
-        {
-          type: "boolean",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Is Fixed Rate",
-      description: "Enable fixed-rate exchanges (rate frozen for 20 minutes)",
-    },
-    is_fee_paid_by_user: {
-      anyOf: [
-        {
-          type: "boolean",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Is Fee Paid By User",
-      description: "Enable fixed-rate exchanges with all fees paid by users",
-    },
     user_id: {
       type: "string",
       title: "User Id",
-      description: "User ID to apply to the product",
+      description: "The user ID to associate with the purchase",
     },
     product_id: {
       type: "string",
       title: "Product Id",
-      description: "Product ID to apply to the product",
+      description: "The product ID to associate with the purchase",
     },
     coupon_id: {
       anyOf: [
@@ -614,12 +559,12 @@ export const NowCreateInvoiceReqSchema = {
         },
       ],
       title: "Coupon Id",
-      description: "Coupon ID to apply to the product",
+      description: "The coupon ID to associate with the purchase",
     },
   },
   type: "object",
-  required: ["price_amount", "price_currency", "user_id", "product_id"],
-  title: "NowCreateInvoiceReq",
+  required: ["user_id", "product_id"],
+  title: "NowNewInvoiceCreate",
   description: `Request model for creating a payment invoice.
 
 Creates a payment link where the customer can complete the payment.
@@ -628,165 +573,70 @@ With this method, the customer is required to follow the generated url to comple
 https://documenter.getpostman.com/view/7907941/2s93JusNJt#f5e4e645-dce2-4b06-b2ca-2a29aaa5e845`,
 } as const;
 
-export const NowCreateInvoiceResSchema = {
+export const PaginatedResponse_Coupon_Schema = {
   properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Invoice ID",
+    data: {
+      items: {
+        $ref: "#/components/schemas/Coupon",
+      },
+      type: "array",
+      title: "Data",
     },
-    token_id: {
-      type: "string",
-      title: "Token Id",
-      description: "Internal identifier",
+    total: {
+      type: "integer",
+      title: "Total",
+      description: "The total number of items",
     },
-    order_id: {
+    page: {
+      type: "integer",
+      title: "Page",
+      description: "The current page number",
+    },
+    page_size: {
+      type: "integer",
+      title: "Page Size",
+      description: "The number of items per page",
+    },
+    prev: {
       anyOf: [
         {
-          type: "string",
+          type: "integer",
         },
         {
           type: "null",
         },
       ],
-      title: "Order Id",
-      description: "Order ID specified in request",
+      title: "Prev",
+      description: "The previous page number",
     },
-    order_description: {
+    next: {
       anyOf: [
         {
-          type: "string",
+          type: "integer",
         },
         {
           type: "null",
         },
       ],
-      title: "Order Description",
-      description: "Order description specified in request",
+      title: "Next",
+      description: "The next page number",
     },
-    price_amount: {
-      type: "string",
-      title: "Price Amount",
-      description: "Base price in fiat",
-    },
-    price_currency: {
-      type: "string",
-      title: "Price Currency",
-      description: "Ticker of base fiat currency",
-    },
-    pay_currency: {
+    last: {
       anyOf: [
         {
-          type: "string",
+          type: "integer",
         },
         {
           type: "null",
         },
       ],
-      title: "Pay Currency",
-      description: "Currency customer will pay with",
-    },
-    ipn_callback_url: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Ipn Callback Url",
-      description: "Link to IPN notifications endpoint",
-    },
-    invoice_url: {
-      type: "string",
-      title: "Invoice Url",
-      description: "Link to the payment page",
-    },
-    success_url: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Success Url",
-      description: "Redirect URL for successful payment",
-    },
-    cancel_url: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Cancel Url",
-      description: "Redirect URL for failed payment",
-    },
-    partially_paid_url: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Partially Paid Url",
-      description: "Redirect URL for partial payment",
-    },
-    payout_currency: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Payout Currency",
-      description: "Ticker of payout currency",
-    },
-    created_at: {
-      type: "string",
-      title: "Created At",
-      description: "Time of invoice creation",
-    },
-    updated_at: {
-      type: "string",
-      title: "Updated At",
-      description: "Time of latest invoice update",
-    },
-    is_fixed_rate: {
-      type: "boolean",
-      title: "Is Fixed Rate",
-      description: "Fixed Rate option status",
-    },
-    is_fee_paid_by_user: {
-      type: "boolean",
-      title: "Is Fee Paid By User",
-      description: "Fee Paid By User option status",
+      title: "Last",
+      description: "The last page number",
     },
   },
   type: "object",
-  required: [
-    "id",
-    "token_id",
-    "price_amount",
-    "price_currency",
-    "invoice_url",
-    "created_at",
-    "updated_at",
-    "is_fixed_rate",
-    "is_fee_paid_by_user",
-  ],
-  title: "NowCreateInvoiceRes",
-  description: `Response model for created invoice.
-https://documenter.getpostman.com/view/7907941/2s93JusNJt#f5e4e645-dce2-4b06-b2ca-2a29aaa5e845`,
+  required: ["data", "total", "page", "page_size"],
+  title: "PaginatedResponse[Coupon]",
 } as const;
 
 export const PaymentSchema = {
@@ -799,7 +649,24 @@ export const PaymentSchema = {
     product_id: {
       type: "string",
       title: "Product Id",
-      description: "Product ID",
+      description: "Product purchased",
+    },
+    coupon_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Coupon Id",
+      description: "Coupon used for the payment",
+    },
+    user_id: {
+      type: "string",
+      title: "User Id",
+      description: "User ID the payment is for",
     },
     timestamp: {
       type: "integer",
@@ -828,17 +695,30 @@ export const PaymentSchema = {
       title: "Market",
       description: "Payment market",
     },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Payment updated at timestamp in seconds",
+    },
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Payment created at timestamp in seconds",
+    },
   },
   type: "object",
   required: [
     "id",
     "product_id",
+    "user_id",
     "timestamp",
     "amount",
     "currency",
     "status",
     "provider",
     "market",
+    "updated_at",
+    "created_at",
   ],
   title: "Payment",
   description: "Combined payment model across all services",
@@ -861,6 +741,21 @@ export const PaymentStatusSchema = {
 
 export const ProductSchema = {
   properties: {
+    id: {
+      type: "string",
+      title: "Id",
+      description: "UID of the model",
+    },
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+    },
     name: {
       type: "string",
       title: "Name",
@@ -901,14 +796,33 @@ export const ProductSchema = {
       title: "Is Active",
       description: "Product is active",
     },
-    id: {
-      type: "string",
-      title: "Id",
-      description: "UID of the product",
+    original_price: {
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Original Price",
+      description:
+        "Original product price. This is the price before the coupon is applied. None if no coupon is applied.",
     },
   },
   type: "object",
-  required: ["name", "price", "duration", "description", "is_active", "id"],
+  required: [
+    "id",
+    "created_at",
+    "updated_at",
+    "name",
+    "price",
+    "scopes",
+    "duration",
+    "description",
+    "is_active",
+    "original_price",
+  ],
   title: "Product",
   description: "Model for reading a product",
 } as const;
@@ -1081,6 +995,8 @@ export const ScopeSchema = {
     "write:pay:products",
     "read:pay:now",
     "write:pay:now",
+    "write:pay:coupons",
+    "read:pay:coupons",
     "read:metrics:marketcap",
     "read:metrics:indicators",
     "read:metrics:exchanges",
@@ -1095,6 +1011,21 @@ export const ScopeSchema = {
 
 export const SubscriptionSchema = {
   properties: {
+    id: {
+      type: "string",
+      title: "Id",
+      description: "UID of the model",
+    },
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+    },
     user_id: {
       type: "string",
       title: "User Id",
@@ -1115,14 +1046,17 @@ export const SubscriptionSchema = {
       title: "Access Until",
       description: "Access until timestamp in seconds. 0 means unlimited.",
     },
-    id: {
-      type: "string",
-      title: "Id",
-      description: "UID of the product subscription",
-    },
   },
   type: "object",
-  required: ["user_id", "product_id", "access_from", "access_until", "id"],
+  required: [
+    "id",
+    "created_at",
+    "updated_at",
+    "user_id",
+    "product_id",
+    "access_from",
+    "access_until",
+  ],
   title: "Subscription",
   description: "Model for reading a product subscription",
 } as const;
