@@ -25,42 +25,34 @@ import type {
   GetSubscriptionsData,
   GetSubscriptionsError,
   GetSubscriptionsResponse,
+  GetPaymentByInvoiceData,
+  GetPaymentByInvoiceError,
+  GetPaymentByInvoiceResponse,
   GetCouponByCodeCaptchaAuthData,
   GetCouponByCodeCaptchaAuthError,
   GetCouponByCodeCaptchaAuthResponse,
   GetCouponByCodeData,
   GetCouponByCodeError,
   GetCouponByCodeResponse,
-  GetCouponData,
-  GetCouponError,
-  GetCouponResponse,
-  UpdateCouponData,
-  UpdateCouponError,
-  UpdateCouponResponse,
-  DeleteCouponData,
-  DeleteCouponError,
-  DeleteCouponResponse,
-  VerifyCouponData,
-  VerifyCouponError,
-  VerifyCouponResponse,
   GetCouponsData,
   GetCouponsError,
   GetCouponsResponse,
   CreateCouponData,
   CreateCouponError,
   CreateCouponResponse,
+  UpdateCouponData,
+  UpdateCouponError,
+  UpdateCouponResponse,
+  DeleteCouponData,
+  DeleteCouponError,
+  DeleteCouponResponse,
   GetNowApiStatusError,
   GetNowApiStatusResponse,
-  CreateNowInvoiceData,
-  CreateNowInvoiceError,
-  CreateNowInvoiceResponse,
   HandleNowWebhookError,
   HandleNowWebhookResponse,
-  GetNowPaymentsError,
-  GetNowPaymentsResponse,
-  GetNowPaymentByInvoiceData,
-  GetNowPaymentByInvoiceError,
-  GetNowPaymentByInvoiceResponse,
+  CreateInvoiceData,
+  CreateInvoiceError,
+  CreateInvoiceResponse,
   PingError,
   PingResponse,
   GetMetricsError,
@@ -202,6 +194,23 @@ export function createClient(
   };
 
   /**
+   * Get Payments By Invoice
+   * Get all payments by invoice ID. Usually is just one payment, but can be multiple in case of partial payments.
+   */
+  const getPaymentByInvoice = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetPaymentByInvoiceData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetPaymentByInvoiceResponse,
+      GetPaymentByInvoiceError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/payments/by-invoice/{id}",
+    });
+  };
+
+  /**
    * Get Coupon By Code Captcha Auth
    * Get a coupon by code using captcha authentication
    */
@@ -232,74 +241,6 @@ export function createClient(
     >({
       ...options,
       url: "/coupons/by-code",
-    });
-  };
-
-  /**
-   * Get Coupon
-   * Get a coupon by id
-   */
-  const getCoupon = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetCouponData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetCouponResponse,
-      GetCouponError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/coupons/{id}",
-    });
-  };
-
-  /**
-   * Update Coupon
-   * Update a coupon
-   */
-  const updateCoupon = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<UpdateCouponData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).put<
-      UpdateCouponResponse,
-      UpdateCouponError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/coupons/{id}",
-    });
-  };
-
-  /**
-   * Delete Coupon
-   * Deactivate a coupon
-   */
-  const deleteCoupon = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<DeleteCouponData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).delete<
-      DeleteCouponResponse,
-      DeleteCouponError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/coupons/{id}",
-    });
-  };
-
-  /**
-   * Verify Coupon
-   * Verify a coupon. Returns True if the coupon is valid, False otherwise.
-   */
-  const verifyCoupon = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<VerifyCouponData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      VerifyCouponResponse,
-      VerifyCouponError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/coupons/verify",
     });
   };
 
@@ -338,6 +279,40 @@ export function createClient(
   };
 
   /**
+   * Update Coupon
+   * Update a coupon
+   */
+  const updateCoupon = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<UpdateCouponData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).put<
+      UpdateCouponResponse,
+      UpdateCouponError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/coupons/{id}",
+    });
+  };
+
+  /**
+   * Delete Coupon
+   * Deactivate a coupon
+   */
+  const deleteCoupon = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<DeleteCouponData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).delete<
+      DeleteCouponResponse,
+      DeleteCouponError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/coupons/{id}",
+    });
+  };
+
+  /**
    * Get Status
    * Get the status of the NOWPayments API
    */
@@ -351,23 +326,6 @@ export function createClient(
     >({
       ...options,
       url: "/now/status",
-    });
-  };
-
-  /**
-   * Create Invoice
-   * Create a payment invoice with a payment link for customer completion. Only Bearer authentication is supported.
-   */
-  const createNowInvoice = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<CreateNowInvoiceData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).post<
-      CreateNowInvoiceResponse,
-      CreateNowInvoiceError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/now/invoice",
     });
   };
 
@@ -390,36 +348,19 @@ export function createClient(
   };
 
   /**
-   * Get Now Payments
-   * Get all of the user's NOW payments
+   * Create Invoice
+   * Create a payment invoice with a payment link for customer completion. Only Bearer authentication is supported.
    */
-  const getNowPayments = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  const createInvoice = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<CreateInvoiceData, ThrowOnError>,
   ) => {
-    return (options?.client ?? client).get<
-      GetNowPaymentsResponse,
-      GetNowPaymentsError,
+    return (options?.client ?? client).post<
+      CreateInvoiceResponse,
+      CreateInvoiceError,
       ThrowOnError
     >({
       ...options,
-      url: "/now/payments",
-    });
-  };
-
-  /**
-   * Get Now Payment By Invoice
-   * Get a NOW payment by invoice ID
-   */
-  const getNowPaymentByInvoice = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetNowPaymentByInvoiceData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetNowPaymentByInvoiceResponse,
-      GetNowPaymentByInvoiceError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/now/payments/by-invoice/{id}",
+      url: "/invoices",
     });
   };
 
@@ -465,19 +406,16 @@ export function createClient(
     updateProduct,
     getPaymentHistory,
     getSubscriptions,
+    getPaymentByInvoice,
     getCouponByCodeCaptchaAuth,
     getCouponByCode,
-    getCoupon,
-    updateCoupon,
-    deleteCoupon,
-    verifyCoupon,
     getCoupons,
     createCoupon,
+    updateCoupon,
+    deleteCoupon,
     getNowApiStatus,
-    createNowInvoice,
     handleNowWebhook,
-    getNowPayments,
-    getNowPaymentByInvoice,
+    createInvoice,
     ping,
     getMetrics,
   };

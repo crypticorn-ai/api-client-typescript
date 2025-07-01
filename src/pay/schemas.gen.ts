@@ -173,7 +173,7 @@ export const CouponSchema = {
       title: "Valid From",
       description:
         "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
-      default: 1750972551,
+      default: 1751409993,
     },
     usage_limit: {
       anyOf: [
@@ -305,7 +305,7 @@ export const CouponCreateSchema = {
       title: "Valid From",
       description:
         "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
-      default: 1750972551,
+      default: 1751409993,
     },
     usage_limit: {
       anyOf: [
@@ -507,7 +507,62 @@ export const ExceptionDetailSchema = {
   description: "Exception details returned to the client.",
 } as const;
 
-export const InvoiceSchema = {
+export const InvoiceCreateSchema = {
+  properties: {
+    user_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "User Id",
+      description:
+        "The ID of the user. Overrides the authenticated user if provided and the user is an admin.",
+    },
+    product_id: {
+      type: "string",
+      title: "Product Id",
+      description: "The ID of the product",
+    },
+    coupon_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Coupon Id",
+      description: "The ID of the coupon",
+    },
+    provider: {
+      $ref: "#/components/schemas/Provider",
+      description: "The provider the invoice is created with",
+    },
+    address: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Address",
+      description: "The address of the user. Only used for staking invoices.",
+    },
+  },
+  type: "object",
+  required: ["product_id", "provider"],
+  title: "InvoiceCreate",
+  description: "Model for creating an invoice",
+} as const;
+
+export const InvoiceInfoSchema = {
   properties: {
     id: {
       type: "string",
@@ -533,44 +588,8 @@ export const InvoiceSchema = {
   },
   type: "object",
   required: ["id", "provider"],
-  title: "Invoice",
+  title: "InvoiceInfo",
   description: "Combined invoice model across all services",
-} as const;
-
-export const NowNewInvoiceCreateSchema = {
-  properties: {
-    user_id: {
-      type: "string",
-      title: "User Id",
-      description: "The user ID to associate with the purchase",
-    },
-    product_id: {
-      type: "string",
-      title: "Product Id",
-      description: "The product ID to associate with the purchase",
-    },
-    coupon_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Coupon Id",
-      description: "The coupon ID to associate with the purchase",
-    },
-  },
-  type: "object",
-  required: ["user_id", "product_id"],
-  title: "NowNewInvoiceCreate",
-  description: `Request model for creating a payment invoice.
-
-Creates a payment link where the customer can complete the payment.
-With this method, the customer is required to follow the generated url to complete the payment.
-
-https://documenter.getpostman.com/view/7907941/2s93JusNJt#f5e4e645-dce2-4b06-b2ca-2a29aaa5e845`,
 } as const;
 
 export const PaginatedResponse_Coupon_Schema = {
@@ -734,6 +753,11 @@ export const PaymentSchema = {
       title: "User Id",
       description: "User ID the payment is for",
     },
+    invoice_id: {
+      type: "string",
+      title: "Invoice Id",
+      description: "Invoice ID",
+    },
     timestamp: {
       type: "integer",
       title: "Timestamp",
@@ -777,6 +801,7 @@ export const PaymentSchema = {
     "id",
     "product_id",
     "user_id",
+    "invoice_id",
     "timestamp",
     "amount",
     "currency",
@@ -1027,7 +1052,7 @@ export const ProductUpdateSchema = {
 
 export const ProviderSchema = {
   type: "string",
-  enum: ["now"],
+  enum: ["now", "staking", "stripe"],
   title: "Provider",
   description: "Available payment providers",
 } as const;

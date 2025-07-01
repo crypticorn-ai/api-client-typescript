@@ -270,9 +270,35 @@ export type ExceptionDetail = {
 };
 
 /**
+ * Model for creating an invoice
+ */
+export type InvoiceCreate = {
+  /**
+   * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+   */
+  user_id?: string | null;
+  /**
+   * The ID of the product
+   */
+  product_id: string;
+  /**
+   * The ID of the coupon
+   */
+  coupon_id?: string | null;
+  /**
+   * The provider the invoice is created with
+   */
+  provider: Provider;
+  /**
+   * The address of the user. Only used for staking invoices.
+   */
+  address?: string | null;
+};
+
+/**
  * Combined invoice model across all services
  */
-export type Invoice = {
+export type InvoiceInfo = {
   /**
    * Invoice ID
    */
@@ -285,29 +311,6 @@ export type Invoice = {
    * Invoice URL. If None, no external payment is required.
    */
   url?: string | null;
-};
-
-/**
- * Request model for creating a payment invoice.
- *
- * Creates a payment link where the customer can complete the payment.
- * With this method, the customer is required to follow the generated url to complete the payment.
- *
- * https://documenter.getpostman.com/view/7907941/2s93JusNJt#f5e4e645-dce2-4b06-b2ca-2a29aaa5e845
- */
-export type NowNewInvoiceCreate = {
-  /**
-   * The user ID to associate with the purchase
-   */
-  user_id: string;
-  /**
-   * The product ID to associate with the purchase
-   */
-  product_id: string;
-  /**
-   * The coupon ID to associate with the purchase
-   */
-  coupon_id?: string | null;
 };
 
 export type PaginatedResponse_Coupon_ = {
@@ -386,6 +389,10 @@ export type Payment = {
    * User ID the payment is for
    */
   user_id: string;
+  /**
+   * Invoice ID
+   */
+  invoice_id: string;
   /**
    * Payment timestamp in seconds
    */
@@ -538,7 +545,7 @@ export type ProductUpdate = {
 /**
  * Available payment providers
  */
-export type Provider = "now";
+export type Provider = "now" | "staking" | "stripe";
 
 /**
  * The permission scopes for the API.
@@ -740,6 +747,19 @@ export type GetSubscriptionsResponse = Array<Subscription>;
 
 export type GetSubscriptionsError = ExceptionDetail;
 
+export type GetPaymentByInvoiceData = {
+  path: {
+    /**
+     * The invoice ID
+     */
+    id: string;
+  };
+};
+
+export type GetPaymentByInvoiceResponse = Array<Payment>;
+
+export type GetPaymentByInvoiceError = ExceptionDetail;
+
 export type GetCouponByCodeCaptchaAuthData = {
   query: {
     captcha_token: string;
@@ -766,59 +786,6 @@ export type GetCouponByCodeData = {
 export type GetCouponByCodeResponse = Coupon;
 
 export type GetCouponByCodeError = ExceptionDetail;
-
-export type GetCouponData = {
-  path: {
-    /**
-     * The coupon to get
-     */
-    id: string;
-  };
-};
-
-export type GetCouponResponse = Coupon;
-
-export type GetCouponError = ExceptionDetail;
-
-export type UpdateCouponData = {
-  body: CouponUpdate;
-  path: {
-    /**
-     * The coupon to update
-     */
-    id: string;
-  };
-};
-
-export type UpdateCouponResponse = Coupon;
-
-export type UpdateCouponError = ExceptionDetail;
-
-export type DeleteCouponData = {
-  path: {
-    /**
-     * The coupon to delete
-     */
-    id: string;
-  };
-};
-
-export type DeleteCouponResponse = void;
-
-export type DeleteCouponError = ExceptionDetail;
-
-export type VerifyCouponData = {
-  query: {
-    /**
-     * The coupon code to verify
-     */
-    code: string;
-  };
-};
-
-export type VerifyCouponResponse = boolean;
-
-export type VerifyCouponError = ExceptionDetail;
 
 export type GetCouponsData = {
   query?: {
@@ -861,38 +828,48 @@ export type CreateCouponResponse = Coupon;
 
 export type CreateCouponError = ExceptionDetail;
 
+export type UpdateCouponData = {
+  body: CouponUpdate;
+  path: {
+    /**
+     * The coupon to update
+     */
+    id: string;
+  };
+};
+
+export type UpdateCouponResponse = Coupon;
+
+export type UpdateCouponError = ExceptionDetail;
+
+export type DeleteCouponData = {
+  path: {
+    /**
+     * The coupon to delete
+     */
+    id: string;
+  };
+};
+
+export type DeleteCouponResponse = void;
+
+export type DeleteCouponError = ExceptionDetail;
+
 export type GetNowApiStatusResponse = string;
 
 export type GetNowApiStatusError = ExceptionDetail;
-
-export type CreateNowInvoiceData = {
-  body: NowNewInvoiceCreate;
-};
-
-export type CreateNowInvoiceResponse = Invoice;
-
-export type CreateNowInvoiceError = ExceptionDetail;
 
 export type HandleNowWebhookResponse = unknown;
 
 export type HandleNowWebhookError = ExceptionDetail;
 
-export type GetNowPaymentsResponse = Array<Payment>;
-
-export type GetNowPaymentsError = ExceptionDetail;
-
-export type GetNowPaymentByInvoiceData = {
-  path: {
-    /**
-     * The invoice ID
-     */
-    id: number;
-  };
+export type CreateInvoiceData = {
+  body: InvoiceCreate;
 };
 
-export type GetNowPaymentByInvoiceResponse = Payment;
+export type CreateInvoiceResponse = InvoiceInfo;
 
-export type GetNowPaymentByInvoiceError = ExceptionDetail;
+export type CreateInvoiceError = ExceptionDetail;
 
 export type PingResponse = string;
 
