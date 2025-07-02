@@ -15,7 +15,7 @@
     "generate": "tsx scripts/generate.ts"
   },
   "dependencies": {
-    "@crypticorn-ai/auth-service": "^1.8.0",
+    "@crypticorn-ai/auth-service": "^1.8.1",
     "@crypticorn-ai/token-service": "^0.6.4",
     "@hey-api/client-fetch": "^0.5.0"
   },
