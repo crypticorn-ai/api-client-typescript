@@ -842,18 +842,18 @@ export type UpdateCouponResponse = Coupon;
 
 export type UpdateCouponError = ExceptionDetail;
 
-export type DeleteCouponData = {
+export type DeactivateCouponData = {
   path: {
     /**
-     * The coupon to delete
+     * The coupon to deactivate
      */
     id: string;
   };
 };
 
-export type DeleteCouponResponse = void;
+export type DeactivateCouponResponse = void;
 
-export type DeleteCouponError = ExceptionDetail;
+export type DeactivateCouponError = ExceptionDetail;
 
 export type GetNowApiStatusResponse = string;
 

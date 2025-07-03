@@ -43,9 +43,9 @@ import type {
   UpdateCouponData,
   UpdateCouponError,
   UpdateCouponResponse,
-  DeleteCouponData,
-  DeleteCouponError,
-  DeleteCouponResponse,
+  DeactivateCouponData,
+  DeactivateCouponError,
+  DeactivateCouponResponse,
   GetNowApiStatusError,
   GetNowApiStatusResponse,
   HandleNowWebhookError,
@@ -229,7 +229,7 @@ export function createClient(
 
   /**
    * Get Coupon By Code
-   * Get a coupon by code
+   * Get a coupon by code. Only bearer auth is supported.
    */
   const getCouponByCode = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<GetCouponByCodeData, ThrowOnError>,
@@ -246,7 +246,7 @@ export function createClient(
 
   /**
    * Get Coupons
-   * List all coupons
+   * List all coupons. Only bearer auth is supported.
    */
   const getCoupons = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetCouponsData, ThrowOnError>,
@@ -296,15 +296,15 @@ export function createClient(
   };
 
   /**
-   * Delete Coupon
+   * Deactivate Coupon
    * Deactivate a coupon
    */
-  const deleteCoupon = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<DeleteCouponData, ThrowOnError>,
+  const deactivateCoupon = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<DeactivateCouponData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).delete<
-      DeleteCouponResponse,
-      DeleteCouponError,
+      DeactivateCouponResponse,
+      DeactivateCouponError,
       ThrowOnError
     >({
       ...options,
@@ -412,7 +412,7 @@ export function createClient(
     getCoupons,
     createCoupon,
     updateCoupon,
-    deleteCoupon,
+    deactivateCoupon,
     getNowApiStatus,
     handleNowWebhook,
     createInvoice,
