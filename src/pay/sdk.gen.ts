@@ -25,9 +25,9 @@ import type {
   GetSubscriptionsData,
   GetSubscriptionsError,
   GetSubscriptionsResponse,
-  GetPaymentByInvoiceData,
-  GetPaymentByInvoiceError,
-  GetPaymentByInvoiceResponse,
+  GetPaymentsByInvoiceData,
+  GetPaymentsByInvoiceError,
+  GetPaymentsByInvoiceResponse,
   GetCouponByCodeCaptchaAuthData,
   GetCouponByCodeCaptchaAuthError,
   GetCouponByCodeCaptchaAuthResponse,
@@ -197,12 +197,12 @@ export function createClient(
    * Get Payments By Invoice
    * Get all payments by invoice ID. Usually is just one payment, but can be multiple in case of partial payments.
    */
-  const getPaymentByInvoice = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetPaymentByInvoiceData, ThrowOnError>,
+  const getPaymentsByInvoice = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetPaymentsByInvoiceData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetPaymentByInvoiceResponse,
-      GetPaymentByInvoiceError,
+      GetPaymentsByInvoiceResponse,
+      GetPaymentsByInvoiceError,
       ThrowOnError
     >({
       ...options,
@@ -406,7 +406,7 @@ export function createClient(
     updateProduct,
     getPaymentHistory,
     getSubscriptions,
-    getPaymentByInvoice,
+    getPaymentsByInvoice,
     getCouponByCodeCaptchaAuth,
     getCouponByCode,
     getCoupons,

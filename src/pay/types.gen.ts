@@ -747,7 +747,7 @@ export type GetSubscriptionsResponse = Array<Subscription>;
 
 export type GetSubscriptionsError = ExceptionDetail;
 
-export type GetPaymentByInvoiceData = {
+export type GetPaymentsByInvoiceData = {
   path: {
     /**
      * The invoice ID
@@ -756,9 +756,9 @@ export type GetPaymentByInvoiceData = {
   };
 };
 
-export type GetPaymentByInvoiceResponse = Array<Payment>;
+export type GetPaymentsByInvoiceResponse = Array<Payment>;
 
-export type GetPaymentByInvoiceError = ExceptionDetail;
+export type GetPaymentsByInvoiceError = ExceptionDetail;
 
 export type GetCouponByCodeCaptchaAuthData = {
   query: {

@@ -173,7 +173,6 @@ export const CouponSchema = {
       title: "Valid From",
       description:
         "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
-      default: 1751409993,
     },
     usage_limit: {
       anyOf: [
@@ -305,7 +304,6 @@ export const CouponCreateSchema = {
       title: "Valid From",
       description:
         "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
-      default: 1751409993,
     },
     usage_limit: {
       anyOf: [
