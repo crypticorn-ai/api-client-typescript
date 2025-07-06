@@ -553,6 +553,19 @@ export const InvoiceCreateSchema = {
       title: "Address",
       description: "The address of the user. Only used for staking invoices.",
     },
+    oob: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Oob",
+      description:
+        "The oob code for the invoice. Only used for signup invoices.",
+    },
   },
   type: "object",
   required: ["product_id", "provider"],
@@ -885,6 +898,23 @@ export const ProductSchema = {
       title: "Is Active",
       description: "Product is active",
     },
+    images: {
+      anyOf: [
+        {
+          items: {
+            type: "string",
+            minLength: 1,
+            format: "uri",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Images",
+      description: "Product images as hosted URLs",
+    },
     original_price: {
       anyOf: [
         {
@@ -910,6 +940,7 @@ export const ProductSchema = {
     "duration",
     "description",
     "is_active",
+    "images",
     "original_price",
   ],
   title: "Product",
@@ -957,6 +988,23 @@ export const ProductCreateSchema = {
       type: "boolean",
       title: "Is Active",
       description: "Product is active",
+    },
+    images: {
+      anyOf: [
+        {
+          items: {
+            type: "string",
+            minLength: 1,
+            format: "uri",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Images",
+      description: "Product images as hosted URLs",
     },
   },
   type: "object",
@@ -1041,6 +1089,23 @@ export const ProductUpdateSchema = {
       ],
       title: "Is Active",
       description: "Product is active",
+    },
+    images: {
+      anyOf: [
+        {
+          items: {
+            type: "string",
+            minLength: 1,
+            format: "uri",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Images",
+      description: "Product images as hosted URLs",
     },
   },
   type: "object",

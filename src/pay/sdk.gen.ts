@@ -53,6 +53,8 @@ import type {
   CreateInvoiceData,
   CreateInvoiceError,
   CreateInvoiceResponse,
+  StripeWebhookStripeWebhookPostError,
+  StripeWebhookStripeWebhookPostResponse,
   PingError,
   PingResponse,
   GetMetricsError,
@@ -365,6 +367,22 @@ export function createClient(
   };
 
   /**
+   * Stripe Webhook
+   */
+  const stripeWebhookStripeWebhookPost = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).post<
+      StripeWebhookStripeWebhookPostResponse,
+      StripeWebhookStripeWebhookPostError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/stripe/webhook",
+    });
+  };
+
+  /**
    * Ping
    * Returns 'OK' if the API is running.
    */
@@ -416,6 +434,7 @@ export function createClient(
     getNowApiStatus,
     handleNowWebhook,
     createInvoice,
+    stripeWebhookStripeWebhookPost,
     ping,
     getMetrics,
   };

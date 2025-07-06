@@ -293,6 +293,10 @@ export type InvoiceCreate = {
    * The address of the user. Only used for staking invoices.
    */
   address?: string | null;
+  /**
+   * The oob code for the invoice. Only used for signup invoices.
+   */
+  oob?: string | null;
 };
 
 /**
@@ -477,6 +481,10 @@ export type Product = {
    */
   is_active: boolean;
   /**
+   * Product images as hosted URLs
+   */
+  images: Array<string> | null;
+  /**
    * Original product price. This is the price before the coupon is applied. None if no coupon is applied.
    */
   original_price: number | null;
@@ -510,6 +518,10 @@ export type ProductCreate = {
    * Product is active
    */
   is_active: boolean;
+  /**
+   * Product images as hosted URLs
+   */
+  images?: Array<string> | null;
 };
 
 /**
@@ -540,6 +552,10 @@ export type ProductUpdate = {
    * Product is active
    */
   is_active?: boolean | null;
+  /**
+   * Product images as hosted URLs
+   */
+  images?: Array<string> | null;
 };
 
 /**
@@ -870,6 +886,10 @@ export type CreateInvoiceData = {
 export type CreateInvoiceResponse = InvoiceInfo;
 
 export type CreateInvoiceError = ExceptionDetail;
+
+export type StripeWebhookStripeWebhookPostResponse = unknown;
+
+export type StripeWebhookStripeWebhookPostError = ExceptionDetail;
 
 export type PingResponse = string;
 
