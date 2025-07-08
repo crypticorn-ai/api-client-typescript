@@ -349,47 +349,6 @@ export const CouponCreateSchema = {
 
 export const CouponUpdateSchema = {
   properties: {
-    code: {
-      anyOf: [
-        {
-          type: "string",
-          maxLength: 32,
-          minLength: 4,
-          pattern: "^[A-Z0-9]+$",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Code",
-      description: "Coupon code. If not specified, a random code is generated.",
-    },
-    name: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Name",
-      description: "Coupon name. If not specified, the name is not changed.",
-    },
-    discount: {
-      anyOf: [
-        {
-          type: "number",
-          maximum: 1,
-          minimum: 0,
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Discount",
-      description: "Discount percentage as a decimal",
-    },
     valid_until: {
       anyOf: [
         {
@@ -402,19 +361,6 @@ export const CouponUpdateSchema = {
       title: "Valid Until",
       description:
         "Coupon valid until timestamp in seconds. If not specified, the valid until is not changed.",
-    },
-    valid_from: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Valid From",
-      description:
-        "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
     },
     usage_limit: {
       anyOf: [
@@ -445,17 +391,17 @@ export const CouponUpdateSchema = {
       description:
         "Products that the coupon can be used on. If empty, the products are not changed.",
     },
-    is_active: {
+    name: {
       anyOf: [
         {
-          type: "boolean",
+          type: "string",
         },
         {
           type: "null",
         },
       ],
-      title: "Is Active",
-      description: "Coupon is active",
+      title: "Name",
+      description: "Coupon name. If not specified, the name is not changed.",
     },
   },
   type: "object",
@@ -772,7 +718,9 @@ export const PaymentSchema = {
     timestamp: {
       type: "integer",
       title: "Timestamp",
-      description: "Payment timestamp in seconds",
+      description:
+        "Payment timestamp in seconds. Deprecated, use updated_at instead.",
+      deprecated: true,
     },
     amount: {
       type: "number",
@@ -805,6 +753,13 @@ export const PaymentSchema = {
       type: "integer",
       title: "Created At",
       description: "Payment created at timestamp in seconds",
+    },
+    details: {
+      additionalProperties: true,
+      type: "object",
+      title: "Details",
+      description: "Payment details specific to the provider",
+      default: {},
     },
   },
   type: "object",
@@ -903,8 +858,6 @@ export const ProductSchema = {
         {
           items: {
             type: "string",
-            minLength: 1,
-            format: "uri",
           },
           type: "array",
         },
@@ -994,8 +947,6 @@ export const ProductCreateSchema = {
         {
           items: {
             type: "string",
-            minLength: 1,
-            format: "uri",
           },
           type: "array",
         },
@@ -1095,8 +1046,6 @@ export const ProductUpdateSchema = {
         {
           items: {
             type: "string",
-            minLength: 1,
-            format: "uri",
           },
           type: "array",
         },

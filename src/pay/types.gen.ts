@@ -206,25 +206,9 @@ export type CouponCreate = {
  */
 export type CouponUpdate = {
   /**
-   * Coupon code. If not specified, a random code is generated.
-   */
-  code?: string | null;
-  /**
-   * Coupon name. If not specified, the name is not changed.
-   */
-  name?: string | null;
-  /**
-   * Discount percentage as a decimal
-   */
-  discount?: number | null;
-  /**
    * Coupon valid until timestamp in seconds. If not specified, the valid until is not changed.
    */
   valid_until?: number | null;
-  /**
-   * Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.
-   */
-  valid_from?: number | null;
   /**
    * Coupon usage limit. If not specified, the usage limit is not changed.
    */
@@ -234,9 +218,9 @@ export type CouponUpdate = {
    */
   products?: Array<string> | null;
   /**
-   * Coupon is active
+   * Coupon name. If not specified, the name is not changed.
    */
-  is_active?: boolean | null;
+  name?: string | null;
 };
 
 /**
@@ -398,7 +382,8 @@ export type Payment = {
    */
   invoice_id: string;
   /**
-   * Payment timestamp in seconds
+   * Payment timestamp in seconds. Deprecated, use updated_at instead.
+   * @deprecated
    */
   timestamp: number;
   /**
@@ -426,6 +411,12 @@ export type Payment = {
    * Payment created at timestamp in seconds
    */
   created_at: number;
+  /**
+   * Payment details specific to the provider
+   */
+  details?: {
+    [key: string]: unknown;
+  };
 };
 
 /**
@@ -642,7 +633,7 @@ export type GetProductsCaptchaAuthData = {
     /**
      * The captcha token to verify the request.
      */
-    captcha_token?: string | null;
+    captcha_token?: string;
     /**
      * The coupon code to apply to the products.
      */
@@ -753,7 +744,7 @@ export type GetSubscriptionsData = {
      */
     state?: "active" | "inactive" | "both";
     /**
-     * The user ID to get subscriptions for. Defaults to the authenticated user.
+     * The ID of the user to get subscriptions for. Overrides the authenticated user if provided and the user is an admin.
      */
     user_id?: string | null;
   };
