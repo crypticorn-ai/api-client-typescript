@@ -53,6 +53,9 @@ import type {
   CreateInvoiceData,
   CreateInvoiceError,
   CreateInvoiceResponse,
+  GetInvoiceData,
+  GetInvoiceError,
+  GetInvoiceResponse,
   StripeWebhookStripeWebhookPostError,
   StripeWebhookStripeWebhookPostResponse,
   PingError,
@@ -367,6 +370,23 @@ export function createClient(
   };
 
   /**
+   * Get Invoice
+   * Get a payment invoice with a payment link for customer completion.
+   */
+  const getInvoice = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetInvoiceData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetInvoiceResponse,
+      GetInvoiceError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/invoices/{id}",
+    });
+  };
+
+  /**
    * Stripe Webhook
    */
   const stripeWebhookStripeWebhookPost = <ThrowOnError extends boolean = false>(
@@ -434,6 +454,7 @@ export function createClient(
     getNowApiStatus,
     handleNowWebhook,
     createInvoice,
+    getInvoice,
     stripeWebhookStripeWebhookPost,
     ping,
     getMetrics,

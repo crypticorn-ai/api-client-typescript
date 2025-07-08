@@ -254,6 +254,56 @@ export type ExceptionDetail = {
 };
 
 /**
+ * Model for reading an invoice
+ */
+export type Invoice = {
+  /**
+   * UID of the model
+   */
+  id: string;
+  /**
+   * Timestamp of creation
+   */
+  created_at: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at: number;
+  /**
+   * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+   */
+  user_id: string | null;
+  /**
+   * The ID of the product
+   */
+  product_id: string;
+  /**
+   * The ID of the coupon
+   */
+  coupon_id: string | null;
+  /**
+   * The provider the invoice is created with
+   */
+  provider: Provider;
+  /**
+   * The address of the user. Only used for staking invoices.
+   */
+  address: string | null;
+  /**
+   * The oob code for the invoice. Only used for signup invoices.
+   */
+  oob: string | null;
+  /**
+   * The amount of the invoice in USD
+   */
+  usd_amount: number;
+  /**
+   * Invoice URL. If None, no external payment is required.
+   */
+  url: string | null;
+};
+
+/**
  * Model for creating an invoice
  */
 export type InvoiceCreate = {
@@ -281,24 +331,6 @@ export type InvoiceCreate = {
    * The oob code for the invoice. Only used for signup invoices.
    */
   oob?: string | null;
-};
-
-/**
- * Combined invoice model across all services
- */
-export type InvoiceInfo = {
-  /**
-   * Invoice ID
-   */
-  id: string;
-  /**
-   * Payment provider
-   */
-  provider: Provider;
-  /**
-   * Invoice URL. If None, no external payment is required.
-   */
-  url?: string | null;
 };
 
 export type PaginatedResponse_Coupon_ = {
@@ -874,9 +906,22 @@ export type CreateInvoiceData = {
   body: InvoiceCreate;
 };
 
-export type CreateInvoiceResponse = InvoiceInfo;
+export type CreateInvoiceResponse = Invoice;
 
 export type CreateInvoiceError = ExceptionDetail;
+
+export type GetInvoiceData = {
+  path: {
+    /**
+     * The invoice ID
+     */
+    id: string;
+  };
+};
+
+export type GetInvoiceResponse = Invoice;
+
+export type GetInvoiceError = ExceptionDetail;
 
 export type StripeWebhookStripeWebhookPostResponse = unknown;
 

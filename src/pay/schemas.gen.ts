@@ -451,6 +451,118 @@ export const ExceptionDetailSchema = {
   description: "Exception details returned to the client.",
 } as const;
 
+export const InvoiceSchema = {
+  properties: {
+    id: {
+      type: "string",
+      title: "Id",
+      description: "UID of the model",
+    },
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+    },
+    user_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "User Id",
+      description:
+        "The ID of the user. Overrides the authenticated user if provided and the user is an admin.",
+    },
+    product_id: {
+      type: "string",
+      title: "Product Id",
+      description: "The ID of the product",
+    },
+    coupon_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Coupon Id",
+      description: "The ID of the coupon",
+    },
+    provider: {
+      $ref: "#/components/schemas/Provider",
+      description: "The provider the invoice is created with",
+    },
+    address: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Address",
+      description: "The address of the user. Only used for staking invoices.",
+    },
+    oob: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Oob",
+      description:
+        "The oob code for the invoice. Only used for signup invoices.",
+    },
+    usd_amount: {
+      type: "number",
+      title: "Usd Amount",
+      description: "The amount of the invoice in USD",
+    },
+    url: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Url",
+      description: "Invoice URL. If None, no external payment is required.",
+    },
+  },
+  type: "object",
+  required: [
+    "id",
+    "created_at",
+    "updated_at",
+    "user_id",
+    "product_id",
+    "coupon_id",
+    "provider",
+    "address",
+    "oob",
+    "usd_amount",
+    "url",
+  ],
+  title: "Invoice",
+  description: "Model for reading an invoice",
+} as const;
+
 export const InvoiceCreateSchema = {
   properties: {
     user_id: {
@@ -517,36 +629,6 @@ export const InvoiceCreateSchema = {
   required: ["product_id", "provider"],
   title: "InvoiceCreate",
   description: "Model for creating an invoice",
-} as const;
-
-export const InvoiceInfoSchema = {
-  properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "Invoice ID",
-    },
-    provider: {
-      $ref: "#/components/schemas/Provider",
-      description: "Payment provider",
-    },
-    url: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Url",
-      description: "Invoice URL. If None, no external payment is required.",
-    },
-  },
-  type: "object",
-  required: ["id", "provider"],
-  title: "InvoiceInfo",
-  description: "Combined invoice model across all services",
 } as const;
 
 export const PaginatedResponse_Coupon_Schema = {
