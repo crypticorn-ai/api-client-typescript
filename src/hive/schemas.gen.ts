@@ -13,6 +13,7 @@ export const ApiErrorIdentifierSchema = {
     "cancelled_open_order",
     "client_order_id_already_exists",
     "invalid_content_type",
+    "coupon_invalid",
     "delete_bot_error",
     "exchange_http_request_error",
     "exchange_invalid_parameter",
@@ -408,12 +409,6 @@ export const FeatureSizeSchema = {
   title: "FeatureSize",
   description:
     "Dataset feature size options determining the complexity and scope of training data.",
-} as const;
-
-export const LogLevelSchema = {
-  type: "string",
-  enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-  title: "LogLevel",
 } as const;
 
 export const ModelCreateSchema = {

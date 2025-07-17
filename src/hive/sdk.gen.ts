@@ -33,23 +33,6 @@ import type {
   GetDataInfoResponse,
   PingError,
   PingResponse,
-  GetTimeData,
-  GetTimeError,
-  GetTimeResponse,
-  GetLogLevelError,
-  GetLogLevelResponse,
-  GetUptimeData,
-  GetUptimeError,
-  GetUptimeResponse,
-  GetMemoryUsageError,
-  GetMemoryUsageResponse,
-  GetThreadsError,
-  GetThreadsResponse,
-  GetContainerLimitsError,
-  GetContainerLimitsResponse,
-  GetDependenciesData,
-  GetDependenciesError,
-  GetDependenciesResponse,
   GetMetricsError,
   GetMetricsResponse,
 } from "./types.gen";
@@ -240,132 +223,6 @@ export function createClient(
   };
 
   /**
-   * Time
-   * Returns the current time in either ISO or Unix timestamp (seconds) format.
-   */
-  const getTime = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetTimeData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetTimeResponse,
-      GetTimeError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/time",
-    });
-  };
-
-  /**
-   * @deprecated
-   * Get Logging Level
-   * Get the log level of the server logger. Will be removed in a future release.
-   */
-  const getLogLevel = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetLogLevelResponse,
-      GetLogLevelError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/admin/log-level",
-    });
-  };
-
-  /**
-   * Get Uptime
-   * Return the server uptime in seconds or human-readable form.
-   */
-  const getUptime = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetUptimeData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetUptimeResponse,
-      GetUptimeError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/admin/uptime",
-    });
-  };
-
-  /**
-   * Get Memory Usage
-   * Resident Set Size (RSS) in MB — the actual memory used by the process in RAM.
-   * Represents the physical memory footprint. Important for monitoring real usage.
-   */
-  const getMemoryUsage = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetMemoryUsageResponse,
-      GetMemoryUsageError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/admin/memory",
-    });
-  };
-
-  /**
-   * Get Threads
-   * Return count and names of active threads.
-   */
-  const getThreads = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetThreadsResponse,
-      GetThreadsError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/admin/threads",
-    });
-  };
-
-  /**
-   * Get Container Limits
-   * Return container resource limits from cgroup.
-   */
-  const getContainerLimits = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetContainerLimitsResponse,
-      GetContainerLimitsError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/admin/limits",
-    });
-  };
-
-  /**
-   * List Installed Packages
-   * Return a list of installed packages and versions.
-   *
-   * The include parameter accepts regex patterns to match against package names.
-   * For example:
-   * - crypticorn.* will match all packages starting with 'crypticorn'
-   * - .*tic.* will match all packages containing 'tic' in their name
-   */
-  const getDependencies = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetDependenciesData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetDependenciesResponse,
-      GetDependenciesError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/admin/dependencies",
-    });
-  };
-
-  /**
    * Metrics
    * Get Prometheus metrics for the application. Returns plain text.
    */
@@ -378,7 +235,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/admin/metrics",
+      url: "/metrics",
     });
   };
 
@@ -393,13 +250,6 @@ export function createClient(
     downloadData,
     getDataInfo,
     ping,
-    getTime,
-    getLogLevel,
-    getUptime,
-    getMemoryUsage,
-    getThreads,
-    getContainerLimits,
-    getDependencies,
     getMetrics,
   };
 }
