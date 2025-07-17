@@ -58,6 +58,8 @@ import type {
   GetInvoiceResponse,
   StripeWebhookStripeWebhookPostError,
   StripeWebhookStripeWebhookPostResponse,
+  GetAicPriceError,
+  GetAicPriceResponse,
   PingError,
   PingResponse,
   GetMetricsError,
@@ -403,6 +405,23 @@ export function createClient(
   };
 
   /**
+   * Get Aic Price
+   * Return the current price of 1 AIC token in USD.
+   */
+  const getAicPrice = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetAicPriceResponse,
+      GetAicPriceError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/token/price",
+    });
+  };
+
+  /**
    * Ping
    * Returns 'OK' if the API is running.
    */
@@ -456,6 +475,7 @@ export function createClient(
     createInvoice,
     getInvoice,
     stripeWebhookStripeWebhookPost,
+    getAicPrice,
     ping,
     getMetrics,
   };

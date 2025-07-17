@@ -927,6 +927,10 @@ export type StripeWebhookStripeWebhookPostResponse = unknown;
 
 export type StripeWebhookStripeWebhookPostError = ExceptionDetail;
 
+export type GetAicPriceResponse = number;
+
+export type GetAicPriceError = ExceptionDetail;
+
 export type PingResponse = string;
 
 export type PingError = ExceptionDetail;
