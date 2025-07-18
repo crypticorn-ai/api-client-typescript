@@ -614,8 +614,6 @@ export type Scope =
   | "read:pay:payments"
   | "read:pay:products"
   | "write:pay:products"
-  | "read:pay:now"
-  | "write:pay:now"
   | "write:pay:coupons"
   | "read:pay:coupons"
   | "read:metrics:marketcap"
@@ -655,9 +653,41 @@ export type Subscription = {
    */
   access_from: number;
   /**
-   * Access until timestamp in seconds. 0 means unlimited.
+   * Access until timestamp in seconds.
    */
   access_until: number;
+};
+
+/**
+ * Model for a user's balance
+ */
+export type UserBalance = {
+  /**
+   * Total balance in wei of AIC over all connected wallets
+   */
+  balance: number;
+  /**
+   * Staked balance in wei of AIC
+   */
+  staked: number;
+};
+
+/**
+ * Model for a user's balance for a specific wallet
+ */
+export type WalletBalance = {
+  /**
+   * Wallet address
+   */
+  address: string;
+  /**
+   * Balance in wei of AIC
+   */
+  balance: number;
+  /**
+   * Staked balance in wei of AIC
+   */
+  staked: number;
 };
 
 export type GetProductsCaptchaAuthData = {
@@ -930,6 +960,45 @@ export type StripeWebhookStripeWebhookPostError = ExceptionDetail;
 export type GetAicPriceResponse = number;
 
 export type GetAicPriceError = ExceptionDetail;
+
+export type GetTotalBalanceData = {
+  query?: {
+    /**
+     * Wallet address to check balance for. Overrides the authenticated user if provided and the user is an admin.
+     */
+    user_id?: string | null;
+  };
+};
+
+export type GetTotalBalanceResponse = UserBalance;
+
+export type GetTotalBalanceError = ExceptionDetail;
+
+export type GetBalancesData = {
+  query?: {
+    /**
+     * Wallet address to check balance for. Overrides the authenticated user if provided and the user is an admin.
+     */
+    user_id?: string | null;
+  };
+};
+
+export type GetBalancesResponse = Array<WalletBalance>;
+
+export type GetBalancesError = ExceptionDetail;
+
+export type GetAccessibleScopesData = {
+  query: {
+    /**
+     * User ID to get scopes for
+     */
+    user_id: string;
+  };
+};
+
+export type GetAccessibleScopesResponse = Array<Scope>;
+
+export type GetAccessibleScopesError = ExceptionDetail;
 
 export type PingResponse = string;
 

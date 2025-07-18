@@ -1178,8 +1178,6 @@ export const ScopeSchema = {
     "read:pay:payments",
     "read:pay:products",
     "write:pay:products",
-    "read:pay:now",
-    "write:pay:now",
     "write:pay:coupons",
     "read:pay:coupons",
     "read:metrics:marketcap",
@@ -1229,7 +1227,7 @@ export const SubscriptionSchema = {
     access_until: {
       type: "integer",
       title: "Access Until",
-      description: "Access until timestamp in seconds. 0 means unlimited.",
+      description: "Access until timestamp in seconds.",
     },
   },
   type: "object",
@@ -1244,4 +1242,47 @@ export const SubscriptionSchema = {
   ],
   title: "Subscription",
   description: "Model for reading a product subscription",
+} as const;
+
+export const UserBalanceSchema = {
+  properties: {
+    balance: {
+      type: "integer",
+      title: "Balance",
+      description: "Total balance in wei of AIC over all connected wallets",
+    },
+    staked: {
+      type: "integer",
+      title: "Staked",
+      description: "Staked balance in wei of AIC",
+    },
+  },
+  type: "object",
+  required: ["balance", "staked"],
+  title: "UserBalance",
+  description: "Model for a user's balance",
+} as const;
+
+export const WalletBalanceSchema = {
+  properties: {
+    address: {
+      type: "string",
+      title: "Address",
+      description: "Wallet address",
+    },
+    balance: {
+      type: "integer",
+      title: "Balance",
+      description: "Balance in wei of AIC",
+    },
+    staked: {
+      type: "integer",
+      title: "Staked",
+      description: "Staked balance in wei of AIC",
+    },
+  },
+  type: "object",
+  required: ["address", "balance", "staked"],
+  title: "WalletBalance",
+  description: "Model for a user's balance for a specific wallet",
 } as const;

@@ -60,6 +60,15 @@ import type {
   StripeWebhookStripeWebhookPostResponse,
   GetAicPriceError,
   GetAicPriceResponse,
+  GetTotalBalanceData,
+  GetTotalBalanceError,
+  GetTotalBalanceResponse,
+  GetBalancesData,
+  GetBalancesError,
+  GetBalancesResponse,
+  GetAccessibleScopesData,
+  GetAccessibleScopesError,
+  GetAccessibleScopesResponse,
   PingError,
   PingResponse,
   GetMetricsError,
@@ -422,6 +431,57 @@ export function createClient(
   };
 
   /**
+   * Get Total Balance
+   * Get user's total AIC balance and staking information.
+   */
+  const getTotalBalance = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetTotalBalanceData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetTotalBalanceResponse,
+      GetTotalBalanceError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/access/balances/total",
+    });
+  };
+
+  /**
+   * Get Balances
+   * Get user's AIC balance and staking information for each connected wallet.
+   */
+  const getBalances = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetBalancesData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBalancesResponse,
+      GetBalancesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/access/balances",
+    });
+  };
+
+  /**
+   * Get Accessible Scopes
+   * Get all scopes the user has access to. Checks allowlist, subscriptions, and AIC balance in connected wallets and staking pools.
+   */
+  const getAccessibleScopes = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetAccessibleScopesData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetAccessibleScopesResponse,
+      GetAccessibleScopesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/access/scopes",
+    });
+  };
+
+  /**
    * Ping
    * Returns 'OK' if the API is running.
    */
@@ -476,6 +536,9 @@ export function createClient(
     getInvoice,
     stripeWebhookStripeWebhookPost,
     getAicPrice,
+    getTotalBalance,
+    getBalances,
+    getAccessibleScopes,
     ping,
     getMetrics,
   };
