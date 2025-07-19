@@ -1265,12 +1265,12 @@ export const SubscriptionSchema = {
 export const UserBalanceSchema = {
   properties: {
     balance: {
-      type: "integer",
+      type: "string",
       title: "Balance",
       description: "Total balance in wei of AIC over all connected wallets",
     },
     staked: {
-      type: "integer",
+      type: "string",
       title: "Staked",
       description: "Staked balance in wei of AIC",
     },
@@ -1289,12 +1289,12 @@ export const WalletBalanceSchema = {
       description: "Wallet address",
     },
     balance: {
-      type: "integer",
+      type: "string",
       title: "Balance",
       description: "Balance in wei of AIC",
     },
     staked: {
-      type: "integer",
+      type: "string",
       title: "Staked",
       description: "Staked balance in wei of AIC",
     },

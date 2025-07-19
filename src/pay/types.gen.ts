@@ -679,11 +679,11 @@ export type UserBalance = {
   /**
    * Total balance in wei of AIC over all connected wallets
    */
-  balance: number;
+  balance: string;
   /**
    * Staked balance in wei of AIC
    */
-  staked: number;
+  staked: string;
 };
 
 /**
@@ -697,11 +697,11 @@ export type WalletBalance = {
   /**
    * Balance in wei of AIC
    */
-  balance: number;
+  balance: string;
   /**
    * Staked balance in wei of AIC
    */
-  staked: number;
+  staked: string;
 };
 
 export type GetProductsCaptchaAuthData = {
