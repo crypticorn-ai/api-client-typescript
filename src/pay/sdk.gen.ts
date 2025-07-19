@@ -69,6 +69,8 @@ import type {
   GetAccessibleScopesData,
   GetAccessibleScopesError,
   GetAccessibleScopesResponse,
+  GetAccessThresholdsError,
+  GetAccessThresholdsResponse,
   PingError,
   PingResponse,
   GetMetricsError,
@@ -482,6 +484,23 @@ export function createClient(
   };
 
   /**
+   * Get Access Thresholds
+   * Get the access thresholds for the scopes.
+   */
+  const getAccessThresholds = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetAccessThresholdsResponse,
+      GetAccessThresholdsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/access/thresholds",
+    });
+  };
+
+  /**
    * Ping
    * Returns 'OK' if the API is running.
    */
@@ -539,6 +558,7 @@ export function createClient(
     getTotalBalance,
     getBalances,
     getAccessibleScopes,
+    getAccessThresholds,
     ping,
     getMetrics,
   };
