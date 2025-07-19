@@ -28,6 +28,7 @@ export type ApiErrorIdentifier =
   | "cancelled_open_order"
   | "client_order_id_already_exists"
   | "invalid_content_type"
+  | "coupon_invalid"
   | "delete_bot_error"
   | "exchange_http_request_error"
   | "exchange_invalid_parameter"
@@ -197,7 +198,7 @@ export type BotCreate = {
 export type BotStatus = "running" | "stopping" | "stopped" | "deleted";
 
 /**
- * Trading bot model for API update operations.
+ * Trading bot model for API update operations. Fields cannot be unset.
  */
 export type BotUpdate = {
   /**
@@ -548,8 +549,6 @@ export type FuturesTradingActionCreate = {
    */
   expiry_timestamp?: number | null;
 };
-
-export type LogLevel = "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL";
 
 /**
  * Margin mode for futures trades
@@ -1064,6 +1063,10 @@ export type StrategyExchangeInfo = {
    * Minimum amount for the strategy on the exchange
    */
   min_amount: number;
+  /**
+   * Maximum amount for the strategy on the exchange, default is 100 thousand
+   */
+  max_amount?: number;
 };
 
 /**
@@ -1752,61 +1755,6 @@ export type GetAllExchangesError = ExceptionDetail;
 export type PingResponse = string;
 
 export type PingError = ExceptionDetail;
-
-export type GetTimeData = {
-  query?: {
-    type?: "iso" | "unix";
-  };
-};
-
-export type GetTimeResponse = string;
-
-export type GetTimeError = ExceptionDetail;
-
-export type GetLogLevelResponse = LogLevel;
-
-export type GetLogLevelError = ExceptionDetail;
-
-export type GetUptimeData = {
-  query?: {
-    type?: "seconds" | "human";
-  };
-};
-
-export type GetUptimeResponse = string;
-
-export type GetUptimeError = ExceptionDetail;
-
-export type GetMemoryUsageResponse = number;
-
-export type GetMemoryUsageError = ExceptionDetail;
-
-export type GetThreadsResponse = {
-  [key: string]: unknown;
-};
-
-export type GetThreadsError = ExceptionDetail;
-
-export type GetContainerLimitsResponse = {
-  [key: string]: unknown;
-};
-
-export type GetContainerLimitsError = ExceptionDetail;
-
-export type GetDependenciesData = {
-  query?: {
-    /**
-     * List of regex patterns to match against package names. If not provided, all installed packages will be returned.
-     */
-    include?: Array<string>;
-  };
-};
-
-export type GetDependenciesResponse = {
-  [key: string]: string;
-};
-
-export type GetDependenciesError = ExceptionDetail;
 
 export type GetMetricsResponse = unknown;
 

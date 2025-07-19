@@ -32,6 +32,7 @@ export const ApiErrorIdentifierSchema = {
     "cancelled_open_order",
     "client_order_id_already_exists",
     "invalid_content_type",
+    "coupon_invalid",
     "delete_bot_error",
     "exchange_http_request_error",
     "exchange_invalid_parameter",
@@ -151,7 +152,7 @@ export const BotSchema = {
     },
     allocation: {
       type: "integer",
-      exclusiveMinimum: 0,
+      minimum: 1,
       title: "Allocation",
       description: "Initial allocation for the bot",
     },
@@ -218,7 +219,7 @@ export const BotCreateSchema = {
     },
     allocation: {
       type: "integer",
-      exclusiveMinimum: 0,
+      minimum: 1,
       title: "Allocation",
       description: "Initial allocation for the bot",
     },
@@ -237,7 +238,6 @@ export const BotCreateSchema = {
       description: "UID for the API key",
     },
   },
-  additionalProperties: false,
   type: "object",
   required: ["name", "allocation", "status", "strategy_id", "api_key_id"],
   title: "BotCreate",
@@ -268,7 +268,7 @@ export const BotUpdateSchema = {
       anyOf: [
         {
           type: "integer",
-          exclusiveMinimum: 0,
+          minimum: 1,
         },
         {
           type: "null",
@@ -289,10 +289,10 @@ export const BotUpdateSchema = {
       description: "Status of the bot",
     },
   },
-  additionalProperties: false,
   type: "object",
   title: "BotUpdate",
-  description: "Trading bot model for API update operations.",
+  description:
+    "Trading bot model for API update operations. Fields cannot be unset.",
 } as const;
 
 export const ExceptionDetailSchema = {
@@ -460,7 +460,6 @@ export const ExchangeKeyCreateSchema = {
       description: "The exchange the API key is for.",
     },
   },
-  additionalProperties: false,
   type: "object",
   required: ["label", "api_key", "secret", "exchange"],
   title: "ExchangeKeyCreate",
@@ -518,7 +517,6 @@ export const ExchangeKeyUpdateSchema = {
       description: "API passphrase. Required by some exchanges.",
     },
   },
-  additionalProperties: false,
   type: "object",
   title: "ExchangeKeyUpdate",
   description: "Exchange key model for API update operations.",
@@ -930,12 +928,6 @@ export const FuturesTradingActionCreateSchema = {
   description: "Model for sending futures trading actions",
 } as const;
 
-export const LogLevelSchema = {
-  type: "string",
-  enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-  title: "LogLevel",
-} as const;
-
 export const MarginModeSchema = {
   type: "string",
   enum: ["isolated", "cross"],
@@ -998,7 +990,6 @@ export const NotificationSchema = {
       description: "Type of the notification. Of type ApiErrorType",
     },
   },
-  additionalProperties: false,
   type: "object",
   required: ["user_id", "identifier", "level", "type"],
   title: "Notification",
@@ -1033,7 +1024,6 @@ export const NotificationCreateSchema = {
       description: "Type of the notification. Of type ApiErrorType",
     },
   },
-  additionalProperties: false,
   type: "object",
   required: ["identifier", "level", "type"],
   title: "NotificationCreate",
@@ -1068,7 +1058,6 @@ export const NotificationUpdateSchema = {
       description: "Whether the notification has been sent as an email",
     },
   },
-  additionalProperties: false,
   type: "object",
   title: "NotificationUpdate",
   description: "Notification model for API update operations.",
@@ -1836,7 +1825,6 @@ export const StrategySchema = {
       description: "Market of operation of the strategy",
     },
   },
-  additionalProperties: false,
   type: "object",
   required: [
     "name",
@@ -1914,7 +1902,6 @@ export const StrategyCreateSchema = {
       description: "Market of operation of the strategy",
     },
   },
-  additionalProperties: false,
   type: "object",
   required: [
     "name",
@@ -1947,6 +1934,13 @@ export const StrategyExchangeInfoSchema = {
       type: "integer",
       title: "Min Amount",
       description: "Minimum amount for the strategy on the exchange",
+    },
+    max_amount: {
+      type: "integer",
+      title: "Max Amount",
+      description:
+        "Maximum amount for the strategy on the exchange, default is 100 thousand ",
+      default: 100000,
     },
   },
   type: "object",
@@ -2023,7 +2017,6 @@ export const StrategyUpdateSchema = {
       description: "Performance fee for the strategy",
     },
   },
-  additionalProperties: false,
   type: "object",
   title: "StrategyUpdate",
   description: "Strategy model for API update operations.",
