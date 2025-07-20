@@ -354,6 +354,66 @@ export const ExchangeSchema = {
     "All exchanges used in the crypticorn ecosystem. Refer to the APIs for support for a specific usecase (data, trading, etc.).",
 } as const;
 
+export const ExchangeInfoSchema = {
+  properties: {
+    exchange: {
+      $ref: "#/components/schemas/Exchange",
+      description: "Exchange",
+    },
+    is_tradeable: {
+      type: "boolean",
+      title: "Is Tradeable",
+      description:
+        "Whether the exchange is tradeable (trade execution is implemented)",
+    },
+    is_beta: {
+      type: "boolean",
+      title: "Is Beta",
+      description:
+        "Whether the exchange is in public beta testing (marked as beta in the UI)",
+    },
+    is_public: {
+      type: "boolean",
+      title: "Is Public",
+      description: "Whether the exchange is public (shown in the UI)",
+    },
+    is_planned: {
+      type: "boolean",
+      title: "Is Planned",
+      description:
+        "Whether the exchange is planned to be added (marked as planned but disabled in the UI)",
+    },
+    is_deprecated: {
+      type: "boolean",
+      title: "Is Deprecated",
+      description: "Whether the exchange is deprecated (not supported anymore)",
+    },
+    ref_link: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Ref Link",
+      description: "Reference link to the exchange",
+    },
+  },
+  type: "object",
+  required: [
+    "exchange",
+    "is_tradeable",
+    "is_beta",
+    "is_public",
+    "is_planned",
+    "is_deprecated",
+  ],
+  title: "ExchangeInfo",
+  description: "Model for exchange info",
+} as const;
+
 export const ExchangeKeySchema = {
   properties: {
     user_id: {

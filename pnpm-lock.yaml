@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@crypticorn-ai/auth-service':
-        specifier: ^1.9.1
-        version: 1.9.1
+        specifier: ^1.10.0
+        version: 1.10.0
       '@crypticorn-ai/token-service':
         specifier: ^0.6.4
         version: 0.6.4(typescript@5.7.2)
@@ -82,8 +82,8 @@ packages:
     resolution: {integrity: sha512-4gY54eEGEstClvEkGnwVkTkrx0sqwemEFG5OSRRn3tD91XH0+Q8XIkYIfo7IwEWPpJZwILb9GUXeShtplRc/eA==}
     engines: {node: '>= 16'}
 
-  '@crypticorn-ai/auth-service@1.9.1':
-    resolution: {integrity: sha512-/rvmVfas9OxVcBdUo+SF4nV9nxVXhlFwgax+OPTyY5SOb4yYbOaKHpKmzqGVFCy8hoCrvB/28BZsucQT5XRC+Q==, tarball: https://npm.pkg.github.com/download/@crypticorn-ai/auth-service/1.9.1/f6e5f28dcf2ed3a21e9188c93c7e46c425cffb28}
+  '@crypticorn-ai/auth-service@1.10.0':
+    resolution: {integrity: sha512-MCKaEVyLjFn50CYYMROgkQ7tiCubH+mjuJWzfVelgBE98vBOGQTBP490VF8WcdoJeAAHP9q7NBxY4UKUn0G18Q==, tarball: https://npm.pkg.github.com/download/@crypticorn-ai/auth-service/1.10.0/05fe61584c6548ad3c8715e829428cb556007804}
 
   '@crypticorn-ai/token-service@0.6.4':
     resolution: {integrity: sha512-/qtAzm9oBALx3bd1UBqzf7sybF6FPzuCH4rvytj1JXw/jk/vx/qcAHVn3/ZlUcIUftG4uf5drjLOh7tcD+ki/Q==, tarball: https://npm.pkg.github.com/download/@crypticorn-ai/token-service/0.6.4/0ac2e1bf8129ba1f34c5085358165e9e6237a775}
@@ -1378,7 +1378,7 @@ snapshots:
       '@types/json-schema': 7.0.15
       js-yaml: 4.1.0
 
-  '@crypticorn-ai/auth-service@1.9.1': {}
+  '@crypticorn-ai/auth-service@1.10.0': {}
 
   '@crypticorn-ai/token-service@0.6.4(typescript@5.7.2)':
     dependencies:

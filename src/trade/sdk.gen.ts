@@ -108,8 +108,12 @@ import type {
   GetTradeableExchangesResponse,
   GetPlannedExchangesError,
   GetPlannedExchangesResponse,
+  GetBetaExchangesError,
+  GetBetaExchangesResponse,
   GetAllExchangesError,
   GetAllExchangesResponse,
+  GetExchangeInfosError,
+  GetExchangeInfosResponse,
   PingError,
   PingResponse,
   GetMetricsError,
@@ -713,8 +717,9 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Get Tradeable Exchanges
-   * Returns a list of exchanges that are tradeable.
+   * Returns a list of exchanges that are tradeable. Deprecated, use getExchangeInfo instead.
    */
   const getTradeableExchanges = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
@@ -730,8 +735,10 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Get Planned Exchanges
    * Returns a list of exchanges that are planned to be added for trading.
+   * Deprecated, use getExchangeInfo instead.
    */
   const getPlannedExchanges = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
@@ -747,8 +754,29 @@ export function createClient(
   };
 
   /**
+   * @deprecated
+   * Get Beta Exchanges
+   * Returns a list of exchanges that are in beta testing.
+   * Deprecated, use getExchangeInfo instead.
+   */
+  const getBetaExchanges = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetBetaExchangesResponse,
+      GetBetaExchangesError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/exchanges/beta",
+    });
+  };
+
+  /**
+   * @deprecated
    * Get All Exchanges
    * Returns a list of all exchanges.
+   * Deprecated, use getExchangeInfo instead.
    */
   const getAllExchanges = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
@@ -760,6 +788,23 @@ export function createClient(
     >({
       ...options,
       url: "/exchanges",
+    });
+  };
+
+  /**
+   * Get Exchange Info
+   * Returns a list of all exchanges with their information.
+   */
+  const getExchangeInfos = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetExchangeInfosResponse,
+      GetExchangeInfosError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/exchanges/infos",
     });
   };
 
@@ -834,7 +879,9 @@ export function createClient(
     deleteNotification,
     getTradeableExchanges,
     getPlannedExchanges,
+    getBetaExchanges,
     getAllExchanges,
+    getExchangeInfos,
     ping,
     getMetrics,
   };

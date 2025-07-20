@@ -259,6 +259,40 @@ export type Exchange =
   | "bitstamp";
 
 /**
+ * Model for exchange info
+ */
+export type ExchangeInfo = {
+  /**
+   * Exchange
+   */
+  exchange: Exchange;
+  /**
+   * Whether the exchange is tradeable (trade execution is implemented)
+   */
+  is_tradeable: boolean;
+  /**
+   * Whether the exchange is in public beta testing (marked as beta in the UI)
+   */
+  is_beta: boolean;
+  /**
+   * Whether the exchange is public (shown in the UI)
+   */
+  is_public: boolean;
+  /**
+   * Whether the exchange is planned to be added (marked as planned but disabled in the UI)
+   */
+  is_planned: boolean;
+  /**
+   * Whether the exchange is deprecated (not supported anymore)
+   */
+  is_deprecated: boolean;
+  /**
+   * Reference link to the exchange
+   */
+  ref_link?: string | null;
+};
+
+/**
  * Exchange API key model without sensitive credentials for safe read operations.
  */
 export type ExchangeKey = {
@@ -1748,9 +1782,17 @@ export type GetPlannedExchangesResponse = Array<Exchange>;
 
 export type GetPlannedExchangesError = ExceptionDetail;
 
+export type GetBetaExchangesResponse = Array<Exchange>;
+
+export type GetBetaExchangesError = ExceptionDetail;
+
 export type GetAllExchangesResponse = Array<Exchange>;
 
 export type GetAllExchangesError = ExceptionDetail;
+
+export type GetExchangeInfosResponse = Array<ExchangeInfo>;
+
+export type GetExchangeInfosError = ExceptionDetail;
 
 export type PingResponse = string;
 
