@@ -6,14 +6,17 @@
 export type ApiErrorIdentifier =
   | "allocation_below_current_exposure"
   | "allocation_below_min_amount"
+  | "allocation_limit_exceeded"
   | "black_swan"
   | "bot_already_deleted"
-  | "bot_disabled"
   | "bot_stopping_completed"
   | "bot_stopping_started"
+  | "cancelled_open_order"
   | "client_order_id_already_exists"
   | "invalid_content_type"
   | "delete_bot_error"
+  | "exchange_http_request_error"
+  | "exchange_invalid_parameter"
   | "exchange_invalid_signature"
   | "exchange_invalid_timestamp"
   | "exchange_ip_address_is_not_authorized"
@@ -29,24 +32,23 @@ export type ApiErrorIdentifier =
   | "exchange_user_account_is_frozen"
   | "api_key_expired"
   | "bearer_token_expired"
+  | "failed_open_order"
   | "forbidden"
   | "hedge_mode_not_active"
-  | "http_request_error"
   | "insufficient_balance"
   | "insufficient_margin"
   | "insufficient_scopes"
   | "invalid_api_key"
+  | "invalid_basic_auth"
   | "invalid_bearer"
   | "invalid_data"
   | "invalid_data_response"
   | "invalid_exchange_key"
-  | "invalid_margin_mode"
   | "invalid_model_name"
-  | "exchange_invalid_parameter"
   | "leverage_limit_exceeded"
   | "order_violates_liquidation_price_constraints"
   | "margin_mode_clash"
-  | "model_name_not_unique"
+  | "name_not_unique"
   | "no_credentials"
   | "now_api_down"
   | "object_already_exists"
@@ -62,6 +64,8 @@ export type ApiErrorIdentifier =
   | "order_price_is_invalid"
   | "order_size_too_large"
   | "order_size_too_small"
+  | "orphan_open_order"
+  | "orphan_close_order"
   | "position_limit_exceeded"
   | "position_does_not_exist"
   | "position_opening_temporarily_suspended"
@@ -70,14 +74,13 @@ export type ApiErrorIdentifier =
   | "risk_limit_exceeded"
   | "rpc_timeout"
   | "system_settlement_in_process"
-  | "strategy_already_exists"
   | "strategy_disabled"
   | "strategy_leverage_mismatch"
   | "strategy_not_supporting_exchange"
   | "success"
   | "symbol_does_not_exist"
   | "trading_action_expired"
-  | "trading_action_skipped"
+  | "trading_action_skipped_bot_stopping"
   | "trading_has_been_locked"
   | "trading_is_suspended"
   | "unknown_error_occurred"
@@ -97,6 +100,9 @@ export type ApiErrorType =
   | "server error"
   | "no error";
 
+/**
+ * Price change data for a trading pair over a specific timeframe.
+ */
 export type ChangeInTimeframe = {
   pair: string;
   change: number;
@@ -133,7 +139,7 @@ export type ExceptionDetail = {
 };
 
 /**
- * Model for a single funding rate
+ * Individual funding rate entry with timestamp and rate value for futures trading.
  */
 export type FundingRate = {
   /**
@@ -147,7 +153,7 @@ export type FundingRate = {
 };
 
 /**
- * Response model for fetching funding rates
+ * Response containing historical funding rates for a specific trading symbol.
  */
 export type FundingRateResponse = {
   /**
@@ -211,54 +217,171 @@ export type OHLCV = {
 
 export type Resolution = "15" | "30" | "60" | "240" | "1D";
 
+/**
+ * Symbol search result for UDF symbol lookup functionality.
+ */
 export type SearchSymbol = {
+  /**
+   * Symbol identifier
+   */
   symbol: string;
+  /**
+   * Human-readable symbol description
+   */
   description: string;
+  /**
+   * Exchange where symbol is traded
+   */
   exchange: InternalExchange;
+  /**
+   * Symbol type classification
+   */
   type: string;
 };
 
+/**
+ * Sort direction options for data ordering (ascending or descending).
+ */
 export type SortDirection = "asc" | "desc";
 
+/**
+ * Group of symbols for batch operations in UDF requests.
+ */
 export type SymbolGroup = {
+  /**
+   * List of symbol identifiers in the group
+   */
   symbol?: Array<string>;
 };
 
+/**
+ * Comprehensive symbol information for UDF charting library compatibility.
+ */
 export type SymbolInfo = {
+  /**
+   * Symbol name identifier
+   */
   name: string;
+  /**
+   * Exchange where symbol is traded
+   */
   "exchange-traded": string;
+  /**
+   * Exchange where symbol is listed
+   */
   "exchange-listed": string;
+  /**
+   * Timezone for symbol trading hours
+   */
   timezone: string;
+  /**
+   * Minimum price movement
+   */
   minmov: number;
+  /**
+   * Secondary minimum price movement
+   */
   minmov2: number;
+  /**
+   * Point value for price calculations
+   */
   pointvalue: number;
+  /**
+   * Trading session hours
+   */
   session: string;
+  /**
+   * Whether intraday data is available
+   */
   has_intraday: boolean;
+  /**
+   * Whether volume data is unavailable
+   */
   has_no_volume: boolean;
+  /**
+   * Human-readable symbol description
+   */
   description: string;
+  /**
+   * Symbol type classification
+   */
   type: string;
+  /**
+   * List of supported time resolutions
+   */
   supported_resolutions: Array<string>;
+  /**
+   * Price scale factor for decimal places
+   */
   pricescale: number;
+  /**
+   * Symbol ticker identifier
+   */
   ticker: string;
 };
 
+/**
+ * Symbol type definition for UDF data feed configuration.
+ */
 export type SymbolType = {
+  /**
+   * Display name of the symbol type
+   */
   name: string;
+  /**
+   * Internal value identifier for the symbol type
+   */
   value: string;
 };
 
+/**
+ * Available timeframes for candlestick and technical analysis data.
+ */
 export type Timeframe = "15m" | "30m" | "1h" | "4h" | "1d";
 
+/**
+ * Universal Data Feed configuration for charting library compatibility.
+ */
 export type UDFConfig = {
+  /**
+   * List of supported time resolutions
+   */
   supported_resolutions: Array<string>;
+  /**
+   * Whether grouped symbol requests are supported
+   */
   supports_group_request?: boolean;
+  /**
+   * Whether chart marks are supported
+   */
   supports_marks?: boolean;
+  /**
+   * Whether symbol search is supported
+   */
   supports_search?: boolean;
+  /**
+   * Whether timescale marks are supported
+   */
   supports_timescale_marks?: boolean;
+  /**
+   * Whether server time is supported
+   */
   supports_time?: boolean;
+  /**
+   * List of available exchanges
+   */
   exchanges: Array<InternalExchange>;
+  /**
+   * List of supported symbol types
+   */
   symbols_types: Array<SymbolType>;
+  /**
+   * List of supported currency codes
+   */
   currency_codes: Array<string>;
+  /**
+   * List of supported market types
+   */
   supported_markets: Array<string>;
 };
 
@@ -320,6 +443,10 @@ export type GetDependenciesResponse = {
 };
 
 export type GetDependenciesError = ExceptionDetail;
+
+export type GetMetricsResponse = unknown;
+
+export type GetMetricsError = ExceptionDetail;
 
 export type GetUdfConfigResponse = UDFConfig;
 

@@ -39,6 +39,7 @@ export type ApiErrorIdentifier =
   | "insufficient_margin"
   | "insufficient_scopes"
   | "invalid_api_key"
+  | "invalid_basic_auth"
   | "invalid_bearer"
   | "invalid_data"
   | "invalid_data_response"
@@ -48,8 +49,6 @@ export type ApiErrorIdentifier =
   | "order_violates_liquidation_price_constraints"
   | "margin_mode_clash"
   | "name_not_unique"
-  | "no_api_key"
-  | "no_bearer"
   | "no_credentials"
   | "now_api_down"
   | "object_already_exists"
@@ -193,18 +192,30 @@ export type InternalExchange =
 export type LogLevel = "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL";
 
 /**
- * A ranking of symbols by marketcap at a given timestamp.
+ * Market capitalization ranking showing sorted values at a specific timestamp.
  */
 export type MarketcapRanking = {
+  /**
+   * Unix timestamp of the ranking snapshot
+   */
   timestamp: number;
+  /**
+   * Ordered list of market cap values from highest to lowest
+   */
   marketcap_values: Array<number | null>;
 };
 
 /**
- * A ranking of marketcap values at a given timestamp.
+ * Symbol ranking ordered by market capitalization at a specific timestamp.
  */
 export type MarketcapSymbolRanking = {
+  /**
+   * Unix timestamp of the ranking snapshot
+   */
   timestamp: number;
+  /**
+   * Ordered list of symbols ranked by market cap
+   */
   symbols: Array<string | null>;
 };
 
@@ -213,20 +224,53 @@ export type MarketcapSymbolRanking = {
  */
 export type MarketType = "spot" | "futures";
 
+/**
+ * Open, High, Low, Close, Volume candlestick data with optional market cap information.
+ */
 export type OHLCV = {
+  /**
+   * Unix timestamp of the candle period
+   */
   timestamp: number;
+  /**
+   * Opening price of the period
+   */
   open: number;
+  /**
+   * Highest price during the period
+   */
   high: number;
+  /**
+   * Lowest price during the period
+   */
   low: number;
+  /**
+   * Closing price of the period
+   */
   close: number;
+  /**
+   * Trading volume during the period
+   */
   volume: number;
+  /**
+   * Market capitalization at period close
+   */
   marketcap?: number | null;
 };
 
+/**
+ * Error severity levels for logging and monitoring systems.
+ */
 export type Severity = "ERROR" | "WARNING" | "CRITICAL";
 
+/**
+ * Time interval options for aggregating market data and technical indicators.
+ */
 export type TimeInterval = "15m" | "30m" | "1h" | "4h" | "1d";
 
+/**
+ * Trading status indicators for market availability and lifecycle management.
+ */
 export type TradingStatus = "ACTIVE" | "RETIRED" | "EXPIRED";
 
 export type PingResponse = string;
@@ -287,6 +331,10 @@ export type GetDependenciesResponse = {
 };
 
 export type GetDependenciesError = ExceptionDetail;
+
+export type GetMetricsResponse = unknown;
+
+export type GetMetricsError = ExceptionDetail;
 
 export type GetCurrentMarketcapData = {
   query?: {
@@ -504,7 +552,7 @@ export type GetAvailableExchangesForMarketError = ExceptionDetail;
 export type GetExchangeMappingsForPairData = {
   query: {
     /**
-     * Optional exchange name to filter by. If not provided, returns all exchanges.
+     * Optional exchange name to filter by. If not provided, returns all exchanges a match was found for.
      */
     exchange?: InternalExchange;
     /**
@@ -512,7 +560,7 @@ export type GetExchangeMappingsForPairData = {
      */
     market?: MarketType;
     /**
-     * Trading pair to find mappings for (e.g., 'BTCUSDT', '1000SHIBUSDT')
+     * Trading pair to find mappings for. Can be exchange specific (e.g., 'BTCUSDT', '1000SHIBUSDT') or a common format Symbol/QuoteCurrency (e.g., 'BTC/USDT')
      */
     pair: string;
     /**

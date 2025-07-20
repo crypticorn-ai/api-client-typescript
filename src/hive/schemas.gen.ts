@@ -5,14 +5,18 @@ export const ApiErrorIdentifierSchema = {
   enum: [
     "allocation_below_current_exposure",
     "allocation_below_min_amount",
+    "allocation_limit_exceeded",
     "black_swan",
     "bot_already_deleted",
-    "bot_disabled",
     "bot_stopping_completed",
     "bot_stopping_started",
+    "cancelled_open_order",
     "client_order_id_already_exists",
     "invalid_content_type",
+    "coupon_invalid",
     "delete_bot_error",
+    "exchange_http_request_error",
+    "exchange_invalid_parameter",
     "exchange_invalid_signature",
     "exchange_invalid_timestamp",
     "exchange_ip_address_is_not_authorized",
@@ -28,20 +32,19 @@ export const ApiErrorIdentifierSchema = {
     "exchange_user_account_is_frozen",
     "api_key_expired",
     "bearer_token_expired",
+    "failed_open_order",
     "forbidden",
     "hedge_mode_not_active",
-    "http_request_error",
     "insufficient_balance",
     "insufficient_margin",
     "insufficient_scopes",
     "invalid_api_key",
+    "invalid_basic_auth",
     "invalid_bearer",
     "invalid_data",
     "invalid_data_response",
     "invalid_exchange_key",
-    "invalid_margin_mode",
     "invalid_model_name",
-    "exchange_invalid_parameter",
     "leverage_limit_exceeded",
     "order_violates_liquidation_price_constraints",
     "margin_mode_clash",
@@ -61,6 +64,8 @@ export const ApiErrorIdentifierSchema = {
     "order_price_is_invalid",
     "order_size_too_large",
     "order_size_too_small",
+    "orphan_open_order",
+    "orphan_close_order",
     "position_limit_exceeded",
     "position_does_not_exist",
     "position_opening_temporarily_suspended",
@@ -69,14 +74,13 @@ export const ApiErrorIdentifierSchema = {
     "risk_limit_exceeded",
     "rpc_timeout",
     "system_settlement_in_process",
-    "strategy_already_exists",
     "strategy_disabled",
     "strategy_leverage_mismatch",
     "strategy_not_supporting_exchange",
     "success",
     "symbol_does_not_exist",
     "trading_action_expired",
-    "trading_action_skipped",
+    "trading_action_skipped_bot_stopping",
     "trading_has_been_locked",
     "trading_is_suspended",
     "unknown_error_occurred",
@@ -126,7 +130,8 @@ export const CoinInfoSchema = {
   type: "object",
   required: ["identifier", "version_added"],
   title: "CoinInfo",
-  description: "Information about a coin",
+  description:
+    "Metadata about a cryptocurrency including availability across data versions.",
 } as const;
 
 export const CoinsSchema = {
@@ -134,7 +139,7 @@ export const CoinsSchema = {
   enum: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
   title: "Coins",
   description:
-    "All existing coins. Some might no be available in the latest data version, but kept for older versions.",
+    "Cryptocurrency identifiers for AI training data. Uses obfuscated identifiers for public API access.",
 } as const;
 
 export const DataDownloadResponseSchema = {
@@ -157,12 +162,14 @@ export const DataDownloadResponseSchema = {
     },
     links: {
       $ref: "#/components/schemas/DownloadLinks",
+      description: "The download links for the data",
     },
   },
   type: "object",
   required: ["coin", "feature_size", "version", "target", "links"],
   title: "DataDownloadResponse",
-  description: "The response for a data download request",
+  description:
+    "Response model containing download links and metadata for requested training data.",
 } as const;
 
 export const DataInfoSchema = {
@@ -238,7 +245,7 @@ export const DataInfoSchema = {
   ],
   title: "DataInfo",
   description:
-    "The complete data information for all versions, coins, feature sizes and targets",
+    "Comprehensive data catalog including all available datasets, versions, and metadata.",
 } as const;
 
 export const DataOptionsSchema = {
@@ -263,13 +270,15 @@ export const DataOptionsSchema = {
   type: "object",
   required: ["targets", "feature_sizes"],
   title: "DataOptions",
+  description:
+    "Available options for targets and feature sizes in the latest data version.",
 } as const;
 
 export const DataVersionSchema = {
   type: "string",
   enum: ["1.0"],
   title: "DataVersion",
-  description: "All existing data versions",
+  description: "Available data versions for AI model training datasets.",
 } as const;
 
 export const DataVersionInfoSchema = {
@@ -287,6 +296,8 @@ export const DataVersionInfoSchema = {
   type: "object",
   required: ["version", "release_date"],
   title: "DataVersionInfo",
+  description:
+    "Information about a specific data version including release metadata.",
 } as const;
 
 export const DownloadLinksSchema = {
@@ -310,7 +321,8 @@ export const DownloadLinksSchema = {
   type: "object",
   required: ["y_train", "X_test", "X_train"],
   title: "DownloadLinks",
-  description: "The download links for the data",
+  description:
+    "Collection of secure download URLs for different dataset splits.",
 } as const;
 
 export const EvaluationSchema = {
@@ -396,13 +408,7 @@ export const FeatureSizeSchema = {
   enum: ["small", "medium", "large"],
   title: "FeatureSize",
   description:
-    "All existing feature sizes. Some might no be available in the latest data version, but kept for older versions.",
-} as const;
-
-export const LogLevelSchema = {
-  type: "string",
-  enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-  title: "LogLevel",
+    "Dataset feature size options determining the complexity and scope of training data.",
 } as const;
 
 export const ModelCreateSchema = {
@@ -522,7 +528,7 @@ export const TargetSchema = {
   enum: ["Tatooine", "Alderaan", "Hoth"],
   title: "Target",
   description:
-    "All existing targets. Some might no be available in the latest data version, but kept for older versions.",
+    "AI model prediction targets with obfuscated names for public API access.",
 } as const;
 
 export const TargetInfoSchema = {
@@ -555,12 +561,14 @@ export const TargetInfoSchema = {
   type: "object",
   required: ["name", "type", "version_added"],
   title: "TargetInfo",
-  description: "Information about a target",
+  description:
+    "Metadata about an AI prediction target including type and version availability.",
 } as const;
 
 export const TargetTypeSchema = {
   type: "string",
   enum: ["continuous", "binary"],
   title: "TargetType",
-  description: "The type of the target",
+  description:
+    "Type classification for AI prediction targets (continuous vs binary outcomes).",
 } as const;

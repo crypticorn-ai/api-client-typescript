@@ -28,6 +28,7 @@ export type ApiErrorIdentifier =
   | "cancelled_open_order"
   | "client_order_id_already_exists"
   | "invalid_content_type"
+  | "coupon_invalid"
   | "delete_bot_error"
   | "exchange_http_request_error"
   | "exchange_invalid_parameter"
@@ -63,8 +64,6 @@ export type ApiErrorIdentifier =
   | "order_violates_liquidation_price_constraints"
   | "margin_mode_clash"
   | "name_not_unique"
-  | "no_api_key"
-  | "no_bearer"
   | "no_credentials"
   | "now_api_down"
   | "object_already_exists"
@@ -199,7 +198,7 @@ export type BotCreate = {
 export type BotStatus = "running" | "stopping" | "stopped" | "deleted";
 
 /**
- * Trading bot model for API update operations.
+ * Trading bot model for API update operations. Fields cannot be unset.
  */
 export type BotUpdate = {
   /**
@@ -258,6 +257,40 @@ export type Exchange =
   | "bitget"
   | "gateio"
   | "bitstamp";
+
+/**
+ * Model for exchange info
+ */
+export type ExchangeInfo = {
+  /**
+   * Exchange
+   */
+  exchange: Exchange;
+  /**
+   * Whether the exchange is tradeable (trade execution is implemented)
+   */
+  is_tradeable: boolean;
+  /**
+   * Whether the exchange is in public beta testing (marked as beta in the UI)
+   */
+  is_beta: boolean;
+  /**
+   * Whether the exchange is public (shown in the UI)
+   */
+  is_public: boolean;
+  /**
+   * Whether the exchange is planned to be added (marked as planned but disabled in the UI)
+   */
+  is_planned: boolean;
+  /**
+   * Whether the exchange is deprecated (not supported anymore)
+   */
+  is_deprecated: boolean;
+  /**
+   * Reference link to the exchange
+   */
+  ref_link?: string | null;
+};
 
 /**
  * Exchange API key model without sensitive credentials for safe read operations.
@@ -550,8 +583,6 @@ export type FuturesTradingActionCreate = {
    */
   expiry_timestamp?: number | null;
 };
-
-export type LogLevel = "DEBUG" | "INFO" | "WARNING" | "ERROR" | "CRITICAL";
 
 /**
  * Margin mode for futures trades
@@ -1066,6 +1097,10 @@ export type StrategyExchangeInfo = {
    * Minimum amount for the strategy on the exchange
    */
   min_amount: number;
+  /**
+   * Maximum amount for the strategy on the exchange, default is 100 thousand
+   */
+  max_amount?: number;
 };
 
 /**
@@ -1747,65 +1782,22 @@ export type GetPlannedExchangesResponse = Array<Exchange>;
 
 export type GetPlannedExchangesError = ExceptionDetail;
 
+export type GetBetaExchangesResponse = Array<Exchange>;
+
+export type GetBetaExchangesError = ExceptionDetail;
+
 export type GetAllExchangesResponse = Array<Exchange>;
 
 export type GetAllExchangesError = ExceptionDetail;
+
+export type GetExchangeInfosResponse = Array<ExchangeInfo>;
+
+export type GetExchangeInfosError = ExceptionDetail;
 
 export type PingResponse = string;
 
 export type PingError = ExceptionDetail;
 
-export type GetTimeData = {
-  query?: {
-    type?: "iso" | "unix";
-  };
-};
+export type GetMetricsResponse = unknown;
 
-export type GetTimeResponse = string;
-
-export type GetTimeError = ExceptionDetail;
-
-export type GetLogLevelResponse = LogLevel;
-
-export type GetLogLevelError = ExceptionDetail;
-
-export type GetUptimeData = {
-  query?: {
-    type?: "seconds" | "human";
-  };
-};
-
-export type GetUptimeResponse = string;
-
-export type GetUptimeError = ExceptionDetail;
-
-export type GetMemoryUsageResponse = number;
-
-export type GetMemoryUsageError = ExceptionDetail;
-
-export type GetThreadsResponse = {
-  [key: string]: unknown;
-};
-
-export type GetThreadsError = ExceptionDetail;
-
-export type GetContainerLimitsResponse = {
-  [key: string]: unknown;
-};
-
-export type GetContainerLimitsError = ExceptionDetail;
-
-export type GetDependenciesData = {
-  query?: {
-    /**
-     * List of regex patterns to match against package names. If not provided, all installed packages will be returned.
-     */
-    include?: Array<string>;
-  };
-};
-
-export type GetDependenciesResponse = {
-  [key: string]: string;
-};
-
-export type GetDependenciesError = ExceptionDetail;
+export type GetMetricsError = ExceptionDetail;

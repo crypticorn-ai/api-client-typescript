@@ -24,6 +24,8 @@ import type {
   GetDependenciesData,
   GetDependenciesError,
   GetDependenciesResponse,
+  GetMetricsError,
+  GetMetricsResponse,
   GetCurrentMarketcapData,
   GetCurrentMarketcapError,
   GetCurrentMarketcapResponse,
@@ -224,6 +226,23 @@ export function createClient(
     >({
       ...options,
       url: "/admin/dependencies",
+    });
+  };
+
+  /**
+   * Metrics
+   * Get Prometheus metrics for the application. Returns plain text.
+   */
+  const getMetrics = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetMetricsResponse,
+      GetMetricsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: "/admin/metrics",
     });
   };
 
@@ -505,6 +524,7 @@ export function createClient(
     getThreads,
     getContainerLimits,
     getDependencies,
+    getMetrics,
     getCurrentMarketcap,
     getMarketcapSymbols,
     getMarketcapSymbolsWithOhlcv,
