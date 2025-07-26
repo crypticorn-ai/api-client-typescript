@@ -639,6 +639,90 @@ export type Scope =
   | "read:klines";
 
 /**
+ * Model for detailed scope access info for a user, for each access method.
+ */
+export type ScopeInfo = {
+  /**
+   * The scope affected
+   */
+  scope: Scope;
+  /**
+   * Expiry timestamp in seconds, or None if not applicable (e.g. balance-based)
+   */
+  expires_at?: number | null;
+  /**
+   * Whether the scope has expired or not
+   */
+  has_expired: boolean;
+  /**
+   * Reason for access (allowlist, subscription, balance, etc.)
+   */
+  reason: "allowlist" | "subscription" | "balance";
+};
+
+/**
+ * Reason for access (allowlist, subscription, balance, etc.)
+ */
+export type reason = "allowlist" | "subscription" | "balance";
+
+/**
+ * Model containing all scopes the user has access to, and detailed info for each access method (allowlist, subscription, balance).
+ */
+export type ScopesInfo = {
+  /**
+   * List of scopes
+   */
+  scopes: Array<Scope>;
+  /**
+   * List of scope access info. Contains one entry for each scope, for each access method (allowlist, subscription, balance) if the user has (or had in the last 7 days) access to the scope.
+   */
+  info: Array<ScopeInfo>;
+};
+
+/**
+ * Details of a staking pool
+ */
+export type StakeDetails = {
+  /**
+   * The ID of the staking pool.
+   */
+  pool_id: 1 | 2 | 3 | 4;
+  /**
+   * The base reward amount accumulated so far, in wei (1 ETH = 1e18 wei).
+   */
+  reward_base: string;
+  /**
+   * The amount currently staked by the user, in wei.
+   */
+  current_stake: string;
+  /**
+   * The Unix timestamp (in seconds) when the stake was created.
+   */
+  start_time: string;
+  /**
+   * The duration the stake is locked for, in seconds (e.g., 5184000 = 60 days).
+   */
+  lock_period: string;
+  /**
+   * The annual percentage yield (APY), represented in wei format (e.g., 1e18 = 100%).
+   */
+  apy: string;
+  /**
+   * The reward currently available to claim, in wei.
+   */
+  pending_reward: string;
+  /**
+   * The amount currently pending to withdraw, in wei.
+   */
+  pending_withdrawal: string;
+};
+
+/**
+ * The ID of the staking pool.
+ */
+export type pool_id = 1 | 2 | 3 | 4;
+
+/**
  * Model for reading a product subscription
  */
 export type Subscription = {
@@ -673,17 +757,55 @@ export type Subscription = {
 };
 
 /**
+ * Model for a user's total balance
+ */
+export type TotalBalance = {
+  /**
+   * Total staked balance in wei of AIC
+   */
+  staked: string;
+  /**
+   * Total balance in wei of AIC
+   */
+  balance: string;
+  /**
+   * Total reward base in wei of AIC
+   */
+  reward_base: string;
+  /**
+   * Total pending reward in wei of AIC
+   */
+  pending_reward: string;
+  /**
+   * Total pending withdrawal in wei of AIC
+   */
+  pending_withdrawal: string;
+  /**
+   * The average APY on the staked balance calculated from the pool balances and their APYs. 1e18 = 100%
+   */
+  average_apy: number;
+};
+
+/**
  * Model for a user's balance
  */
 export type UserBalance = {
   /**
-   * Total balance in wei of AIC over all connected wallets
+   * List of wallet balances
    */
-  balance: string;
+  wallets: Array<WalletBalance>;
   /**
-   * Staked balance in wei of AIC
+   * Timestamp of last update
    */
-  staked: string;
+  updated_at: number;
+  /**
+   * Combined balance information computed from the wallet balances
+   */
+  readonly total: TotalBalance;
+  /**
+   * List of pool balances computed from the wallet balances
+   */
+  readonly pools: Array<StakeDetails>;
 };
 
 /**
@@ -699,9 +821,9 @@ export type WalletBalance = {
    */
   balance: string;
   /**
-   * Staked balance in wei of AIC
+   * List of stake details for each pool
    */
-  staked: string;
+  staked: Array<StakeDetails>;
 };
 
 export type GetProductsCaptchaAuthData = {
@@ -971,38 +1093,42 @@ export type StripeWebhookStripeWebhookPostResponse = unknown;
 
 export type StripeWebhookStripeWebhookPostError = ExceptionDetail;
 
+export type GetAicPriceData = {
+  query?: {
+    /**
+     * Force live fetch and update cache.
+     */
+    force?: boolean;
+  };
+};
+
 export type GetAicPriceResponse = number;
 
 export type GetAicPriceError = ExceptionDetail;
 
-export type GetTotalBalanceData = {
-  query?: {
-    /**
-     * Wallet address to check balance for. Overrides the authenticated user if provided and the user is an admin.
-     */
-    user_id?: string | null;
-  };
-};
-
-export type GetTotalBalanceResponse = UserBalance;
-
-export type GetTotalBalanceError = ExceptionDetail;
-
 export type GetBalancesData = {
   query?: {
     /**
+     * Force live fetch and update cache.
+     */
+    force?: boolean;
+    /**
      * Wallet address to check balance for. Overrides the authenticated user if provided and the user is an admin.
      */
     user_id?: string | null;
   };
 };
 
-export type GetBalancesResponse = Array<WalletBalance>;
+export type GetBalancesResponse = UserBalance;
 
 export type GetBalancesError = ExceptionDetail;
 
-export type GetAccessibleScopesData = {
+export type GetScopesInfoData = {
   query: {
+    /**
+     * Force live fetch and update cache.
+     */
+    force?: boolean;
     /**
      * User ID to get scopes for
      */
@@ -1010,13 +1136,13 @@ export type GetAccessibleScopesData = {
   };
 };
 
-export type GetAccessibleScopesResponse = Array<Scope>;
+export type GetScopesInfoResponse = ScopesInfo;
 
-export type GetAccessibleScopesError = ExceptionDetail;
+export type GetScopesInfoError = ExceptionDetail;
 
-export type GetAccessThresholdsResponse = Array<AccessThreshold>;
+export type GetThresholdsResponse = Array<AccessThreshold>;
 
-export type GetAccessThresholdsError = ExceptionDetail;
+export type GetThresholdsError = ExceptionDetail;
 
 export type PingResponse = string;
 

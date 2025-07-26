@@ -1210,6 +1210,134 @@ export const ScopeSchema = {
   description: "The permission scopes for the API.",
 } as const;
 
+export const ScopeInfoSchema = {
+  properties: {
+    scope: {
+      $ref: "#/components/schemas/Scope",
+      description: "The scope affected",
+    },
+    expires_at: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Expires At",
+      description:
+        "Expiry timestamp in seconds, or None if not applicable (e.g. balance-based)",
+    },
+    has_expired: {
+      type: "boolean",
+      title: "Has Expired",
+      description: "Whether the scope has expired or not",
+    },
+    reason: {
+      type: "string",
+      enum: ["allowlist", "subscription", "balance"],
+      title: "Reason",
+      description: "Reason for access (allowlist, subscription, balance, etc.)",
+    },
+  },
+  type: "object",
+  required: ["scope", "has_expired", "reason"],
+  title: "ScopeInfo",
+  description:
+    "Model for detailed scope access info for a user, for each access method.",
+} as const;
+
+export const ScopesInfoSchema = {
+  properties: {
+    scopes: {
+      items: {
+        $ref: "#/components/schemas/Scope",
+      },
+      type: "array",
+      title: "Scopes",
+      description: "List of scopes",
+    },
+    info: {
+      items: {
+        $ref: "#/components/schemas/ScopeInfo",
+      },
+      type: "array",
+      title: "Info",
+      description:
+        "List of scope access info. Contains one entry for each scope, for each access method (allowlist, subscription, balance) if the user has (or had in the last 7 days) access to the scope.",
+    },
+  },
+  type: "object",
+  required: ["scopes", "info"],
+  title: "ScopesInfo",
+  description:
+    "Model containing all scopes the user has access to, and detailed info for each access method (allowlist, subscription, balance).",
+} as const;
+
+export const StakeDetailsSchema = {
+  properties: {
+    pool_id: {
+      type: "integer",
+      enum: [1, 2, 3, 4],
+      title: "Pool Id",
+      description: "The ID of the staking pool.",
+    },
+    reward_base: {
+      type: "string",
+      title: "Reward Base",
+      description:
+        "The base reward amount accumulated so far, in wei (1 ETH = 1e18 wei).",
+    },
+    current_stake: {
+      type: "string",
+      title: "Current Stake",
+      description: "The amount currently staked by the user, in wei.",
+    },
+    start_time: {
+      type: "string",
+      title: "Start Time",
+      description:
+        "The Unix timestamp (in seconds) when the stake was created.",
+    },
+    lock_period: {
+      type: "string",
+      title: "Lock Period",
+      description:
+        "The duration the stake is locked for, in seconds (e.g., 5184000 = 60 days).",
+    },
+    apy: {
+      type: "string",
+      title: "Apy",
+      description:
+        "The annual percentage yield (APY), represented in wei format (e.g., 1e18 = 100%).",
+    },
+    pending_reward: {
+      type: "string",
+      title: "Pending Reward",
+      description: "The reward currently available to claim, in wei.",
+    },
+    pending_withdrawal: {
+      type: "string",
+      title: "Pending Withdrawal",
+      description: "The amount currently pending to withdraw, in wei.",
+    },
+  },
+  type: "object",
+  required: [
+    "pool_id",
+    "reward_base",
+    "current_stake",
+    "start_time",
+    "lock_period",
+    "apy",
+    "pending_reward",
+    "pending_withdrawal",
+  ],
+  title: "StakeDetails",
+  description: "Details of a staking pool",
+} as const;
+
 export const SubscriptionSchema = {
   properties: {
     id: {
@@ -1262,21 +1390,86 @@ export const SubscriptionSchema = {
   description: "Model for reading a product subscription",
 } as const;
 
-export const UserBalanceSchema = {
+export const TotalBalanceSchema = {
   properties: {
-    balance: {
-      type: "string",
-      title: "Balance",
-      description: "Total balance in wei of AIC over all connected wallets",
-    },
     staked: {
       type: "string",
       title: "Staked",
-      description: "Staked balance in wei of AIC",
+      description: "Total staked balance in wei of AIC",
+    },
+    balance: {
+      type: "string",
+      title: "Balance",
+      description: "Total balance in wei of AIC",
+    },
+    reward_base: {
+      type: "string",
+      title: "Reward Base",
+      description: "Total reward base in wei of AIC",
+    },
+    pending_reward: {
+      type: "string",
+      title: "Pending Reward",
+      description: "Total pending reward in wei of AIC",
+    },
+    pending_withdrawal: {
+      type: "string",
+      title: "Pending Withdrawal",
+      description: "Total pending withdrawal in wei of AIC",
+    },
+    average_apy: {
+      type: "number",
+      title: "Average Apy",
+      description:
+        "The average APY on the staked balance calculated from the pool balances and their APYs. 1e18 = 100%",
     },
   },
   type: "object",
-  required: ["balance", "staked"],
+  required: [
+    "staked",
+    "balance",
+    "reward_base",
+    "pending_reward",
+    "pending_withdrawal",
+    "average_apy",
+  ],
+  title: "TotalBalance",
+  description: "Model for a user's total balance",
+} as const;
+
+export const UserBalanceSchema = {
+  properties: {
+    wallets: {
+      items: {
+        $ref: "#/components/schemas/WalletBalance",
+      },
+      type: "array",
+      title: "Wallets",
+      description: "List of wallet balances",
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+    },
+    total: {
+      $ref: "#/components/schemas/TotalBalance",
+      description:
+        "Combined balance information computed from the wallet balances",
+      readOnly: true,
+    },
+    pools: {
+      items: {
+        $ref: "#/components/schemas/StakeDetails",
+      },
+      type: "array",
+      title: "Pools",
+      description: "List of pool balances computed from the wallet balances",
+      readOnly: true,
+    },
+  },
+  type: "object",
+  required: ["wallets", "updated_at", "total", "pools"],
   title: "UserBalance",
   description: "Model for a user's balance",
 } as const;
@@ -1294,9 +1487,12 @@ export const WalletBalanceSchema = {
       description: "Balance in wei of AIC",
     },
     staked: {
-      type: "string",
+      items: {
+        $ref: "#/components/schemas/StakeDetails",
+      },
+      type: "array",
       title: "Staked",
-      description: "Staked balance in wei of AIC",
+      description: "List of stake details for each pool",
     },
   },
   type: "object",
