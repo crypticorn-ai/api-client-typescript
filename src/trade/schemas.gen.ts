@@ -799,7 +799,7 @@ export const FuturesTradingActionSchema = {
       ],
       title: "Take Profit",
       description:
-        "Take profit targets. Can be set for open actions only. Multiple can be set.",
+        "Take profit targets. Sorted ascending (for long actions) or descending (for short actions) by delta to market price",
     },
     stop_loss: {
       anyOf: [
@@ -815,7 +815,7 @@ export const FuturesTradingActionSchema = {
       ],
       title: "Stop Loss",
       description:
-        "Stop loss values. Can be set for open actions only. Multiple can be set.",
+        "Stop loss values. Sorted ascending (for long actions) or descending (for short actions) by delta to market price",
     },
     expiry_timestamp: {
       anyOf: [
@@ -1140,6 +1140,27 @@ export const OrderSchema = {
       title: "Id",
       description: "Unique identifier for the resource",
     },
+    exchange: {
+      $ref: "#/components/schemas/Exchange",
+      description: "Exchange name. Of type Exchange",
+    },
+    symbol: {
+      type: "string",
+      title: "Symbol",
+      description: "Trading symbol on exchange",
+    },
+    action_type: {
+      $ref: "#/components/schemas/TradingActionType",
+      description: "Type of trading action. Of type TradingActionType",
+    },
+    status: {
+      $ref: "#/components/schemas/OrderStatus",
+      description: "Trade status of the order. Of type OrderStatus",
+    },
+    market_type: {
+      $ref: "#/components/schemas/MarketType",
+      description: "Market type of the order. Of type MarketType",
+    },
     trading_action_id: {
       anyOf: [
         {
@@ -1186,7 +1207,7 @@ export const OrderSchema = {
         },
       ],
       title: "Position Id",
-      description: "UID for the position on the exchange",
+      description: "UID for the position",
     },
     api_key_id: {
       anyOf: [
@@ -1236,29 +1257,6 @@ export const OrderSchema = {
       title: "Client Order Id",
       description: "Client order ID",
     },
-    exchange: {
-      anyOf: [
-        {
-          $ref: "#/components/schemas/Exchange",
-        },
-        {
-          type: "null",
-        },
-      ],
-      description: "Exchange name. Of type Exchange",
-    },
-    symbol: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Symbol",
-      description: "Trading symbol on exchange",
-    },
     common_symbol: {
       anyOf: [
         {
@@ -1283,28 +1281,6 @@ export const OrderSchema = {
       title: "Price",
       description: "Price of the order",
     },
-    action_type: {
-      anyOf: [
-        {
-          $ref: "#/components/schemas/TradingActionType",
-        },
-        {
-          type: "null",
-        },
-      ],
-      description: "Type of trading action. Of type TradingActionType",
-    },
-    market_type: {
-      anyOf: [
-        {
-          $ref: "#/components/schemas/MarketType",
-        },
-        {
-          type: "null",
-        },
-      ],
-      description: "Market type of the order. Of type MarketType",
-    },
     margin_mode: {
       anyOf: [
         {
@@ -1326,17 +1302,6 @@ export const OrderSchema = {
         },
       ],
       description: "API error identifier. Of type ApiErrorIdentifier",
-    },
-    status: {
-      anyOf: [
-        {
-          $ref: "#/components/schemas/OrderStatus",
-        },
-        {
-          type: "null",
-        },
-      ],
-      description: "Trade status of the order. Of type OrderStatus",
     },
     filled_perc: {
       anyOf: [
@@ -1432,11 +1397,25 @@ export const OrderSchema = {
       description:
         "Timestamp of order creation on the exchange in seconds since epoch.",
     },
+    is_lost: {
+      anyOf: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Is Lost",
+      description:
+        "Whether the order is a lost order. These are orders that are not filled and recognizable by us.",
+    },
   },
   type: "object",
+  required: ["exchange", "symbol", "action_type", "status", "market_type"],
   title: "Order",
   description:
-    "Response model for orders. All optional as the model is built step by step.",
+    "Response model for orders. Fields are marked as required if they are always set on initial creation.",
 } as const;
 
 export const OrderStatusSchema = {
@@ -1993,13 +1972,14 @@ export const StrategyExchangeInfoSchema = {
     min_amount: {
       type: "integer",
       title: "Min Amount",
-      description: "Minimum amount for the strategy on the exchange",
+      description:
+        "Minimum amount for the strategy on the exchange in the base asset.",
     },
     max_amount: {
       type: "integer",
       title: "Max Amount",
       description:
-        "Maximum amount for the strategy on the exchange, default is 100 thousand ",
+        "Maximum amount for the strategy on the exchange in the base asset.",
       default: 100000,
     },
   },

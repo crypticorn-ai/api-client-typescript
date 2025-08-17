@@ -509,11 +509,11 @@ export type FuturesTradingAction = {
    */
   allocation: string;
   /**
-   * Take profit targets. Can be set for open actions only. Multiple can be set.
+   * Take profit targets. Sorted ascending (for long actions) or descending (for short actions) by delta to market price
    */
   take_profit?: Array<TPSL> | null;
   /**
-   * Stop loss values. Can be set for open actions only. Multiple can be set.
+   * Stop loss values. Sorted ascending (for long actions) or descending (for short actions) by delta to market price
    */
   stop_loss?: Array<TPSL> | null;
   /**
@@ -677,7 +677,7 @@ export type NotificationUpdate = {
 };
 
 /**
- * Response model for orders. All optional as the model is built step by step.
+ * Response model for orders. Fields are marked as required if they are always set on initial creation.
  */
 export type Order = {
   /**
@@ -693,6 +693,26 @@ export type Order = {
    */
   id?: string;
   /**
+   * Exchange name. Of type Exchange
+   */
+  exchange: Exchange;
+  /**
+   * Trading symbol on exchange
+   */
+  symbol: string;
+  /**
+   * Type of trading action. Of type TradingActionType
+   */
+  action_type: TradingActionType;
+  /**
+   * Trade status of the order. Of type OrderStatus
+   */
+  status: OrderStatus;
+  /**
+   * Market type of the order. Of type MarketType
+   */
+  market_type: MarketType;
+  /**
    * UID for the trading action that placed the order
    */
   trading_action_id?: string | null;
@@ -705,7 +725,7 @@ export type Order = {
    */
   exchange_order_id?: string | null;
   /**
-   * UID for the position on the exchange
+   * UID for the position
    */
   position_id?: string | null;
   /**
@@ -725,14 +745,6 @@ export type Order = {
    */
   client_order_id?: string | null;
   /**
-   * Exchange name. Of type Exchange
-   */
-  exchange?: Exchange | null;
-  /**
-   * Trading symbol on exchange
-   */
-  symbol?: string | null;
-  /**
    * Common trading symbol
    */
   common_symbol?: string | null;
@@ -741,14 +753,6 @@ export type Order = {
    */
   price?: string | null;
   /**
-   * Type of trading action. Of type TradingActionType
-   */
-  action_type?: TradingActionType | null;
-  /**
-   * Market type of the order. Of type MarketType
-   */
-  market_type?: MarketType | null;
-  /**
    * Margin mode of the order. Of type MarginMode
    */
   margin_mode?: MarginMode | null;
@@ -756,10 +760,6 @@ export type Order = {
    * API error identifier. Of type ApiErrorIdentifier
    */
   status_code?: ApiErrorIdentifier | null;
-  /**
-   * Trade status of the order. Of type OrderStatus
-   */
-  status?: OrderStatus | null;
   /**
    * Percentage of the order filled
    */
@@ -794,6 +794,10 @@ export type Order = {
    * Timestamp of order creation on the exchange in seconds since epoch.
    */
   order_time?: number | null;
+  /**
+   * Whether the order is a lost order. These are orders that are not filled and recognizable by us.
+   */
+  is_lost?: boolean | null;
 };
 
 /**
@@ -1094,11 +1098,11 @@ export type StrategyExchangeInfo = {
    */
   base_asset?: string;
   /**
-   * Minimum amount for the strategy on the exchange
+   * Minimum amount for the strategy on the exchange in the base asset.
    */
   min_amount: number;
   /**
-   * Maximum amount for the strategy on the exchange, default is 100 thousand
+   * Maximum amount for the strategy on the exchange in the base asset.
    */
   max_amount?: number;
 };
@@ -1461,11 +1465,11 @@ export type GetBotsData = {
      */
     filter_value?: string | null;
     /**
-     * Whether to include deleted bots. Filter by status takes precedence over this.
+     * Whether to include deleted bots. Filter by status takes precedence over this. Defaults to True.
      */
     include_deleted?: boolean;
     /**
-     * Whether to validate the bots
+     * Whether to validate the bots. Defaults to True.
      */
     should_validate?: boolean;
     /**
@@ -1773,22 +1777,6 @@ export type DeleteNotificationData = {
 export type DeleteNotificationResponse = void;
 
 export type DeleteNotificationError = ExceptionDetail;
-
-export type GetTradeableExchangesResponse = Array<Exchange>;
-
-export type GetTradeableExchangesError = ExceptionDetail;
-
-export type GetPlannedExchangesResponse = Array<Exchange>;
-
-export type GetPlannedExchangesError = ExceptionDetail;
-
-export type GetBetaExchangesResponse = Array<Exchange>;
-
-export type GetBetaExchangesError = ExceptionDetail;
-
-export type GetAllExchangesResponse = Array<Exchange>;
-
-export type GetAllExchangesError = ExceptionDetail;
 
 export type GetExchangeInfosResponse = Array<ExchangeInfo>;
 
