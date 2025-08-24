@@ -568,11 +568,11 @@ export type ProductUpdate = {
   /**
    * Product name
    */
-  name?: string | null;
+  name: string | null;
   /**
    * Product price
    */
-  price?: number | null;
+  price: number | null;
   /**
    * Scopes that product provides
    */
@@ -580,15 +580,15 @@ export type ProductUpdate = {
   /**
    * Product duration in days. 0 means forever.
    */
-  duration?: number | null;
+  duration: number | null;
   /**
    * Product description
    */
-  description?: string | null;
+  description: string | null;
   /**
    * Product is active
    */
-  is_active?: boolean | null;
+  is_active: boolean | null;
   /**
    * Product images as hosted URLs
    */

@@ -1158,6 +1158,7 @@ export const ProductUpdateSchema = {
     },
   },
   type: "object",
+  required: ["name", "price", "duration", "description", "is_active"],
   title: "ProductUpdate",
   description: "Model for updating a product",
 } as const;
