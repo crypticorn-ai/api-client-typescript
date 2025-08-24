@@ -1,6 +1,6 @@
 {
   "name": "@crypticorn-ai/api-client",
-  "version": "2.16.5",
+  "version": "2.16.6-beta.0",
   "description": "Crypticorn API Client",
   "license": "ISC",
   "author": "Máté Homolya <mate.homolya@proton.me>",
