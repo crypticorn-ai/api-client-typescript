@@ -131,38 +131,17 @@ export const BotSchema = {
       description: "UID for the user",
     },
     created_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
       title: "Created At",
       description: "Timestamp of creation",
     },
     updated_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
     },
     id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Id",
       description: "Unique identifier for the resource",
     },
@@ -229,9 +208,6 @@ export const BotSchema = {
     "status",
     "strategy_id",
     "api_key_id",
-    "status_code",
-    "current_allocation",
-    "current_exposure",
   ],
   title: "Bot",
   description: "Trading bot model for read operations.",
@@ -250,10 +226,6 @@ export const BotCreateSchema = {
       title: "Allocation",
       description: "Initial allocation for the bot",
     },
-    status: {
-      $ref: "#/components/schemas/BotStatus",
-      description: "Status of the bot",
-    },
     strategy_id: {
       type: "string",
       title: "Strategy Id",
@@ -266,7 +238,7 @@ export const BotCreateSchema = {
     },
   },
   type: "object",
-  required: ["name", "allocation", "status", "strategy_id", "api_key_id"],
+  required: ["name", "allocation", "strategy_id", "api_key_id"],
   title: "BotCreate",
   description: "Trading bot model for API create operations.",
 } as const;
@@ -449,38 +421,17 @@ export const ExchangeKeySchema = {
       description: "UID for the user",
     },
     created_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
       title: "Created At",
       description: "Timestamp of creation",
     },
     updated_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
     },
     id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Id",
       description: "Unique identifier for the resource",
     },
@@ -501,15 +452,7 @@ export const ExchangeKeySchema = {
     },
   },
   type: "object",
-  required: [
-    "user_id",
-    "created_at",
-    "updated_at",
-    "id",
-    "label",
-    "exchange",
-    "deleted",
-  ],
+  required: ["user_id", "created_at", "updated_at", "id", "label", "exchange"],
   title: "ExchangeKey",
   description:
     "Exchange API key model without sensitive credentials for safe read operations.",
@@ -737,6 +680,21 @@ export const FuturesBalanceSchema = {
 
 export const FuturesTradingActionSchema = {
   properties: {
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
+    },
     leverage: {
       type: "integer",
       minimum: 1,
@@ -749,54 +707,11 @@ export const FuturesTradingActionSchema = {
       description: "Margin mode for futures trades. Default is isolated.",
       default: "isolated",
     },
-    created_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Created At",
-      description: "Timestamp of creation",
-    },
-    updated_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Updated At",
-      description: "Timestamp of last update",
-    },
-    id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Id",
-      description: "Unique identifier for the resource",
-    },
     execution_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Execution Id",
       description:
-        "UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.",
+        "UID for the execution of the order. A specific TP/SL execution ID of the opening order.",
     },
     open_order_execution_id: {
       anyOf: [
@@ -910,23 +825,14 @@ export const FuturesTradingActionSchema = {
   },
   type: "object",
   required: [
-    "leverage",
-    "margin_mode",
     "created_at",
     "updated_at",
     "id",
-    "execution_id",
-    "open_order_execution_id",
     "action_type",
     "market_type",
     "strategy_id",
     "symbol",
-    "is_limit",
-    "limit_price",
     "allocation",
-    "take_profit",
-    "stop_loss",
-    "expiry_timestamp",
   ],
   title: "FuturesTradingAction",
   description: "Model for futures trading actions",
@@ -1099,38 +1005,17 @@ export const NotificationSchema = {
       description: "UID for the user",
     },
     created_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
       title: "Created At",
       description: "Timestamp of creation",
     },
     updated_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
     },
     id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Id",
       description: "Unique identifier for the resource",
     },
@@ -1166,8 +1051,6 @@ export const NotificationSchema = {
     "created_at",
     "updated_at",
     "id",
-    "viewed",
-    "sent",
     "identifier",
     "level",
     "type",
@@ -1246,38 +1129,17 @@ export const NotificationUpdateSchema = {
 export const OrderSchema = {
   properties: {
     created_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
       title: "Created At",
       description: "Timestamp of creation",
     },
     updated_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
     },
     id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Id",
       description: "Unique identifier for the resource",
     },
@@ -1537,27 +1399,7 @@ export const OrderSchema = {
     "action_type",
     "status",
     "market_type",
-    "trading_action_id",
-    "execution_id",
-    "exchange_order_id",
-    "position_id",
-    "api_key_id",
-    "user_id",
-    "bot_id",
-    "client_order_id",
-    "common_symbol",
     "price",
-    "margin_mode",
-    "status_code",
-    "filled_perc",
-    "filled_qty",
-    "sent_qty",
-    "fee",
-    "leverage",
-    "order_details",
-    "pnl",
-    "order_time",
-    "is_lost",
   ],
   title: "Order",
   description:
@@ -1942,38 +1784,17 @@ export const SpotTradingActionCreateSchema = {
 export const StrategySchema = {
   properties: {
     created_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
       title: "Created At",
       description: "Timestamp of creation",
     },
     updated_at: {
-      anyOf: [
-        {
-          type: "integer",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
     },
     id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Id",
       description: "Unique identifier for the resource",
     },
@@ -2048,7 +1869,6 @@ export const StrategySchema = {
     "enabled",
     "performance_fee",
     "identifier",
-    "margin_mode",
     "leverage",
     "market_type",
   ],
@@ -2255,14 +2075,7 @@ export const TPSLSchema = {
         "Percentage of the open order to sell. All allocations must sum up to 1. Use this allocation again when closing the order.",
     },
     execution_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Execution Id",
       description: "Execution ID of the order.",
     },

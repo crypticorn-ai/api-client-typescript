@@ -120,10 +120,6 @@ export type ApiErrorType =
  */
 export type Coupon = {
   /**
-   * UID of the model
-   */
-  id: string;
-  /**
    * Timestamp of creation
    */
   created_at: number;
@@ -132,9 +128,13 @@ export type Coupon = {
    */
   updated_at: number;
   /**
+   * Unique identifier for the resource
+   */
+  id: string;
+  /**
    * Coupon code. If not specified, a random code is generated.
    */
-  code: string | null;
+  code?: string | null;
   /**
    * A name for the coupon, e.g. 'Black Friday 2025'
    */
@@ -146,23 +146,23 @@ export type Coupon = {
   /**
    * Coupon valid until timestamp in seconds. If not specified, the coupon is valid for 100 years.
    */
-  valid_until: number | null;
+  valid_until?: number | null;
   /**
    * Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.
    */
-  valid_from: number | null;
+  valid_from?: number | null;
   /**
    * Coupon usage limit. If not specified, the coupon can be used unlimited times.
    */
-  usage_limit: number | null;
+  usage_limit?: number | null;
   /**
    * Products that the coupon can be used on. If not specified, the coupon can be used on all products.
    */
-  products: Array<string> | null;
+  products?: Array<string> | null;
   /**
    * Coupon is active
    */
-  is_active: boolean;
+  is_active?: boolean;
   /**
    * Coupon usage count
    */
@@ -272,10 +272,6 @@ export type ExceptionDetail = {
  */
 export type Invoice = {
   /**
-   * UID of the model
-   */
-  id: string;
-  /**
    * Timestamp of creation
    */
   created_at: number;
@@ -284,47 +280,9 @@ export type Invoice = {
    */
   updated_at: number;
   /**
-   * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+   * Unique identifier for the resource
    */
-  user_id: string | null;
-  /**
-   * The ID of the product
-   */
-  product_id: string;
-  /**
-   * The ID of the coupon
-   */
-  coupon_id: string | null;
-  /**
-   * The provider the invoice is created with
-   */
-  provider: Provider;
-  /**
-   * The address of the user. Only used for staking invoices.
-   */
-  address: string | null;
-  /**
-   * The oob code for the invoice. Only used for signup invoices.
-   */
-  oob: string | null;
-  /**
-   * The amount of the invoice in USD
-   */
-  usd_amount: number;
-  /**
-   * Invoice URL. If None, no external payment is required.
-   */
-  url: string | null;
-};
-
-/**
- * Model for creating an invoice
- */
-export type InvoiceCreate = {
-  /**
-   * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
-   */
-  user_id?: string | null;
+  id: string;
   /**
    * The ID of the product
    */
@@ -345,6 +303,48 @@ export type InvoiceCreate = {
    * The oob code for the invoice. Only used for signup invoices.
    */
   oob?: string | null;
+  /**
+   * The ID of the user
+   */
+  user_id: string;
+  /**
+   * The amount of the invoice in USD
+   */
+  usd_amount: number;
+  /**
+   * Invoice URL. If None, no external payment is required.
+   */
+  url?: string | null;
+};
+
+/**
+ * Model for creating an invoice
+ */
+export type InvoiceCreate = {
+  /**
+   * The ID of the product
+   */
+  product_id: string;
+  /**
+   * The ID of the coupon
+   */
+  coupon_id?: string | null;
+  /**
+   * The provider the invoice is created with
+   */
+  provider: Provider;
+  /**
+   * The address of the user. Only used for staking invoices.
+   */
+  address?: string | null;
+  /**
+   * The oob code for the invoice. Only used for signup invoices.
+   */
+  oob?: string | null;
+  /**
+   * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+   */
+  user_id?: string | null;
 };
 
 export type PaginatedResponse_Coupon_ = {
@@ -428,11 +428,6 @@ export type Payment = {
    */
   invoice_id: string;
   /**
-   * Payment timestamp in seconds. Deprecated, use updated_at instead.
-   * @deprecated
-   */
-  timestamp: number;
-  /**
    * Payment amount
    */
   amount: number;
@@ -482,10 +477,6 @@ export type PaymentStatus =
  */
 export type Product = {
   /**
-   * UID of the model
-   */
-  id: string;
-  /**
    * Timestamp of creation
    */
   created_at: number;
@@ -493,6 +484,10 @@ export type Product = {
    * Timestamp of last update
    */
   updated_at: number;
+  /**
+   * Unique identifier for the resource
+   */
+  id: string;
   /**
    * Product name
    */
@@ -504,7 +499,7 @@ export type Product = {
   /**
    * Scopes that product provides
    */
-  scopes: Array<Scope> | null;
+  scopes?: Array<Scope> | null;
   /**
    * Product duration in days. 0 means forever.
    */
@@ -520,11 +515,11 @@ export type Product = {
   /**
    * Product images as hosted URLs
    */
-  images: Array<string> | null;
+  images?: Array<string> | null;
   /**
    * Original product price. This is the price before the coupon is applied. None if no coupon is applied.
    */
-  original_price: number | null;
+  original_price?: number | null;
 };
 
 /**
@@ -568,11 +563,11 @@ export type ProductUpdate = {
   /**
    * Product name
    */
-  name: string | null;
+  name?: string | null;
   /**
    * Product price
    */
-  price: number | null;
+  price?: number | null;
   /**
    * Scopes that product provides
    */
@@ -580,15 +575,15 @@ export type ProductUpdate = {
   /**
    * Product duration in days. 0 means forever.
    */
-  duration: number | null;
+  duration?: number | null;
   /**
    * Product description
    */
-  description: string | null;
+  description?: string | null;
   /**
    * Product is active
    */
-  is_active: boolean | null;
+  is_active?: boolean | null;
   /**
    * Product images as hosted URLs
    */
@@ -727,10 +722,6 @@ export type pool_id = 1 | 2 | 3 | 4;
  */
 export type Subscription = {
   /**
-   * UID of the model
-   */
-  id: string;
-  /**
    * Timestamp of creation
    */
   created_at: number;
@@ -738,6 +729,10 @@ export type Subscription = {
    * Timestamp of last update
    */
   updated_at: number;
+  /**
+   * Unique identifier for the resource
+   */
+  id: string;
   /**
    * User ID
    */
@@ -783,7 +778,7 @@ export type TotalBalance = {
   /**
    * The average APY on the staked balance calculated from the pool balances and their APYs. 1e18 = 100%
    */
-  average_apy: number;
+  average_apy: string;
 };
 
 /**

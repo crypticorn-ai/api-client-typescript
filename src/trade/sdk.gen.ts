@@ -609,6 +609,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Get Notifications
    * Get all notifications for the authenticated user
    */
@@ -626,6 +627,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Create Notification
    * Create a new notification
    */
@@ -643,6 +645,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Update Notifications
    * Bulk update notifications
    */
@@ -660,6 +663,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Delete Notifications
    * Delete all notifications for the authenticated user
    */
@@ -677,6 +681,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Update Notification
    * Update a notification's viewed status
    */
@@ -694,6 +699,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Delete Notification
    * Delete a notification
    */

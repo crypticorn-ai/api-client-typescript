@@ -124,11 +124,6 @@ export const ApiErrorTypeSchema = {
 
 export const CouponSchema = {
   properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "UID of the model",
-    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -138,6 +133,11 @@ export const CouponSchema = {
       type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
     },
     code: {
       anyOf: [
@@ -249,17 +249,11 @@ export const CouponSchema = {
   },
   type: "object",
   required: [
-    "id",
     "created_at",
     "updated_at",
-    "code",
+    "id",
     "name",
     "discount",
-    "valid_until",
-    "valid_from",
-    "usage_limit",
-    "products",
-    "is_active",
     "usage_count",
     "payment_required",
     "is_valid",
@@ -471,11 +465,6 @@ export const ExceptionDetailSchema = {
 
 export const InvoiceSchema = {
   properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "UID of the model",
-    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -486,18 +475,10 @@ export const InvoiceSchema = {
       title: "Updated At",
       description: "Timestamp of last update",
     },
-    user_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "User Id",
-      description:
-        "The ID of the user. Overrides the authenticated user if provided and the user is an admin.",
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
     },
     product_id: {
       type: "string",
@@ -544,6 +525,11 @@ export const InvoiceSchema = {
       title: "Oob",
       description:
         "The oob code for the invoice. Only used for signup invoices.",
+    },
+    user_id: {
+      type: "string",
+      title: "User Id",
+      description: "The ID of the user",
     },
     usd_amount: {
       type: "number",
@@ -565,17 +551,13 @@ export const InvoiceSchema = {
   },
   type: "object",
   required: [
-    "id",
     "created_at",
     "updated_at",
-    "user_id",
+    "id",
     "product_id",
-    "coupon_id",
     "provider",
-    "address",
-    "oob",
+    "user_id",
     "usd_amount",
-    "url",
   ],
   title: "Invoice",
   description: "Model for reading an invoice",
@@ -583,19 +565,6 @@ export const InvoiceSchema = {
 
 export const InvoiceCreateSchema = {
   properties: {
-    user_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "User Id",
-      description:
-        "The ID of the user. Overrides the authenticated user if provided and the user is an admin.",
-    },
     product_id: {
       type: "string",
       title: "Product Id",
@@ -641,6 +610,19 @@ export const InvoiceCreateSchema = {
       title: "Oob",
       description:
         "The oob code for the invoice. Only used for signup invoices.",
+    },
+    user_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "User Id",
+      description:
+        "The ID of the user. Overrides the authenticated user if provided and the user is an admin.",
     },
   },
   type: "object",
@@ -815,13 +797,6 @@ export const PaymentSchema = {
       title: "Invoice Id",
       description: "Invoice ID",
     },
-    timestamp: {
-      type: "integer",
-      title: "Timestamp",
-      description:
-        "Payment timestamp in seconds. Deprecated, use updated_at instead.",
-      deprecated: true,
-    },
     amount: {
       type: "number",
       title: "Amount",
@@ -868,7 +843,6 @@ export const PaymentSchema = {
     "product_id",
     "user_id",
     "invoice_id",
-    "timestamp",
     "amount",
     "currency",
     "status",
@@ -898,11 +872,6 @@ export const PaymentStatusSchema = {
 
 export const ProductSchema = {
   properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "UID of the model",
-    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -912,6 +881,11 @@ export const ProductSchema = {
       type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
     },
     name: {
       type: "string",
@@ -984,17 +958,14 @@ export const ProductSchema = {
   },
   type: "object",
   required: [
-    "id",
     "created_at",
     "updated_at",
+    "id",
     "name",
     "price",
-    "scopes",
     "duration",
     "description",
     "is_active",
-    "images",
-    "original_price",
   ],
   title: "Product",
   description: "Model for reading a product",
@@ -1158,7 +1129,6 @@ export const ProductUpdateSchema = {
     },
   },
   type: "object",
-  required: ["name", "price", "duration", "description", "is_active"],
   title: "ProductUpdate",
   description: "Model for updating a product",
 } as const;
@@ -1341,11 +1311,6 @@ export const StakeDetailsSchema = {
 
 export const SubscriptionSchema = {
   properties: {
-    id: {
-      type: "string",
-      title: "Id",
-      description: "UID of the model",
-    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -1355,6 +1320,11 @@ export const SubscriptionSchema = {
       type: "integer",
       title: "Updated At",
       description: "Timestamp of last update",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
     },
     user_id: {
       type: "string",
@@ -1379,9 +1349,9 @@ export const SubscriptionSchema = {
   },
   type: "object",
   required: [
-    "id",
     "created_at",
     "updated_at",
+    "id",
     "user_id",
     "product_id",
     "access_from",
@@ -1419,7 +1389,7 @@ export const TotalBalanceSchema = {
       description: "Total pending withdrawal in wei of AIC",
     },
     average_apy: {
-      type: "number",
+      type: "string",
       title: "Average Apy",
       description:
         "The average APY on the staked balance calculated from the pool balances and their APYs. 1e18 = 100%",
