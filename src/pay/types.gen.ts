@@ -120,10 +120,6 @@ export type ApiErrorType =
  */
 export type Coupon = {
   /**
-   * UID of the model
-   */
-  id: string;
-  /**
    * Timestamp of creation
    */
   created_at: number;
@@ -132,9 +128,13 @@ export type Coupon = {
    */
   updated_at: number;
   /**
+   * Unique identifier for the resource
+   */
+  id: string;
+  /**
    * Coupon code. If not specified, a random code is generated.
    */
-  code: string | null;
+  code?: string | null;
   /**
    * A name for the coupon, e.g. 'Black Friday 2025'
    */
@@ -146,23 +146,23 @@ export type Coupon = {
   /**
    * Coupon valid until timestamp in seconds. If not specified, the coupon is valid for 100 years.
    */
-  valid_until: number | null;
+  valid_until?: number | null;
   /**
    * Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.
    */
-  valid_from: number | null;
+  valid_from?: number | null;
   /**
    * Coupon usage limit. If not specified, the coupon can be used unlimited times.
    */
-  usage_limit: number | null;
+  usage_limit?: number | null;
   /**
    * Products that the coupon can be used on. If not specified, the coupon can be used on all products.
    */
-  products: Array<string> | null;
+  products?: Array<string> | null;
   /**
    * Coupon is active
    */
-  is_active: boolean;
+  is_active?: boolean;
   /**
    * Coupon usage count
    */
@@ -272,10 +272,6 @@ export type ExceptionDetail = {
  */
 export type Invoice = {
   /**
-   * UID of the model
-   */
-  id: string;
-  /**
    * Timestamp of creation
    */
   created_at: number;
@@ -284,47 +280,9 @@ export type Invoice = {
    */
   updated_at: number;
   /**
-   * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+   * Unique identifier for the resource
    */
-  user_id: string | null;
-  /**
-   * The ID of the product
-   */
-  product_id: string;
-  /**
-   * The ID of the coupon
-   */
-  coupon_id: string | null;
-  /**
-   * The provider the invoice is created with
-   */
-  provider: Provider;
-  /**
-   * The address of the user. Only used for staking invoices.
-   */
-  address: string | null;
-  /**
-   * The oob code for the invoice. Only used for signup invoices.
-   */
-  oob: string | null;
-  /**
-   * The amount of the invoice in USD
-   */
-  usd_amount: number;
-  /**
-   * Invoice URL. If None, no external payment is required.
-   */
-  url: string | null;
-};
-
-/**
- * Model for creating an invoice
- */
-export type InvoiceCreate = {
-  /**
-   * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
-   */
-  user_id?: string | null;
+  id: string;
   /**
    * The ID of the product
    */
@@ -345,6 +303,48 @@ export type InvoiceCreate = {
    * The oob code for the invoice. Only used for signup invoices.
    */
   oob?: string | null;
+  /**
+   * The ID of the user
+   */
+  user_id: string;
+  /**
+   * The amount of the invoice in USD
+   */
+  usd_amount: number;
+  /**
+   * Invoice URL. If None, no external payment is required.
+   */
+  url?: string | null;
+};
+
+/**
+ * Model for creating an invoice
+ */
+export type InvoiceCreate = {
+  /**
+   * The ID of the product
+   */
+  product_id: string;
+  /**
+   * The ID of the coupon
+   */
+  coupon_id?: string | null;
+  /**
+   * The provider the invoice is created with
+   */
+  provider: Provider;
+  /**
+   * The address of the user. Only used for staking invoices.
+   */
+  address?: string | null;
+  /**
+   * The oob code for the invoice. Only used for signup invoices.
+   */
+  oob?: string | null;
+  /**
+   * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
+   */
+  user_id?: string | null;
 };
 
 export type PaginatedResponse_Coupon_ = {
@@ -428,11 +428,6 @@ export type Payment = {
    */
   invoice_id: string;
   /**
-   * Payment timestamp in seconds. Deprecated, use updated_at instead.
-   * @deprecated
-   */
-  timestamp: number;
-  /**
    * Payment amount
    */
   amount: number;
@@ -482,10 +477,6 @@ export type PaymentStatus =
  */
 export type Product = {
   /**
-   * UID of the model
-   */
-  id: string;
-  /**
    * Timestamp of creation
    */
   created_at: number;
@@ -493,6 +484,10 @@ export type Product = {
    * Timestamp of last update
    */
   updated_at: number;
+  /**
+   * Unique identifier for the resource
+   */
+  id: string;
   /**
    * Product name
    */
@@ -504,7 +499,7 @@ export type Product = {
   /**
    * Scopes that product provides
    */
-  scopes: Array<Scope> | null;
+  scopes?: Array<Scope> | null;
   /**
    * Product duration in days. 0 means forever.
    */
@@ -520,11 +515,11 @@ export type Product = {
   /**
    * Product images as hosted URLs
    */
-  images: Array<string> | null;
+  images?: Array<string> | null;
   /**
    * Original product price. This is the price before the coupon is applied. None if no coupon is applied.
    */
-  original_price: number | null;
+  original_price?: number | null;
 };
 
 /**
@@ -639,13 +634,93 @@ export type Scope =
   | "read:klines";
 
 /**
+ * Model for detailed scope access info for a user, for each access method.
+ */
+export type ScopeInfo = {
+  /**
+   * The scope affected
+   */
+  scope: Scope;
+  /**
+   * Expiry timestamp in seconds, or None if not applicable (e.g. balance-based)
+   */
+  expires_at?: number | null;
+  /**
+   * Whether the scope has expired or not
+   */
+  has_expired: boolean;
+  /**
+   * Reason for access (allowlist, subscription, balance, etc.)
+   */
+  reason: "allowlist" | "subscription" | "balance";
+};
+
+/**
+ * Reason for access (allowlist, subscription, balance, etc.)
+ */
+export type reason = "allowlist" | "subscription" | "balance";
+
+/**
+ * Model containing all scopes the user has access to, and detailed info for each access method (allowlist, subscription, balance).
+ */
+export type ScopesInfo = {
+  /**
+   * List of scopes
+   */
+  scopes: Array<Scope>;
+  /**
+   * List of scope access info. Contains one entry for each scope, for each access method (allowlist, subscription, balance) if the user has (or had in the last 7 days) access to the scope.
+   */
+  info: Array<ScopeInfo>;
+};
+
+/**
+ * Details of a staking pool
+ */
+export type StakeDetails = {
+  /**
+   * The ID of the staking pool.
+   */
+  pool_id: 1 | 2 | 3 | 4;
+  /**
+   * The base reward amount accumulated so far, in wei (1 ETH = 1e18 wei).
+   */
+  reward_base: string;
+  /**
+   * The amount currently staked by the user, in wei.
+   */
+  current_stake: string;
+  /**
+   * The Unix timestamp (in seconds) when the stake was created.
+   */
+  start_time: string;
+  /**
+   * The duration the stake is locked for, in seconds (e.g., 5184000 = 60 days).
+   */
+  lock_period: string;
+  /**
+   * The annual percentage yield (APY), represented in wei format (e.g., 1e18 = 100%).
+   */
+  apy: string;
+  /**
+   * The reward currently available to claim, in wei.
+   */
+  pending_reward: string;
+  /**
+   * The amount currently pending to withdraw, in wei.
+   */
+  pending_withdrawal: string;
+};
+
+/**
+ * The ID of the staking pool.
+ */
+export type pool_id = 1 | 2 | 3 | 4;
+
+/**
  * Model for reading a product subscription
  */
 export type Subscription = {
-  /**
-   * UID of the model
-   */
-  id: string;
   /**
    * Timestamp of creation
    */
@@ -654,6 +729,10 @@ export type Subscription = {
    * Timestamp of last update
    */
   updated_at: number;
+  /**
+   * Unique identifier for the resource
+   */
+  id: string;
   /**
    * User ID
    */
@@ -673,17 +752,55 @@ export type Subscription = {
 };
 
 /**
+ * Model for a user's total balance
+ */
+export type TotalBalance = {
+  /**
+   * Total staked balance in wei of AIC
+   */
+  staked: string;
+  /**
+   * Total balance in wei of AIC
+   */
+  balance: string;
+  /**
+   * Total reward base in wei of AIC
+   */
+  reward_base: string;
+  /**
+   * Total pending reward in wei of AIC
+   */
+  pending_reward: string;
+  /**
+   * Total pending withdrawal in wei of AIC
+   */
+  pending_withdrawal: string;
+  /**
+   * The average APY on the staked balance calculated from the pool balances and their APYs. 1e18 = 100%
+   */
+  average_apy: string;
+};
+
+/**
  * Model for a user's balance
  */
 export type UserBalance = {
   /**
-   * Total balance in wei of AIC over all connected wallets
+   * List of wallet balances
    */
-  balance: string;
+  wallets: Array<WalletBalance>;
   /**
-   * Staked balance in wei of AIC
+   * Timestamp of last update
    */
-  staked: string;
+  updated_at: number;
+  /**
+   * Combined balance information computed from the wallet balances
+   */
+  readonly total: TotalBalance;
+  /**
+   * List of pool balances computed from the wallet balances
+   */
+  readonly pools: Array<StakeDetails>;
 };
 
 /**
@@ -699,9 +816,9 @@ export type WalletBalance = {
    */
   balance: string;
   /**
-   * Staked balance in wei of AIC
+   * List of stake details for each pool
    */
-  staked: string;
+  staked: Array<StakeDetails>;
 };
 
 export type GetProductsCaptchaAuthData = {
@@ -971,38 +1088,42 @@ export type StripeWebhookStripeWebhookPostResponse = unknown;
 
 export type StripeWebhookStripeWebhookPostError = ExceptionDetail;
 
+export type GetAicPriceData = {
+  query?: {
+    /**
+     * Force live fetch and update cache.
+     */
+    force?: boolean;
+  };
+};
+
 export type GetAicPriceResponse = number;
 
 export type GetAicPriceError = ExceptionDetail;
 
-export type GetTotalBalanceData = {
-  query?: {
-    /**
-     * Wallet address to check balance for. Overrides the authenticated user if provided and the user is an admin.
-     */
-    user_id?: string | null;
-  };
-};
-
-export type GetTotalBalanceResponse = UserBalance;
-
-export type GetTotalBalanceError = ExceptionDetail;
-
 export type GetBalancesData = {
   query?: {
     /**
+     * Force live fetch and update cache.
+     */
+    force?: boolean;
+    /**
      * Wallet address to check balance for. Overrides the authenticated user if provided and the user is an admin.
      */
     user_id?: string | null;
   };
 };
 
-export type GetBalancesResponse = Array<WalletBalance>;
+export type GetBalancesResponse = UserBalance;
 
 export type GetBalancesError = ExceptionDetail;
 
-export type GetAccessibleScopesData = {
+export type GetScopesInfoData = {
   query: {
+    /**
+     * Force live fetch and update cache.
+     */
+    force?: boolean;
     /**
      * User ID to get scopes for
      */
@@ -1010,13 +1131,13 @@ export type GetAccessibleScopesData = {
   };
 };
 
-export type GetAccessibleScopesResponse = Array<Scope>;
+export type GetScopesInfoResponse = ScopesInfo;
 
-export type GetAccessibleScopesError = ExceptionDetail;
+export type GetScopesInfoError = ExceptionDetail;
 
-export type GetAccessThresholdsResponse = Array<AccessThreshold>;
+export type GetThresholdsResponse = Array<AccessThreshold>;
 
-export type GetAccessThresholdsError = ExceptionDetail;
+export type GetThresholdsError = ExceptionDetail;
 
 export type PingResponse = string;
 

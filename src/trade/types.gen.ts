@@ -126,15 +126,15 @@ export type Bot = {
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at: number;
   /**
    * Timestamp of last update
    */
-  updated_at?: number;
+  updated_at: number;
   /**
    * Unique identifier for the resource
    */
-  id?: string;
+  id: string;
   /**
    * Name of the bot
    */
@@ -181,10 +181,6 @@ export type BotCreate = {
    * Initial allocation for the bot
    */
   allocation: number;
-  /**
-   * Status of the bot
-   */
-  status: BotStatus;
   /**
    * UID for the trading strategy used by the bot
    */
@@ -303,27 +299,27 @@ export type ExchangeKey = {
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at: number;
   /**
    * Timestamp of last update
    */
-  updated_at?: number;
+  updated_at: number;
   /**
    * Unique identifier for the resource
    */
-  id?: string;
+  id: string;
   /**
    * Label for the API key
    */
   label: string;
   /**
-   * Whether the API key has been deleted.
-   */
-  deleted?: boolean;
-  /**
    * The exchange the API key is for.
    */
   exchange: Exchange;
+  /**
+   * Whether the API key has been deleted.
+   */
+  deleted?: boolean;
 };
 
 /**
@@ -453,6 +449,18 @@ export type FuturesBalance = {
  */
 export type FuturesTradingAction = {
   /**
+   * Timestamp of creation
+   */
+  created_at: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at: number;
+  /**
+   * Unique identifier for the resource
+   */
+  id: string;
+  /**
    * Leverage to use for futures trades. Default is 1.
    */
   leverage?: number;
@@ -461,21 +469,9 @@ export type FuturesTradingAction = {
    */
   margin_mode?: MarginMode;
   /**
-   * Timestamp of creation
+   * UID for the execution of the order. A specific TP/SL execution ID of the opening order.
    */
-  created_at?: number;
-  /**
-   * Timestamp of last update
-   */
-  updated_at?: number;
-  /**
-   * Unique identifier for the resource
-   */
-  id?: string;
-  /**
-   * UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.
-   */
-  execution_id?: string | null;
+  execution_id?: string;
   /**
    * UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.
    */
@@ -509,11 +505,11 @@ export type FuturesTradingAction = {
    */
   allocation: string;
   /**
-   * Take profit targets. Can be set for open actions only. Multiple can be set.
+   * Take profit targets. Sorted ascending (for long actions) or descending (for short actions) by delta to market price
    */
   take_profit?: Array<TPSL> | null;
   /**
-   * Stop loss values. Can be set for open actions only. Multiple can be set.
+   * Stop loss values. Sorted ascending (for long actions) or descending (for short actions) by delta to market price
    */
   stop_loss?: Array<TPSL> | null;
   /**
@@ -523,7 +519,7 @@ export type FuturesTradingAction = {
 };
 
 /**
- * Model for sending futures trading actions
+ * Model for sending futures trading actions to the API
  */
 export type FuturesTradingActionCreate = {
   /**
@@ -605,15 +601,15 @@ export type Notification = {
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at: number;
   /**
    * Timestamp of last update
    */
-  updated_at?: number;
+  updated_at: number;
   /**
    * Unique identifier for the resource
    */
-  id?: string;
+  id: string;
   /**
    * Whether the notification has been marked as seen
    */
@@ -677,21 +673,41 @@ export type NotificationUpdate = {
 };
 
 /**
- * Response model for orders. All optional as the model is built step by step.
+ * Response model for orders. This is the model that is returned by the API and the database.
  */
 export type Order = {
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at: number;
   /**
    * Timestamp of last update
    */
-  updated_at?: number;
+  updated_at: number;
   /**
    * Unique identifier for the resource
    */
-  id?: string;
+  id: string;
+  /**
+   * Exchange name. Of type Exchange
+   */
+  exchange: Exchange;
+  /**
+   * Trading symbol on exchange
+   */
+  symbol: string;
+  /**
+   * Type of trading action. Of type TradingActionType
+   */
+  action_type: TradingActionType;
+  /**
+   * Trade status of the order. Of type OrderStatus
+   */
+  status: OrderStatus;
+  /**
+   * Market type of the order. Of type MarketType
+   */
+  market_type: MarketType;
   /**
    * UID for the trading action that placed the order
    */
@@ -705,7 +721,7 @@ export type Order = {
    */
   exchange_order_id?: string | null;
   /**
-   * UID for the position on the exchange
+   * UID for the position
    */
   position_id?: string | null;
   /**
@@ -725,29 +741,13 @@ export type Order = {
    */
   client_order_id?: string | null;
   /**
-   * Exchange name. Of type Exchange
-   */
-  exchange?: Exchange | null;
-  /**
-   * Trading symbol on exchange
-   */
-  symbol?: string | null;
-  /**
    * Common trading symbol
    */
   common_symbol?: string | null;
   /**
    * Price of the order
    */
-  price?: string | null;
-  /**
-   * Type of trading action. Of type TradingActionType
-   */
-  action_type?: TradingActionType | null;
-  /**
-   * Market type of the order. Of type MarketType
-   */
-  market_type?: MarketType | null;
+  price: string;
   /**
    * Margin mode of the order. Of type MarginMode
    */
@@ -757,23 +757,19 @@ export type Order = {
    */
   status_code?: ApiErrorIdentifier | null;
   /**
-   * Trade status of the order. Of type OrderStatus
-   */
-  status?: OrderStatus | null;
-  /**
    * Percentage of the order filled
    */
-  filled_perc?: string | null;
+  filled_perc?: string;
   /**
    * Quantity filled. Needed for pnl calculation. In the symbol's base currency.
    */
-  filled_qty?: string | null;
+  filled_qty?: string;
   /**
    * Quantity sent to the exchange. In the symbol's base currency.
    */
-  sent_qty?: string | null;
+  sent_qty?: string;
   /**
-   * Fees for the order
+   * Fees for the order as a negative value
    */
   fee?: string | null;
   /**
@@ -791,9 +787,13 @@ export type Order = {
    */
   pnl?: string | null;
   /**
-   * Timestamp of order creation on the exchange in seconds since epoch.
+   * Timestamp of order creation on the exchange in seconds since epoch. None if the order is not placed.
    */
   order_time?: number | null;
+  /**
+   * Whether the order is a lost order. These are orders that are not filled and recognizable by us.
+   */
+  is_lost?: boolean | null;
 };
 
 /**
@@ -931,11 +931,11 @@ export type SpotBalance = {
   /**
    * Allocated balance for bots. Added on runtime.
    */
-  allocated?: number;
+  allocated?: number | null;
 };
 
 /**
- * Model for sending spot trading actions
+ * Model for sending spot trading actions to the API
  */
 export type SpotTradingActionCreate = {
   /**
@@ -995,15 +995,15 @@ export type Strategy = {
   /**
    * Timestamp of creation
    */
-  created_at?: number;
+  created_at: number;
   /**
    * Timestamp of last update
    */
-  updated_at?: number;
+  updated_at: number;
   /**
    * Unique identifier for the resource
    */
-  id?: string;
+  id: string;
   /**
    * Name of the strategy
    */
@@ -1094,17 +1094,17 @@ export type StrategyExchangeInfo = {
    */
   base_asset?: string;
   /**
-   * Minimum amount for the strategy on the exchange
+   * Minimum amount for the strategy on the exchange in the base asset.
    */
   min_amount: number;
   /**
-   * Maximum amount for the strategy on the exchange, default is 100 thousand
+   * Maximum amount for the strategy on the exchange in the base asset.
    */
   max_amount?: number;
 };
 
 /**
- * Strategy model for API update operations.
+ * Strategy model for API update operations. Fields cannot be unset.
  */
 export type StrategyUpdate = {
   /**
@@ -1144,7 +1144,7 @@ export type TPSL = {
   /**
    * Execution ID of the order.
    */
-  execution_id?: string | null;
+  execution_id?: string;
 };
 
 /**
@@ -1461,11 +1461,11 @@ export type GetBotsData = {
      */
     filter_value?: string | null;
     /**
-     * Whether to include deleted bots. Filter by status takes precedence over this.
+     * Whether to include deleted bots. Filter by status takes precedence over this. Defaults to True.
      */
     include_deleted?: boolean;
     /**
-     * Whether to validate the bots
+     * Whether to validate the bots. Defaults to True.
      */
     should_validate?: boolean;
     /**
@@ -1773,22 +1773,6 @@ export type DeleteNotificationData = {
 export type DeleteNotificationResponse = void;
 
 export type DeleteNotificationError = ExceptionDetail;
-
-export type GetTradeableExchangesResponse = Array<Exchange>;
-
-export type GetTradeableExchangesError = ExceptionDetail;
-
-export type GetPlannedExchangesResponse = Array<Exchange>;
-
-export type GetPlannedExchangesError = ExceptionDetail;
-
-export type GetBetaExchangesResponse = Array<Exchange>;
-
-export type GetBetaExchangesError = ExceptionDetail;
-
-export type GetAllExchangesResponse = Array<Exchange>;
-
-export type GetAllExchangesError = ExceptionDetail;
 
 export type GetExchangeInfosResponse = Array<ExchangeInfo>;
 

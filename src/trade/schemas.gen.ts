@@ -200,6 +200,9 @@ export const BotSchema = {
   type: "object",
   required: [
     "user_id",
+    "created_at",
+    "updated_at",
+    "id",
     "name",
     "allocation",
     "status",
@@ -223,10 +226,6 @@ export const BotCreateSchema = {
       title: "Allocation",
       description: "Initial allocation for the bot",
     },
-    status: {
-      $ref: "#/components/schemas/BotStatus",
-      description: "Status of the bot",
-    },
     strategy_id: {
       type: "string",
       title: "Strategy Id",
@@ -239,7 +238,7 @@ export const BotCreateSchema = {
     },
   },
   type: "object",
-  required: ["name", "allocation", "status", "strategy_id", "api_key_id"],
+  required: ["name", "allocation", "strategy_id", "api_key_id"],
   title: "BotCreate",
   description: "Trading bot model for API create operations.",
 } as const;
@@ -441,19 +440,19 @@ export const ExchangeKeySchema = {
       title: "Label",
       description: "Label for the API key",
     },
+    exchange: {
+      $ref: "#/components/schemas/Exchange",
+      description: "The exchange the API key is for.",
+    },
     deleted: {
       type: "boolean",
       title: "Deleted",
       description: "Whether the API key has been deleted.",
       default: false,
     },
-    exchange: {
-      $ref: "#/components/schemas/Exchange",
-      description: "The exchange the API key is for.",
-    },
   },
   type: "object",
-  required: ["user_id", "label", "exchange"],
+  required: ["user_id", "created_at", "updated_at", "id", "label", "exchange"],
   title: "ExchangeKey",
   description:
     "Exchange API key model without sensitive credentials for safe read operations.",
@@ -681,18 +680,6 @@ export const FuturesBalanceSchema = {
 
 export const FuturesTradingActionSchema = {
   properties: {
-    leverage: {
-      type: "integer",
-      minimum: 1,
-      title: "Leverage",
-      description: "Leverage to use for futures trades. Default is 1.",
-      default: 1,
-    },
-    margin_mode: {
-      $ref: "#/components/schemas/MarginMode",
-      description: "Margin mode for futures trades. Default is isolated.",
-      default: "isolated",
-    },
     created_at: {
       type: "integer",
       title: "Created At",
@@ -708,18 +695,23 @@ export const FuturesTradingActionSchema = {
       title: "Id",
       description: "Unique identifier for the resource",
     },
+    leverage: {
+      type: "integer",
+      minimum: 1,
+      title: "Leverage",
+      description: "Leverage to use for futures trades. Default is 1.",
+      default: 1,
+    },
+    margin_mode: {
+      $ref: "#/components/schemas/MarginMode",
+      description: "Margin mode for futures trades. Default is isolated.",
+      default: "isolated",
+    },
     execution_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Execution Id",
       description:
-        "UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.",
+        "UID for the execution of the order. A specific TP/SL execution ID of the opening order.",
     },
     open_order_execution_id: {
       anyOf: [
@@ -799,7 +791,7 @@ export const FuturesTradingActionSchema = {
       ],
       title: "Take Profit",
       description:
-        "Take profit targets. Can be set for open actions only. Multiple can be set.",
+        "Take profit targets. Sorted ascending (for long actions) or descending (for short actions) by delta to market price",
     },
     stop_loss: {
       anyOf: [
@@ -815,7 +807,7 @@ export const FuturesTradingActionSchema = {
       ],
       title: "Stop Loss",
       description:
-        "Stop loss values. Can be set for open actions only. Multiple can be set.",
+        "Stop loss values. Sorted ascending (for long actions) or descending (for short actions) by delta to market price",
     },
     expiry_timestamp: {
       anyOf: [
@@ -833,6 +825,9 @@ export const FuturesTradingActionSchema = {
   },
   type: "object",
   required: [
+    "created_at",
+    "updated_at",
+    "id",
     "action_type",
     "market_type",
     "strategy_id",
@@ -985,7 +980,7 @@ export const FuturesTradingActionCreateSchema = {
   type: "object",
   required: ["action_type", "strategy_id", "symbol", "allocation"],
   title: "FuturesTradingActionCreate",
-  description: "Model for sending futures trading actions",
+  description: "Model for sending futures trading actions to the API",
 } as const;
 
 export const MarginModeSchema = {
@@ -1051,7 +1046,15 @@ export const NotificationSchema = {
     },
   },
   type: "object",
-  required: ["user_id", "identifier", "level", "type"],
+  required: [
+    "user_id",
+    "created_at",
+    "updated_at",
+    "id",
+    "identifier",
+    "level",
+    "type",
+  ],
   title: "Notification",
   description: "Notification model for read operations.",
 } as const;
@@ -1140,6 +1143,27 @@ export const OrderSchema = {
       title: "Id",
       description: "Unique identifier for the resource",
     },
+    exchange: {
+      $ref: "#/components/schemas/Exchange",
+      description: "Exchange name. Of type Exchange",
+    },
+    symbol: {
+      type: "string",
+      title: "Symbol",
+      description: "Trading symbol on exchange",
+    },
+    action_type: {
+      $ref: "#/components/schemas/TradingActionType",
+      description: "Type of trading action. Of type TradingActionType",
+    },
+    status: {
+      $ref: "#/components/schemas/OrderStatus",
+      description: "Trade status of the order. Of type OrderStatus",
+    },
+    market_type: {
+      $ref: "#/components/schemas/MarketType",
+      description: "Market type of the order. Of type MarketType",
+    },
     trading_action_id: {
       anyOf: [
         {
@@ -1186,7 +1210,7 @@ export const OrderSchema = {
         },
       ],
       title: "Position Id",
-      description: "UID for the position on the exchange",
+      description: "UID for the position",
     },
     api_key_id: {
       anyOf: [
@@ -1236,29 +1260,6 @@ export const OrderSchema = {
       title: "Client Order Id",
       description: "Client order ID",
     },
-    exchange: {
-      anyOf: [
-        {
-          $ref: "#/components/schemas/Exchange",
-        },
-        {
-          type: "null",
-        },
-      ],
-      description: "Exchange name. Of type Exchange",
-    },
-    symbol: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Symbol",
-      description: "Trading symbol on exchange",
-    },
     common_symbol: {
       anyOf: [
         {
@@ -1272,38 +1273,9 @@ export const OrderSchema = {
       description: "Common trading symbol",
     },
     price: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Price",
       description: "Price of the order",
-    },
-    action_type: {
-      anyOf: [
-        {
-          $ref: "#/components/schemas/TradingActionType",
-        },
-        {
-          type: "null",
-        },
-      ],
-      description: "Type of trading action. Of type TradingActionType",
-    },
-    market_type: {
-      anyOf: [
-        {
-          $ref: "#/components/schemas/MarketType",
-        },
-        {
-          type: "null",
-        },
-      ],
-      description: "Market type of the order. Of type MarketType",
     },
     margin_mode: {
       anyOf: [
@@ -1327,54 +1299,25 @@ export const OrderSchema = {
       ],
       description: "API error identifier. Of type ApiErrorIdentifier",
     },
-    status: {
-      anyOf: [
-        {
-          $ref: "#/components/schemas/OrderStatus",
-        },
-        {
-          type: "null",
-        },
-      ],
-      description: "Trade status of the order. Of type OrderStatus",
-    },
     filled_perc: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Filled Perc",
       description: "Percentage of the order filled",
+      default: "0",
     },
     filled_qty: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Filled Qty",
       description:
         "Quantity filled. Needed for pnl calculation. In the symbol's base currency.",
+      default: "0",
     },
     sent_qty: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Sent Qty",
       description:
         "Quantity sent to the exchange. In the symbol's base currency.",
+      default: "0",
     },
     fee: {
       anyOf: [
@@ -1386,7 +1329,7 @@ export const OrderSchema = {
         },
       ],
       title: "Fee",
-      description: "Fees for the order",
+      description: "Fees for the order as a negative value",
     },
     leverage: {
       anyOf: [
@@ -1430,13 +1373,37 @@ export const OrderSchema = {
       ],
       title: "Order Time",
       description:
-        "Timestamp of order creation on the exchange in seconds since epoch.",
+        "Timestamp of order creation on the exchange in seconds since epoch. None if the order is not placed.",
+    },
+    is_lost: {
+      anyOf: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Is Lost",
+      description:
+        "Whether the order is a lost order. These are orders that are not filled and recognizable by us.",
     },
   },
   type: "object",
+  required: [
+    "created_at",
+    "updated_at",
+    "id",
+    "exchange",
+    "symbol",
+    "action_type",
+    "status",
+    "market_type",
+    "price",
+  ],
   title: "Order",
   description:
-    "Response model for orders. All optional as the model is built step by step.",
+    "Response model for orders. This is the model that is returned by the API and the database.",
 } as const;
 
 export const OrderStatusSchema = {
@@ -1664,10 +1631,16 @@ export const SpotBalanceSchema = {
       description: "Frozen funds not available for use",
     },
     allocated: {
-      type: "number",
+      anyOf: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Allocated",
       description: "Allocated balance for bots. Added on runtime.",
-      default: 0,
     },
   },
   type: "object",
@@ -1805,7 +1778,7 @@ export const SpotTradingActionCreateSchema = {
   type: "object",
   required: ["action_type", "strategy_id", "symbol", "allocation"],
   title: "SpotTradingActionCreate",
-  description: "Model for sending spot trading actions",
+  description: "Model for sending spot trading actions to the API",
 } as const;
 
 export const StrategySchema = {
@@ -1887,6 +1860,9 @@ export const StrategySchema = {
   },
   type: "object",
   required: [
+    "created_at",
+    "updated_at",
+    "id",
     "name",
     "description",
     "exchanges",
@@ -1993,13 +1969,14 @@ export const StrategyExchangeInfoSchema = {
     min_amount: {
       type: "integer",
       title: "Min Amount",
-      description: "Minimum amount for the strategy on the exchange",
+      description:
+        "Minimum amount for the strategy on the exchange in the base asset.",
     },
     max_amount: {
       type: "integer",
       title: "Max Amount",
       description:
-        "Maximum amount for the strategy on the exchange, default is 100 thousand ",
+        "Maximum amount for the strategy on the exchange in the base asset.",
       default: 100000,
     },
   },
@@ -2079,7 +2056,8 @@ export const StrategyUpdateSchema = {
   },
   type: "object",
   title: "StrategyUpdate",
-  description: "Strategy model for API update operations.",
+  description:
+    "Strategy model for API update operations. Fields cannot be unset.",
 } as const;
 
 export const TPSLSchema = {
@@ -2097,14 +2075,7 @@ export const TPSLSchema = {
         "Percentage of the open order to sell. All allocations must sum up to 1. Use this allocation again when closing the order.",
     },
     execution_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
+      type: "string",
       title: "Execution Id",
       description: "Execution ID of the order.",
     },

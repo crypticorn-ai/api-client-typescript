@@ -104,14 +104,6 @@ import type {
   DeleteNotificationData,
   DeleteNotificationError,
   DeleteNotificationResponse,
-  GetTradeableExchangesError,
-  GetTradeableExchangesResponse,
-  GetPlannedExchangesError,
-  GetPlannedExchangesResponse,
-  GetBetaExchangesError,
-  GetBetaExchangesResponse,
-  GetAllExchangesError,
-  GetAllExchangesResponse,
   GetExchangeInfosError,
   GetExchangeInfosResponse,
   PingError,
@@ -211,7 +203,7 @@ export function createClient(
 
   /**
    * Get Bots Orders
-   * Get all orders for all bots of the user
+   * Get all orders for all bots of the user. Default sort is `created_at` and default order is `desc`.
    */
   const getBotsOrders = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetBotsOrdersData, ThrowOnError>,
@@ -228,7 +220,7 @@ export function createClient(
 
   /**
    * Get Bot Orders
-   * Get all orders for a bot of the user
+   * Get all orders for a bot of the user. Default sort is `created_at` and default order is `desc`.
    */
   const getBotOrders = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<GetBotOrdersData, ThrowOnError>,
@@ -279,6 +271,7 @@ export function createClient(
 
   /**
    * Get Bots
+   * Returns all bots for the user. Default sort is by created_at, descending. Deleted bots are included by default.
    */
   const getBots = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetBotsData, ThrowOnError>,
@@ -312,6 +305,7 @@ export function createClient(
 
   /**
    * Get Bot
+   * Returns a bot for the user.
    */
   const getBot = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<GetBotData, ThrowOnError>,
@@ -615,6 +609,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Get Notifications
    * Get all notifications for the authenticated user
    */
@@ -632,6 +627,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Create Notification
    * Create a new notification
    */
@@ -649,6 +645,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Update Notifications
    * Bulk update notifications
    */
@@ -666,6 +663,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Delete Notifications
    * Delete all notifications for the authenticated user
    */
@@ -683,6 +681,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Update Notification
    * Update a notification's viewed status
    */
@@ -700,6 +699,7 @@ export function createClient(
   };
 
   /**
+   * @deprecated
    * Delete Notification
    * Delete a notification
    */
@@ -713,81 +713,6 @@ export function createClient(
     >({
       ...options,
       url: "/notifications/{id}",
-    });
-  };
-
-  /**
-   * @deprecated
-   * Get Tradeable Exchanges
-   * Returns a list of exchanges that are tradeable. Deprecated, use getExchangeInfo instead.
-   */
-  const getTradeableExchanges = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetTradeableExchangesResponse,
-      GetTradeableExchangesError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/exchanges/tradeable",
-    });
-  };
-
-  /**
-   * @deprecated
-   * Get Planned Exchanges
-   * Returns a list of exchanges that are planned to be added for trading.
-   * Deprecated, use getExchangeInfo instead.
-   */
-  const getPlannedExchanges = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetPlannedExchangesResponse,
-      GetPlannedExchangesError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/exchanges/planned",
-    });
-  };
-
-  /**
-   * @deprecated
-   * Get Beta Exchanges
-   * Returns a list of exchanges that are in beta testing.
-   * Deprecated, use getExchangeInfo instead.
-   */
-  const getBetaExchanges = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetBetaExchangesResponse,
-      GetBetaExchangesError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/exchanges/beta",
-    });
-  };
-
-  /**
-   * @deprecated
-   * Get All Exchanges
-   * Returns a list of all exchanges.
-   * Deprecated, use getExchangeInfo instead.
-   */
-  const getAllExchanges = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetAllExchangesResponse,
-      GetAllExchangesError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/exchanges",
     });
   };
 
@@ -877,10 +802,6 @@ export function createClient(
     deleteNotifications,
     updateNotification,
     deleteNotification,
-    getTradeableExchanges,
-    getPlannedExchanges,
-    getBetaExchanges,
-    getAllExchanges,
     getExchangeInfos,
     ping,
     getMetrics,

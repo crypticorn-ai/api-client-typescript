@@ -58,19 +58,17 @@ import type {
   GetInvoiceResponse,
   StripeWebhookStripeWebhookPostError,
   StripeWebhookStripeWebhookPostResponse,
+  GetAicPriceData,
   GetAicPriceError,
   GetAicPriceResponse,
-  GetTotalBalanceData,
-  GetTotalBalanceError,
-  GetTotalBalanceResponse,
   GetBalancesData,
   GetBalancesError,
   GetBalancesResponse,
-  GetAccessibleScopesData,
-  GetAccessibleScopesError,
-  GetAccessibleScopesResponse,
-  GetAccessThresholdsError,
-  GetAccessThresholdsResponse,
+  GetScopesInfoData,
+  GetScopesInfoError,
+  GetScopesInfoResponse,
+  GetThresholdsError,
+  GetThresholdsResponse,
   PingError,
   PingResponse,
   GetMetricsError,
@@ -145,7 +143,7 @@ export function createClient(
 
   /**
    * Get Product Usage
-   * Get the usage count of each product.
+   * Get the usage count of each product. Returns a list of tuples (product_id, usage_count).
    */
   const getProductUsage = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
@@ -420,7 +418,7 @@ export function createClient(
    * Return the current price of 1 AIC token in USD.
    */
   const getAicPrice = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+    options?: OptionsLegacyParser<GetAicPriceData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
       GetAicPriceResponse,
@@ -429,23 +427,6 @@ export function createClient(
     >({
       ...options,
       url: "/token/price",
-    });
-  };
-
-  /**
-   * Get Total Balance
-   * Get user's total AIC balance and staking information.
-   */
-  const getTotalBalance = <ThrowOnError extends boolean = false>(
-    options?: OptionsLegacyParser<GetTotalBalanceData, ThrowOnError>,
-  ) => {
-    return (options?.client ?? client).get<
-      GetTotalBalanceResponse,
-      GetTotalBalanceError,
-      ThrowOnError
-    >({
-      ...options,
-      url: "/access/balances/total",
     });
   };
 
@@ -468,31 +449,33 @@ export function createClient(
 
   /**
    * Get Accessible Scopes
-   * Get all scopes the user has access to. Checks allowlist, subscriptions, and AIC balance in connected wallets and staking pools.
+   * Core endpoint: Returns all access scopes a user has (currently or in the last 7 days), and detailed info for each access method.
+   * - `scopes`: List of currently active scopes (user has access right now).
+   * - `info`: List of all access records (active and recently expired), for allowlist, subscription, and balance-based access.
    */
-  const getAccessibleScopes = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetAccessibleScopesData, ThrowOnError>,
+  const getScopesInfo = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<GetScopesInfoData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetAccessibleScopesResponse,
-      GetAccessibleScopesError,
+      GetScopesInfoResponse,
+      GetScopesInfoError,
       ThrowOnError
     >({
       ...options,
-      url: "/access/scopes",
+      url: "/access/scopes/info",
     });
   };
 
   /**
-   * Get Access Thresholds
+   * Get Thresholds
    * Get the access thresholds for the scopes.
    */
-  const getAccessThresholds = <ThrowOnError extends boolean = false>(
+  const getThresholds = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetAccessThresholdsResponse,
-      GetAccessThresholdsError,
+      GetThresholdsResponse,
+      GetThresholdsError,
       ThrowOnError
     >({
       ...options,
@@ -555,10 +538,9 @@ export function createClient(
     getInvoice,
     stripeWebhookStripeWebhookPost,
     getAicPrice,
-    getTotalBalance,
     getBalances,
-    getAccessibleScopes,
-    getAccessThresholds,
+    getScopesInfo,
+    getThresholds,
     ping,
     getMetrics,
   };
