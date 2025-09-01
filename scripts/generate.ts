@@ -31,7 +31,6 @@ if (!environment || !environments.includes(environment)) {
   environments.forEach((e) => console.error(`  - ${e}`));
   process.exit(1);
 }
-const url = args["url"];
 const host =
   environment === "local"
     ? "http://localhost"
@@ -45,7 +44,7 @@ async function main() {
   try {
     // get path from args
     // @ts-ignore
-    const path = `${url || `${host}/v1/${service}/openapi.json`}`;
+    const path = `${host}/v1/${service}/openapi.json`;
     const res = await createClient({
       // @ts-ignore
       client: "@hey-api/client-fetch",
