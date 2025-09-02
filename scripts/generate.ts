@@ -16,6 +16,7 @@ const services = [
   "metrics",
   "hive",
   "dex",
+  "notification",
 ];
 if (!service || !services.includes(service)) {
   console.error(`Invalid service: ${service}`);
