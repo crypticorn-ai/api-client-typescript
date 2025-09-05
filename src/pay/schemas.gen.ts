@@ -498,7 +498,9 @@ export const InvoiceSchema = {
       description: "The ID of the coupon",
     },
     provider: {
-      $ref: "#/components/schemas/Provider",
+      type: "string",
+      enum: ["now", "staking", "stripe"],
+      title: "Provider",
       description: "The provider the invoice is created with",
     },
     address: {
@@ -583,7 +585,9 @@ export const InvoiceCreateSchema = {
       description: "The ID of the coupon",
     },
     provider: {
-      $ref: "#/components/schemas/Provider",
+      type: "string",
+      enum: ["now", "staking", "stripe"],
+      title: "Provider",
       description: "The provider the invoice is created with",
     },
     address: {
@@ -808,14 +812,28 @@ export const PaymentSchema = {
       description: "Payment currency",
     },
     status: {
-      $ref: "#/components/schemas/PaymentStatus",
+      type: "string",
+      enum: [
+        "waiting",
+        "processing",
+        "paid",
+        "partially_paid",
+        "refunded",
+        "failed",
+        "cancelled",
+      ],
+      title: "Status",
+      description: "Payment status",
     },
     provider: {
-      $ref: "#/components/schemas/Provider",
+      type: "string",
+      enum: ["now", "staking", "stripe"],
+      title: "Provider",
       description: "Payment provider",
     },
     market: {
       type: "string",
+      enum: ["crypto", "fiat"],
       title: "Market",
       description: "Payment market",
     },
@@ -853,21 +871,6 @@ export const PaymentSchema = {
   ],
   title: "Payment",
   description: "Combined payment model across all services",
-} as const;
-
-export const PaymentStatusSchema = {
-  type: "string",
-  enum: [
-    "waiting",
-    "processing",
-    "paid",
-    "partially_paid",
-    "refunded",
-    "failed",
-    "cancelled",
-  ],
-  title: "PaymentStatus",
-  description: "Payment status",
 } as const;
 
 export const ProductSchema = {
@@ -1131,13 +1134,6 @@ export const ProductUpdateSchema = {
   type: "object",
   title: "ProductUpdate",
   description: "Model for updating a product",
-} as const;
-
-export const ProviderSchema = {
-  type: "string",
-  enum: ["now", "staking", "stripe"],
-  title: "Provider",
-  description: "Available payment providers",
 } as const;
 
 export const ScopeSchema = {

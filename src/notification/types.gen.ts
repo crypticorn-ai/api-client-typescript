@@ -94,6 +94,8 @@ export type Broadcast = {
         | "order_completion"
         | "trading_agent_execution_alert"
         | "otp_code"
+        | "subscription_expiring"
+        | "subscription_expired"
       ),
       boolean,
     ]
@@ -129,6 +131,8 @@ export type BroadcastCreate = {
         | "order_completion"
         | "trading_agent_execution_alert"
         | "otp_code"
+        | "subscription_expiring"
+        | "subscription_expired"
       ),
       boolean,
     ]
@@ -164,6 +168,8 @@ export type BroadcastUpdate = {
         | "order_completion"
         | "trading_agent_execution_alert"
         | "otp_code"
+        | "subscription_expiring"
+        | "subscription_expired"
       ),
       boolean,
     ]
@@ -236,7 +242,9 @@ export type DashboardNotification = {
     | "new_dex_ai_call_incognito"
     | "order_completion"
     | "trading_agent_execution_alert"
-    | "otp_code";
+    | "otp_code"
+    | "subscription_expiring"
+    | "subscription_expired";
   /**
    * Whether the notification has been marked as seen
    */
@@ -271,7 +279,9 @@ export type template_id =
   | "new_dex_ai_call_incognito"
   | "order_completion"
   | "trading_agent_execution_alert"
-  | "otp_code";
+  | "otp_code"
+  | "subscription_expiring"
+  | "subscription_expired";
 
 export type DashboardNotificationUpdate = {
   /**
@@ -295,7 +305,9 @@ export type NotificationCreate = {
     | "new_dex_ai_call_incognito"
     | "order_completion"
     | "trading_agent_execution_alert"
-    | "otp_code";
+    | "otp_code"
+    | "subscription_expiring"
+    | "subscription_expired";
   /**
    * Variables for the template
    */
@@ -322,7 +334,9 @@ export type template =
   | "new_dex_ai_call_incognito"
   | "order_completion"
   | "trading_agent_execution_alert"
-  | "otp_code";
+  | "otp_code"
+  | "subscription_expiring"
+  | "subscription_expired";
 
 export type PaginatedResponse_DashboardNotification_ = {
   data: Array<DashboardNotification>;
@@ -367,7 +381,9 @@ export type Template = {
     | "new_dex_ai_call_incognito"
     | "order_completion"
     | "trading_agent_execution_alert"
-    | "otp_code";
+    | "otp_code"
+    | "subscription_expiring"
+    | "subscription_expired";
   /**
    * Name of the template
    */
@@ -402,7 +418,9 @@ export type identifier =
   | "new_dex_ai_call_incognito"
   | "order_completion"
   | "trading_agent_execution_alert"
-  | "otp_code";
+  | "otp_code"
+  | "subscription_expiring"
+  | "subscription_expired";
 
 export type UITemplate = {
   /**
@@ -464,6 +482,8 @@ export type UserSetting = {
         | "order_completion"
         | "trading_agent_execution_alert"
         | "otp_code"
+        | "subscription_expiring"
+        | "subscription_expired"
       ),
       boolean,
     ]
@@ -495,6 +515,8 @@ export type UserSettingCreate = {
         | "order_completion"
         | "trading_agent_execution_alert"
         | "otp_code"
+        | "subscription_expiring"
+        | "subscription_expired"
       ),
       boolean,
     ]
@@ -522,6 +544,8 @@ export type UserSettingUpdate = {
         | "order_completion"
         | "trading_agent_execution_alert"
         | "otp_code"
+        | "subscription_expiring"
+        | "subscription_expired"
       ),
       boolean,
     ]
@@ -675,7 +699,9 @@ export type GetTemplateData = {
       | "new_dex_ai_call_incognito"
       | "order_completion"
       | "trading_agent_execution_alert"
-      | "otp_code";
+      | "otp_code"
+      | "subscription_expiring"
+      | "subscription_expired";
   };
 };
 

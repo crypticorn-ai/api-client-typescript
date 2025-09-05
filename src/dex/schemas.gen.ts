@@ -13,6 +13,7 @@ export const ApiErrorIdentifierSchema = {
     "cancelled_open_order",
     "client_order_id_already_exists",
     "invalid_content_type",
+    "coupon_invalid",
     "delete_bot_error",
     "exchange_http_request_error",
     "exchange_invalid_parameter",
@@ -143,12 +144,6 @@ export const ExceptionDetailSchema = {
   required: ["code", "type", "level", "status_code"],
   title: "ExceptionDetail",
   description: "Exception details returned to the client.",
-} as const;
-
-export const LogLevelSchema = {
-  type: "string",
-  enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-  title: "LogLevel",
 } as const;
 
 export const PaginatedResponse_SignalWithToken_Schema = {
