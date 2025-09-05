@@ -1,6 +1,6 @@
 {
   "name": "@crypticorn-ai/api-client",
-  "version": "2.18.0-beta.0",
+  "version": "2.18.0-beta.1",
   "description": "Crypticorn API Client for Typescript",
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.57.1",
+    "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
     "@trpc/server": "^10.45.2",
     "@types/cookie-parser": "^1.4.7",

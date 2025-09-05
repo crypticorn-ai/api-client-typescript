@@ -5,7 +5,8 @@
     },
     {
       "name": "dev",
-      "prerelease": "beta"
+      "prerelease": "beta",
+      "channel": "beta"
     }
   ],
   "tagFormat": "v${version}",
@@ -30,6 +31,12 @@
     ],
     [
       "@semantic-release/git"
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepare": "pnpm run build"
+      }
     ]
   ]
 }
