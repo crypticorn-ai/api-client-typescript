@@ -2,6 +2,11 @@
   "name": "@crypticorn-ai/api-client",
   "version": "2.18.0-beta.1",
   "description": "Crypticorn API Client for Typescript",
+  "files": [
+    "dist/**/*",
+    "package.json",
+    "README.md"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/crypticorn-ai/api-client-typescript"
