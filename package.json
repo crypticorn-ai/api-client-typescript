@@ -1,6 +1,6 @@
 {
   "name": "@crypticorn-ai/api-client",
-  "version": "2.18.0-beta.1",
+  "version": "2.18.0-beta.2",
   "description": "Crypticorn API Client for Typescript",
   "files": [
     "dist/**/*",
