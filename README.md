@@ -1,0 +1,79 @@
+![Crypticorn Logo](https://crypticorn-public.s3.eu-west-1.amazonaws.com/logo-full.svg)
+
+## What is Crypticorn?
+
+Crypticorn is at the forefront of cutting-edge crypto trading with Machine Learning.
+
+Use this API Client to access valuable data sources, contribute to the Hive AI - a community driven AI Meta Model for predicting the
+crypto market - and programmatically interact with the entire Crypticorn ecosystem.
+
+## Installation
+
+You need Node.js 18+ installed to be able to use this library.
+
+You can install the latest stable version from npm:
+```bash
+npm install @crypticorn-ai/api-client
+```
+
+If you want the latest beta version, run:
+```bash
+npm install @crypticorn-ai/api-client@beta
+```
+
+## Structure
+
+Our API is available as a TypeScript/JavaScript SDK with full TypeScript support. The main entry point is:
+
+- `ApiClient` - Main client for all API operations
+
+```typescript
+import { ApiClient } from '@crypticorn-ai/api-client'
+```
+
+The client serves as the central interface for API operations and provides access to multiple API wrappers corresponding to our micro services. These are structured as follows:
+
+- `auth` - Authentication and user management
+- `trade` - Trading operations and bot management
+- `klines` - Market data and candlestick information
+- `metrics` - Market metrics and analytics
+- `hive` - Hive AI community predictions
+- `dex` - DEX trading and analysis
+- `pay` - Payment and subscription management
+- `notification` - Notification services
+
+You can either explore each API by clicking through the library or checkout the [API Documentation](https://docs.crypticorn.com/api).
+
+## Versioning
+
+The SDK major version tracks the highest supported API version. A new API major bump always triggers a new major release of this package. Minor and patch versions only add non-breaking changes. We follow [Semantic Versioning](https://semver.org/).
+
+| SDK Version | Auth | Trade | Klines | Metrics | Hive | Dex | Pay | Notification |
+| ----------- | ---- | ----- | ------ | ------- | ---- | --- | --- | ------------ |
+| v2.x        | v1   | v1    | v1     | v1      | v1   | v1  | v1  | v1           |
+
+## Authentication
+
+To get started, [create an API key in your dashboard](https://app.crypticorn.com/account/settings).
+
+The scopes you can assign, resemble the [package structure](#structure). The first part defines if the scopes is for reading or writing a resource, the second matches the API, the third the ROUTER being used. `read` scopes gives access to GET, `write` to PUT, PATCH, POST, DELETE endpoints.
+
+There are scopes which don't follow this structure. Those are either scopes that must be purchased (e.g. `read:predictions`), give access to endpoints existing in all APIs (e.g. `read:admin`) or provide access to an entire service (e.g. `read:sentiment`).
+
+## Basic Usage
+
+You can use the client with the `createClient` function and configure it as needed:
+
+```typescript
+import { createClient } from '@crypticorn-ai/api-client'
+
+const client = createClient({
+  accessToken: 'your-access-token',
+  refreshToken: 'your-refresh-token', // optional
+  environment: 'prod', // 'prod' | 'dev' | 'local'
+  apiRoot: 'https://api.crypticorn.com' // optional, defaults to environment-based URL
+})
+
+// Make API calls
+const balances = await client.pay.getBalances()
+```

@@ -37,3 +37,7 @@ export { AuthSchemas, AuthTypes };
 import * as DexSchemas from "./dex/schemas.gen";
 import * as DexTypes from "./dex/types.gen";
 export { DexSchemas, DexTypes };
+// notification
+import * as NotificationSchemas from "./notification/schemas.gen";
+import * as NotificationTypes from "./notification/types.gen";
+export { NotificationSchemas, NotificationTypes };

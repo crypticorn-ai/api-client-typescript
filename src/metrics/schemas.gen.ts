@@ -13,6 +13,7 @@ export const ApiErrorIdentifierSchema = {
     "cancelled_open_order",
     "client_order_id_already_exists",
     "invalid_content_type",
+    "coupon_invalid",
     "delete_bot_error",
     "exchange_http_request_error",
     "exchange_invalid_parameter",
@@ -233,12 +234,6 @@ export const InternalExchangeSchema = {
   enum: ["kucoin", "bingx", "binance", "bybit", "hyperliquid", "bitget"],
   title: "InternalExchange",
   description: "All exchanges we are using, including public (Exchange)",
-} as const;
-
-export const LogLevelSchema = {
-  type: "string",
-  enum: ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-  title: "LogLevel",
 } as const;
 
 export const MarketTypeSchema = {

@@ -294,7 +294,7 @@ export type Invoice = {
   /**
    * The provider the invoice is created with
    */
-  provider: Provider;
+  provider: "now" | "staking" | "stripe";
   /**
    * The address of the user. Only used for staking invoices.
    */
@@ -318,6 +318,11 @@ export type Invoice = {
 };
 
 /**
+ * The provider the invoice is created with
+ */
+export type provider = "now" | "staking" | "stripe";
+
+/**
  * Model for creating an invoice
  */
 export type InvoiceCreate = {
@@ -332,7 +337,7 @@ export type InvoiceCreate = {
   /**
    * The provider the invoice is created with
    */
-  provider: Provider;
+  provider: "now" | "staking" | "stripe";
   /**
    * The address of the user. Only used for staking invoices.
    */
@@ -435,15 +440,25 @@ export type Payment = {
    * Payment currency
    */
   currency: string;
-  status: PaymentStatus;
+  /**
+   * Payment status
+   */
+  status:
+    | "waiting"
+    | "processing"
+    | "paid"
+    | "partially_paid"
+    | "refunded"
+    | "failed"
+    | "cancelled";
   /**
    * Payment provider
    */
-  provider: Provider;
+  provider: "now" | "staking" | "stripe";
   /**
    * Payment market
    */
-  market: string;
+  market: "crypto" | "fiat";
   /**
    * Payment updated at timestamp in seconds
    */
@@ -463,7 +478,7 @@ export type Payment = {
 /**
  * Payment status
  */
-export type PaymentStatus =
+export type status =
   | "waiting"
   | "processing"
   | "paid"
@@ -471,6 +486,11 @@ export type PaymentStatus =
   | "refunded"
   | "failed"
   | "cancelled";
+
+/**
+ * Payment market
+ */
+export type market = "crypto" | "fiat";
 
 /**
  * Model for reading a product
@@ -589,11 +609,6 @@ export type ProductUpdate = {
    */
   images?: Array<string> | null;
 };
-
-/**
- * Available payment providers
- */
-export type Provider = "now" | "staking" | "stripe";
 
 /**
  * The permission scopes for the API.

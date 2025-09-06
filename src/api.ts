@@ -15,6 +15,7 @@ import { createClient as createKlinesClient } from "./klines";
 import { createClient as createSentimentClient } from "./sentiment";
 import { createClient as createMetricsClient } from "./metrics";
 import { createClient as createDexClient } from "./dex";
+import { createClient as createNotificationClient } from "./notification";
 
 export const environments: Record<EnvironmentType, string> = {
   // local development
@@ -134,6 +135,7 @@ export const createClient = ({
   sentiment: ReturnType<typeof createSentimentClient>;
   metrics: ReturnType<typeof createMetricsClient>;
   dex: ReturnType<typeof createDexClient>;
+  notification: ReturnType<typeof createNotificationClient>;
 } => {
   if (!apiRoot) {
     const result = getHosts({
@@ -168,6 +170,7 @@ export const createClient = ({
   const sentiment = createSentimentClient(apiRoot + "/sentiment", headers, rest.fetch);
   const metrics = createMetricsClient(apiRoot + "/metrics", headers, rest.fetch);
   const dex = createDexClient(apiRoot + "/dex", headers, rest.fetch);
+  const notification = createNotificationClient(apiRoot + "/notification", headers, rest.fetch);
   return {
     auth,
     token,
@@ -179,6 +182,7 @@ export const createClient = ({
     sentiment,
     metrics,
     dex,
+    notification,
   };
 };
 

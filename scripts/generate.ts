@@ -7,15 +7,14 @@ import minimist from "minimist";
 const args = minimist(process.argv.slice(2));
 const service = args["service"];
 const services = [
-  "klines",
   "trade",
   "pay",
   "auth",
-  "token",
-  "sentiment",
   "metrics",
   "hive",
   "dex",
+  "notification",
+  "all",
 ];
 if (!service || !services.includes(service)) {
   console.error(`Invalid service: ${service}`);
@@ -31,7 +30,6 @@ if (!environment || !environments.includes(environment)) {
   environments.forEach((e) => console.error(`  - ${e}`));
   process.exit(1);
 }
-const url = args["url"];
 const host =
   environment === "local"
     ? "http://localhost"
@@ -41,11 +39,11 @@ const host =
 
 // if you run this script the first time for a service, comment out lines 20-62 (might not be needed)
 
-async function main() {
+async function generateForService(serviceName: string) {
   try {
     // get path from args
     // @ts-ignore
-    const path = `${url || `${host}/v1/${service}/openapi.json`}`;
+    const path = `${host}/v1/${serviceName}/openapi.json`;
     const res = await createClient({
       // @ts-ignore
       client: "@hey-api/client-fetch",
@@ -53,18 +51,18 @@ async function main() {
         path,
       },
       output: {
-        path: `src/${service}`,
+        path: `src/${serviceName}`,
       },
     }).catch((err) => {
       console.error("Could not find openapi.json file at path:", path);
-      process.exit(1);
+      throw err;
     });
 
     // @ts-ignore
     const ops = res[0].operations.map((op) => op.name);
 
     // read sdk.gen.ts
-    let sdkGen = await fs.readFile(`src/${service}/sdk.gen.ts`, "utf8");
+    let sdkGen = await fs.readFile(`src/${serviceName}/sdk.gen.ts`, "utf8");
 
     // remove line export const client = createClient(createConfig());
     sdkGen = sdkGen.replace(
@@ -110,13 +108,13 @@ ${ops.map((op) => `    ${op},`).join("\n")}
 }
 `;
 
-    await fs.writeFile(`src/${service}/sdk.gen.ts`, tsTemplate);
+    await fs.writeFile(`src/${serviceName}/sdk.gen.ts`, tsTemplate);
 
     // format files with prettier
     const files = [
-      `src/${service}/sdk.gen.ts`,
-      `src/${service}/schemas.gen.ts`,
-      `src/${service}/types.gen.ts`,
+      `src/${serviceName}/sdk.gen.ts`,
+      `src/${serviceName}/schemas.gen.ts`,
+      `src/${serviceName}/types.gen.ts`,
     ];
     for (const file of files) {
       const formatted = await prettier.format(await fs.readFile(file, "utf8"), {
@@ -125,7 +123,25 @@ ${ops.map((op) => `    ${op},`).join("\n")}
       await fs.writeFile(file, formatted);
     }
 
-    console.log("Client generation complete!");
+    console.log(`Client generation complete for ${serviceName}!`);
+  } catch (error) {
+    console.error(`Error generating client for ${serviceName}:`, error);
+    throw error;
+  }
+}
+
+async function main() {
+  try {
+    if (service === "all") {
+      // Generate for all services except "all"
+      const servicesToGenerate = services.filter(s => s !== "all");
+      for (const serviceName of servicesToGenerate) {
+        console.log(`Generating client for ${serviceName}...`);
+        await generateForService(serviceName);
+      }
+    } else {
+      await generateForService(service);
+    }
     
     // Run build command
     console.log("Running build...");
