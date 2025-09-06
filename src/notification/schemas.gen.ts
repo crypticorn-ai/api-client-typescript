@@ -49,7 +49,7 @@ export const BroadcastSchema = {
       type: "array",
       title: "Template Preferences",
       description:
-        "List of templates and whether the user wants to receive the notification",
+        "List of templates and whether the broadcast sends the notification for",
     },
     discord_webhook_url: {
       type: "string",
@@ -109,7 +109,7 @@ export const BroadcastCreateSchema = {
       type: "array",
       title: "Template Preferences",
       description:
-        "List of templates and whether the user wants to receive the notification",
+        "List of templates and whether the broadcast sends the notification for",
     },
     discord_webhook_url: {
       type: "string",
@@ -131,38 +131,45 @@ export const BroadcastCreateSchema = {
 export const BroadcastUpdateSchema = {
   properties: {
     template_preferences: {
-      items: {
-        prefixItems: [
-          {
-            type: "string",
-            enum: [
-              "subscription_predictions_welcome",
-              "subscription_dex_signals_welcome",
-              "subscription_combo_welcome",
-              "new_member",
-              "exchange_api_key_expiring",
-              "test",
-              "new_dex_ai_call",
-              "new_dex_ai_call_incognito",
-              "order_completion",
-              "trading_agent_execution_alert",
-              "otp_code",
-              "subscription_expiring",
-              "subscription_expired",
+      anyOf: [
+        {
+          items: {
+            prefixItems: [
+              {
+                type: "string",
+                enum: [
+                  "subscription_predictions_welcome",
+                  "subscription_dex_signals_welcome",
+                  "subscription_combo_welcome",
+                  "new_member",
+                  "exchange_api_key_expiring",
+                  "test",
+                  "new_dex_ai_call",
+                  "new_dex_ai_call_incognito",
+                  "order_completion",
+                  "trading_agent_execution_alert",
+                  "otp_code",
+                  "subscription_expiring",
+                  "subscription_expired",
+                ],
+              },
+              {
+                type: "boolean",
+              },
             ],
+            type: "array",
+            maxItems: 2,
+            minItems: 2,
           },
-          {
-            type: "boolean",
-          },
-        ],
-        type: "array",
-        maxItems: 2,
-        minItems: 2,
-      },
-      type: "array",
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Template Preferences",
       description:
-        "List of templates and whether the user wants to receive the notification",
+        "List of templates and whether the broadcast sends the notification for",
     },
     discord_webhook_url: {
       anyOf: [
@@ -190,7 +197,6 @@ export const BroadcastUpdateSchema = {
     },
   },
   type: "object",
-  required: ["template_preferences"],
   title: "BroadcastUpdate",
   description: "Update a broadcast",
 } as const;
@@ -486,14 +492,21 @@ export const TemplateSchema = {
       title: "Channels",
       description: "Channels to send the notification to for this template",
     },
-    unsubscribable: {
+    user_controllable: {
       type: "boolean",
-      title: "Unsubscribable",
-      description: "Whether the user can unsubscribe from the template",
+      title: "User Controllable",
+      description:
+        "Whether the user can enable/disable this notification template in their settings",
     },
   },
   type: "object",
-  required: ["identifier", "name", "variables", "channels", "unsubscribable"],
+  required: [
+    "identifier",
+    "name",
+    "variables",
+    "channels",
+    "user_controllable",
+  ],
   title: "Template",
 } as const;
 
@@ -565,7 +578,7 @@ export const UITemplateSchema = {
     },
   },
   type: "object",
-  required: ["title", "body", "imageUrl", "actions", "fields"],
+  required: ["title", "body"],
   title: "UITemplate",
 } as const;
 

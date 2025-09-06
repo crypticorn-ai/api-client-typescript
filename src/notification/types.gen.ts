@@ -78,7 +78,7 @@ export type Broadcast = {
    */
   updated_at: number;
   /**
-   * List of templates and whether the user wants to receive the notification
+   * List of templates and whether the broadcast sends the notification for
    */
   template_preferences: Array<
     [
@@ -115,7 +115,7 @@ export type Broadcast = {
  */
 export type BroadcastCreate = {
   /**
-   * List of templates and whether the user wants to receive the notification
+   * List of templates and whether the broadcast sends the notification for
    */
   template_preferences: Array<
     [
@@ -152,9 +152,9 @@ export type BroadcastCreate = {
  */
 export type BroadcastUpdate = {
   /**
-   * List of templates and whether the user wants to receive the notification
+   * List of templates and whether the broadcast sends the notification for
    */
-  template_preferences: Array<
+  template_preferences?: Array<
     [
       (
         | "subscription_predictions_welcome"
@@ -173,7 +173,7 @@ export type BroadcastUpdate = {
       ),
       boolean,
     ]
-  >;
+  > | null;
   /**
    * Discord webhook URL for the broadcast to be sent to
    */
@@ -399,9 +399,9 @@ export type Template = {
    */
   channels: Array<"email" | "telegram" | "discord" | "websocket" | "ui">;
   /**
-   * Whether the user can unsubscribe from the template
+   * Whether the user can enable/disable this notification template in their settings
    */
-  unsubscribable: boolean;
+  user_controllable: boolean;
 };
 
 /**
@@ -438,15 +438,15 @@ export type UITemplate = {
   /**
    * The image URL of the notification.
    */
-  imageUrl: string | null;
+  imageUrl?: string | null;
   /**
    * The actions of the notification.
    */
-  actions: Array<DashboardActionButton> | null;
+  actions?: Array<DashboardActionButton> | null;
   /**
    * The fields of the notification.
    */
-  fields: Array<DashboardField> | null;
+  fields?: Array<DashboardField> | null;
 };
 
 /**
