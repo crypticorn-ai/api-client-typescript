@@ -30,6 +30,14 @@ if (!environment || !environments.includes(environment)) {
   environments.forEach((e) => console.error(`  - ${e}`));
   process.exit(1);
 }
+const version = args["version"] || "v1";
+const versions = ["v1", "v2"];
+if (!version || !versions.includes(version)) {
+  console.error(`Invalid version: ${version}`);
+  console.error("Valid versions are:");
+  versions.forEach((v) => console.error(`  - ${v}`));
+  process.exit(1);
+}
 const host =
   environment === "local"
     ? "http://localhost"
@@ -43,7 +51,7 @@ async function generateForService(serviceName: string) {
   try {
     // get path from args
     // @ts-ignore
-    const path = `${host}/v1/${serviceName}/openapi.json`;
+    const path = `${host}/${version}/${serviceName}/openapi.json`;
     const res = await createClient({
       // @ts-ignore
       client: "@hey-api/client-fetch",
