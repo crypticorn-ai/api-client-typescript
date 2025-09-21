@@ -25,10 +25,10 @@ npm install @crypticorn-ai/api-client@beta
 
 Our API is available as a TypeScript/JavaScript SDK with full TypeScript support. The main entry point is:
 
-- `ApiClient` - Main client for all API operations
+- `AsyncClient` - Main client for all API operations
 
 ```typescript
-import { ApiClient } from '@crypticorn-ai/api-client'
+import { AsyncClient } from '@crypticorn-ai/api-client'
 ```
 
 The client serves as the central interface for API operations and provides access to multiple API wrappers corresponding to our micro services. These are structured as follows:
@@ -51,6 +51,8 @@ The SDK major version tracks the highest supported API version. A new API major 
 | SDK Version | Auth | Trade | Klines | Metrics | Hive | Dex | Pay | Notification |
 | ----------- | ---- | ----- | ------ | ------- | ---- | --- | --- | ------------ |
 | v2.x        | v1   | v1    | v1     | v1      | v1   | v1  | v1  | v1           |
+| v3.x        | v2   | v2    | v1     | v1      | v1   | v1  | v1  | v1           |
+
 
 ## Authentication
 
@@ -62,18 +64,33 @@ There are scopes which don't follow this structure. Those are either scopes that
 
 ## Basic Usage
 
-You can use the client with the `createClient` function and configure it as needed:
+You can create a client instance and configure it as needed:
 
 ```typescript
-import { createClient } from '@crypticorn-ai/api-client'
+import { AsyncClient } from '@crypticorn-ai/api-client'
 
-const client = createClient({
-  accessToken: 'your-access-token',
-  refreshToken: 'your-refresh-token', // optional
-  environment: 'prod', // 'prod' | 'dev' | 'local'
-  apiRoot: 'https://api.crypticorn.com' // optional, defaults to environment-based URL
+// Create client with API key (recommended)
+const client = new AsyncClient({
+  apiKey: 'your-api-key',
+})
+
+// Or create with JWT
+const client = new AsyncClient({
+  jwt: 'your-jwt-token',
 })
 
 // Make API calls
 const balances = await client.pay.getBalances()
+const trades = await client.trade.getOrders()
+```
+## Service Configuration
+
+You can configure individual services for testing or different environments:
+
+```typescript
+client.configure('trade', {
+  host: 'https://trade-api.example.com',
+  jwt: 'different-jwt-token'
+})
+```
 ```
