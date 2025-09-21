@@ -7,7 +7,6 @@ import {
   Trend,
 } from "./types";
 import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
-import { createClient as createTokenClient } from "@crypticorn-ai/token-service/dist/client";
 import { createClient as createHiveClient } from "./hive";
 import { createClient as createTradeClient } from "./trade";
 import { createClient as createPayClient } from "./pay";
@@ -126,7 +125,6 @@ export const createClient = ({
   fetch?: typeof fetch;
 }): {
   auth: ReturnType<typeof createAuthClient>;
-  token: ReturnType<typeof createTokenClient>;
   api: ReturnType<typeof createApiClient>;
   hive: ReturnType<typeof createHiveClient>;
   trade: ReturnType<typeof createTradeClient>;
@@ -153,7 +151,6 @@ export const createClient = ({
       : `accessToken=${accessToken}`,
     "Content-Type": "application/json",
   };
-  const token = createTokenClient(apiRoot + "/token", headers, rest.fetch);
   const auth = createAuthClient(apiRoot + "/auth/trpc", headers, rest.fetch);
   const api = createApiClient({
     accessToken,
@@ -173,7 +170,6 @@ export const createClient = ({
   const notification = createNotificationClient(apiRoot + "/notification", headers, rest.fetch);
   return {
     auth,
-    token,
     api,
     hive,
     trade,
