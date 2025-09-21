@@ -1,4 +1,7 @@
-export * from "./api";
+// Main client exports
+export { AsyncClient } from "./api";
+
+// Export types that users might need
 export * from "./types";
 // trade
 import * as TradeSchemas from "./trade/schemas.gen";

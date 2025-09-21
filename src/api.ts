@@ -1,11 +1,3 @@
-import {
-  DexProgress,
-  EconomicsNewsData,
-  EnvironmentType,
-  Kline,
-  Prediction,
-  Trend,
-} from "./types";
 import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
 import { createClient as createHiveClient } from "./hive";
 import { createClient as createTradeClient } from "./trade";
@@ -16,307 +8,190 @@ import { createClient as createMetricsClient } from "./metrics";
 import { createClient as createDexClient } from "./dex";
 import { createClient as createNotificationClient } from "./notification";
 
-export const environments: Record<EnvironmentType, string> = {
-  // local development
-  local: "localhost",
-  // development
-  dev: "api.crypticorn.dev",
-  // production
-  prod: "api.crypticorn.com",
-};
+// Internal types
+type ServiceName = 
+  | "hive" 
+  | "trade" 
+  | "klines" 
+  | "pay" 
+  | "metrics" 
+  | "auth" 
+  | "dex" 
+  | "notification";
 
-export function getHosts({
-  environment,
-  host = environments[environment],
-  version,
-}: {
-  environment: EnvironmentType;
-  host?: string;
-  version?: string;
-}) {
-  let apiRoot = `https://${host}/${version}`;
-  let wsRoot = `wss://${host}/${version}/ws`;
-
-  if (host.includes("localhost")) {
-    apiRoot = `http://${host}/${version}`;
-    wsRoot = `ws://${host}/${version}/ws`;
-  }
-
-  return { apiRoot, wsRoot };
+interface ClientConfig {
+  apiKey?: string;
+  jwt?: string;
+  baseUrl?: string;
+  fetch?: typeof fetch;
 }
 
-export async function createSocket({
-  accessToken,
-  wsRoot,
-  environment = "prod",
-  version = "v1",
-  host,
-  onMessage,
-  WebSocketImplementation = WebSocket,
-}: {
-  accessToken: string;
-  wsRoot?: string;
-  environment?: EnvironmentType;
-  version?: string;
-  host?: string;
-  onMessage: (data: Prediction) => void;
-  WebSocketImplementation?: typeof WebSocket;
-}) {
-  if (!wsRoot) {
-    const result = getHosts({
-      environment,
-      version,
-      host,
-    });
-    wsRoot = result.wsRoot;
-  }
-  const websocket = new WebSocketImplementation(wsRoot) as WebSocket;
+interface ServiceConfig {
+  host: string;
+  jwt?: string;
+  apiKey?: Record<string, string>;
+}
 
-  websocket.onopen = () => {
-    // Order is important
-    websocket.send(JSON.stringify({ type: "auth", token: accessToken }));
-    // websocket.send(JSON.stringify({ type: 'auth', api_key: "" }));
-    websocket.send(JSON.stringify({ type: "subscribe", topic: "predictions" }));
+// Service client types
+type ServiceClient = ReturnType<typeof createAuthClient> | 
+  ReturnType<typeof createHiveClient> | 
+  ReturnType<typeof createTradeClient> | 
+  ReturnType<typeof createPayClient> | 
+  ReturnType<typeof createKlinesClient> | 
+  ReturnType<typeof createSentimentClient> | 
+  ReturnType<typeof createMetricsClient> | 
+  ReturnType<typeof createDexClient> | 
+  ReturnType<typeof createNotificationClient>;
+
+type ServiceClientFactory = (host: string, headers: Record<string, string>, fetchImpl?: typeof fetch) => ServiceClient;
+
+interface ServiceDefinition {
+  factory: ServiceClientFactory;
+  path: string;
+}
+
+/**
+ * Base class for Crypticorn API clients containing shared functionality.
+ */
+class BaseClient {
+  private _baseUrl: string;
+  private _apiKey?: string;
+  private _jwt?: string;
+  private _fetch?: typeof fetch;
+  private _services: Record<ServiceName, ServiceClient>;
+
+  private readonly _serviceDefinitions: Record<ServiceName, ServiceDefinition> = {
+    hive: { factory: createHiveClient, path: "v1/hive" },
+    trade: { factory: createTradeClient, path: "v2/trade" },
+    klines: { factory: createKlinesClient, path: "v1/klines" },
+    pay: { factory: createPayClient, path: "v1/pay" },
+    metrics: { factory: createMetricsClient, path: "v1/metrics" },
+    auth: { factory: createAuthClient, path: "v1/auth" },
+    dex: { factory: createDexClient, path: "v1/dex" },
+    notification: { factory: createNotificationClient, path: "v1/notification" },
   };
 
-  websocket.onmessage = (event) => {
-    try {
-      const decoded = JSON.parse(event.data);
-      if (decoded.type === "message" && decoded.topic === "predictions") {
-        onMessage(decoded.data);
-      } else if (decoded.type === "auth") {
-        // ignore
-        // console.log(decoded);
-      }
-    } catch (e) {
-      console.error("Error parsing message", e);
+  constructor(config: ClientConfig = {}) {
+    this._baseUrl = config.baseUrl?.replace(/\/$/, "") || "https://api.crypticorn.com";
+    this._apiKey = config.apiKey;
+    this._jwt = config.jwt;
+    this._fetch = config.fetch;
+
+    this._services = this._createServices();
+  }
+
+  private _createServices(): Record<ServiceName, ServiceClient> {
+    const services = {} as Record<ServiceName, ServiceClient>;
+    
+    for (const [name, definition] of Object.entries(this._serviceDefinitions) as [ServiceName, ServiceDefinition][]) {
+      const serviceUrl = this._getServiceUrl(definition.path);
+      const headers = this._getHeaders();
+      services[name] = definition.factory(serviceUrl, headers, this._fetch);
     }
-  };
+    
+    return services;
+  }
 
-  websocket.onerror = (event) => {
-    console.error("WebSocket error:", event);
-  };
+  private _getServiceUrl(path: string): string {
+    return `${this._baseUrl}/${path}`;
+  }
 
-  websocket.onclose = (event) => {
-    console.log("WebSocket connection closed:", event);
-  };
+  private _getHeaders(): Record<string, string> {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (this._jwt) {
+      headers["Authorization"] = `Bearer ${this._jwt}`;
+    }
+
+    if (this._apiKey) {
+      headers["X-API-Key"] = this._apiKey;
+    }
+
+    return headers;
+  }
+
+  // Getters
+  get baseUrl(): string {
+    return this._baseUrl;
+  }
+
+  get apiKey(): string | undefined {
+    return this._apiKey;
+  }
+
+  get jwt(): string | undefined {
+    return this._jwt;
+  }
+
+  // Service accessors
+  get hive(): ReturnType<typeof createHiveClient> {
+    return this._services.hive as ReturnType<typeof createHiveClient>;
+  }
+
+  get trade(): ReturnType<typeof createTradeClient> {
+    return this._services.trade as ReturnType<typeof createTradeClient>;
+  }
+
+  get klines(): ReturnType<typeof createKlinesClient> {
+    return this._services.klines as ReturnType<typeof createKlinesClient>;
+  }
+
+  get pay(): ReturnType<typeof createPayClient> {
+    return this._services.pay as ReturnType<typeof createPayClient>;
+  }
+
+  get metrics(): ReturnType<typeof createMetricsClient> {
+    return this._services.metrics as ReturnType<typeof createMetricsClient>;
+  }
+
+  get auth(): ReturnType<typeof createAuthClient> {
+    return this._services.auth as ReturnType<typeof createAuthClient>;
+  }
+
+  get dex(): ReturnType<typeof createDexClient> {
+    return this._services.dex as ReturnType<typeof createDexClient>;
+  }
+
+  get notification(): ReturnType<typeof createNotificationClient> {
+    return this._services.notification as ReturnType<typeof createNotificationClient>;
+  }
+
+  /**
+   * Configure a specific service with custom settings.
+   * Useful for testing against local servers or different environments.
+   */
+  configure(service: ServiceName, config: Partial<ServiceConfig>): void {
+    if (!(service in this._serviceDefinitions)) {
+      throw new Error(`Invalid service: ${service}. Must be one of ${Object.keys(this._serviceDefinitions).join(", ")}`);
+    }
+
+    const definition = this._serviceDefinitions[service];
+    const serviceUrl = config.host || this._getServiceUrl(definition.path);
+    const headers = this._getHeaders();
+
+    // Update headers with custom config
+    if (config.jwt) {
+      headers["Authorization"] = `Bearer ${config.jwt}`;
+    }
+    if (config.apiKey) {
+      Object.assign(headers, config.apiKey);
+    }
+
+    this._services[service] = definition.factory(serviceUrl, headers, this._fetch);
+  }
 }
 
-export type ApiClient = ReturnType<typeof createClient>;
-export type SocketClient = ReturnType<typeof createSocket>;
-
-const defaultVersion = "1.5";
-
-export const createClient = ({
-  accessToken = "",
-  refreshToken = "",
-  apiRoot,
-  environment = "prod",
-  version = "v1",
-  host,
-  ...rest
-}: {
-  accessToken?: string;
-  refreshToken?: string;
-  apiRoot?: string;
-  environment?: EnvironmentType;
-  version?: string;
-  host?: string;
-  fetch?: typeof fetch;
-}): {
-  auth: ReturnType<typeof createAuthClient>;
-  api: ReturnType<typeof createApiClient>;
-  hive: ReturnType<typeof createHiveClient>;
-  trade: ReturnType<typeof createTradeClient>;
-  pay: ReturnType<typeof createPayClient>;
-  klines: ReturnType<typeof createKlinesClient>;
-  sentiment: ReturnType<typeof createSentimentClient>;
-  metrics: ReturnType<typeof createMetricsClient>;
-  dex: ReturnType<typeof createDexClient>;
-  notification: ReturnType<typeof createNotificationClient>;
-} => {
-  if (!apiRoot) {
-    const result = getHosts({
-      environment,
-      version,
-      host,
-    });
-    apiRoot = result.apiRoot;
-  }
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-    "X-Refresh-Token": refreshToken,
-    Cookie: refreshToken
-      ? `accessToken=${accessToken}; refreshToken=${refreshToken}`
-      : `accessToken=${accessToken}`,
-    "Content-Type": "application/json",
-  };
-  const auth = createAuthClient(apiRoot + "/auth/trpc", headers, rest.fetch);
-  const api = createApiClient({
-    accessToken,
-    apiRoot,
-    environment,
-    version,
-    host,
-    fetch: rest.fetch,
-  });
-  const trade = createTradeClient(apiRoot + "/trade", headers, rest.fetch);
-  const hive = createHiveClient(apiRoot + "/hive", headers, rest.fetch);
-  const pay = createPayClient(apiRoot + "/pay", headers, rest.fetch);
-  const klines = createKlinesClient(apiRoot + "/klines", headers, rest.fetch);
-  const sentiment = createSentimentClient(apiRoot + "/sentiment", headers, rest.fetch);
-  const metrics = createMetricsClient(apiRoot + "/metrics", headers, rest.fetch);
-  const dex = createDexClient(apiRoot + "/dex", headers, rest.fetch);
-  const notification = createNotificationClient(apiRoot + "/notification", headers, rest.fetch);
-  return {
-    auth,
-    api,
-    hive,
-    trade,
-    pay,
-    klines,
-    sentiment,
-    metrics,
-    dex,
-    notification,
-  };
-};
-
-export const createApiClient = ({
-  accessToken,
-  apiRoot,
-  environment = "prod",
-  version = "v1",
-  host,
-  ...rest
-}: {
-  accessToken: string;
-  apiRoot?: string;
-  environment?: EnvironmentType;
-  version?: string;
-  host?: string;
-  fetch?: typeof fetch;
-}) => {
-  const fetch = rest.fetch || globalThis.fetch;
-  if (!apiRoot) {
-    const result = getHosts({
-      environment,
-      version,
-      host,
-    });
-    apiRoot = result.apiRoot;
+/**
+ * The official async TypeScript client for interacting with the Crypticorn API.
+ * It consists of multiple microservices covering the whole stack of the Crypticorn project.
+ */
+class AsyncClient extends BaseClient {
+  constructor(config: ClientConfig = {}) {
+    super(config);
   }
 
-  const predRoot = apiRoot + "/predictions";
-  const dexRoot = apiRoot + "/dex";
-  const trendRoot = apiRoot + "/trends";
+}
 
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${accessToken}`,
-  };
-
-  const getLatestPredictions = async ({
-    version = defaultVersion,
-    klines = 20,
-  }: {
-    version?: string;
-    klines?: number;
-  } = {}) => {
-    return fetch(`${predRoot}/latest?version=${version}&klines=${klines}`, {
-      headers,
-    }).then((res) => res.json()) as Promise<{
-      predictions: Prediction[];
-      klines: Record<string, Kline[]>;
-    }>;
-  };
-
-  const getPrediction = async (predictionId: string) => {
-    return fetch(`${predRoot}/id/${predictionId}`, {
-      headers,
-    }).then((res) => res.json()) as Promise<Prediction | null>;
-  };
-
-  const getHistoricalPredictions = async ({
-    symbol,
-    records,
-    version = defaultVersion,
-  }: {
-    symbol: string;
-    records: number;
-    version?: string;
-  }) => {
-    return fetch(
-      `${predRoot}/symbol/${symbol}?version=${version}&limit=${records}`,
-      {
-        headers,
-      }
-    ).then((r) => r.json()) as Promise<Prediction[]>;
-  };
-
-  const getLatestTrends = async () => {
-    return fetch(`${trendRoot}/`, { headers }).then((res) =>
-      res.json()
-    ) as Promise<Trend[]>;
-  };
-
-  const getDexProgress = async () => {
-    return fetch(`${dexRoot}/progress`).then((res) =>
-      res.json()
-    ) as Promise<DexProgress>;
-  };
-
-  // Testing the economics news data
-  const getEconomicsNewsData = async ({
-    entries = 100,
-    reverse = false,
-  }: {
-    entries?: number;
-    reverse?: boolean;
-  } = {}): Promise<EconomicsNewsData> => {
-    const res = (await fetch(
-      `${apiRoot}/miners/ec?entries=${entries}&reverse=${reverse}`,
-      {
-        headers,
-      }
-    ).then((res) => res.json())) as { data: any[] };
-    // cast the data: array to the actual type
-    const data = res.data.map((item) => {
-      const [
-        timestamp,
-        country,
-        event,
-        currency,
-        previous,
-        estimate,
-        actual,
-        change,
-        impact,
-        changePercentage,
-      ] = item;
-      return {
-        timestamp,
-        country,
-        event,
-        currency,
-        previous,
-        estimate,
-        actual,
-        change,
-        impact,
-        changePercentage,
-      };
-    });
-    return { data };
-  };
-
-  return {
-    apiRoot,
-    getLatestPredictions,
-    getPrediction,
-    getDexProgress,
-    getHistoricalPredictions,
-    getLatestTrends,
-    getEconomicsNewsData,
-  };
-};
+export { AsyncClient };
