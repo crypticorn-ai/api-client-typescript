@@ -19,10 +19,43 @@ type ServiceName =
   | "dex" 
   | "notification";
 
+/**
+ * Configuration options for the Crypticorn API client.
+ * 
+ * @interface ClientConfig
+ */
 interface ClientConfig {
+  /**
+   * API key for authenticating with the Crypticorn API.
+   * Used for programmatic access and server-to-server communication.
+   */
   apiKey?: string;
+
+  /**
+   * JSON Web Token (JWT) access token for user authentication.
+   * This should be a valid JWT token obtained from the authentication service.
+   */
   jwt?: string;
+
+  /**
+   * Refresh token for obtaining new access tokens when the current JWT expires.
+   * Used in conjunction with the JWT for automatic token refresh.
+   */
+  refreshToken?: string;
+
+  /**
+   * Base URL for the Crypticorn API.
+   * Defaults to 'https://api.crypticorn.com' if not specified.
+   * 
+   * @default 'https://api.crypticorn.com'
+   */
   baseUrl?: string;
+
+  /**
+   * Custom fetch implementation to use for HTTP requests.
+   * Useful for testing, custom request handling, or when running in environments
+   * where the global fetch is not available.
+   */
   fetch?: typeof fetch;
 }
 
@@ -57,6 +90,7 @@ class BaseClient {
   private _baseUrl: string;
   private _apiKey?: string;
   private _jwt?: string;
+  private _refreshToken?: string;
   private _fetch?: typeof fetch;
   private _services: Record<ServiceName, ServiceClient>;
 
@@ -72,9 +106,10 @@ class BaseClient {
   };
 
   constructor(config: ClientConfig = {}) {
-    this._baseUrl = config.baseUrl?.replace(/\/$/, "") || "https://api.crypticorn.com";
+    this._baseUrl = config.baseUrl || "https://api.crypticorn.com";
     this._apiKey = config.apiKey;
     this._jwt = config.jwt;
+    this._refreshToken = config.refreshToken;
     this._fetch = config.fetch;
 
     this._services = this._createServices();
@@ -105,6 +140,10 @@ class BaseClient {
       headers["Authorization"] = `Bearer ${this._jwt}`;
     }
 
+    if (this._refreshToken) {
+      headers["X-Refresh-Token"] = this._refreshToken;
+    }
+
     if (this._apiKey) {
       headers["X-API-Key"] = this._apiKey;
     }
@@ -123,6 +162,10 @@ class BaseClient {
 
   get jwt(): string | undefined {
     return this._jwt;
+  }
+
+  get refreshToken(): string | undefined {
+    return this._refreshToken;
   }
 
   // Service accessors
