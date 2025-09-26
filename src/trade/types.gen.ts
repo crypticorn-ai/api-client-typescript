@@ -60,6 +60,13 @@ export type BotUpdate = {
 };
 
 /**
+ * Error response schema.
+ */
+export type ErrorResponse = {
+  detail: string;
+};
+
+/**
  * Exchange API key model without sensitive credentials for safe read operations.
  */
 export type ExchangeKey = {
@@ -947,6 +954,10 @@ export type VaultBot = {
    */
   api_key_id: string;
   /**
+   * Exchange name
+   */
+  exchange: "hyperliquid";
+  /**
    * Vault details
    */
   vault_details: VaultDetails;
@@ -1031,15 +1042,9 @@ export type GetBotOrdersCountData = {
 
 export type GetBotOrdersCountResponse = Array<OrdersCount>;
 
-export type GetBotOrdersCountError = unknown;
+export type GetBotOrdersCountError = ErrorResponse;
 
-export type GetBotPnlData = {
-  path: {
-    /**
-     * The ID of the bot
-     */
-    id: string;
-  };
+export type GetBotsPnlData = {
   query?: {
     /**
      * The number of items to return. Defaults to None, meaning no limit.
@@ -1068,9 +1073,11 @@ export type GetBotPnlData = {
   };
 };
 
-export type GetBotPnlResponse = Array<PnL>;
+export type GetBotsPnlResponse = {
+  [key: string]: Array<PnL>;
+};
 
-export type GetBotPnlError = unknown;
+export type GetBotsPnlError = ErrorResponse;
 
 export type GetBotOrdersData = {
   path: {
@@ -1109,7 +1116,7 @@ export type GetBotOrdersData = {
 
 export type GetBotOrdersResponse = PaginatedResponse_Order_;
 
-export type GetBotOrdersError = unknown;
+export type GetBotOrdersError = ErrorResponse;
 
 export type GetBotActionsData = {
   path: {
@@ -1148,7 +1155,7 @@ export type GetBotActionsData = {
 
 export type GetBotActionsResponse = PaginatedResponse_FuturesTradingAction_;
 
-export type GetBotActionsError = unknown;
+export type GetBotActionsError = ErrorResponse;
 
 export type GetBotsData = {
   query?: {
@@ -1177,7 +1184,7 @@ export type GetBotsData = {
 
 export type GetBotsResponse = Array<VaultBot>;
 
-export type GetBotsError = unknown;
+export type GetBotsError = ErrorResponse;
 
 export type CreateBotData = {
   body: BotCreate;
@@ -1185,7 +1192,7 @@ export type CreateBotData = {
 
 export type CreateBotResponse = Bot;
 
-export type CreateBotError = unknown;
+export type CreateBotError = ErrorResponse;
 
 export type GetBotData = {
   path: {
@@ -1198,7 +1205,7 @@ export type GetBotData = {
 
 export type GetBotResponse = VaultBot;
 
-export type GetBotError = unknown;
+export type GetBotError = ErrorResponse;
 
 export type UpdateBotData = {
   body: BotUpdate;
@@ -1212,7 +1219,7 @@ export type UpdateBotData = {
 
 export type UpdateBotResponse = Bot;
 
-export type UpdateBotError = unknown;
+export type UpdateBotError = ErrorResponse;
 
 export type GetExchangeKeysData = {
   query?: {
@@ -1237,7 +1244,7 @@ export type GetExchangeKeysData = {
 
 export type GetExchangeKeysResponse = Array<ExchangeKey>;
 
-export type GetExchangeKeysError = unknown;
+export type GetExchangeKeysError = ErrorResponse;
 
 export type CreateExchangeKeyData = {
   body: ExchangeKeyCreate;
@@ -1245,7 +1252,7 @@ export type CreateExchangeKeyData = {
 
 export type CreateExchangeKeyResponse = ExchangeKey;
 
-export type CreateExchangeKeyError = unknown;
+export type CreateExchangeKeyError = ErrorResponse;
 
 export type UpdateExchangeKeyData = {
   body: ExchangeKeyUpdate;
@@ -1259,7 +1266,7 @@ export type UpdateExchangeKeyData = {
 
 export type UpdateExchangeKeyResponse = ExchangeKey;
 
-export type UpdateExchangeKeyError = unknown;
+export type UpdateExchangeKeyError = ErrorResponse;
 
 export type DeleteExchangeKeyData = {
   path: {
@@ -1272,11 +1279,11 @@ export type DeleteExchangeKeyData = {
 
 export type DeleteExchangeKeyResponse = void;
 
-export type DeleteExchangeKeyError = unknown;
+export type DeleteExchangeKeyError = ErrorResponse;
 
 export type GetExchangeKeyBalancesResponse = Array<ExchangeKeyBalance>;
 
-export type GetExchangeKeyBalancesError = unknown;
+export type GetExchangeKeyBalancesError = ErrorResponse;
 
 export type PostFuturesActionData = {
   body: FuturesTradingActionCreate;
@@ -1284,7 +1291,7 @@ export type PostFuturesActionData = {
 
 export type PostFuturesActionResponse = PostFuturesAction;
 
-export type PostFuturesActionError = unknown;
+export type PostFuturesActionError = ErrorResponse;
 
 export type PostSpotActionData = {
   body: SpotTradingActionCreate;
@@ -1292,11 +1299,11 @@ export type PostSpotActionData = {
 
 export type PostSpotActionResponse = unknown;
 
-export type PostSpotActionError = unknown;
+export type PostSpotActionError = ErrorResponse;
 
 export type GetStrategiesResponse = Array<Strategy>;
 
-export type GetStrategiesError = unknown;
+export type GetStrategiesError = ErrorResponse;
 
 export type CreateStrategyData = {
   body: StrategyCreate;
@@ -1304,7 +1311,7 @@ export type CreateStrategyData = {
 
 export type CreateStrategyResponse = Strategy;
 
-export type CreateStrategyError = unknown;
+export type CreateStrategyError = ErrorResponse;
 
 export type UpdateStrategyData = {
   body: StrategyUpdate;
@@ -1318,12 +1325,12 @@ export type UpdateStrategyData = {
 
 export type UpdateStrategyResponse = Strategy;
 
-export type UpdateStrategyError = unknown;
+export type UpdateStrategyError = ErrorResponse;
 
 export type PingResponse = string;
 
-export type PingError = unknown;
+export type PingError = ErrorResponse;
 
 export type GetMetricsResponse = unknown;
 
-export type GetMetricsError = unknown;
+export type GetMetricsError = ErrorResponse;

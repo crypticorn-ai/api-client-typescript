@@ -88,6 +88,19 @@ export const BotUpdateSchema = {
     "Trading bot model for API update operations. Fields cannot be unset.",
 } as const;
 
+export const ErrorResponseSchema = {
+  properties: {
+    detail: {
+      type: "string",
+      title: "Detail",
+    },
+  },
+  type: "object",
+  required: ["detail"],
+  title: "ErrorResponse",
+  description: "Error response schema.",
+} as const;
+
 export const ExchangeKeySchema = {
   properties: {
     created_at: {
@@ -1671,6 +1684,12 @@ export const VaultBotSchema = {
       title: "Api Key Id",
       description: "UID for the API key",
     },
+    exchange: {
+      type: "string",
+      const: "hyperliquid",
+      title: "Exchange",
+      description: "Exchange name",
+    },
     vault_details: {
       $ref: "#/components/schemas/VaultDetails",
       description: "Vault details",
@@ -1684,6 +1703,7 @@ export const VaultBotSchema = {
     "status",
     "strategy_id",
     "api_key_id",
+    "exchange",
     "vault_details",
   ],
   title: "VaultBot",

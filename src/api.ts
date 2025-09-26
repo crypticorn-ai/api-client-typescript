@@ -101,7 +101,7 @@ class BaseClient {
     klines: { factory: createKlinesClient, path: "v1/klines" },
     pay: { factory: createPayClient, path: "v1/pay" },
     metrics: { factory: createMetricsClient, path: "v1/metrics" },
-    auth: { factory: createAuthClient, path: "v1/auth" },
+    auth: { factory: createAuthClient, path: "v1/auth/trpc" },
     dex: { factory: createDexClient, path: "v1/dex" },
     notification: { factory: createNotificationClient, path: "v1/notification" },
   };

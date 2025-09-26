@@ -8,9 +8,9 @@ import type {
   GetBotOrdersCountData,
   GetBotOrdersCountError,
   GetBotOrdersCountResponse,
-  GetBotPnlData,
-  GetBotPnlError,
-  GetBotPnlResponse,
+  GetBotsPnlData,
+  GetBotsPnlError,
+  GetBotsPnlResponse,
   GetBotOrdersData,
   GetBotOrdersError,
   GetBotOrdersResponse,
@@ -96,24 +96,24 @@ export function createClient(
   };
 
   /**
-   * Get Bot Pnl
-   * Returns a list of PnLs for a bot over time, sorted by `timestamp` ascending by default.
+   * Get Bots Pnl
+   * Returns a dictionary of PnLs for multiple bots over time, sorted by `timestamp` ascending by default.
    *
-   * If more than 1000 data points exist, PnLs are grouped by day.
+   * If more than 1000 per bot data points exist, PnLs are grouped by day.
    *
    * For relative type, uses TWR-style cumulative percentage returns.
    * For absolute type, uses traditional cumulative PnL calculation.
    */
-  const getBotPnl = <ThrowOnError extends boolean = false>(
-    options: OptionsLegacyParser<GetBotPnlData, ThrowOnError>,
+  const getBotsPnl = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetBotsPnlData, ThrowOnError>,
   ) => {
     return (options?.client ?? client).get<
-      GetBotPnlResponse,
-      GetBotPnlError,
+      GetBotsPnlResponse,
+      GetBotsPnlError,
       ThrowOnError
     >({
       ...options,
-      url: "/bots/{id}/orders/pnl",
+      url: "/bots/orders/pnl",
     });
   };
 
@@ -424,7 +424,7 @@ export function createClient(
 
   return {
     getBotOrdersCount,
-    getBotPnl,
+    getBotsPnl,
     getBotOrders,
     getBotActions,
     getBots,
