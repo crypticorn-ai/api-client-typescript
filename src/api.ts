@@ -7,6 +7,7 @@ import { createClient as createSentimentClient } from "./sentiment";
 import { createClient as createMetricsClient } from "./metrics";
 import { createClient as createDexClient } from "./dex";
 import { createClient as createNotificationClient } from "./notification";
+import { EconomicsNewsData, Kline, Prediction, Trend } from "./types";
 
 // Internal types
 type ServiceName = 
@@ -87,12 +88,12 @@ interface ServiceDefinition {
  * Base class for Crypticorn API clients containing shared functionality.
  */
 class BaseClient {
-  private _baseUrl: string;
-  private _apiKey?: string;
-  private _jwt?: string;
-  private _refreshToken?: string;
-  private _fetch?: typeof fetch;
-  private _services: Record<ServiceName, ServiceClient>;
+  protected _baseUrl: string;
+  protected _apiKey?: string;
+  protected _jwt?: string;
+  protected _refreshToken?: string;
+  protected _fetch?: typeof fetch;
+  protected _services: Record<ServiceName, ServiceClient>;
 
   private readonly _serviceDefinitions: Record<ServiceName, ServiceDefinition> = {
     hive: { factory: createHiveClient, path: "v1/hive" },
@@ -131,7 +132,7 @@ class BaseClient {
     return `${this._baseUrl}/${path}`;
   }
 
-  private _getHeaders(): Record<string, string> {
+  protected _getHeaders(): Record<string, string> {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
@@ -231,10 +232,98 @@ class BaseClient {
  * It consists of multiple microservices covering the whole stack of the Crypticorn project.
  */
 class AsyncClient extends BaseClient {
+  public readonly api: {
+    getLatestPredictions: (params?: {
+      version?: string;
+      klines?: number;
+    }) => Promise<{
+      predictions: Prediction[];
+      klines: Record<string, Kline[]>;
+    }>;
+    getLatestTrends: () => Promise<Trend[]>;
+    getEconomicsNewsData: (params?: {
+      entries?: number;
+      reverse?: boolean;
+    }) => Promise<EconomicsNewsData>;
+  };
+
   constructor(config: ClientConfig = {}) {
     super(config);
-  }
+    
+    // Create the api namespace with the required methods
+    this.api = {
+      getLatestPredictions: async ({
+        version = "v1",
+        klines = 20,
+      }: {
+        version?: string;
+        klines?: number;
+      } = {}) => {
+        const headers = this._getHeaders();
+        const response = await (this._fetch || globalThis.fetch)(
+          `${this._baseUrl}/predictions/latest?version=${version}&klines=${klines}`,
+          { headers }
+        );
+        return response.json() as Promise<{
+          predictions: Prediction[];
+          klines: Record<string, Kline[]>;
+        }>;
+      },
 
+      getLatestTrends: async () => {
+        const headers = this._getHeaders();
+        const response = await (this._fetch || globalThis.fetch)(
+          `${this._baseUrl}/trends/`,
+          { headers }
+        );
+        return response.json() as Promise<Trend[]>;
+      },
+
+      getEconomicsNewsData: async ({
+        entries = 100,
+        reverse = false,
+      }: {
+        entries?: number;
+        reverse?: boolean;
+      } = {}): Promise<EconomicsNewsData> => {
+        const headers = this._getHeaders();
+        const response = await (this._fetch || globalThis.fetch)(
+          `${this._baseUrl}/miners/ec?entries=${entries}&reverse=${reverse}`,
+          { headers }
+        );
+        const res = await response.json() as { data: any[] };
+        
+        // Cast the data array to the actual type
+        const data = res.data.map((item) => {
+          const [
+            timestamp,
+            country,
+            event,
+            currency,
+            previous,
+            estimate,
+            actual,
+            change,
+            impact,
+            changePercentage,
+          ] = item;
+          return {
+            timestamp,
+            country,
+            event,
+            currency,
+            previous,
+            estimate,
+            actual,
+            change,
+            impact,
+            changePercentage,
+          };
+        });
+        return { data };
+      },
+    };
+  }
 }
 
 export { AsyncClient };
