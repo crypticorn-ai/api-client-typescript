@@ -107,9 +107,9 @@ class BaseClient {
   };
 
   constructor(config: ClientConfig = {}) {
-    // Ensure baseUrl ends with a single trailing slash
+    // Ensure baseUrl does not end with a trailing slash
     const baseUrl = config.baseUrl || "https://api.crypticorn.com";
-    this._baseUrl = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
+    this._baseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
     this._apiKey = config.apiKey;
     this._jwt = config.jwt;
     this._refreshToken = config.refreshToken;
