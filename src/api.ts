@@ -2,8 +2,6 @@ import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
 import { createClient as createHiveClient } from "./hive";
 import { createClient as createTradeClient } from "./trade";
 import { createClient as createPayClient } from "./pay";
-import { createClient as createKlinesClient } from "./klines";
-import { createClient as createSentimentClient } from "./sentiment";
 import { createClient as createMetricsClient } from "./metrics";
 import { createClient as createDexClient } from "./dex";
 import { createClient as createNotificationClient } from "./notification";
@@ -13,7 +11,6 @@ import { EconomicsNewsData, Kline, Prediction, Trend } from "./types";
 type ServiceName = 
   | "hive" 
   | "trade" 
-  | "klines" 
   | "pay" 
   | "metrics" 
   | "auth" 
@@ -71,8 +68,6 @@ type ServiceClient = ReturnType<typeof createAuthClient> |
   ReturnType<typeof createHiveClient> | 
   ReturnType<typeof createTradeClient> | 
   ReturnType<typeof createPayClient> | 
-  ReturnType<typeof createKlinesClient> | 
-  ReturnType<typeof createSentimentClient> | 
   ReturnType<typeof createMetricsClient> | 
   ReturnType<typeof createDexClient> | 
   ReturnType<typeof createNotificationClient>;
@@ -98,7 +93,6 @@ class BaseClient {
   private readonly _serviceDefinitions: Record<ServiceName, ServiceDefinition> = {
     hive: { factory: createHiveClient, path: "v1/hive" },
     trade: { factory: createTradeClient, path: "v2/trade" },
-    klines: { factory: createKlinesClient, path: "v1/klines" },
     pay: { factory: createPayClient, path: "v1/pay" },
     metrics: { factory: createMetricsClient, path: "v1/metrics" },
     auth: { factory: createAuthClient, path: "v1/auth/trpc" },
@@ -178,10 +172,6 @@ class BaseClient {
 
   get trade(): ReturnType<typeof createTradeClient> {
     return this._services.trade as ReturnType<typeof createTradeClient>;
-  }
-
-  get klines(): ReturnType<typeof createKlinesClient> {
-    return this._services.klines as ReturnType<typeof createKlinesClient>;
   }
 
   get pay(): ReturnType<typeof createPayClient> {

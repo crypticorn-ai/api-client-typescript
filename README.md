@@ -31,16 +31,7 @@ Our API is available as a TypeScript/JavaScript SDK with full TypeScript support
 import { AsyncClient } from '@crypticorn-ai/api-client'
 ```
 
-The client serves as the central interface for API operations and provides access to multiple API wrappers corresponding to our micro services. These are structured as follows:
-
-- `auth` - Authentication and user management
-- `trade` - Trading operations and bot management
-- `klines` - Market data and candlestick information
-- `metrics` - Market metrics and analytics
-- `hive` - Hive AI community predictions
-- `dex` - DEX trading and analysis
-- `pay` - Payment and subscription management
-- `notification` - Notification services
+The client serves as the central interface for API operations and provides access to multiple API wrappers corresponding to our micro services.
 
 You can either explore each API by clicking through the library or checkout the [API Documentation](https://docs.crypticorn.com/api).
 
@@ -51,7 +42,7 @@ The SDK major version tracks the highest supported API version. A new API major 
 | SDK Version | Auth | Trade | Klines | Metrics | Hive | Dex | Pay | Notification |
 | ----------- | ---- | ----- | ------ | ------- | ---- | --- | --- | ------------ |
 | v2.x        | v1   | v1    | v1     | v1      | v1   | v1  | v1  | v1           |
-| v3.x        | v2   | v2    | v1     | v1      | v1   | v1  | v1  | v1           |
+| v3.x        | v1   | v2    | -      | v1      | v1   | v1  | v1  | v1           |
 
 
 ## Authentication
@@ -92,5 +83,4 @@ client.configure('trade', {
   host: 'https://trade-api.example.com',
   jwt: 'different-jwt-token'
 })
-```
 ```
