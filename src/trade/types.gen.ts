@@ -584,20 +584,6 @@ export type status_code =
   | "trading_action_expired"
   | "black_swan";
 
-/**
- * The number of orders by day
- */
-export type OrdersCount = {
-  /**
-   * Timestamp of the latest order for the day
-   */
-  timestamp: number;
-  /**
-   * The number of orders for the day
-   */
-  count: number;
-};
-
 export type PaginatedResponse_FuturesTradingAction_ = {
   data: Array<FuturesTradingAction>;
   /**
@@ -1016,33 +1002,6 @@ export type VaultDetails = {
    */
   tvl: number;
 };
-
-export type GetBotOrdersCountData = {
-  path: {
-    /**
-     * The ID of the bot
-     */
-    id: string;
-  };
-  query?: {
-    /**
-     * The group by period for the orders count. Defaults to day.
-     */
-    group_by?: "day" | "week" | "month" | "year";
-    /**
-     * The field to sort by
-     */
-    sort_by?: string | null;
-    /**
-     * The order to sort by
-     */
-    sort_order?: "asc" | "desc" | null;
-  };
-};
-
-export type GetBotOrdersCountResponse = Array<OrdersCount>;
-
-export type GetBotOrdersCountError = ErrorResponse;
 
 export type GetBotsPnlData = {
   query?: {

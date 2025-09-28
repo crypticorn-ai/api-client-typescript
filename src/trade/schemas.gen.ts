@@ -957,25 +957,6 @@ export const OrderSchema = {
     "Response model for orders. This is the model that is returned by the API and the database.",
 } as const;
 
-export const OrdersCountSchema = {
-  properties: {
-    timestamp: {
-      type: "integer",
-      title: "Timestamp",
-      description: "Timestamp of the latest order for the day",
-    },
-    count: {
-      type: "integer",
-      title: "Count",
-      description: "The number of orders for the day",
-    },
-  },
-  type: "object",
-  required: ["timestamp", "count"],
-  title: "OrdersCount",
-  description: "The number of orders by day",
-} as const;
-
 export const PaginatedResponse_FuturesTradingAction_Schema = {
   properties: {
     data: {
