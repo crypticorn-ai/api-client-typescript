@@ -32,7 +32,6 @@ export const BroadcastSchema = {
               "new_dex_ai_call",
               "new_dex_ai_call_incognito",
               "order_completion",
-              "trading_agent_execution_alert",
               "otp_code",
               "subscription_expiring",
               "subscription_expired",
@@ -51,15 +50,13 @@ export const BroadcastSchema = {
       description:
         "List of templates and whether the broadcast sends the notification for",
     },
-    discord_webhook_url: {
-      type: "string",
-      title: "Discord Webhook Url",
-      description: "Discord webhook URL for the broadcast to be sent to",
-    },
-    telegram_chat_id: {
-      type: "string",
-      title: "Telegram Chat Id",
-      description: "Telegram chat ID for the broadcast to be sent to",
+    recipients: {
+      items: {
+        $ref: "#/components/schemas/BroadcastRecipient",
+      },
+      type: "array",
+      title: "Recipients",
+      description: "List of recipients for the broadcast to be sent to",
     },
   },
   type: "object",
@@ -68,8 +65,7 @@ export const BroadcastSchema = {
     "created_at",
     "updated_at",
     "template_preferences",
-    "discord_webhook_url",
-    "telegram_chat_id",
+    "recipients",
   ],
   title: "Broadcast",
   description: "Broadcast with communication preferences",
@@ -92,7 +88,6 @@ export const BroadcastCreateSchema = {
               "new_dex_ai_call",
               "new_dex_ai_call_incognito",
               "order_completion",
-              "trading_agent_execution_alert",
               "otp_code",
               "subscription_expiring",
               "subscription_expired",
@@ -111,21 +106,51 @@ export const BroadcastCreateSchema = {
       description:
         "List of templates and whether the broadcast sends the notification for",
     },
-    discord_webhook_url: {
-      type: "string",
-      title: "Discord Webhook Url",
-      description: "Discord webhook URL for the broadcast to be sent to",
-    },
-    telegram_chat_id: {
-      type: "string",
-      title: "Telegram Chat Id",
-      description: "Telegram chat ID for the broadcast to be sent to",
+    recipients: {
+      items: {
+        $ref: "#/components/schemas/BroadcastRecipient",
+      },
+      type: "array",
+      title: "Recipients",
+      description: "List of recipients for the broadcast to be sent to",
     },
   },
   type: "object",
-  required: ["template_preferences", "discord_webhook_url", "telegram_chat_id"],
+  required: ["template_preferences", "recipients"],
   title: "BroadcastCreate",
   description: "Create a new broadcast",
+} as const;
+
+export const BroadcastRecipientSchema = {
+  properties: {
+    service: {
+      type: "string",
+      enum: ["discord", "telegram"],
+      title: "Service",
+      description: "Service type for the broadcast",
+    },
+    value: {
+      type: "string",
+      title: "Value",
+      description: "Webhook URL or chat ID for the service",
+    },
+    name: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Name",
+      description: "Optional name/identifier for this recipient",
+    },
+  },
+  type: "object",
+  required: ["service", "value"],
+  title: "BroadcastRecipient",
+  description: "Webhook recipient configuration",
 } as const;
 
 export const BroadcastUpdateSchema = {
@@ -147,7 +172,6 @@ export const BroadcastUpdateSchema = {
                   "new_dex_ai_call",
                   "new_dex_ai_call_incognito",
                   "order_completion",
-                  "trading_agent_execution_alert",
                   "otp_code",
                   "subscription_expiring",
                   "subscription_expired",
@@ -171,29 +195,20 @@ export const BroadcastUpdateSchema = {
       description:
         "List of templates and whether the broadcast sends the notification for",
     },
-    discord_webhook_url: {
+    recipients: {
       anyOf: [
         {
-          type: "string",
+          items: {
+            $ref: "#/components/schemas/BroadcastRecipient",
+          },
+          type: "array",
         },
         {
           type: "null",
         },
       ],
-      title: "Discord Webhook Url",
-      description: "Discord webhook URL for the broadcast to be sent to",
-    },
-    telegram_chat_id: {
-      anyOf: [
-        {
-          type: "string",
-        },
-        {
-          type: "null",
-        },
-      ],
-      title: "Telegram Chat Id",
-      description: "Telegram chat ID for the broadcast to be sent to",
+      title: "Recipients",
+      description: "List of webhook recipients for the broadcast to be sent to",
     },
   },
   type: "object",
@@ -272,7 +287,6 @@ export const DashboardNotificationSchema = {
         "new_dex_ai_call",
         "new_dex_ai_call_incognito",
         "order_completion",
-        "trading_agent_execution_alert",
         "otp_code",
         "subscription_expiring",
         "subscription_expired",
@@ -334,6 +348,19 @@ export const DashboardNotificationUpdateSchema = {
   title: "DashboardNotificationUpdate",
 } as const;
 
+export const ErrorResponseSchema = {
+  properties: {
+    detail: {
+      type: "string",
+      title: "Detail",
+    },
+  },
+  type: "object",
+  required: ["detail"],
+  title: "ErrorResponse",
+  description: "Error response schema.",
+} as const;
+
 export const NotificationCreateSchema = {
   properties: {
     template: {
@@ -348,7 +375,6 @@ export const NotificationCreateSchema = {
         "new_dex_ai_call",
         "new_dex_ai_call_incognito",
         "order_completion",
-        "trading_agent_execution_alert",
         "otp_code",
         "subscription_expiring",
         "subscription_expired",
@@ -464,7 +490,6 @@ export const TemplateSchema = {
         "new_dex_ai_call",
         "new_dex_ai_call_incognito",
         "order_completion",
-        "trading_agent_execution_alert",
         "otp_code",
         "subscription_expiring",
         "subscription_expired",
@@ -614,7 +639,6 @@ export const UserSettingSchema = {
               "new_dex_ai_call",
               "new_dex_ai_call_incognito",
               "order_completion",
-              "trading_agent_execution_alert",
               "otp_code",
               "subscription_expiring",
               "subscription_expired",
@@ -668,7 +692,6 @@ export const UserSettingCreateSchema = {
               "new_dex_ai_call",
               "new_dex_ai_call_incognito",
               "order_completion",
-              "trading_agent_execution_alert",
               "otp_code",
               "subscription_expiring",
               "subscription_expired",
@@ -713,7 +736,6 @@ export const UserSettingUpdateSchema = {
                   "new_dex_ai_call",
                   "new_dex_ai_call_incognito",
                   "order_completion",
-                  "trading_agent_execution_alert",
                   "otp_code",
                   "subscription_expiring",
                   "subscription_expired",
@@ -742,59 +764,3 @@ export const UserSettingUpdateSchema = {
   title: "UserSettingUpdate",
   description: "Update a user setting",
 } as const;
-
-export const _ExceptionDetail_Literal__unknown_error____invalid_data_request____invalid_data_response____object_already_exists____object_not_found____template_not_found____invalid_template_variables___Schema =
-  {
-    properties: {
-      message: {
-        anyOf: [
-          {
-            type: "string",
-          },
-          {
-            type: "null",
-          },
-        ],
-        title: "Message",
-        description: "An additional error message",
-      },
-      code: {
-        type: "string",
-        enum: [
-          "unknown_error",
-          "invalid_data_request",
-          "invalid_data_response",
-          "object_already_exists",
-          "object_not_found",
-          "template_not_found",
-          "invalid_template_variables",
-        ],
-        title: "Code",
-        description: "The unique error code",
-      },
-      type: {
-        type: "string",
-        enum: ["user error", "exchange error", "server error", "no error"],
-        title: "Type",
-        description: "The type of error",
-      },
-      level: {
-        type: "string",
-        enum: ["error", "info", "success", "warning"],
-        title: "Level",
-        description: "The level of the error",
-      },
-      status_code: {
-        type: "integer",
-        title: "Status Code",
-        description: "The HTTP status code",
-      },
-      details: {
-        title: "Details",
-        description: "Additional details about the error",
-      },
-    },
-    type: "object",
-    required: ["code", "type", "level", "status_code"],
-    title: "ExceptionDetail",
-  } as const;

@@ -1,326 +1,321 @@
-import {
-  DexProgress,
-  EconomicsNewsData,
-  EnvironmentType,
-  Kline,
-  Prediction,
-  Trend,
-} from "./types";
 import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
-import { createClient as createTokenClient } from "@crypticorn-ai/token-service/dist/client";
 import { createClient as createHiveClient } from "./hive";
 import { createClient as createTradeClient } from "./trade";
 import { createClient as createPayClient } from "./pay";
-import { createClient as createKlinesClient } from "./klines";
-import { createClient as createSentimentClient } from "./sentiment";
 import { createClient as createMetricsClient } from "./metrics";
 import { createClient as createDexClient } from "./dex";
 import { createClient as createNotificationClient } from "./notification";
+import { EconomicsNewsData, Kline, Prediction, Trend } from "./types";
 
-export const environments: Record<EnvironmentType, string> = {
-  // local development
-  local: "localhost",
-  // development
-  dev: "api.crypticorn.dev",
-  // production
-  prod: "api.crypticorn.com",
-};
+// Internal types
+type ServiceName = 
+  | "hive" 
+  | "trade" 
+  | "pay" 
+  | "metrics" 
+  | "auth" 
+  | "dex" 
+  | "notification";
 
-export function getHosts({
-  environment,
-  host = environments[environment],
-  version,
-}: {
-  environment: EnvironmentType;
-  host?: string;
-  version?: string;
-}) {
-  let apiRoot = `https://${host}/${version}`;
-  let wsRoot = `wss://${host}/${version}/ws`;
+/**
+ * Configuration options for the Crypticorn API client.
+ * 
+ * @interface ClientConfig
+ */
+interface ClientConfig {
+  /**
+   * API key for authenticating with the Crypticorn API.
+   * Used for programmatic access and server-to-server communication.
+   */
+  apiKey?: string;
 
-  if (host.includes("localhost")) {
-    apiRoot = `http://${host}/${version}`;
-    wsRoot = `ws://${host}/${version}/ws`;
-  }
+  /**
+   * JSON Web Token (JWT) access token for user authentication.
+   * This should be a valid JWT token obtained from the authentication service.
+   */
+  jwt?: string;
 
-  return { apiRoot, wsRoot };
-}
-
-export async function createSocket({
-  accessToken,
-  wsRoot,
-  environment = "prod",
-  version = "v1",
-  host,
-  onMessage,
-  WebSocketImplementation = WebSocket,
-}: {
-  accessToken: string;
-  wsRoot?: string;
-  environment?: EnvironmentType;
-  version?: string;
-  host?: string;
-  onMessage: (data: Prediction) => void;
-  WebSocketImplementation?: typeof WebSocket;
-}) {
-  if (!wsRoot) {
-    const result = getHosts({
-      environment,
-      version,
-      host,
-    });
-    wsRoot = result.wsRoot;
-  }
-  const websocket = new WebSocketImplementation(wsRoot) as WebSocket;
-
-  websocket.onopen = () => {
-    // Order is important
-    websocket.send(JSON.stringify({ type: "auth", token: accessToken }));
-    // websocket.send(JSON.stringify({ type: 'auth', api_key: "" }));
-    websocket.send(JSON.stringify({ type: "subscribe", topic: "predictions" }));
-  };
-
-  websocket.onmessage = (event) => {
-    try {
-      const decoded = JSON.parse(event.data);
-      if (decoded.type === "message" && decoded.topic === "predictions") {
-        onMessage(decoded.data);
-      } else if (decoded.type === "auth") {
-        // ignore
-        // console.log(decoded);
-      }
-    } catch (e) {
-      console.error("Error parsing message", e);
-    }
-  };
-
-  websocket.onerror = (event) => {
-    console.error("WebSocket error:", event);
-  };
-
-  websocket.onclose = (event) => {
-    console.log("WebSocket connection closed:", event);
-  };
-}
-
-export type ApiClient = ReturnType<typeof createClient>;
-export type SocketClient = ReturnType<typeof createSocket>;
-
-const defaultVersion = "1.5";
-
-export const createClient = ({
-  accessToken = "",
-  refreshToken = "",
-  apiRoot,
-  environment = "prod",
-  version = "v1",
-  host,
-  ...rest
-}: {
-  accessToken?: string;
+  /**
+   * Refresh token for obtaining new access tokens when the current JWT expires.
+   * Used in conjunction with the JWT for automatic token refresh.
+   */
   refreshToken?: string;
-  apiRoot?: string;
-  environment?: EnvironmentType;
-  version?: string;
-  host?: string;
-  fetch?: typeof fetch;
-}): {
-  auth: ReturnType<typeof createAuthClient>;
-  token: ReturnType<typeof createTokenClient>;
-  api: ReturnType<typeof createApiClient>;
-  hive: ReturnType<typeof createHiveClient>;
-  trade: ReturnType<typeof createTradeClient>;
-  pay: ReturnType<typeof createPayClient>;
-  klines: ReturnType<typeof createKlinesClient>;
-  sentiment: ReturnType<typeof createSentimentClient>;
-  metrics: ReturnType<typeof createMetricsClient>;
-  dex: ReturnType<typeof createDexClient>;
-  notification: ReturnType<typeof createNotificationClient>;
-} => {
-  if (!apiRoot) {
-    const result = getHosts({
-      environment,
-      version,
-      host,
-    });
-    apiRoot = result.apiRoot;
-  }
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-    "X-Refresh-Token": refreshToken,
-    Cookie: refreshToken
-      ? `accessToken=${accessToken}; refreshToken=${refreshToken}`
-      : `accessToken=${accessToken}`,
-    "Content-Type": "application/json",
-  };
-  const token = createTokenClient(apiRoot + "/token", headers, rest.fetch);
-  const auth = createAuthClient(apiRoot + "/auth/trpc", headers, rest.fetch);
-  const api = createApiClient({
-    accessToken,
-    apiRoot,
-    environment,
-    version,
-    host,
-    fetch: rest.fetch,
-  });
-  const trade = createTradeClient(apiRoot + "/trade", headers, rest.fetch);
-  const hive = createHiveClient(apiRoot + "/hive", headers, rest.fetch);
-  const pay = createPayClient(apiRoot + "/pay", headers, rest.fetch);
-  const klines = createKlinesClient(apiRoot + "/klines", headers, rest.fetch);
-  const sentiment = createSentimentClient(apiRoot + "/sentiment", headers, rest.fetch);
-  const metrics = createMetricsClient(apiRoot + "/metrics", headers, rest.fetch);
-  const dex = createDexClient(apiRoot + "/dex", headers, rest.fetch);
-  const notification = createNotificationClient(apiRoot + "/notification", headers, rest.fetch);
-  return {
-    auth,
-    token,
-    api,
-    hive,
-    trade,
-    pay,
-    klines,
-    sentiment,
-    metrics,
-    dex,
-    notification,
-  };
-};
 
-export const createApiClient = ({
-  accessToken,
-  apiRoot,
-  environment = "prod",
-  version = "v1",
-  host,
-  ...rest
-}: {
-  accessToken: string;
-  apiRoot?: string;
-  environment?: EnvironmentType;
-  version?: string;
-  host?: string;
+  /**
+   * Base URL for the Crypticorn API.
+   * Defaults to 'https://api.crypticorn.com' if not specified.
+   * 
+   * @default 'https://api.crypticorn.com'
+   */
+  baseUrl?: string;
+
+  /**
+   * Custom fetch implementation to use for HTTP requests.
+   * Useful for testing, custom request handling, or when running in environments
+   * where the global fetch is not available.
+   */
   fetch?: typeof fetch;
-}) => {
-  const fetch = rest.fetch || globalThis.fetch;
-  if (!apiRoot) {
-    const result = getHosts({
-      environment,
-      version,
-      host,
-    });
-    apiRoot = result.apiRoot;
+}
+
+interface ServiceConfig {
+  host: string;
+  jwt?: string;
+  apiKey?: Record<string, string>;
+}
+
+// Service client types
+type ServiceClient = ReturnType<typeof createAuthClient> | 
+  ReturnType<typeof createHiveClient> | 
+  ReturnType<typeof createTradeClient> | 
+  ReturnType<typeof createPayClient> | 
+  ReturnType<typeof createMetricsClient> | 
+  ReturnType<typeof createDexClient> | 
+  ReturnType<typeof createNotificationClient>;
+
+type ServiceClientFactory = (host: string, headers: Record<string, string>, fetchImpl?: typeof fetch) => ServiceClient;
+
+interface ServiceDefinition {
+  factory: ServiceClientFactory;
+  path: string;
+}
+
+/**
+ * Base class for Crypticorn API clients containing shared functionality.
+ */
+class BaseClient {
+  protected _baseUrl: string;
+  protected _apiKey?: string;
+  protected _jwt?: string;
+  protected _refreshToken?: string;
+  protected _fetch?: typeof fetch;
+  protected _services: Record<ServiceName, ServiceClient>;
+
+  private readonly _serviceDefinitions: Record<ServiceName, ServiceDefinition> = {
+    hive: { factory: createHiveClient, path: "v1/hive" },
+    trade: { factory: createTradeClient, path: "v2/trade" },
+    pay: { factory: createPayClient, path: "v1/pay" },
+    metrics: { factory: createMetricsClient, path: "v1/metrics" },
+    auth: { factory: createAuthClient, path: "v1/auth/trpc" },
+    dex: { factory: createDexClient, path: "v1/dex" },
+    notification: { factory: createNotificationClient, path: "v1/notification" },
+  };
+
+  constructor(config: ClientConfig = {}) {
+    // Ensure baseUrl does not end with a trailing slash
+    const baseUrl = config.baseUrl || "https://api.crypticorn.com";
+    this._baseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+    this._apiKey = config.apiKey;
+    this._jwt = config.jwt;
+    this._refreshToken = config.refreshToken;
+    this._fetch = config.fetch;
+
+    this._services = this._createServices();
   }
 
-  const predRoot = apiRoot + "/predictions";
-  const dexRoot = apiRoot + "/dex";
-  const trendRoot = apiRoot + "/trends";
+  private _createServices(): Record<ServiceName, ServiceClient> {
+    const services = {} as Record<ServiceName, ServiceClient>;
+    
+    for (const [name, definition] of Object.entries(this._serviceDefinitions) as [ServiceName, ServiceDefinition][]) {
+      const serviceUrl = this._getServiceUrl(definition.path);
+      const headers = this._getHeaders();
+      services[name] = definition.factory(serviceUrl, headers, this._fetch);
+    }
+    
+    return services;
+  }
 
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${accessToken}`,
-  };
+  private _getServiceUrl(path: string): string {
+    return `${this._baseUrl}/${path}`;
+  }
 
-  const getLatestPredictions = async ({
-    version = defaultVersion,
-    klines = 20,
-  }: {
-    version?: string;
-    klines?: number;
-  } = {}) => {
-    return fetch(`${predRoot}/latest?version=${version}&klines=${klines}`, {
-      headers,
-    }).then((res) => res.json()) as Promise<{
+  protected _getHeaders(): Record<string, string> {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (this._jwt) {
+      headers["Authorization"] = `Bearer ${this._jwt}`;
+    }
+
+    if (this._refreshToken) {
+      headers["X-Refresh-Token"] = this._refreshToken;
+    }
+
+    if (this._apiKey) {
+      headers["X-API-Key"] = this._apiKey;
+    }
+
+    return headers;
+  }
+
+  // Getters
+  get baseUrl(): string {
+    return this._baseUrl;
+  }
+
+  get apiKey(): string | undefined {
+    return this._apiKey;
+  }
+
+  get jwt(): string | undefined {
+    return this._jwt;
+  }
+
+  get refreshToken(): string | undefined {
+    return this._refreshToken;
+  }
+
+  // Service accessors
+  get hive(): ReturnType<typeof createHiveClient> {
+    return this._services.hive as ReturnType<typeof createHiveClient>;
+  }
+
+  get trade(): ReturnType<typeof createTradeClient> {
+    return this._services.trade as ReturnType<typeof createTradeClient>;
+  }
+
+  get pay(): ReturnType<typeof createPayClient> {
+    return this._services.pay as ReturnType<typeof createPayClient>;
+  }
+
+  get metrics(): ReturnType<typeof createMetricsClient> {
+    return this._services.metrics as ReturnType<typeof createMetricsClient>;
+  }
+
+  get auth(): ReturnType<typeof createAuthClient> {
+    return this._services.auth as ReturnType<typeof createAuthClient>;
+  }
+
+  get dex(): ReturnType<typeof createDexClient> {
+    return this._services.dex as ReturnType<typeof createDexClient>;
+  }
+
+  get notification(): ReturnType<typeof createNotificationClient> {
+    return this._services.notification as ReturnType<typeof createNotificationClient>;
+  }
+
+  /**
+   * Configure a specific service with custom settings.
+   * Useful for testing against local servers or different environments.
+   */
+  configure(service: ServiceName, config: Partial<ServiceConfig>): void {
+    if (!(service in this._serviceDefinitions)) {
+      throw new Error(`Invalid service: ${service}. Must be one of ${Object.keys(this._serviceDefinitions).join(", ")}`);
+    }
+
+    const definition = this._serviceDefinitions[service];
+    const serviceUrl = config.host || this._getServiceUrl(definition.path);
+    const headers = this._getHeaders();
+
+    // Update headers with custom config
+    if (config.jwt) {
+      headers["Authorization"] = `Bearer ${config.jwt}`;
+    }
+    if (config.apiKey) {
+      Object.assign(headers, config.apiKey);
+    }
+
+    this._services[service] = definition.factory(serviceUrl, headers, this._fetch);
+  }
+}
+
+/**
+ * The official async TypeScript client for interacting with the Crypticorn API.
+ * It consists of multiple microservices covering the whole stack of the Crypticorn project.
+ */
+class AsyncClient extends BaseClient {
+  public readonly api: {
+    getLatestPredictions: (params?: {
+      version?: string;
+      klines?: number;
+    }) => Promise<{
       predictions: Prediction[];
       klines: Record<string, Kline[]>;
     }>;
+    getLatestTrends: () => Promise<Trend[]>;
+    getEconomicsNewsData: (params?: {
+      entries?: number;
+      reverse?: boolean;
+    }) => Promise<EconomicsNewsData>;
   };
 
-  const getPrediction = async (predictionId: string) => {
-    return fetch(`${predRoot}/id/${predictionId}`, {
-      headers,
-    }).then((res) => res.json()) as Promise<Prediction | null>;
-  };
+  constructor(config: ClientConfig = {}) {
+    super(config);
+    
+    // Create the api namespace with the required methods
+    this.api = {
+      getLatestPredictions: async ({
+        version = "v1",
+        klines = 20,
+      }: {
+        version?: string;
+        klines?: number;
+      } = {}) => {
+        const headers = this._getHeaders();
+        const response = await (this._fetch || globalThis.fetch)(
+          `${this._baseUrl}/v1/predictions/latest?version=${version}&klines=${klines}`,
+          { headers }
+        );
+        return response.json() as Promise<{
+          predictions: Prediction[];
+          klines: Record<string, Kline[]>;
+        }>;
+      },
 
-  const getHistoricalPredictions = async ({
-    symbol,
-    records,
-    version = defaultVersion,
-  }: {
-    symbol: string;
-    records: number;
-    version?: string;
-  }) => {
-    return fetch(
-      `${predRoot}/symbol/${symbol}?version=${version}&limit=${records}`,
-      {
-        headers,
-      }
-    ).then((r) => r.json()) as Promise<Prediction[]>;
-  };
+      getLatestTrends: async () => {
+        const headers = this._getHeaders();
+        const response = await (this._fetch || globalThis.fetch)(
+          `${this._baseUrl}/v1/trends/`,
+          { headers }
+        );
+        return response.json() as Promise<Trend[]>;
+      },
 
-  const getLatestTrends = async () => {
-    return fetch(`${trendRoot}/`, { headers }).then((res) =>
-      res.json()
-    ) as Promise<Trend[]>;
-  };
+      getEconomicsNewsData: async ({
+        entries = 100,
+        reverse = false,
+      }: {
+        entries?: number;
+        reverse?: boolean;
+      } = {}): Promise<EconomicsNewsData> => {
+        const headers = this._getHeaders();
+        const response = await (this._fetch || globalThis.fetch)(
+          `${this._baseUrl}/v1/miners/ec?entries=${entries}&reverse=${reverse}`,
+          { headers }
+        );
+        const res = await response.json() as { data: any[] };
+        
+        // Cast the data array to the actual type
+        const data = res.data.map((item) => {
+          const [
+            timestamp,
+            country,
+            event,
+            currency,
+            previous,
+            estimate,
+            actual,
+            change,
+            impact,
+            changePercentage,
+          ] = item;
+          return {
+            timestamp,
+            country,
+            event,
+            currency,
+            previous,
+            estimate,
+            actual,
+            change,
+            impact,
+            changePercentage,
+          };
+        });
+        return { data };
+      },
+    };
+  }
+}
 
-  const getDexProgress = async () => {
-    return fetch(`${dexRoot}/progress`).then((res) =>
-      res.json()
-    ) as Promise<DexProgress>;
-  };
-
-  // Testing the economics news data
-  const getEconomicsNewsData = async ({
-    entries = 100,
-    reverse = false,
-  }: {
-    entries?: number;
-    reverse?: boolean;
-  } = {}): Promise<EconomicsNewsData> => {
-    const res = (await fetch(
-      `${apiRoot}/miners/ec?entries=${entries}&reverse=${reverse}`,
-      {
-        headers,
-      }
-    ).then((res) => res.json())) as { data: any[] };
-    // cast the data: array to the actual type
-    const data = res.data.map((item) => {
-      const [
-        timestamp,
-        country,
-        event,
-        currency,
-        previous,
-        estimate,
-        actual,
-        change,
-        impact,
-        changePercentage,
-      ] = item;
-      return {
-        timestamp,
-        country,
-        event,
-        currency,
-        previous,
-        estimate,
-        actual,
-        change,
-        impact,
-        changePercentage,
-      };
-    });
-    return { data };
-  };
-
-  return {
-    apiRoot,
-    getLatestPredictions,
-    getPrediction,
-    getDexProgress,
-    getHistoricalPredictions,
-    getLatestTrends,
-    getEconomicsNewsData,
-  };
-};
+export { AsyncClient };

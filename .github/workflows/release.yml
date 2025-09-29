@@ -2,8 +2,8 @@ name: Release
 on:
   push:
     branches:
-      - main
-      - dev
+      - v3
+      - v3-dev
 
 permissions:
   contents: write # for the git plugin to commit changes
