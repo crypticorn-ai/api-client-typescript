@@ -253,7 +253,7 @@ class AsyncClient extends BaseClient {
       } = {}) => {
         const headers = this._getHeaders();
         const response = await (this._fetch || globalThis.fetch)(
-          `${this._baseUrl}predictions/latest?version=${version}&klines=${klines}`,
+          `${this._baseUrl}/predictions/latest?version=${version}&klines=${klines}`,
           { headers }
         );
         return response.json() as Promise<{
@@ -265,7 +265,7 @@ class AsyncClient extends BaseClient {
       getLatestTrends: async () => {
         const headers = this._getHeaders();
         const response = await (this._fetch || globalThis.fetch)(
-          `${this._baseUrl}trends/`,
+          `${this._baseUrl}/trends/`,
           { headers }
         );
         return response.json() as Promise<Trend[]>;
@@ -280,7 +280,7 @@ class AsyncClient extends BaseClient {
       } = {}): Promise<EconomicsNewsData> => {
         const headers = this._getHeaders();
         const response = await (this._fetch || globalThis.fetch)(
-          `${this._baseUrl}miners/ec?entries=${entries}&reverse=${reverse}`,
+          `${this._baseUrl}/miners/ec?entries=${entries}&reverse=${reverse}`,
           { headers }
         );
         const res = await response.json() as { data: any[] };
