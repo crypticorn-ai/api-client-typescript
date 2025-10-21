@@ -1,7 +1,5 @@
 /// <reference types="node" />
 import { createClient } from "@hey-api/openapi-ts";
-import prettier from "prettier";
-import fs from "fs/promises";
 import minimist from "minimist";
 
 const args = minimist(process.argv.slice(2));
@@ -57,6 +55,7 @@ async function generateForService(serviceName: string) {
         path,
       },
       output: {
+        lint: null,
         path: `src/${serviceName}`,
       },
       plugins: [
@@ -69,31 +68,6 @@ async function generateForService(serviceName: string) {
       throw err;
     });
 
-    // format files with prettier
-    const files = [
-      `src/${serviceName}/client/client.gen.ts`,
-      `src/${serviceName}/client/types.gen.ts`,
-      `src/${serviceName}/client/utils.gen.ts`,
-      `src/${serviceName}/client/index.ts`,
-      `src/${serviceName}/core/auth.gen.ts`,
-      `src/${serviceName}/core/bodySerializer.gen.ts`,
-      `src/${serviceName}/core/params.gen.ts`,
-      `src/${serviceName}/core/pathSerializer.gen.ts`,
-      `src/${serviceName}/core/queryKeySerializer.gen.ts`,
-      `src/${serviceName}/core/serverSentEvents.gen.ts`,
-      `src/${serviceName}/core/types.gen.ts`,
-      `src/${serviceName}/core/utils.gen.ts`,
-      `src/${serviceName}/index.ts`,
-      `src/${serviceName}/schemas.gen.ts`,
-      `src/${serviceName}/sdk.gen.ts`,
-      `src/${serviceName}/types.gen.ts`,
-    ];
-    for (const file of files) {
-      const formatted = await prettier.format(await fs.readFile(file, "utf8"), {
-        parser: "typescript",
-      });
-      await fs.writeFile(file, formatted);
-    }
 
     console.log(`Client generation complete for ${serviceName}!`);
   } catch (error) {
@@ -115,16 +89,6 @@ async function main() {
       await generateForService(service);
     }
     
-    // Run build command
-    console.log("Running build...");
-    const { execSync } = await import('child_process');
-    try {
-      execSync('pnpm run build', { stdio: 'inherit' });
-      console.log("Build completed successfully!");
-    } catch (error) {
-      console.error("Build failed:", error);
-      process.exit(1);
-    }
     
     console.log(
       `

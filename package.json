@@ -17,11 +17,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "update": "rm -rf dist && npm run generate --",
     "build": "node esbuild.mjs && tsc",
-    "dev": "tsx watch src/dev.ts",
     "build:watch": "node esbuild.mjs --watch",
-    "generate": "tsx scripts/generate.ts"
+    "generate": "tsx scripts/generate.ts",
+    "format": "uvx pre-commit run biome-format --all-files"
   },
   "dependencies": {
     "@crypticorn-ai/auth-service": "^1.13.0"
@@ -34,7 +33,6 @@
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "esbuild": "^0.23.0",
     "minimist": "^1.2.8",
-    "prettier": "^3.6.2",
     "semantic-release": "^25.0.1",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
