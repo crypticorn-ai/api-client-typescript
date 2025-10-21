@@ -36,4 +36,4 @@ jobs:
       uses: davelosert/vitest-coverage-report-action@v2
       with:
         title: Coverage Report ${{ matrix.node-version }}
-        comment-on: ['pr', 'commit']
+        comment-on: 'pr,commit'
