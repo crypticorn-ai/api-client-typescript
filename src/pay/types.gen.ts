@@ -9,7 +9,7 @@ export type ClientOptions = {
  *
  * Access scopes
  */
-export type AccessScope = "read:predictions" | "read:dex:signals";
+export type AccessScope = 'read:predictions' | 'read:dex:signals';
 
 /**
  * AccessThreshold
@@ -262,7 +262,7 @@ export type Invoice = {
    *
    * The provider the invoice is created with
    */
-  provider: "now" | "staking" | "stripe";
+  provider: 'now' | 'staking' | 'stripe';
   /**
    * Address
    *
@@ -318,7 +318,7 @@ export type InvoiceCreate = {
    *
    * The provider the invoice is created with
    */
-  provider: "now" | "staking" | "stripe";
+  provider: 'now' | 'staking' | 'stripe';
   /**
    * Address
    *
@@ -485,25 +485,25 @@ export type Payment = {
    * Payment status
    */
   status:
-    | "waiting"
-    | "processing"
-    | "paid"
-    | "partially_paid"
-    | "refunded"
-    | "failed"
-    | "cancelled";
+    | 'waiting'
+    | 'processing'
+    | 'paid'
+    | 'partially_paid'
+    | 'refunded'
+    | 'failed'
+    | 'cancelled';
   /**
    * Provider
    *
    * Payment provider
    */
-  provider: "now" | "staking" | "stripe";
+  provider: 'now' | 'staking' | 'stripe';
   /**
    * Market
    *
    * Payment market
    */
-  market: "crypto" | "fiat";
+  market: 'crypto' | 'fiat';
   /**
    * Updated At
    *
@@ -727,7 +727,7 @@ export type ScopeInfo = {
    *
    * Reason for access (allowlist, subscription, balance, etc.)
    */
-  reason: "allowlist" | "subscription" | "balance";
+  reason: 'allowlist' | 'subscription' | 'balance';
 };
 
 /**
@@ -1073,7 +1073,7 @@ export type GetProductsCaptchaAuthData = {
      */
     captcha_token?: string;
   };
-  url: "/products/captcha";
+  url: '/products/captcha';
 };
 
 export type GetProductsCaptchaAuthErrors = {
@@ -1119,7 +1119,7 @@ export type GetProductsData = {
      *
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
     /**
      * Sort By
      *
@@ -1133,7 +1133,7 @@ export type GetProductsData = {
      */
     coupon?: string | null;
   };
-  url: "/products";
+  url: '/products';
 };
 
 export type GetProductsErrors = {
@@ -1164,7 +1164,7 @@ export type CreateProductData = {
   body: ProductCreate;
   path?: never;
   query?: never;
-  url: "/products";
+  url: '/products';
 };
 
 export type CreateProductErrors = {
@@ -1190,7 +1190,7 @@ export type GetProductUsageData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/products/usage";
+  url: '/products/usage';
 };
 
 export type GetProductUsageErrors = {
@@ -1229,7 +1229,7 @@ export type UpdateProductData = {
     id: string;
   };
   query?: never;
-  url: "/products/{id}";
+  url: '/products/{id}';
 };
 
 export type UpdateProductErrors = {
@@ -1272,7 +1272,7 @@ export type GetPaymentHistoryData = {
      *
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
     /**
      * Sort By
      *
@@ -1298,7 +1298,7 @@ export type GetPaymentHistoryData = {
      */
     user_id?: string | null;
   };
-  url: "/payments/history";
+  url: '/payments/history';
 };
 
 export type GetPaymentHistoryErrors = {
@@ -1336,9 +1336,9 @@ export type GetSubscriptionsData = {
      *
      * The state of the subscriptions to get. Defaults to all states.
      */
-    state?: "active" | "inactive" | "both";
+    state?: 'active' | 'inactive' | 'both';
   };
-  url: "/payments/subscriptions";
+  url: '/payments/subscriptions';
 };
 
 export type GetSubscriptionsErrors = {
@@ -1374,7 +1374,7 @@ export type GetPaymentsByInvoiceData = {
     id: string;
   };
   query?: never;
-  url: "/payments/by-invoice/{id}";
+  url: '/payments/by-invoice/{id}';
 };
 
 export type GetPaymentsByInvoiceErrors = {
@@ -1414,7 +1414,7 @@ export type GetCouponByCodeCaptchaAuthData = {
      */
     captcha_token: string;
   };
-  url: "/coupons/by-code/captcha";
+  url: '/coupons/by-code/captcha';
 };
 
 export type GetCouponByCodeCaptchaAuthErrors = {
@@ -1448,7 +1448,7 @@ export type GetCouponByCodeData = {
      */
     code: string;
   };
-  url: "/coupons/by-code";
+  url: '/coupons/by-code';
 };
 
 export type GetCouponByCodeErrors = {
@@ -1492,7 +1492,7 @@ export type GetCouponsData = {
      *
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
     /**
      * Sort By
      *
@@ -1512,7 +1512,7 @@ export type GetCouponsData = {
      */
     page_size?: number;
   };
-  url: "/coupons";
+  url: '/coupons';
 };
 
 export type GetCouponsErrors = {
@@ -1540,7 +1540,7 @@ export type CreateCouponData = {
   body: CouponCreate;
   path?: never;
   query?: never;
-  url: "/coupons";
+  url: '/coupons';
 };
 
 export type CreateCouponErrors = {
@@ -1573,7 +1573,7 @@ export type DeactivateCouponData = {
     id: string;
   };
   query?: never;
-  url: "/coupons/{id}";
+  url: '/coupons/{id}';
 };
 
 export type DeactivateCouponErrors = {
@@ -1610,7 +1610,7 @@ export type UpdateCouponData = {
     id: string;
   };
   query?: never;
-  url: "/coupons/{id}";
+  url: '/coupons/{id}';
 };
 
 export type UpdateCouponErrors = {
@@ -1636,7 +1636,7 @@ export type GetNowApiStatusData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/now/status";
+  url: '/now/status';
 };
 
 export type GetNowApiStatusErrors = {
@@ -1665,7 +1665,7 @@ export type HandleNowWebhookData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/now/webhook";
+  url: '/now/webhook';
 };
 
 export type HandleNowWebhookErrors = {
@@ -1692,7 +1692,7 @@ export type CreateInvoiceData = {
   body: InvoiceCreate;
   path?: never;
   query?: never;
-  url: "/invoices";
+  url: '/invoices';
 };
 
 export type CreateInvoiceErrors = {
@@ -1725,7 +1725,7 @@ export type GetInvoiceData = {
     id: string;
   };
   query?: never;
-  url: "/invoices/{id}";
+  url: '/invoices/{id}';
 };
 
 export type GetInvoiceErrors = {
@@ -1750,7 +1750,7 @@ export type StripeWebhookStripeWebhookPostData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/stripe/webhook";
+  url: '/stripe/webhook';
 };
 
 export type StripeWebhookStripeWebhookPostErrors = {
@@ -1781,7 +1781,7 @@ export type GetAicPriceData = {
      */
     force?: boolean;
   };
-  url: "/token/price";
+  url: '/token/price';
 };
 
 export type GetAicPriceErrors = {
@@ -1822,7 +1822,7 @@ export type GetBalancesData = {
      */
     force?: boolean;
   };
-  url: "/token/balances";
+  url: '/token/balances';
 };
 
 export type GetBalancesErrors = {
@@ -1861,7 +1861,7 @@ export type GetBalances2Data = {
      */
     force?: boolean;
   };
-  url: "/access/balances";
+  url: '/access/balances';
 };
 
 export type GetBalances2Errors = {
@@ -1900,7 +1900,7 @@ export type GetScopesInfoData = {
      */
     force?: boolean;
   };
-  url: "/access/scopes/info";
+  url: '/access/scopes/info';
 };
 
 export type GetScopesInfoErrors = {
@@ -1926,7 +1926,7 @@ export type GetThresholdsData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/access/thresholds";
+  url: '/access/thresholds';
 };
 
 export type GetThresholdsErrors = {
@@ -1954,7 +1954,7 @@ export type PingData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/";
+  url: '/';
 };
 
 export type PingErrors = {
@@ -1981,7 +1981,7 @@ export type GetMetricsData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/metrics";
+  url: '/metrics';
 };
 
 export type GetMetricsErrors = {

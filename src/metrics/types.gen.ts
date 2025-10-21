@@ -10,95 +10,95 @@ export type ClientOptions = {
  * Unique identifier of the API error.
  */
 export type ApiErrorIdentifier =
-  | "allocation_below_current_exposure"
-  | "allocation_below_min_amount"
-  | "allocation_limit_exceeded"
-  | "black_swan"
-  | "bot_already_deleted"
-  | "bot_stopping_completed"
-  | "bot_stopping_started"
-  | "cancelled_open_order"
-  | "client_order_id_already_exists"
-  | "invalid_content_type"
-  | "coupon_invalid"
-  | "delete_bot_error"
-  | "exchange_http_request_error"
-  | "exchange_invalid_parameter"
-  | "exchange_invalid_signature"
-  | "exchange_invalid_timestamp"
-  | "exchange_ip_address_is_not_authorized"
-  | "exchange_key_already_exists"
-  | "exchange_key_in_use"
-  | "exchange_system_under_maintenance"
-  | "exchange_rate_limit_exceeded"
-  | "insufficient_permissions_spot_and_futures_required"
-  | "exchange_service_temporarily_unavailable"
-  | "exchange_system_is_busy"
-  | "exchange_system_configuration_error"
-  | "exchange_internal_system_error"
-  | "exchange_user_account_is_frozen"
-  | "api_key_expired"
-  | "bearer_token_expired"
-  | "failed_open_order"
-  | "forbidden"
-  | "hedge_mode_not_active"
-  | "insufficient_balance"
-  | "insufficient_margin"
-  | "insufficient_scopes"
-  | "invalid_api_key"
-  | "invalid_basic_auth"
-  | "invalid_bearer"
-  | "invalid_data"
-  | "invalid_data_response"
-  | "invalid_exchange_key"
-  | "invalid_model_name"
-  | "leverage_limit_exceeded"
-  | "order_violates_liquidation_price_constraints"
-  | "margin_mode_clash"
-  | "name_not_unique"
-  | "no_credentials"
-  | "now_api_down"
-  | "object_already_exists"
-  | "object_created"
-  | "object_deleted"
-  | "object_locked"
-  | "object_not_found"
-  | "object_updated"
-  | "order_is_already_filled"
-  | "order_is_being_processed"
-  | "order_quantity_limit_exceeded"
-  | "order_does_not_exist"
-  | "order_price_is_invalid"
-  | "order_size_too_large"
-  | "order_size_too_small"
-  | "orphan_open_order"
-  | "orphan_close_order"
-  | "position_limit_exceeded"
-  | "position_does_not_exist"
-  | "position_opening_temporarily_suspended"
-  | "post_only_order_would_immediately_match"
-  | "request_scope_limit_exceeded"
-  | "risk_limit_exceeded"
-  | "rpc_timeout"
-  | "system_settlement_in_process"
-  | "strategy_disabled"
-  | "strategy_leverage_mismatch"
-  | "strategy_not_supporting_exchange"
-  | "success"
-  | "symbol_does_not_exist"
-  | "trading_action_expired"
-  | "trading_action_skipped_bot_stopping"
-  | "trading_has_been_locked"
-  | "trading_is_suspended"
-  | "unknown_error_occurred"
-  | "requested_resource_not_found";
+  | 'allocation_below_current_exposure'
+  | 'allocation_below_min_amount'
+  | 'allocation_limit_exceeded'
+  | 'black_swan'
+  | 'bot_already_deleted'
+  | 'bot_stopping_completed'
+  | 'bot_stopping_started'
+  | 'cancelled_open_order'
+  | 'client_order_id_already_exists'
+  | 'invalid_content_type'
+  | 'coupon_invalid'
+  | 'delete_bot_error'
+  | 'exchange_http_request_error'
+  | 'exchange_invalid_parameter'
+  | 'exchange_invalid_signature'
+  | 'exchange_invalid_timestamp'
+  | 'exchange_ip_address_is_not_authorized'
+  | 'exchange_key_already_exists'
+  | 'exchange_key_in_use'
+  | 'exchange_system_under_maintenance'
+  | 'exchange_rate_limit_exceeded'
+  | 'insufficient_permissions_spot_and_futures_required'
+  | 'exchange_service_temporarily_unavailable'
+  | 'exchange_system_is_busy'
+  | 'exchange_system_configuration_error'
+  | 'exchange_internal_system_error'
+  | 'exchange_user_account_is_frozen'
+  | 'api_key_expired'
+  | 'bearer_token_expired'
+  | 'failed_open_order'
+  | 'forbidden'
+  | 'hedge_mode_not_active'
+  | 'insufficient_balance'
+  | 'insufficient_margin'
+  | 'insufficient_scopes'
+  | 'invalid_api_key'
+  | 'invalid_basic_auth'
+  | 'invalid_bearer'
+  | 'invalid_data'
+  | 'invalid_data_response'
+  | 'invalid_exchange_key'
+  | 'invalid_model_name'
+  | 'leverage_limit_exceeded'
+  | 'order_violates_liquidation_price_constraints'
+  | 'margin_mode_clash'
+  | 'name_not_unique'
+  | 'no_credentials'
+  | 'now_api_down'
+  | 'object_already_exists'
+  | 'object_created'
+  | 'object_deleted'
+  | 'object_locked'
+  | 'object_not_found'
+  | 'object_updated'
+  | 'order_is_already_filled'
+  | 'order_is_being_processed'
+  | 'order_quantity_limit_exceeded'
+  | 'order_does_not_exist'
+  | 'order_price_is_invalid'
+  | 'order_size_too_large'
+  | 'order_size_too_small'
+  | 'orphan_open_order'
+  | 'orphan_close_order'
+  | 'position_limit_exceeded'
+  | 'position_does_not_exist'
+  | 'position_opening_temporarily_suspended'
+  | 'post_only_order_would_immediately_match'
+  | 'request_scope_limit_exceeded'
+  | 'risk_limit_exceeded'
+  | 'rpc_timeout'
+  | 'system_settlement_in_process'
+  | 'strategy_disabled'
+  | 'strategy_leverage_mismatch'
+  | 'strategy_not_supporting_exchange'
+  | 'success'
+  | 'symbol_does_not_exist'
+  | 'trading_action_expired'
+  | 'trading_action_skipped_bot_stopping'
+  | 'trading_has_been_locked'
+  | 'trading_is_suspended'
+  | 'unknown_error_occurred'
+  | 'requested_resource_not_found';
 
 /**
  * ApiErrorLevel
  *
  * Level of the API error.
  */
-export type ApiErrorLevel = "error" | "info" | "success" | "warning";
+export type ApiErrorLevel = 'error' | 'info' | 'success' | 'warning';
 
 /**
  * ApiErrorType
@@ -106,10 +106,10 @@ export type ApiErrorLevel = "error" | "info" | "success" | "warning";
  * Type of the API error.
  */
 export type ApiErrorType =
-  | "user error"
-  | "exchange error"
-  | "server error"
-  | "no error";
+  | 'user error'
+  | 'exchange error'
+  | 'server error'
+  | 'no error';
 
 /**
  * ExceptionDetail
@@ -225,19 +225,19 @@ export type ExchangeMapping = {
  * All exchanges we are using, including public (Exchange)
  */
 export type InternalExchange =
-  | "kucoin"
-  | "bingx"
-  | "binance"
-  | "bybit"
-  | "hyperliquid"
-  | "bitget";
+  | 'kucoin'
+  | 'bingx'
+  | 'binance'
+  | 'bybit'
+  | 'hyperliquid'
+  | 'bitget';
 
 /**
  * MarketType
  *
  * Market types
  */
-export type MarketType = "spot" | "futures";
+export type MarketType = 'spot' | 'futures';
 
 /**
  * MarketcapRanking
@@ -334,27 +334,27 @@ export type Ohlcv = {
  *
  * Error severity levels for logging and monitoring systems.
  */
-export type Severity = "ERROR" | "WARNING" | "CRITICAL";
+export type Severity = 'ERROR' | 'WARNING' | 'CRITICAL';
 
 /**
  * TimeInterval
  *
  * Time interval options for aggregating market data and technical indicators.
  */
-export type TimeInterval = "15m" | "30m" | "1h" | "4h" | "1d";
+export type TimeInterval = '15m' | '30m' | '1h' | '4h' | '1d';
 
 /**
  * TradingStatus
  *
  * Trading status indicators for market availability and lifecycle management.
  */
-export type TradingStatus = "ACTIVE" | "RETIRED" | "EXPIRED";
+export type TradingStatus = 'ACTIVE' | 'RETIRED' | 'EXPIRED';
 
 export type PingData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/";
+  url: '/';
 };
 
 export type PingErrors = {
@@ -381,7 +381,7 @@ export type GetMetricsData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/metrics";
+  url: '/metrics';
 };
 
 export type GetMetricsErrors = {
@@ -411,7 +411,7 @@ export type GetCurrentMarketcapData = {
      */
     limit?: number;
   };
-  url: "/marketcap/current";
+  url: '/marketcap/current';
 };
 
 export type GetCurrentMarketcapErrors = {
@@ -459,7 +459,7 @@ export type GetMarketcapSymbolsData = {
      *
      * Interval for which to fetch symbols and marketcap data
      */
-    interval?: "1d" | "1h";
+    interval?: '1d' | '1h';
     /**
      * Market for which to fetch symbols and marketcap data. Defaults to futures.
      */
@@ -469,9 +469,9 @@ export type GetMarketcapSymbolsData = {
      *
      * Exchange for which to fetch symbols and marketcap data. If not provided, all exchanges will be returned.
      */
-    exchange?: "binance" | "kucoin" | "gate.io" | "bybit" | "bingx" | "bitget";
+    exchange?: 'binance' | 'kucoin' | 'gate.io' | 'bybit' | 'bingx' | 'bitget';
   };
-  url: "/marketcap/symbols";
+  url: '/marketcap/symbols';
 };
 
 export type GetMarketcapSymbolsErrors = {
@@ -529,7 +529,7 @@ export type GetMarketcapSymbolsWithOhlcvData = {
      */
     ohlcv_limit?: number;
   };
-  url: "/marketcap/symbols/ohlcv";
+  url: '/marketcap/symbols/ohlcv';
 };
 
 export type GetMarketcapSymbolsWithOhlcvErrors = {
@@ -573,7 +573,7 @@ export type GetMarketcapBetweenTimestampsData = {
      */
     end_timestamp?: number;
   };
-  url: "/marketcap";
+  url: '/marketcap';
 };
 
 export type GetMarketcapBetweenTimestampsErrors = {
@@ -625,7 +625,7 @@ export type GetKerIndicatorData = {
      */
     timestamp?: number;
   };
-  url: "/indicators/ker";
+  url: '/indicators/ker';
 };
 
 export type GetKerIndicatorErrors = {
@@ -679,7 +679,7 @@ export type GetSmaIndicatorData = {
      */
     timestamp?: number;
   };
-  url: "/indicators/sma";
+  url: '/indicators/sma';
 };
 
 export type GetSmaIndicatorErrors = {
@@ -747,7 +747,7 @@ export type GetAvailableExchangesData = {
      */
     status?: TradingStatus;
   };
-  url: "/exchanges/available";
+  url: '/exchanges/available';
 };
 
 export type GetAvailableExchangesErrors = {
@@ -785,7 +785,7 @@ export type GetExchangeMappingsData = {
      */
     exchange?: InternalExchange;
   };
-  url: "/exchanges/mappings";
+  url: '/exchanges/mappings';
 };
 
 export type GetExchangeMappingsErrors = {
@@ -819,7 +819,7 @@ export type GetAvailableExchangesForMarketData = {
      */
     market: MarketType;
   };
-  url: "/exchanges/list";
+  url: '/exchanges/list';
 };
 
 export type GetAvailableExchangesForMarketErrors = {
@@ -869,7 +869,7 @@ export type GetExchangeMappingsForPairData = {
      */
     quote_currency?: string;
   };
-  url: "/exchanges/pair-mappings";
+  url: '/exchanges/pair-mappings';
 };
 
 export type GetExchangeMappingsForPairErrors = {
@@ -898,7 +898,7 @@ export type GetStableTokensData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/tokens/stables";
+  url: '/tokens/stables';
 };
 
 export type GetStableTokensErrors = {
@@ -929,7 +929,7 @@ export type GetWrappedTokensData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/tokens/wrapped";
+  url: '/tokens/wrapped';
 };
 
 export type GetWrappedTokensErrors = {
@@ -965,7 +965,7 @@ export type GetQuoteCurrenciesData = {
      */
     market: MarketType;
   };
-  url: "/quote-currencies";
+  url: '/quote-currencies';
 };
 
 export type GetQuoteCurrenciesErrors = {
@@ -1015,7 +1015,7 @@ export type GetAvailableMarketsForSymbolData = {
      */
     status?: TradingStatus;
   };
-  url: "/markets";
+  url: '/markets';
 };
 
 export type GetAvailableMarketsForSymbolErrors = {
@@ -1063,7 +1063,7 @@ export type GetMetricsErrorLogsData = {
      */
     end_timestamp?: number;
   };
-  url: "/error_logs";
+  url: '/error_logs';
 };
 
 export type GetMetricsErrorLogsErrors = {

@@ -59,19 +59,19 @@ export type CoinInfo = {
    *
    * The identifier of the coin. Obfuscated for public use.
    */
-  identifier: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  identifier: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
   /**
    * Version Added
    *
    * The data version the coin got introduced in
    */
-  version_added: "1.0";
+  version_added: '1.0';
   /**
    * Version Removed
    *
    * The data version the coin got removed in. If None, the coin is still available.
    */
-  version_removed?: "1.0" | null;
+  version_removed?: '1.0' | null;
 };
 
 /**
@@ -129,19 +129,19 @@ export type DataDownloadResponse = {
    *
    * The coin the data is for
    */
-  coin: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  coin: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
   /**
    * Feature Size
    *
    * The feature size the data is for
    */
-  feature_size: "small" | "medium" | "large";
+  feature_size: 'small' | 'medium' | 'large';
   /**
    * Version
    *
    * The version of the data
    */
-  version: "1.0";
+  version: '1.0';
   /**
    * The target of the data
    */
@@ -179,7 +179,7 @@ export type DataInfo = {
    *
    * The feature sizes available for all data versions.
    */
-  feature_sizes: Array<"small" | "medium" | "large">;
+  feature_sizes: Array<'small' | 'medium' | 'large'>;
   /**
    * Targets
    *
@@ -217,7 +217,7 @@ export type DataOptions = {
    *
    * The feature sizes available on the latest data version.
    */
-  feature_sizes: Array<"small" | "medium" | "large">;
+  feature_sizes: Array<'small' | 'medium' | 'large'>;
 };
 
 /**
@@ -231,7 +231,7 @@ export type DataVersionInfo = {
    *
    * Data version
    */
-  version: "1.0";
+  version: '1.0';
   /**
    * Release Date
    *
@@ -331,7 +331,7 @@ export type ModelCreate = {
    *
    * Coin ID for the model
    */
-  coin_id: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  coin_id: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
   /**
    * Target variable for the model
    */
@@ -367,7 +367,7 @@ export type ModelRead = {
    *
    * Coin ID
    */
-  coin_id: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  coin_id: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
   /**
    * Target variable
    */
@@ -381,7 +381,7 @@ export type ModelRead = {
    *
    * Target type
    */
-  target_type: "continuous" | "binary";
+  target_type: 'continuous' | 'binary';
   /**
    * Evaluations
    *
@@ -413,7 +413,7 @@ export type ModelRead = {
  *
  * Enum for model status
  */
-export type ModelStatus = "created" | "evaluated";
+export type ModelStatus = 'created' | 'evaluated';
 
 /**
  * ModelUpdate
@@ -434,7 +434,7 @@ export type ModelUpdate = {
  *
  * AI model prediction targets with obfuscated names for public API access.
  */
-export type Target = "Tatooine" | "Alderaan" | "Hoth";
+export type Target = 'Tatooine' | 'Alderaan' | 'Hoth';
 
 /**
  * TargetInfo
@@ -451,26 +451,26 @@ export type TargetInfo = {
    *
    * The type of the target.
    */
-  type: "continuous" | "binary";
+  type: 'continuous' | 'binary';
   /**
    * Version Added
    *
    * The data version the target got introduced in.
    */
-  version_added: "1.0";
+  version_added: '1.0';
   /**
    * Version Removed
    *
    * The data version the target got removed in. If None, the target is still available.
    */
-  version_removed?: "1.0" | null;
+  version_removed?: '1.0' | null;
 };
 
 export type CreateModelData = {
   body: ModelCreate;
   path?: never;
   query?: never;
-  url: "/models/creation";
+  url: '/models/creation';
 };
 
 export type CreateModelErrors = {
@@ -513,9 +513,9 @@ export type EvaluateModelData = {
      *
      * Data version for evaluation. Defaults to latest public version. Using older versions won't affect leaderboard rankings but can be useful for additional model testing.
      */
-    version?: "1.0" | null;
+    version?: '1.0' | null;
   };
-  url: "/models/evaluation/{id}";
+  url: '/models/evaluation/{id}';
 };
 
 export type EvaluateModelErrors = {
@@ -548,7 +548,7 @@ export type DeleteModelData = {
     id: number;
   };
   query?: never;
-  url: "/models/{id}";
+  url: '/models/{id}';
 };
 
 export type DeleteModelErrors = {
@@ -581,7 +581,7 @@ export type GetModelData = {
     id: number;
   };
   query?: never;
-  url: "/models/{id}";
+  url: '/models/{id}';
 };
 
 export type GetModelErrors = {
@@ -613,7 +613,7 @@ export type UpdateModelData = {
     id: number;
   };
   query?: never;
-  url: "/models/{id}";
+  url: '/models/{id}';
 };
 
 export type UpdateModelErrors = {
@@ -643,7 +643,7 @@ export type GetModelByNameData = {
     name: string;
   };
   query?: never;
-  url: "/models/by-name/{name}";
+  url: '/models/by-name/{name}';
 };
 
 export type GetModelByNameErrors = {
@@ -683,7 +683,7 @@ export type GetModelsData = {
      */
     user_id?: string | null;
   };
-  url: "/models";
+  url: '/models';
 };
 
 export type GetModelsErrors = {
@@ -721,15 +721,15 @@ export type DownloadDataData = {
      *
      * The version of the data to download. Default is the latest public version.
      */
-    version?: "1.0" | null;
+    version?: '1.0' | null;
     /**
      * Feature Size
      *
      * The number of features in the data. Default is `LARGE`.
      */
-    feature_size?: "small" | "medium" | "large" | null;
+    feature_size?: 'small' | 'medium' | 'large' | null;
   };
-  url: "/data";
+  url: '/data';
 };
 
 export type DownloadDataErrors = {
@@ -755,7 +755,7 @@ export type GetDataInfoData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/data/info";
+  url: '/data/info';
 };
 
 export type GetDataInfoErrors = {
@@ -781,7 +781,7 @@ export type PingData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/";
+  url: '/';
 };
 
 export type PingErrors = {
@@ -808,7 +808,7 @@ export type GetMetricsData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/metrics";
+  url: '/metrics';
 };
 
 export type GetMetricsErrors = {

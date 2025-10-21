@@ -465,7 +465,7 @@ export type GetSignalsData = {
      *
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
     /**
      * Sort By
      *
@@ -485,7 +485,7 @@ export type GetSignalsData = {
      */
     page_size?: number;
   };
-  url: "/signals";
+  url: '/signals';
 };
 
 export type GetSignalsErrors = {
@@ -529,7 +529,7 @@ export type GetTopSignalsData = {
      */
     since?: number;
   };
-  url: "/signals/top";
+  url: '/signals/top';
 };
 
 export type GetTopSignalsErrors = {
@@ -555,7 +555,7 @@ export type GetSignalStatsData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/signals/stats";
+  url: '/signals/stats';
 };
 
 export type GetSignalStatsErrors = {
@@ -582,7 +582,7 @@ export type PingData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/";
+  url: '/';
 };
 
 export type PingErrors = {
@@ -609,7 +609,7 @@ export type GetMetricsData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/metrics";
+  url: '/metrics';
 };
 
 export type GetMetricsErrors = {

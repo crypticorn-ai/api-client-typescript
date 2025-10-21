@@ -33,7 +33,7 @@ export type Bot = {
    *
    * Status of the bot
    */
-  status: "running" | "stopping" | "stopped" | "deleted";
+  status: 'running' | 'stopping' | 'stopped' | 'deleted';
   /**
    * Strategy Id
    *
@@ -79,7 +79,7 @@ export type BotUpdate = {
    *
    * Status of the bot
    */
-  status?: "running" | "stopping" | "stopped" | "deleted" | null;
+  status?: 'running' | 'stopping' | 'stopped' | 'deleted' | null;
 };
 
 /**
@@ -135,7 +135,7 @@ export type ExchangeKey = {
    *
    * The exchange the API key is for.
    */
-  exchange: "hyperliquid";
+  exchange: 'hyperliquid';
   /**
    * Deleted
    *
@@ -147,7 +147,7 @@ export type ExchangeKey = {
    *
    * The type of the API key.
    */
-  type: "user" | "vault";
+  type: 'user' | 'vault';
 };
 
 /**
@@ -203,13 +203,13 @@ export type ExchangeKeyCreate = {
    *
    * The exchange the API key is for.
    */
-  exchange: "hyperliquid";
+  exchange: 'hyperliquid';
   /**
    * Type
    *
    * The type of the API key.
    */
-  type: "user" | "vault";
+  type: 'user' | 'vault';
 };
 
 /**
@@ -351,7 +351,7 @@ export type FuturesTradingAction = {
    *
    * Margin mode for futures trades. Default is isolated.
    */
-  margin_mode?: "isolated" | "cross";
+  margin_mode?: 'isolated' | 'cross';
   /**
    * Execution Id
    *
@@ -373,7 +373,7 @@ export type FuturesTradingAction = {
    *
    * The type of market the action is for.
    */
-  market_type: "spot" | "futures";
+  market_type: 'spot' | 'futures';
   /**
    * Strategy Id
    *
@@ -399,7 +399,7 @@ export type FuturesTradingAction = {
    *
    * The type of order to place. Default is market.
    */
-  order_type?: "market" | "limit";
+  order_type?: 'market' | 'limit';
   /**
    * Allocation
    *
@@ -443,7 +443,7 @@ export type FuturesTradingActionCreate = {
    *
    * Margin mode for futures trades. Default is isolated.
    */
-  margin_mode?: "isolated" | "cross";
+  margin_mode?: 'isolated' | 'cross';
   /**
    * Execution Id
    *
@@ -465,7 +465,7 @@ export type FuturesTradingActionCreate = {
    *
    * The type of market the action is for. Must be set to futures.
    */
-  market_type?: "spot" | "futures";
+  market_type?: 'spot' | 'futures';
   /**
    * Strategy Id
    *
@@ -491,7 +491,7 @@ export type FuturesTradingActionCreate = {
    *
    * The type of order to place. Default is market.
    */
-  order_type?: "market" | "limit";
+  order_type?: 'market' | 'limit';
   /**
    * Allocation
    *
@@ -547,7 +547,7 @@ export type Order = {
    *
    * Exchange name. Of type Exchange
    */
-  exchange: "hyperliquid";
+  exchange: 'hyperliquid';
   /**
    * Symbol
    *
@@ -563,13 +563,13 @@ export type Order = {
    *
    * Trade status of the order. Of type OrderStatus
    */
-  status: "new" | "filled" | "partially_filled" | "cancelled" | "failed";
+  status: 'new' | 'filled' | 'partially_filled' | 'cancelled' | 'failed';
   /**
    * Market Type
    *
    * Market type of the order. Of type MarketType
    */
-  market_type: "spot" | "futures";
+  market_type: 'spot' | 'futures';
   /**
    * Trading Action Id
    *
@@ -629,44 +629,44 @@ export type Order = {
    *
    * Margin mode of the order
    */
-  margin_mode?: "isolated" | "cross" | null;
+  margin_mode?: 'isolated' | 'cross' | null;
   /**
    * Status Code
    *
    * Identifier for the status of the order
    */
   status_code:
-    | "unknown_error"
-    | "order_size_too_small"
-    | "order_size_too_large"
-    | "success"
-    | "invalid_exchange_key"
-    | "hedge_mode_not_active"
-    | "margin_mode_clash"
-    | "order_price_invalid"
-    | "insufficient_margin"
-    | "invalid_parameter"
-    | "invalid_signature"
-    | "rate_limit"
-    | "order_not_found"
-    | "symbol_not_found"
-    | "order_limit_exceeded"
-    | "system_error"
-    | "system_busy"
-    | "rpc_timeout"
-    | "position_not_found"
-    | "leverage_exceeded"
-    | "trading_suspended"
-    | "ip_restricted"
-    | "content_type_error"
-    | "request_error"
-    | "orphan_close_order"
-    | "cancelled_open_order"
-    | "failed_open_order"
-    | "orphan_open_order"
-    | "trading_action_skipped_bot_stopping"
-    | "trading_action_expired"
-    | "black_swan";
+    | 'unknown_error'
+    | 'order_size_too_small'
+    | 'order_size_too_large'
+    | 'success'
+    | 'invalid_exchange_key'
+    | 'hedge_mode_not_active'
+    | 'margin_mode_clash'
+    | 'order_price_invalid'
+    | 'insufficient_margin'
+    | 'invalid_parameter'
+    | 'invalid_signature'
+    | 'rate_limit'
+    | 'order_not_found'
+    | 'symbol_not_found'
+    | 'order_limit_exceeded'
+    | 'system_error'
+    | 'system_busy'
+    | 'rpc_timeout'
+    | 'position_not_found'
+    | 'leverage_exceeded'
+    | 'trading_suspended'
+    | 'ip_restricted'
+    | 'content_type_error'
+    | 'request_error'
+    | 'orphan_close_order'
+    | 'cancelled_open_order'
+    | 'failed_open_order'
+    | 'orphan_open_order'
+    | 'trading_action_skipped_bot_stopping'
+    | 'trading_action_expired'
+    | 'black_swan';
   /**
    * Filled Perc
    *
@@ -926,7 +926,7 @@ export type SpotTradingActionCreate = {
    *
    * The type of market the action is for. Must be set to spot.
    */
-  market_type?: "spot" | "futures";
+  market_type?: 'spot' | 'futures';
   /**
    * Strategy Id
    *
@@ -952,7 +952,7 @@ export type SpotTradingActionCreate = {
    *
    * The type of order to place. Default is market.
    */
-  order_type?: "market" | "limit";
+  order_type?: 'market' | 'limit';
   /**
    * Allocation
    *
@@ -1020,7 +1020,7 @@ export type Strategy = {
    *
    * Exchanges supported by the strategy.
    */
-  exchanges: Array<"hyperliquid">;
+  exchanges: Array<'hyperliquid'>;
   /**
    * Enabled
    *
@@ -1038,7 +1038,7 @@ export type Strategy = {
    *
    * Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.
    */
-  margin_mode?: "isolated" | "cross" | null;
+  margin_mode?: 'isolated' | 'cross' | null;
   /**
    * Leverage
    *
@@ -1050,7 +1050,7 @@ export type Strategy = {
    *
    * Market of operation of the strategy
    */
-  market_type: "spot" | "futures";
+  market_type: 'spot' | 'futures';
 };
 
 /**
@@ -1076,7 +1076,7 @@ export type StrategyCreate = {
    *
    * Exchanges supported by the strategy.
    */
-  exchanges: Array<"hyperliquid">;
+  exchanges: Array<'hyperliquid'>;
   /**
    * Enabled
    *
@@ -1094,7 +1094,7 @@ export type StrategyCreate = {
    *
    * Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.
    */
-  margin_mode?: "isolated" | "cross" | null;
+  margin_mode?: 'isolated' | 'cross' | null;
   /**
    * Leverage
    *
@@ -1106,7 +1106,7 @@ export type StrategyCreate = {
    *
    * Market of operation of the strategy
    */
-  market_type: "spot" | "futures";
+  market_type: 'spot' | 'futures';
 };
 
 /**
@@ -1132,7 +1132,7 @@ export type StrategyUpdate = {
    *
    * Exchanges supported by the strategy.
    */
-  exchanges?: Array<"hyperliquid"> | null;
+  exchanges?: Array<'hyperliquid'> | null;
   /**
    * Enabled
    *
@@ -1211,10 +1211,10 @@ export type TpslCreate = {
  * Type of trading action
  */
 export type TradingActionType =
-  | "open_long"
-  | "open_short"
-  | "close_long"
-  | "close_short";
+  | 'open_long'
+  | 'open_short'
+  | 'close_long'
+  | 'close_short';
 
 /**
  * VaultBot
@@ -1245,7 +1245,7 @@ export type VaultBot = {
    *
    * Status of the bot
    */
-  status: "running" | "stopping" | "stopped" | "deleted";
+  status: 'running' | 'stopping' | 'stopped' | 'deleted';
   /**
    * Strategy Id
    *
@@ -1263,7 +1263,7 @@ export type VaultBot = {
    *
    * Exchange name
    */
-  exchange: "hyperliquid";
+  exchange: 'hyperliquid';
   /**
    * Vault details
    */
@@ -1359,7 +1359,7 @@ export type GetBotsPnlData = {
      *
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
     /**
      * Sort By
      *
@@ -1371,7 +1371,7 @@ export type GetBotsPnlData = {
      *
      * Time window for PnL. Defaults to full (all time), or use period (last X days), month, quarter, or year for values since the start of that range.
      */
-    window?: "period" | "month" | "quarter" | "year" | "full";
+    window?: 'period' | 'month' | 'quarter' | 'year' | 'full';
     /**
      * Period
      *
@@ -1389,9 +1389,9 @@ export type GetBotsPnlData = {
      *
      * The type of PnL to return. Defaults to relative.
      */
-    type?: "absolute" | "relative";
+    type?: 'absolute' | 'relative';
   };
-  url: "/bots/orders/pnl";
+  url: '/bots/orders/pnl';
 };
 
 export type GetBotsPnlErrors = {
@@ -1432,7 +1432,7 @@ export type GetBotOrdersData = {
      *
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
     /**
      * Sort By
      *
@@ -1464,7 +1464,7 @@ export type GetBotOrdersData = {
      */
     page_size?: number;
   };
-  url: "/bots/{id}/orders";
+  url: '/bots/{id}/orders';
 };
 
 export type GetBotOrdersErrors = {
@@ -1502,7 +1502,7 @@ export type GetBotActionsData = {
      *
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
     /**
      * Sort By
      *
@@ -1534,7 +1534,7 @@ export type GetBotActionsData = {
      */
     page_size?: number;
   };
-  url: "/bots/{id}/actions";
+  url: '/bots/{id}/actions';
 };
 
 export type GetBotActionsErrors = {
@@ -1577,7 +1577,7 @@ export type GetBotsData = {
      *
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
     /**
      * Sort By
      *
@@ -1591,7 +1591,7 @@ export type GetBotsData = {
      */
     include_deleted?: boolean;
   };
-  url: "/bots";
+  url: '/bots';
 };
 
 export type GetBotsErrors = {
@@ -1618,7 +1618,7 @@ export type CreateBotData = {
   body: BotCreate;
   path?: never;
   query?: never;
-  url: "/bots";
+  url: '/bots';
 };
 
 export type CreateBotErrors = {
@@ -1650,7 +1650,7 @@ export type GetBotData = {
     id: string;
   };
   query?: never;
-  url: "/bots/{id}";
+  url: '/bots/{id}';
 };
 
 export type GetBotErrors = {
@@ -1682,7 +1682,7 @@ export type UpdateBotData = {
     id: string;
   };
   query?: never;
-  url: "/bots/{id}";
+  url: '/bots/{id}';
 };
 
 export type UpdateBotErrors = {
@@ -1724,7 +1724,7 @@ export type GetExchangeKeysData = {
      *
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
     /**
      * Sort By
      *
@@ -1732,7 +1732,7 @@ export type GetExchangeKeysData = {
      */
     sort_by?: string | null;
   };
-  url: "/api-keys";
+  url: '/api-keys';
 };
 
 export type GetExchangeKeysErrors = {
@@ -1761,7 +1761,7 @@ export type CreateExchangeKeyData = {
   body: ExchangeKeyCreate;
   path?: never;
   query?: never;
-  url: "/api-keys";
+  url: '/api-keys';
 };
 
 export type CreateExchangeKeyErrors = {
@@ -1795,7 +1795,7 @@ export type DeleteExchangeKeyData = {
     id: string;
   };
   query?: never;
-  url: "/api-keys/{id}";
+  url: '/api-keys/{id}';
 };
 
 export type DeleteExchangeKeyErrors = {
@@ -1829,7 +1829,7 @@ export type UpdateExchangeKeyData = {
     id: string;
   };
   query?: never;
-  url: "/api-keys/{id}";
+  url: '/api-keys/{id}';
 };
 
 export type UpdateExchangeKeyErrors = {
@@ -1856,7 +1856,7 @@ export type GetExchangeKeyBalancesData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/api-keys/balances";
+  url: '/api-keys/balances';
 };
 
 export type GetExchangeKeyBalancesErrors = {
@@ -1885,7 +1885,7 @@ export type PostFuturesActionData = {
   body: FuturesTradingActionCreate;
   path?: never;
   query?: never;
-  url: "/actions/futures";
+  url: '/actions/futures';
 };
 
 export type PostFuturesActionErrors = {
@@ -1912,7 +1912,7 @@ export type PostSpotActionData = {
   body: SpotTradingActionCreate;
   path?: never;
   query?: never;
-  url: "/actions/spot";
+  url: '/actions/spot';
 };
 
 export type PostSpotActionErrors = {
@@ -1936,7 +1936,7 @@ export type GetStrategiesData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/strategies";
+  url: '/strategies';
 };
 
 export type GetStrategiesErrors = {
@@ -1964,7 +1964,7 @@ export type CreateStrategyData = {
   body: StrategyCreate;
   path?: never;
   query?: never;
-  url: "/strategies";
+  url: '/strategies';
 };
 
 export type CreateStrategyErrors = {
@@ -1998,7 +1998,7 @@ export type UpdateStrategyData = {
     id: string;
   };
   query?: never;
-  url: "/strategies/{id}";
+  url: '/strategies/{id}';
 };
 
 export type UpdateStrategyErrors = {
@@ -2025,7 +2025,7 @@ export type PingData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/";
+  url: '/';
 };
 
 export type PingErrors = {
@@ -2052,7 +2052,7 @@ export type GetMetricsData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/metrics";
+  url: '/metrics';
 };
 
 export type GetMetricsErrors = {

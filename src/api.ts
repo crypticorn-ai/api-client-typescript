@@ -1,25 +1,25 @@
-import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
-import { client as tradeClient } from "./trade/client.gen";
-import { client as hiveClient } from "./hive/client.gen";
-import { client as payClient } from "./pay/client.gen";
-import { client as metricsClient } from "./metrics/client.gen";
-import { client as dexClient } from "./dex/client.gen";
-import { client as notificationClient } from "./notification/client.gen";
-import { EconomicsNewsData, Kline, Prediction, Trend } from "./types";
+import { createClient as createAuthClient } from '@crypticorn-ai/auth-service';
+import { client as dexClient } from './dex/client.gen';
+import { client as hiveClient } from './hive/client.gen';
+import { client as metricsClient } from './metrics/client.gen';
+import { client as notificationClient } from './notification/client.gen';
+import { client as payClient } from './pay/client.gen';
+import { client as tradeClient } from './trade/client.gen';
+import type { EconomicsNewsData, Kline, Prediction, Trend } from './types';
 
 // Internal types
-type ServiceName = 
-  | "hive" 
-  | "trade" 
-  | "pay" 
-  | "metrics" 
-  | "auth" 
-  | "dex" 
-  | "notification";
+type ServiceName =
+  | 'hive'
+  | 'trade'
+  | 'pay'
+  | 'metrics'
+  | 'auth'
+  | 'dex'
+  | 'notification';
 
 /**
  * Configuration options for the Crypticorn API client.
- * 
+ *
  * @interface ClientConfig
  */
 interface ClientConfig {
@@ -44,7 +44,7 @@ interface ClientConfig {
   /**
    * Base URL for the Crypticorn API.
    * Defaults to 'https://api.crypticorn.com' if not specified.
-   * 
+   *
    * @default 'https://api.crypticorn.com'
    */
   baseUrl?: string;
@@ -64,12 +64,13 @@ interface ServiceConfig {
 }
 
 // Service client types
-type ServiceClient = typeof hiveClient | 
-  typeof tradeClient | 
-  typeof payClient | 
-  typeof metricsClient | 
-  typeof dexClient | 
-  typeof notificationClient;
+type ServiceClient =
+  | typeof hiveClient
+  | typeof tradeClient
+  | typeof payClient
+  | typeof metricsClient
+  | typeof dexClient
+  | typeof notificationClient;
 
 interface ServiceDefinition {
   client: ServiceClient;
@@ -87,20 +88,21 @@ class BaseClient {
   protected _fetch?: typeof fetch;
   protected _services: Record<ServiceName, ServiceClient>;
 
-  private readonly _serviceDefinitions: Record<ServiceName, ServiceDefinition> = {
-    hive: { client: hiveClient, path: "v1/hive" },
-    trade: { client: tradeClient, path: "v2/trade" },
-    pay: { client: payClient, path: "v1/pay" },
-    metrics: { client: metricsClient, path: "v1/metrics" },
-    auth: { client: createAuthClient(), path: "v1/auth/trpc" },
-    dex: { client: dexClient, path: "v1/dex" },
-    notification: { client: notificationClient, path: "v1/notification" },
-  };
+  private readonly _serviceDefinitions: Record<ServiceName, ServiceDefinition> =
+    {
+      hive: { client: hiveClient, path: 'v1/hive' },
+      trade: { client: tradeClient, path: 'v2/trade' },
+      pay: { client: payClient, path: 'v1/pay' },
+      metrics: { client: metricsClient, path: 'v1/metrics' },
+      auth: { client: createAuthClient(), path: 'v1/auth/trpc' },
+      dex: { client: dexClient, path: 'v1/dex' },
+      notification: { client: notificationClient, path: 'v1/notification' },
+    };
 
   constructor(config: ClientConfig = {}) {
     // Ensure baseUrl does not end with a trailing slash
-    const baseUrl = config.baseUrl || "https://api.crypticorn.com";
-    this._baseUrl = baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+    const baseUrl = config.baseUrl || 'https://api.crypticorn.com';
+    this._baseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
     this._apiKey = config.apiKey;
     this._jwt = config.jwt;
     this._refreshToken = config.refreshToken;
@@ -111,11 +113,13 @@ class BaseClient {
 
   private _createServices(): Record<ServiceName, ServiceClient> {
     const services = {} as Record<ServiceName, ServiceClient>;
-    
-    for (const [name, definition] of Object.entries(this._serviceDefinitions) as [ServiceName, ServiceDefinition][]) {
+
+    for (const [name, definition] of Object.entries(
+      this._serviceDefinitions,
+    ) as [ServiceName, ServiceDefinition][]) {
       const serviceUrl = this._getServiceUrl(definition.path);
       const headers = this._getHeaders();
-      
+
       // Configure the client with the service URL and headers
       if (name === 'auth') {
         // Auth service has a different structure
@@ -124,12 +128,12 @@ class BaseClient {
         (definition.client as ReturnType<typeof createAuthClient>).setConfig({
           baseUrl: serviceUrl,
           headers,
-          fetch: this._fetch
+          fetch: this._fetch,
         });
         services[name] = definition.client;
       }
     }
-    
+
     return services;
   }
 
@@ -139,19 +143,19 @@ class BaseClient {
 
   protected _getHeaders(): Record<string, string> {
     const headers: Record<string, string> = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     };
 
     if (this._jwt) {
-      headers["Authorization"] = `Bearer ${this._jwt}`;
+      headers.Authorization = `Bearer ${this._jwt}`;
     }
 
     if (this._refreshToken) {
-      headers["X-Refresh-Token"] = this._refreshToken;
+      headers['X-Refresh-Token'] = this._refreshToken;
     }
 
     if (this._apiKey) {
-      headers["X-API-Key"] = this._apiKey;
+      headers['X-API-Key'] = this._apiKey;
     }
 
     return headers;
@@ -209,7 +213,9 @@ class BaseClient {
    */
   configure(service: ServiceName, config: Partial<ServiceConfig>): void {
     if (!(service in this._serviceDefinitions)) {
-      throw new Error(`Invalid service: ${service}. Must be one of ${Object.keys(this._serviceDefinitions).join(", ")}`);
+      throw new Error(
+        `Invalid service: ${service}. Must be one of ${Object.keys(this._serviceDefinitions).join(', ')}`,
+      );
     }
 
     const definition = this._serviceDefinitions[service];
@@ -218,7 +224,7 @@ class BaseClient {
 
     // Update headers with custom config
     if (config.jwt) {
-      headers["Authorization"] = `Bearer ${config.jwt}`;
+      headers.Authorization = `Bearer ${config.jwt}`;
     }
     if (config.apiKey) {
       Object.assign(headers, config.apiKey);
@@ -232,7 +238,7 @@ class BaseClient {
       (definition.client as any).setConfig({
         baseUrl: serviceUrl,
         headers,
-        fetch: this._fetch
+        fetch: this._fetch,
       });
       this._services[service] = definition.client;
     }
@@ -261,11 +267,11 @@ class AsyncClient extends BaseClient {
 
   constructor(config: ClientConfig = {}) {
     super(config);
-    
+
     // Create the api namespace with the required methods
     this.api = {
       getLatestPredictions: async ({
-        version = "v1",
+        version = 'v1',
         klines = 20,
       }: {
         version?: string;
@@ -274,7 +280,7 @@ class AsyncClient extends BaseClient {
         const headers = this._getHeaders();
         const response = await (this._fetch || globalThis.fetch)(
           `${this._baseUrl}/v1/predictions/latest?version=${version}&klines=${klines}`,
-          { headers }
+          { headers },
         );
         return response.json() as Promise<{
           predictions: Prediction[];
@@ -286,7 +292,7 @@ class AsyncClient extends BaseClient {
         const headers = this._getHeaders();
         const response = await (this._fetch || globalThis.fetch)(
           `${this._baseUrl}/v1/trends/`,
-          { headers }
+          { headers },
         );
         return response.json() as Promise<Trend[]>;
       },
@@ -301,10 +307,10 @@ class AsyncClient extends BaseClient {
         const headers = this._getHeaders();
         const response = await (this._fetch || globalThis.fetch)(
           `${this._baseUrl}/v1/miners/ec?entries=${entries}&reverse=${reverse}`,
-          { headers }
+          { headers },
         );
-        const res = await response.json() as { data: any[] };
-        
+        const res = (await response.json()) as { data: any[] };
+
         // Cast the data array to the actual type
         const data = res.data.map((item) => {
           const [

@@ -34,9 +34,9 @@ export type Kline = [
 export type DexProgress = {
   status: string;
   data: {
-    "Eth Tokens": number;
-    "Base Tokens": number;
-    "Solana Tokens": number;
+    'Eth Tokens': number;
+    'Base Tokens': number;
+    'Solana Tokens': number;
   };
 };
 
@@ -55,4 +55,4 @@ export type EconomicsNewsData = {
   }[];
 };
 
-export type EnvironmentType = "local" | "dev" | "prod";
+export type EnvironmentType = 'local' | 'dev' | 'prod';
