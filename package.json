@@ -18,9 +18,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "node esbuild.mjs && tsc",
-    "build:watch": "node esbuild.mjs --watch",
-    "generate": "tsx scripts/generate.ts",
-    "format": "uvx pre-commit run biome-format --all-files"
+    "generate": "tsx scripts/generate.ts"
   },
   "dependencies": {
     "@crypticorn-ai/auth-service": "^1.13.0"

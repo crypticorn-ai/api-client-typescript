@@ -2,9 +2,10 @@
 node = "24"
 pnpm = "10.18.3"
 
-[tasks.format]
-run = "pnpm run format"
-description = "Run Biome formatter"
+[tasks.pre-commit]
+run = "uvx pre-commit run --all-files"
+alias = "pc"
+description = "Run all pre-commit hooks"
 
 [tasks.install]
 run = "pnpm install"
@@ -12,7 +13,7 @@ alias = "i"
 description = "Install dependencies (alias: 'i')"
 
 [tasks."install:upgrade"]
-run = "pnpm update"
+run = "pnpm --package=npm-check-updates dlx ncu -i --format group"
 description = "Upgrade dependencies"
 
 [tasks.setup]
@@ -34,5 +35,5 @@ alias = "g"
 run = "pnpm run generate --service {{arg(name='service')}} --env {{flag(name='env')}} --version {{flag(name='version')}}"
 
 [tasks.clean]
-run = "rm -rf dist/ node_modules/.cache/ .tsbuildinfo"
+run = "rm -rf dist/ node_modules/.cache/"
 description = "Clean build artifacts and cache files"
