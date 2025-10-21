@@ -14,7 +14,6 @@ export default defineConfig({
         'coverage/',
         '**/*.d.ts',
         '**/*.gen.ts',
-        'scripts/',
         'esbuild.mjs',
         'vitest.config.ts',
       ],

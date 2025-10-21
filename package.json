@@ -18,7 +18,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "node esbuild.mjs && tsc",
-    "generate": "tsx scripts/generate.ts",
+    "generate": "tsx generate.ts",
     "test": "vitest run",
     "test:cov": "vitest run --coverage"
   },
