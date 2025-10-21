@@ -35,7 +35,7 @@ description = "Build the package"
 [tasks.generate]
 description = "Generate API clients (alias: 'g')"
 usage = '''
-arg "service" "Service to generate (trade, hive, auth, metrics, dex, notification, pay, all)"
+arg "service" "Service to generate (trade, hive, auth, metrics, dex, notification, pay)"
 flag "--env <env>" "Environment (local, dev, prod)" default="local"
 flag "--version <version>" "API version (v1, v2)" default="v1"
 '''
