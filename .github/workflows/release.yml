@@ -1,9 +1,9 @@
 name: Release
 on:
-  push:
-    branches:
-      - v3
-      - v3-dev
+  workflow_run:
+    workflows: ["Test and Coverage"] # only run if the test and coverage workflow has completed successfully
+    types: [completed]
+    branches: [v3, v3-dev]
 
 permissions:
   contents: write # for the git plugin to commit changes

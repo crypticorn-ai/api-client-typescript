@@ -1,6 +1,10 @@
-name: Test
-on: 
-  pull_request:
+name: Test and Coverage
+on: [push, pull_request]
+
+permissions:
+  contents: write
+  checks: write
+  pull-requests: write
 
 jobs:
   test:
@@ -10,12 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         node-version: ["20", "22", "24", "25"]
-    
-    permissions:
-      # Required to checkout the code
-      contents: read
-      # Required to put a comment into the pull-request
-      pull-requests: write
 
     steps:
     - uses: actions/checkout@v4
