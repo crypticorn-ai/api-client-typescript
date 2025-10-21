@@ -7,6 +7,14 @@ run = "uvx pre-commit run --all-files"
 alias = "pc"
 description = "Run all pre-commit hooks"
 
+[tasks.test]
+run = "pnpm run test"
+description = "Run tests"
+
+[tasks."test:cov"]
+run = "pnpm run test:cov"
+description = "Run tests with coverage"
+
 [tasks.install]
 run = "pnpm install"
 alias = "i"
@@ -35,5 +43,5 @@ alias = "g"
 run = "pnpm run generate --service {{arg(name='service')}} --env {{flag(name='env')}} --version {{flag(name='version')}}"
 
 [tasks.clean]
-run = "rm -rf dist/ node_modules/.cache/"
+run = "rm -rf dist/ node_modules/.cache/ coverage/"
 description = "Clean build artifacts and cache files"

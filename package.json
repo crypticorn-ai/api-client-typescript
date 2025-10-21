@@ -18,7 +18,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "node esbuild.mjs && tsc",
-    "generate": "tsx scripts/generate.ts"
+    "generate": "tsx scripts/generate.ts",
+    "test": "vitest run",
+    "test:cov": "vitest run --coverage"
   },
   "dependencies": {
     "@crypticorn-ai/auth-service": "^1.13.0"
@@ -28,12 +30,14 @@
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
     "@types/node": "^24.9.1",
+    "@vitest/coverage-v8": "^2.1.8",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "esbuild": "^0.23.0",
     "minimist": "^1.2.8",
     "semantic-release": "^25.0.1",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.8"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
