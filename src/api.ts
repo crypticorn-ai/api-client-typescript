@@ -1,10 +1,10 @@
 import { createClient as createAuthClient } from "@crypticorn-ai/auth-service";
-import { createClient as createHiveClient } from "./hive";
-import { createClient as createTradeClient } from "./trade";
-import { createClient as createPayClient } from "./pay";
-import { createClient as createMetricsClient } from "./metrics";
-import { createClient as createDexClient } from "./dex";
-import { createClient as createNotificationClient } from "./notification";
+import { client as tradeClient } from "./trade/client.gen";
+import { client as hiveClient } from "./hive/client.gen";
+import { client as payClient } from "./pay/client.gen";
+import { client as metricsClient } from "./metrics/client.gen";
+import { client as dexClient } from "./dex/client.gen";
+import { client as notificationClient } from "./notification/client.gen";
 import { EconomicsNewsData, Kline, Prediction, Trend } from "./types";
 
 // Internal types
@@ -64,18 +64,15 @@ interface ServiceConfig {
 }
 
 // Service client types
-type ServiceClient = ReturnType<typeof createAuthClient> | 
-  ReturnType<typeof createHiveClient> | 
-  ReturnType<typeof createTradeClient> | 
-  ReturnType<typeof createPayClient> | 
-  ReturnType<typeof createMetricsClient> | 
-  ReturnType<typeof createDexClient> | 
-  ReturnType<typeof createNotificationClient>;
-
-type ServiceClientFactory = (host: string, headers: Record<string, string>, fetchImpl?: typeof fetch) => ServiceClient;
+type ServiceClient = typeof hiveClient | 
+  typeof tradeClient | 
+  typeof payClient | 
+  typeof metricsClient | 
+  typeof dexClient | 
+  typeof notificationClient;
 
 interface ServiceDefinition {
-  factory: ServiceClientFactory;
+  client: ServiceClient;
   path: string;
 }
 
@@ -91,13 +88,13 @@ class BaseClient {
   protected _services: Record<ServiceName, ServiceClient>;
 
   private readonly _serviceDefinitions: Record<ServiceName, ServiceDefinition> = {
-    hive: { factory: createHiveClient, path: "v1/hive" },
-    trade: { factory: createTradeClient, path: "v2/trade" },
-    pay: { factory: createPayClient, path: "v1/pay" },
-    metrics: { factory: createMetricsClient, path: "v1/metrics" },
-    auth: { factory: createAuthClient, path: "v1/auth/trpc" },
-    dex: { factory: createDexClient, path: "v1/dex" },
-    notification: { factory: createNotificationClient, path: "v1/notification" },
+    hive: { client: hiveClient, path: "v1/hive" },
+    trade: { client: tradeClient, path: "v2/trade" },
+    pay: { client: payClient, path: "v1/pay" },
+    metrics: { client: metricsClient, path: "v1/metrics" },
+    auth: { client: createAuthClient(), path: "v1/auth/trpc" },
+    dex: { client: dexClient, path: "v1/dex" },
+    notification: { client: notificationClient, path: "v1/notification" },
   };
 
   constructor(config: ClientConfig = {}) {
@@ -118,7 +115,19 @@ class BaseClient {
     for (const [name, definition] of Object.entries(this._serviceDefinitions) as [ServiceName, ServiceDefinition][]) {
       const serviceUrl = this._getServiceUrl(definition.path);
       const headers = this._getHeaders();
-      services[name] = definition.factory(serviceUrl, headers, this._fetch);
+      
+      // Configure the client with the service URL and headers
+      if (name === 'auth') {
+        // Auth service has a different structure
+        services[name] = definition.client;
+      } else {
+        (definition.client as ReturnType<typeof createAuthClient>).setConfig({
+          baseUrl: serviceUrl,
+          headers,
+          fetch: this._fetch
+        });
+        services[name] = definition.client;
+      }
     }
     
     return services;
@@ -166,32 +175,32 @@ class BaseClient {
   }
 
   // Service accessors
-  get hive(): ReturnType<typeof createHiveClient> {
-    return this._services.hive as ReturnType<typeof createHiveClient>;
+  get hive() {
+    return this._services.hive;
   }
 
-  get trade(): ReturnType<typeof createTradeClient> {
-    return this._services.trade as ReturnType<typeof createTradeClient>;
+  get trade() {
+    return this._services.trade;
   }
 
-  get pay(): ReturnType<typeof createPayClient> {
-    return this._services.pay as ReturnType<typeof createPayClient>;
+  get pay() {
+    return this._services.pay;
   }
 
-  get metrics(): ReturnType<typeof createMetricsClient> {
-    return this._services.metrics as ReturnType<typeof createMetricsClient>;
+  get metrics() {
+    return this._services.metrics;
   }
 
   get auth(): ReturnType<typeof createAuthClient> {
     return this._services.auth as ReturnType<typeof createAuthClient>;
   }
 
-  get dex(): ReturnType<typeof createDexClient> {
-    return this._services.dex as ReturnType<typeof createDexClient>;
+  get dex(): typeof dexClient {
+    return this._services.dex as typeof dexClient;
   }
 
-  get notification(): ReturnType<typeof createNotificationClient> {
-    return this._services.notification as ReturnType<typeof createNotificationClient>;
+  get notification(): typeof notificationClient {
+    return this._services.notification as typeof notificationClient;
   }
 
   /**
@@ -215,7 +224,18 @@ class BaseClient {
       Object.assign(headers, config.apiKey);
     }
 
-    this._services[service] = definition.factory(serviceUrl, headers, this._fetch);
+    // Configure the client with the service URL and headers
+    if (service === 'auth') {
+      // Auth service has a different structure
+      this._services[service] = definition.client;
+    } else {
+      (definition.client as any).setConfig({
+        baseUrl: serviceUrl,
+        headers,
+        fetch: this._fetch
+      });
+      this._services[service] = definition.client;
+    }
   }
 }
 

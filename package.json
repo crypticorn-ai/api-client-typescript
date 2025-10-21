@@ -24,13 +24,13 @@
     "generate": "tsx scripts/generate.ts"
   },
   "dependencies": {
-    "@crypticorn-ai/auth-service": "^1.13.0",
-    "@hey-api/client-fetch": "^0.5.0"
+    "@crypticorn-ai/auth-service": "^1.13.0"
   },
   "devDependencies": {
-    "@hey-api/openapi-ts": "^0.57.1",
+    "@hey-api/openapi-ts": "^0.86.1",
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
+    "@types/node": "^24.9.1",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "esbuild": "^0.23.0",
     "minimist": "^1.2.8",

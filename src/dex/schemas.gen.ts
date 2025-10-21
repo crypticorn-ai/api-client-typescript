@@ -440,3 +440,103 @@ export const TokenDetailSchema = {
   title: "TokenDetail",
   description: "Model for detailed token information",
 } as const;
+
+export const SignalWithTokenWritableSchema = {
+  properties: {
+    ca: {
+      type: "string",
+      title: "Ca",
+      description: "The contract address of the token",
+    },
+    name: {
+      type: "string",
+      title: "Name",
+      description: "The name of the token",
+    },
+    type: {
+      type: "string",
+      title: "Type",
+      description: "The type of the signal",
+    },
+    risk: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Risk",
+      description: "The risk level of the signal",
+    },
+    performance: {
+      type: "string",
+      title: "Performance",
+      description: "The performance in percent as a string. e.g. +100%",
+    },
+    price: {
+      type: "string",
+      title: "Price",
+      description: "The price of the signal",
+    },
+    volume: {
+      $ref: "#/components/schemas/SignalVolume",
+      description: "The volume of the signal",
+    },
+    liquidity: {
+      type: "string",
+      title: "Liquidity",
+      description: "The liquidity of the signal",
+    },
+    mcap: {
+      type: "string",
+      title: "Mcap",
+      description: "The market cap of the signal",
+    },
+    called_at: {
+      type: "integer",
+      title: "Called At",
+      description: "The timestamp of the call",
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "The timestamp of the last update",
+    },
+    tg_id: {
+      anyOf: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Tg Id",
+      description: "The telegram id of the signal",
+    },
+    data: {
+      $ref: "#/components/schemas/TokenData",
+      description: "The token info",
+    },
+  },
+  type: "object",
+  required: [
+    "ca",
+    "name",
+    "type",
+    "performance",
+    "price",
+    "volume",
+    "liquidity",
+    "mcap",
+    "called_at",
+    "updated_at",
+    "tg_id",
+    "data",
+  ],
+  title: "SignalWithToken",
+  description:
+    "Trading signal enriched with comprehensive token metadata and information.",
+} as const;

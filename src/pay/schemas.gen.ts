@@ -1259,3 +1259,135 @@ export const WalletBalanceSchema = {
   title: "WalletBalance",
   description: "Model for a user's balance for a specific wallet",
 } as const;
+
+export const CouponWritableSchema = {
+  properties: {
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+    },
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
+    },
+    code: {
+      type: "string",
+      maxLength: 32,
+      minLength: 4,
+      pattern: "^[A-Z0-9]+$",
+      title: "Code",
+      description: "Coupon code. If not specified, a random code is generated.",
+    },
+    name: {
+      type: "string",
+      title: "Name",
+      description: "A name for the coupon, e.g. 'Black Friday 2025'",
+    },
+    discount: {
+      type: "number",
+      maximum: 1,
+      minimum: 0,
+      title: "Discount",
+      description: "Discount percentage as a decimal",
+    },
+    valid_until: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Valid Until",
+      description:
+        "Coupon valid until timestamp in seconds. If not specified, the coupon does not expire.",
+    },
+    valid_from: {
+      type: "integer",
+      title: "Valid From",
+      description:
+        "Coupon valid from timestamp in seconds. If not specified, the coupon is valid from the current time.",
+    },
+    usage_limit: {
+      anyOf: [
+        {
+          type: "integer",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Usage Limit",
+      description:
+        "Coupon usage limit. If not specified, the coupon can be used unlimited times.",
+    },
+    products: {
+      anyOf: [
+        {
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
+        {
+          type: "null",
+        },
+      ],
+      title: "Products",
+      description:
+        "Products that the coupon can be used on. If not specified, the coupon can be used on all products.",
+    },
+    is_active: {
+      type: "boolean",
+      title: "Is Active",
+      description: "Coupon is active",
+      default: true,
+    },
+    usage_count: {
+      type: "integer",
+      title: "Usage Count",
+      description: "Coupon usage count",
+    },
+  },
+  type: "object",
+  required: [
+    "created_at",
+    "updated_at",
+    "id",
+    "name",
+    "discount",
+    "usage_count",
+  ],
+  title: "Coupon",
+  description: "Model for reading a coupon",
+} as const;
+
+export const UserBalanceWritableSchema = {
+  properties: {
+    wallets: {
+      items: {
+        $ref: "#/components/schemas/WalletBalance",
+      },
+      type: "array",
+      title: "Wallets",
+      description: "List of wallet balances",
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+    },
+  },
+  type: "object",
+  required: ["wallets", "updated_at"],
+  title: "UserBalance",
+  description: "Model for a user's balance",
+} as const;

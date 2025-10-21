@@ -52,76 +52,40 @@ async function generateForService(serviceName: string) {
     // get path from args
     // @ts-ignore
     const path = `${host}/${version}/${serviceName}/openapi.json`;
-    const res = await createClient({
-      // @ts-ignore
-      client: "@hey-api/client-fetch",
+    await createClient({
       input: {
         path,
       },
       output: {
         path: `src/${serviceName}`,
       },
+      plugins: [
+        '@hey-api/sdk',
+        '@hey-api/typescript',
+        '@hey-api/schemas'
+      ],
     }).catch((err) => {
       console.error("Could not find openapi.json file at path:", path);
       throw err;
     });
 
-    // @ts-ignore
-    const ops = res[0].operations.map((op) => op.name);
-
-    // read sdk.gen.ts
-    let sdkGen = await fs.readFile(`src/${serviceName}/sdk.gen.ts`, "utf8");
-
-    // remove line export const client = createClient(createConfig());
-    sdkGen = sdkGen.replace(
-      "export const client = createClient(createConfig());\n",
-      ""
-    );
-
-    // replace "import { createClient" with "import { createClient as createNativeClient"
-    sdkGen = sdkGen.replace(
-      "createClient,",
-      "createClient as createNativeClient,"
-    );
-
-    // Remove all "export " keywords (but preserve named functions/consts)
-    sdkGen = sdkGen.replace(/\bexport\s+/g, "");
-
-    // Now find all import statements robustly
-    const importRegex = /^import[\s\S]+?from\s+["'][^"']+["'];?/gm;
-    const imports = sdkGen.match(importRegex)?.join("\n\n").trim() ?? "";
-    const rest = sdkGen.replace(importRegex, "").trim();
-
-    const tsTemplate = /* ts */ `
-${imports}
-
-export function createClient(
-  baseUrl: string,
-  headers: any,
-  fetch = globalThis.fetch,
-) {
-  const client = createNativeClient(
-    createConfig({
-      baseUrl,
-      fetch,
-      headers,
-    })
-  );
-
-  ${rest}
-
-  return {
-${ops.map((op) => `    ${op},`).join("\n")}
-  };
-}
-`;
-
-    await fs.writeFile(`src/${serviceName}/sdk.gen.ts`, tsTemplate);
-
     // format files with prettier
     const files = [
-      `src/${serviceName}/sdk.gen.ts`,
+      `src/${serviceName}/client/client.gen.ts`,
+      `src/${serviceName}/client/types.gen.ts`,
+      `src/${serviceName}/client/utils.gen.ts`,
+      `src/${serviceName}/client/index.ts`,
+      `src/${serviceName}/core/auth.gen.ts`,
+      `src/${serviceName}/core/bodySerializer.gen.ts`,
+      `src/${serviceName}/core/params.gen.ts`,
+      `src/${serviceName}/core/pathSerializer.gen.ts`,
+      `src/${serviceName}/core/queryKeySerializer.gen.ts`,
+      `src/${serviceName}/core/serverSentEvents.gen.ts`,
+      `src/${serviceName}/core/types.gen.ts`,
+      `src/${serviceName}/core/utils.gen.ts`,
+      `src/${serviceName}/index.ts`,
       `src/${serviceName}/schemas.gen.ts`,
+      `src/${serviceName}/sdk.gen.ts`,
       `src/${serviceName}/types.gen.ts`,
     ];
     for (const file of files) {

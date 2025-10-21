@@ -35,6 +35,7 @@ export const BroadcastSchema = {
               "otp_code",
               "subscription_expiring",
               "subscription_expired",
+              "development_update",
             ],
           },
           {
@@ -91,6 +92,7 @@ export const BroadcastCreateSchema = {
               "otp_code",
               "subscription_expiring",
               "subscription_expired",
+              "development_update",
             ],
           },
           {
@@ -175,6 +177,7 @@ export const BroadcastUpdateSchema = {
                   "otp_code",
                   "subscription_expiring",
                   "subscription_expired",
+                  "development_update",
                 ],
               },
               {
@@ -258,7 +261,7 @@ export const DashboardFieldSchema = {
   title: "DashboardField",
 } as const;
 
-export const DashboardNotificationSchema = {
+export const DashboardNotification_InputSchema = {
   properties: {
     id: {
       type: "string",
@@ -290,6 +293,79 @@ export const DashboardNotificationSchema = {
         "otp_code",
         "subscription_expiring",
         "subscription_expired",
+        "development_update",
+      ],
+      title: "Template Id",
+      description: "Template ID of the notification",
+    },
+    viewed: {
+      type: "boolean",
+      title: "Viewed",
+      description: "Whether the notification has been marked as seen",
+      default: false,
+    },
+    variables: {
+      additionalProperties: true,
+      type: "object",
+      title: "Variables",
+      description: "Variables of the notification",
+    },
+    user_id: {
+      type: "string",
+      title: "User Id",
+      description: "User ID",
+    },
+    rendered: {
+      $ref: "#/components/schemas/UITemplate",
+      description: "Rendered notification",
+    },
+  },
+  type: "object",
+  required: [
+    "id",
+    "created_at",
+    "updated_at",
+    "template_id",
+    "variables",
+    "user_id",
+    "rendered",
+  ],
+  title: "DashboardNotification",
+} as const;
+
+export const DashboardNotification_OutputSchema = {
+  properties: {
+    id: {
+      type: "string",
+      title: "Id",
+      description: "Unique identifier for the resource",
+    },
+    created_at: {
+      type: "integer",
+      title: "Created At",
+      description: "Timestamp of creation",
+    },
+    updated_at: {
+      type: "integer",
+      title: "Updated At",
+      description: "Timestamp of last update",
+    },
+    template_id: {
+      type: "string",
+      enum: [
+        "subscription_predictions_welcome",
+        "subscription_dex_signals_welcome",
+        "subscription_combo_welcome",
+        "new_member",
+        "exchange_api_key_expiring",
+        "test",
+        "new_dex_ai_call",
+        "new_dex_ai_call_incognito",
+        "order_completion",
+        "otp_code",
+        "subscription_expiring",
+        "subscription_expired",
+        "development_update",
       ],
       title: "Template Id",
       description: "Template ID of the notification",
@@ -378,12 +454,15 @@ export const NotificationCreateSchema = {
         "otp_code",
         "subscription_expiring",
         "subscription_expired",
+        "development_update",
       ],
       title: "Template",
       description: "Template ID",
     },
     variables: {
-      additionalProperties: true,
+      additionalProperties: {
+        type: "string",
+      },
       type: "object",
       title: "Variables",
       description: "Variables for the template",
@@ -414,7 +493,7 @@ export const PaginatedResponse_DashboardNotification_Schema = {
   properties: {
     data: {
       items: {
-        $ref: "#/components/schemas/DashboardNotification",
+        $ref: "#/components/schemas/DashboardNotification-Output",
       },
       type: "array",
       title: "Data",
@@ -493,6 +572,7 @@ export const TemplateSchema = {
         "otp_code",
         "subscription_expiring",
         "subscription_expired",
+        "development_update",
       ],
       title: "Identifier",
       description: "Identifier of the template",
@@ -642,6 +722,7 @@ export const UserSettingSchema = {
               "otp_code",
               "subscription_expiring",
               "subscription_expired",
+              "development_update",
             ],
           },
           {
@@ -695,6 +776,7 @@ export const UserSettingCreateSchema = {
               "otp_code",
               "subscription_expiring",
               "subscription_expired",
+              "development_update",
             ],
           },
           {
@@ -739,6 +821,7 @@ export const UserSettingUpdateSchema = {
                   "otp_code",
                   "subscription_expiring",
                   "subscription_expired",
+                  "development_update",
                 ],
               },
               {

@@ -390,8 +390,11 @@ export const ModelCreateSchema = {
     },
     name: {
       type: "string",
+      maxLength: 30,
+      minLength: 5,
+      pattern: "^[a-z0-9_-]+$",
       title: "Name",
-      description: "Model name",
+      description: "The name of the model.",
     },
   },
   type: "object",
@@ -483,13 +486,22 @@ export const ModelStatusSchema = {
 export const ModelUpdateSchema = {
   properties: {
     name: {
-      type: "string",
+      anyOf: [
+        {
+          type: "string",
+          maxLength: 30,
+          minLength: 5,
+          pattern: "^[a-z0-9_-]+$",
+        },
+        {
+          type: "null",
+        },
+      ],
       title: "Name",
-      description: "Model name",
+      description: "The name of the model.",
     },
   },
   type: "object",
-  required: ["name"],
   title: "ModelUpdate",
   description: "Pydantic model for model update",
 } as const;
