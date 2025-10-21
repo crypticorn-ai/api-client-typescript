@@ -24,7 +24,10 @@ jobs:
     - name: Setup pnpm
       uses: pnpm/action-setup@v4
       with:
-        version: 10.18.3
+        version: 10
+    - name: Setup auth token
+      run: |
+        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGE_TOKEN }}" >> ~/.npmrc
     - name: Install Deps
       run: pnpm install --frozen-lockfile
     - name: Build project

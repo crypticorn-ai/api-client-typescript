@@ -1,6 +1,6 @@
 [tools]
 node = "24"
-pnpm = "10.18.3"
+pnpm = "10"
 
 [tasks.pre-commit]
 run = "uvx pre-commit run --all-files"
