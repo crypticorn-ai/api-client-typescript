@@ -31,24 +31,13 @@
     "@hey-api/openapi-ts": "^0.57.1",
     "@semantic-release/exec": "^7.1.0",
     "@semantic-release/git": "^10.0.1",
-    "@trpc/server": "^10.45.2",
-    "@types/cookie-parser": "^1.4.7",
-    "@types/express": "^4.17.21",
-    "@types/node": "^22.1.0",
-    "@types/qs": "^6.9.15",
-    "@types/ws": "^8.5.12",
     "conventional-changelog-conventionalcommits": "^9.1.0",
-    "dotenv": "^16.4.5",
     "esbuild": "^0.23.0",
     "minimist": "^1.2.8",
     "prettier": "^3.4.1",
     "semantic-release": "^24.2.7",
-    "trpc-openapi": "^1.2.0",
     "tsx": "^4.16.5",
-    "typescript": "^5.0.0",
-    "viem": "^2.18.8",
-    "ws": "^8.18.0",
-    "zod": "^3.23.8"
+    "typescript": "^5.0.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
