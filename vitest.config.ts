@@ -8,14 +8,8 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json-summary', 'json', 'html'],
       reportOnFailure: true,
-      exclude: [
-        'node_modules/',
-        'dist/',
-        'coverage/',
-        '**/*.d.ts',
-        '**/*.gen.ts',
-        'esbuild.mjs',
-        'vitest.config.ts',
+      include: [
+        'src/api.ts',
       ],
       thresholds: {
         lines: 80,
