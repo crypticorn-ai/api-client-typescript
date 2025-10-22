@@ -8,6 +8,11 @@ await esbuild.build({
   platform: 'browser',
   outfile: 'dist/index.js',
   format: 'esm',
+  target: 'es2020', // Explicitly set target for better compatibility
   define: {
   },
+  // Add source map for better debugging (optional)
+  // sourcemap: true,
+  // Add legal comments preservation (optional)
+  // legalComments: 'none',
 })
