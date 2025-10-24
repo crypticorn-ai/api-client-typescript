@@ -3,7 +3,7 @@
 /**
  * Access scopes
  */
-export type AccessScope = "read:predictions" | "read:dex:signals";
+export type AccessScope = 'read:predictions' | 'read:dex:signals';
 
 /**
  * Model for an access threshold for lifetime access
@@ -175,7 +175,7 @@ export type Invoice = {
   /**
    * The provider the invoice is created with
    */
-  provider: "now" | "staking" | "stripe";
+  provider: 'now' | 'staking' | 'stripe';
   /**
    * The address of the user. Only used for staking invoices.
    */
@@ -201,7 +201,7 @@ export type Invoice = {
 /**
  * The provider the invoice is created with
  */
-export type provider = "now" | "staking" | "stripe";
+export type provider = 'now' | 'staking' | 'stripe';
 
 /**
  * Model for creating an invoice
@@ -218,7 +218,7 @@ export type InvoiceCreate = {
   /**
    * The provider the invoice is created with
    */
-  provider: "now" | "staking" | "stripe";
+  provider: 'now' | 'staking' | 'stripe';
   /**
    * The address of the user. Only used for staking invoices.
    */
@@ -325,21 +325,21 @@ export type Payment = {
    * Payment status
    */
   status:
-    | "waiting"
-    | "processing"
-    | "paid"
-    | "partially_paid"
-    | "refunded"
-    | "failed"
-    | "cancelled";
+    | 'waiting'
+    | 'processing'
+    | 'paid'
+    | 'partially_paid'
+    | 'refunded'
+    | 'failed'
+    | 'cancelled';
   /**
    * Payment provider
    */
-  provider: "now" | "staking" | "stripe";
+  provider: 'now' | 'staking' | 'stripe';
   /**
    * Payment market
    */
-  market: "crypto" | "fiat";
+  market: 'crypto' | 'fiat';
   /**
    * Payment updated at timestamp in seconds
    */
@@ -360,18 +360,18 @@ export type Payment = {
  * Payment status
  */
 export type status =
-  | "waiting"
-  | "processing"
-  | "paid"
-  | "partially_paid"
-  | "refunded"
-  | "failed"
-  | "cancelled";
+  | 'waiting'
+  | 'processing'
+  | 'paid'
+  | 'partially_paid'
+  | 'refunded'
+  | 'failed'
+  | 'cancelled';
 
 /**
  * Payment market
  */
-export type market = "crypto" | "fiat";
+export type market = 'crypto' | 'fiat';
 
 /**
  * Model for reading a product
@@ -510,13 +510,13 @@ export type ScopeInfo = {
   /**
    * Reason for access (allowlist, subscription, balance, etc.)
    */
-  reason: "allowlist" | "subscription" | "balance";
+  reason: 'allowlist' | 'subscription' | 'balance';
 };
 
 /**
  * Reason for access (allowlist, subscription, balance, etc.)
  */
-export type reason = "allowlist" | "subscription" | "balance";
+export type reason = 'allowlist' | 'subscription' | 'balance';
 
 /**
  * Model containing all scopes the user has access to, and detailed info for each access method (allowlist, subscription, balance).
@@ -717,7 +717,7 @@ export type GetProductsData = {
     /**
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
   };
 };
 
@@ -776,7 +776,7 @@ export type GetPaymentHistoryData = {
     /**
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
     /**
      * The ID of the user. Overrides the authenticated user if provided and the user is an admin.
      */
@@ -793,7 +793,7 @@ export type GetSubscriptionsData = {
     /**
      * The state of the subscriptions to get. Defaults to all states.
      */
-    state?: "active" | "inactive" | "both";
+    state?: 'active' | 'inactive' | 'both';
     /**
      * The ID of the user to get subscriptions for. Overrides the authenticated user if provided and the user is an admin.
      */
@@ -870,7 +870,7 @@ export type GetCouponsData = {
     /**
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
   };
 };
 

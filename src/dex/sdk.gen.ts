@@ -2,7 +2,7 @@ import {
   createClient as createNativeClient,
   createConfig,
   type OptionsLegacyParser,
-} from "@hey-api/client-fetch";
+} from '@hey-api/client-fetch';
 
 import type {
   GetSignalsData,
@@ -17,7 +17,7 @@ import type {
   PingResponse,
   GetMetricsError,
   GetMetricsResponse,
-} from "./types.gen";
+} from './types.gen';
 
 export function createClient(
   baseUrl: string,
@@ -50,7 +50,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/signals",
+      url: '/signals',
     });
   };
 
@@ -69,7 +69,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/signals/top",
+      url: '/signals/top',
     });
   };
 
@@ -88,7 +88,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/signals/stats",
+      url: '/signals/stats',
     });
   };
 
@@ -105,7 +105,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/",
+      url: '/',
     });
   };
 
@@ -122,7 +122,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/metrics",
+      url: '/metrics',
     });
   };
 

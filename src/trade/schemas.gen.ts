@@ -3,67 +3,67 @@
 export const BotSchema = {
   properties: {
     created_at: {
-      type: "integer",
-      title: "Created At",
-      description: "Timestamp of creation",
+      type: 'integer',
+      title: 'Created At',
+      description: 'Timestamp of creation',
     },
     updated_at: {
-      type: "integer",
-      title: "Updated At",
-      description: "Timestamp of last update",
+      type: 'integer',
+      title: 'Updated At',
+      description: 'Timestamp of last update',
     },
     id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
+      type: 'string',
+      title: 'Id',
+      description: 'Unique identifier for the resource',
     },
     status: {
-      type: "string",
-      enum: ["running", "stopping", "stopped", "deleted"],
-      title: "Status",
-      description: "Status of the bot",
+      type: 'string',
+      enum: ['running', 'stopping', 'stopped', 'deleted'],
+      title: 'Status',
+      description: 'Status of the bot',
     },
     strategy_id: {
-      type: "string",
-      title: "Strategy Id",
-      description: "UID for the trading strategy used by the bot",
+      type: 'string',
+      title: 'Strategy Id',
+      description: 'UID for the trading strategy used by the bot',
     },
     api_key_id: {
-      type: "string",
-      title: "Api Key Id",
-      description: "UID for the API key",
+      type: 'string',
+      title: 'Api Key Id',
+      description: 'UID for the API key',
     },
   },
-  type: "object",
+  type: 'object',
   required: [
-    "created_at",
-    "updated_at",
-    "id",
-    "status",
-    "strategy_id",
-    "api_key_id",
+    'created_at',
+    'updated_at',
+    'id',
+    'status',
+    'strategy_id',
+    'api_key_id',
   ],
-  title: "Bot",
-  description: "Trading bot model for read operations.",
+  title: 'Bot',
+  description: 'Trading bot model for read operations.',
 } as const;
 
 export const BotCreateSchema = {
   properties: {
     strategy_id: {
-      type: "string",
-      title: "Strategy Id",
-      description: "UID for the trading strategy used by the bot",
+      type: 'string',
+      title: 'Strategy Id',
+      description: 'UID for the trading strategy used by the bot',
     },
     api_key_id: {
-      type: "string",
-      title: "Api Key Id",
-      description: "UID for the API key",
+      type: 'string',
+      title: 'Api Key Id',
+      description: 'UID for the API key',
     },
   },
-  type: "object",
-  required: ["strategy_id", "api_key_id"],
-  title: "BotCreate",
-  description: "Trading bot model for API create operations.",
+  type: 'object',
+  required: ['strategy_id', 'api_key_id'],
+  title: 'BotCreate',
+  description: 'Trading bot model for API create operations.',
 } as const;
 
 export const BotUpdateSchema = {
@@ -71,157 +71,157 @@ export const BotUpdateSchema = {
     status: {
       anyOf: [
         {
-          type: "string",
-          enum: ["running", "stopping", "stopped", "deleted"],
+          type: 'string',
+          enum: ['running', 'stopping', 'stopped', 'deleted'],
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Status",
-      description: "Status of the bot",
+      title: 'Status',
+      description: 'Status of the bot',
     },
   },
-  type: "object",
-  title: "BotUpdate",
+  type: 'object',
+  title: 'BotUpdate',
   description:
-    "Trading bot model for API update operations. Fields cannot be unset.",
+    'Trading bot model for API update operations. Fields cannot be unset.',
 } as const;
 
 export const ErrorResponseSchema = {
   properties: {
     detail: {
-      type: "string",
-      title: "Detail",
+      type: 'string',
+      title: 'Detail',
     },
   },
-  type: "object",
-  required: ["detail"],
-  title: "ErrorResponse",
-  description: "Error response schema.",
+  type: 'object',
+  required: ['detail'],
+  title: 'ErrorResponse',
+  description: 'Error response schema.',
 } as const;
 
 export const ExchangeKeySchema = {
   properties: {
     created_at: {
-      type: "integer",
-      title: "Created At",
-      description: "Timestamp of creation",
+      type: 'integer',
+      title: 'Created At',
+      description: 'Timestamp of creation',
     },
     updated_at: {
-      type: "integer",
-      title: "Updated At",
-      description: "Timestamp of last update",
+      type: 'integer',
+      title: 'Updated At',
+      description: 'Timestamp of last update',
     },
     id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
+      type: 'string',
+      title: 'Id',
+      description: 'Unique identifier for the resource',
     },
     label: {
-      type: "string",
-      title: "Label",
-      description: "Label for the API key",
+      type: 'string',
+      title: 'Label',
+      description: 'Label for the API key',
     },
     user_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "User Id",
-      description: "UID for the user, if type user",
+      title: 'User Id',
+      description: 'UID for the user, if type user',
     },
     exchange: {
-      type: "string",
-      const: "hyperliquid",
-      title: "Exchange",
-      description: "The exchange the API key is for.",
+      type: 'string',
+      const: 'hyperliquid',
+      title: 'Exchange',
+      description: 'The exchange the API key is for.',
     },
     deleted: {
-      type: "boolean",
-      title: "Deleted",
-      description: "Whether the API key has been deleted.",
+      type: 'boolean',
+      title: 'Deleted',
+      description: 'Whether the API key has been deleted.',
       default: false,
     },
     type: {
-      type: "string",
-      enum: ["user", "vault"],
-      title: "Type",
-      description: "The type of the API key.",
+      type: 'string',
+      enum: ['user', 'vault'],
+      title: 'Type',
+      description: 'The type of the API key.',
     },
   },
-  type: "object",
-  required: ["created_at", "updated_at", "id", "label", "exchange", "type"],
-  title: "ExchangeKey",
+  type: 'object',
+  required: ['created_at', 'updated_at', 'id', 'label', 'exchange', 'type'],
+  title: 'ExchangeKey',
   description:
-    "Exchange API key model without sensitive credentials for safe read operations.",
+    'Exchange API key model without sensitive credentials for safe read operations.',
 } as const;
 
 export const ExchangeKeyBalanceSchema = {
   properties: {
     api_key_id: {
-      type: "string",
-      title: "Api Key Id",
-      description: "API key ID.",
+      type: 'string',
+      title: 'Api Key Id',
+      description: 'API key ID.',
     },
     futures: {
-      $ref: "#/components/schemas/FuturesBalance",
-      description: "Futures balance information.",
+      $ref: '#/components/schemas/FuturesBalance',
+      description: 'Futures balance information.',
     },
     spot: {
       items: {
-        $ref: "#/components/schemas/SpotBalance",
+        $ref: '#/components/schemas/SpotBalance',
       },
-      type: "array",
-      title: "Spot",
-      description: "Spot balance information.",
+      type: 'array',
+      title: 'Spot',
+      description: 'Spot balance information.',
     },
   },
-  type: "object",
-  required: ["api_key_id", "futures", "spot"],
-  title: "ExchangeKeyBalance",
+  type: 'object',
+  required: ['api_key_id', 'futures', 'spot'],
+  title: 'ExchangeKeyBalance',
   description:
-    "Balance information for an exchange API key including futures and spot balances.",
+    'Balance information for an exchange API key including futures and spot balances.',
 } as const;
 
 export const ExchangeKeyCreateSchema = {
   properties: {
     label: {
-      type: "string",
-      title: "Label",
-      description: "Label for the API key",
+      type: 'string',
+      title: 'Label',
+      description: 'Label for the API key',
     },
     api_key: {
-      type: "string",
-      title: "Api Key",
-      description: "API key",
+      type: 'string',
+      title: 'Api Key',
+      description: 'API key',
     },
     secret: {
-      type: "string",
-      title: "Secret",
-      description: "API secret",
+      type: 'string',
+      title: 'Secret',
+      description: 'API secret',
     },
     exchange: {
-      type: "string",
-      const: "hyperliquid",
-      title: "Exchange",
-      description: "The exchange the API key is for.",
+      type: 'string',
+      const: 'hyperliquid',
+      title: 'Exchange',
+      description: 'The exchange the API key is for.',
     },
     type: {
-      type: "string",
-      enum: ["user", "vault"],
-      title: "Type",
-      description: "The type of the API key.",
+      type: 'string',
+      enum: ['user', 'vault'],
+      title: 'Type',
+      description: 'The type of the API key.',
     },
   },
-  type: "object",
-  required: ["label", "api_key", "secret", "exchange", "type"],
-  title: "ExchangeKeyCreate",
-  description: "Exchange key model for API create operations.",
+  type: 'object',
+  required: ['label', 'api_key', 'secret', 'exchange', 'type'],
+  title: 'ExchangeKeyCreate',
+  description: 'Exchange key model for API create operations.',
 } as const;
 
 export const ExchangeKeyUpdateSchema = {
@@ -229,217 +229,217 @@ export const ExchangeKeyUpdateSchema = {
     label: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Label",
-      description: "Label for the API key",
+      title: 'Label',
+      description: 'Label for the API key',
     },
     api_key: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Api Key",
-      description: "API key",
+      title: 'Api Key',
+      description: 'API key',
     },
     secret: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Secret",
-      description: "API secret",
+      title: 'Secret',
+      description: 'API secret',
     },
   },
-  type: "object",
-  title: "ExchangeKeyUpdate",
-  description: "Exchange key model for API update operations.",
+  type: 'object',
+  title: 'ExchangeKeyUpdate',
+  description: 'Exchange key model for API update operations.',
 } as const;
 
 export const ExecutionIdsSchema = {
   properties: {
     main: {
-      type: "string",
-      title: "Main",
-      description: "Main execution ID.",
+      type: 'string',
+      title: 'Main',
+      description: 'Main execution ID.',
     },
     sl: {
       items: {
-        type: "string",
+        type: 'string',
       },
-      type: "array",
-      title: "Sl",
+      type: 'array',
+      title: 'Sl',
       description:
         "Stop loss execution IDs. List with multiple items ordered by the next stop loss, e.g. price = 10000 => SLs: ['900', '700', '500'].",
     },
     tp: {
       items: {
-        type: "string",
+        type: 'string',
       },
-      type: "array",
-      title: "Tp",
+      type: 'array',
+      title: 'Tp',
       description:
         "Take profit execution IDs. List with multiple items ordered by the next take profit, e.g. price = 10000 => TPs: ['1100', '1300', '1500'].",
     },
   },
-  type: "object",
-  required: ["main", "sl", "tp"],
-  title: "ExecutionIds",
+  type: 'object',
+  required: ['main', 'sl', 'tp'],
+  title: 'ExecutionIds',
   description:
-    "Execution IDs for trading actions including main order and stop loss/take profit orders.",
+    'Execution IDs for trading actions including main order and stop loss/take profit orders.',
 } as const;
 
 export const FuturesBalanceSchema = {
   properties: {
     asset: {
-      type: "string",
-      title: "Asset",
-      description: "Asset the balance values are in",
+      type: 'string',
+      title: 'Asset',
+      description: 'Asset the balance values are in',
     },
     equity: {
-      type: "number",
-      title: "Equity",
-      description: "Net asset value including unrealized profit and loss",
+      type: 'number',
+      title: 'Equity',
+      description: 'Net asset value including unrealized profit and loss',
     },
     balance: {
-      type: "number",
-      title: "Balance",
-      description: "Actual account balance (equity - unrealized)",
+      type: 'number',
+      title: 'Balance',
+      description: 'Actual account balance (equity - unrealized)',
     },
     available: {
-      type: "number",
-      title: "Available",
-      description: "Available balance for trading/withdrawal",
+      type: 'number',
+      title: 'Available',
+      description: 'Available balance for trading/withdrawal',
     },
     unrealized: {
-      type: "number",
-      title: "Unrealized",
-      description: "Unrealized profit and loss",
+      type: 'number',
+      title: 'Unrealized',
+      description: 'Unrealized profit and loss',
     },
     used: {
-      type: "number",
-      title: "Used",
-      description: "Margin used in open positions",
+      type: 'number',
+      title: 'Used',
+      description: 'Margin used in open positions',
     },
     frozen: {
-      type: "number",
-      title: "Frozen",
-      description: "Frozen funds not available for use",
+      type: 'number',
+      title: 'Frozen',
+      description: 'Frozen funds not available for use',
     },
   },
-  type: "object",
+  type: 'object',
   required: [
-    "asset",
-    "equity",
-    "balance",
-    "available",
-    "unrealized",
-    "used",
-    "frozen",
+    'asset',
+    'equity',
+    'balance',
+    'available',
+    'unrealized',
+    'used',
+    'frozen',
   ],
-  title: "FuturesBalance",
-  description: "Model for futures balance",
+  title: 'FuturesBalance',
+  description: 'Model for futures balance',
 } as const;
 
 export const FuturesTradingActionSchema = {
   properties: {
     created_at: {
-      type: "integer",
-      title: "Created At",
-      description: "Timestamp of creation",
+      type: 'integer',
+      title: 'Created At',
+      description: 'Timestamp of creation',
     },
     updated_at: {
-      type: "integer",
-      title: "Updated At",
-      description: "Timestamp of last update",
+      type: 'integer',
+      title: 'Updated At',
+      description: 'Timestamp of last update',
     },
     id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
+      type: 'string',
+      title: 'Id',
+      description: 'Unique identifier for the resource',
     },
     leverage: {
-      type: "integer",
+      type: 'integer',
       minimum: 1,
-      title: "Leverage",
-      description: "Leverage to use for futures trades. Default is 1.",
+      title: 'Leverage',
+      description: 'Leverage to use for futures trades. Default is 1.',
       default: 1,
     },
     margin_mode: {
-      type: "string",
-      enum: ["isolated", "cross"],
-      title: "Margin Mode",
-      description: "Margin mode for futures trades. Default is isolated.",
-      default: "isolated",
+      type: 'string',
+      enum: ['isolated', 'cross'],
+      title: 'Margin Mode',
+      description: 'Margin mode for futures trades. Default is isolated.',
+      default: 'isolated',
     },
     execution_id: {
-      type: "string",
-      title: "Execution Id",
+      type: 'string',
+      title: 'Execution Id',
       description:
-        "UID for the execution of the order. A specific TP/SL execution ID of the opening order.",
+        'UID for the execution of the order. A specific TP/SL execution ID of the opening order.',
     },
     open_order_execution_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Open Order Execution Id",
+      title: 'Open Order Execution Id',
       description:
-        "UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.",
+        'UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.',
     },
     action_type: {
-      $ref: "#/components/schemas/TradingActionType",
-      description: "The type of action.",
+      $ref: '#/components/schemas/TradingActionType',
+      description: 'The type of action.',
     },
     market_type: {
-      type: "string",
-      enum: ["spot", "futures"],
-      title: "Market Type",
-      description: "The type of market the action is for.",
+      type: 'string',
+      enum: ['spot', 'futures'],
+      title: 'Market Type',
+      description: 'The type of market the action is for.',
     },
     strategy_id: {
-      type: "string",
-      title: "Strategy Id",
-      description: "UID for the strategy.",
+      type: 'string',
+      title: 'Strategy Id',
+      description: 'UID for the strategy.',
     },
     symbol: {
-      type: "string",
-      title: "Symbol",
+      type: 'string',
+      title: 'Symbol',
       description:
         "Trading symbol or asset pair in format: 'symbol/quote_currency' (see market service for valid symbols)",
     },
     limit_price: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Limit Price",
+      title: 'Limit Price',
       description:
-        "The limit price for limit orders. If not set, the market price will be used.",
+        'The limit price for limit orders. If not set, the market price will be used.',
     },
     allocation: {
-      type: "string",
-      title: "Allocation",
+      type: 'string',
+      title: 'Allocation',
       description:
         "How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.",
     },
@@ -447,144 +447,144 @@ export const FuturesTradingActionSchema = {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TPSL",
+            $ref: '#/components/schemas/TPSL',
           },
-          type: "array",
+          type: 'array',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Take Profit",
+      title: 'Take Profit',
       description:
-        "Take profit targets. Sorted ascending (for long actions) or descending (for short actions) by delta to market price",
+        'Take profit targets. Sorted ascending (for long actions) or descending (for short actions) by delta to market price',
     },
     stop_loss: {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TPSL",
+            $ref: '#/components/schemas/TPSL',
           },
-          type: "array",
+          type: 'array',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Stop Loss",
+      title: 'Stop Loss',
       description:
-        "Stop loss values. Sorted ascending (for long actions) or descending (for short actions) by delta to market price",
+        'Stop loss values. Sorted ascending (for long actions) or descending (for short actions) by delta to market price',
     },
     expiry_timestamp: {
       anyOf: [
         {
-          type: "integer",
+          type: 'integer',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Expiry Timestamp",
+      title: 'Expiry Timestamp',
       description:
-        "Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.",
+        'Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.',
     },
   },
-  type: "object",
+  type: 'object',
   required: [
-    "created_at",
-    "updated_at",
-    "id",
-    "action_type",
-    "market_type",
-    "strategy_id",
-    "symbol",
-    "allocation",
+    'created_at',
+    'updated_at',
+    'id',
+    'action_type',
+    'market_type',
+    'strategy_id',
+    'symbol',
+    'allocation',
   ],
-  title: "FuturesTradingAction",
-  description: "Model for futures trading actions",
+  title: 'FuturesTradingAction',
+  description: 'Model for futures trading actions',
 } as const;
 
 export const FuturesTradingActionCreateSchema = {
   properties: {
     leverage: {
-      type: "integer",
+      type: 'integer',
       minimum: 1,
-      title: "Leverage",
-      description: "Leverage to use for futures trades. Default is 1.",
+      title: 'Leverage',
+      description: 'Leverage to use for futures trades. Default is 1.',
       default: 1,
     },
     margin_mode: {
-      type: "string",
-      enum: ["isolated", "cross"],
-      title: "Margin Mode",
-      description: "Margin mode for futures trades. Default is isolated.",
-      default: "isolated",
+      type: 'string',
+      enum: ['isolated', 'cross'],
+      title: 'Margin Mode',
+      description: 'Margin mode for futures trades. Default is isolated.',
+      default: 'isolated',
     },
     execution_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Execution Id",
+      title: 'Execution Id',
       description:
-        "UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.",
+        'UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.',
     },
     open_order_execution_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Open Order Execution Id",
+      title: 'Open Order Execution Id',
       description:
-        "UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.",
+        'UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.',
     },
     action_type: {
-      $ref: "#/components/schemas/TradingActionType",
-      description: "The type of action.",
+      $ref: '#/components/schemas/TradingActionType',
+      description: 'The type of action.',
     },
     market_type: {
-      type: "string",
-      enum: ["spot", "futures"],
-      title: "Market Type",
+      type: 'string',
+      enum: ['spot', 'futures'],
+      title: 'Market Type',
       description:
-        "The type of market the action is for. Must be set to futures.",
-      default: "futures",
+        'The type of market the action is for. Must be set to futures.',
+      default: 'futures',
     },
     strategy_id: {
-      type: "string",
-      title: "Strategy Id",
-      description: "UID for the strategy.",
+      type: 'string',
+      title: 'Strategy Id',
+      description: 'UID for the strategy.',
     },
     symbol: {
-      type: "string",
-      title: "Symbol",
+      type: 'string',
+      title: 'Symbol',
       description:
         "Trading symbol or asset pair in format: 'symbol/quote_currency' (see market service for valid symbols)",
     },
     limit_price: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Limit Price",
+      title: 'Limit Price',
       description:
-        "The limit price for limit orders. If not set, the market price will be used.",
+        'The limit price for limit orders. If not set, the market price will be used.',
     },
     allocation: {
-      type: "string",
-      title: "Allocation",
+      type: 'string',
+      title: 'Allocation',
       description:
         "How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.",
     },
@@ -592,587 +592,587 @@ export const FuturesTradingActionCreateSchema = {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TPSLCreate",
+            $ref: '#/components/schemas/TPSLCreate',
           },
-          type: "array",
+          type: 'array',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Take Profit",
+      title: 'Take Profit',
       description:
-        "Take profit targets. Can be set for open actions only. Multiple can be set.",
+        'Take profit targets. Can be set for open actions only. Multiple can be set.',
     },
     stop_loss: {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TPSLCreate",
+            $ref: '#/components/schemas/TPSLCreate',
           },
-          type: "array",
+          type: 'array',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Stop Loss",
+      title: 'Stop Loss',
       description:
-        "Stop loss values. Can be set for open actions only. Multiple can be set.",
+        'Stop loss values. Can be set for open actions only. Multiple can be set.',
     },
     expiry_timestamp: {
       anyOf: [
         {
-          type: "integer",
+          type: 'integer',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Expiry Timestamp",
+      title: 'Expiry Timestamp',
       description:
-        "Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.",
+        'Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.',
     },
   },
-  type: "object",
-  required: ["action_type", "strategy_id", "symbol", "allocation"],
-  title: "FuturesTradingActionCreate",
-  description: "Model for sending futures trading actions to the API",
+  type: 'object',
+  required: ['action_type', 'strategy_id', 'symbol', 'allocation'],
+  title: 'FuturesTradingActionCreate',
+  description: 'Model for sending futures trading actions to the API',
 } as const;
 
 export const OrderSchema = {
   properties: {
     created_at: {
-      type: "integer",
-      title: "Created At",
-      description: "Timestamp of creation",
+      type: 'integer',
+      title: 'Created At',
+      description: 'Timestamp of creation',
     },
     updated_at: {
-      type: "integer",
-      title: "Updated At",
-      description: "Timestamp of last update",
+      type: 'integer',
+      title: 'Updated At',
+      description: 'Timestamp of last update',
     },
     id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
+      type: 'string',
+      title: 'Id',
+      description: 'Unique identifier for the resource',
     },
     exchange: {
-      type: "string",
-      const: "hyperliquid",
-      title: "Exchange",
-      description: "Exchange name. Of type Exchange",
+      type: 'string',
+      const: 'hyperliquid',
+      title: 'Exchange',
+      description: 'Exchange name. Of type Exchange',
     },
     symbol: {
-      type: "string",
-      title: "Symbol",
-      description: "Trading symbol on exchange",
+      type: 'string',
+      title: 'Symbol',
+      description: 'Trading symbol on exchange',
     },
     action_type: {
-      $ref: "#/components/schemas/TradingActionType",
-      description: "Type of trading action. Of type TradingActionType",
+      $ref: '#/components/schemas/TradingActionType',
+      description: 'Type of trading action. Of type TradingActionType',
     },
     status: {
-      type: "string",
-      enum: ["new", "filled", "partially_filled", "cancelled", "failed"],
-      title: "Status",
-      description: "Trade status of the order. Of type OrderStatus",
+      type: 'string',
+      enum: ['new', 'filled', 'partially_filled', 'cancelled', 'failed'],
+      title: 'Status',
+      description: 'Trade status of the order. Of type OrderStatus',
     },
     market_type: {
-      type: "string",
-      enum: ["spot", "futures"],
-      title: "Market Type",
-      description: "Market type of the order. Of type MarketType",
+      type: 'string',
+      enum: ['spot', 'futures'],
+      title: 'Market Type',
+      description: 'Market type of the order. Of type MarketType',
     },
     trading_action_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Trading Action Id",
-      description: "UID for the trading action that placed the order",
+      title: 'Trading Action Id',
+      description: 'UID for the trading action that placed the order',
     },
     execution_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Execution Id",
-      description: "UID for the execution (not unique to the bot)",
+      title: 'Execution Id',
+      description: 'UID for the execution (not unique to the bot)',
     },
     exchange_order_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Exchange Order Id",
-      description: "UID for the order on the exchange",
+      title: 'Exchange Order Id',
+      description: 'UID for the order on the exchange',
     },
     position_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Position Id",
-      description: "UID for the position",
+      title: 'Position Id',
+      description: 'UID for the position',
     },
     api_key_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Api Key Id",
-      description: "UID for the API key",
+      title: 'Api Key Id',
+      description: 'UID for the API key',
     },
     bot_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Bot Id",
-      description: "UID for the bot",
+      title: 'Bot Id',
+      description: 'UID for the bot',
     },
     client_order_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Client Order Id",
-      description: "Client order ID",
+      title: 'Client Order Id',
+      description: 'Client order ID',
     },
     common_symbol: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Common Symbol",
-      description: "Common trading symbol",
+      title: 'Common Symbol',
+      description: 'Common trading symbol',
     },
     price: {
-      type: "string",
-      title: "Price",
-      description: "Price of the order",
+      type: 'string',
+      title: 'Price',
+      description: 'Price of the order',
     },
     margin_mode: {
       anyOf: [
         {
-          type: "string",
-          enum: ["isolated", "cross"],
+          type: 'string',
+          enum: ['isolated', 'cross'],
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Margin Mode",
-      description: "Margin mode of the order",
+      title: 'Margin Mode',
+      description: 'Margin mode of the order',
     },
     status_code: {
-      type: "string",
+      type: 'string',
       enum: [
-        "unknown_error",
-        "invalid_data_request",
-        "object_not_found",
-        "forbidden",
-        "exchange_key_already_exists",
-        "exchange_key_in_use",
-        "order_size_too_small",
-        "order_size_too_large",
-        "bot_stopping_completed",
-        "success",
-        "strategy_disabled",
-        "bot_already_deleted",
-        "object_already_exists",
-        "invalid_exchange_key",
-        "hedge_mode_not_active",
-        "strategy_not_supporting_exchange",
-        "margin_mode_clash",
-        "order_price_invalid",
-        "insufficient_margin",
-        "insufficient_balance",
-        "exchange_invalid_parameter",
-        "exchange_invalid_signature",
-        "exchange_rate_limit",
-        "order_not_found",
-        "symbol_not_found",
-        "order_limit_exceeded",
-        "exchange_system_error",
-        "exchange_system_busy",
-        "rpc_timeout",
-        "position_not_found",
-        "leverage_exceeded",
-        "trading_suspended",
-        "exchange_maintenance",
-        "exchange_ip_restricted",
-        "post_only_rejected",
-        "content_type_error",
-        "exchange_http_error",
-        "orphan_close_order",
-        "cancelled_open_order",
-        "failed_open_order",
-        "orphan_open_order",
-        "trading_action_skipped_bot_stopping",
-        "trading_action_expired",
-        "black_swan",
+        'unknown_error',
+        'invalid_data_request',
+        'object_not_found',
+        'forbidden',
+        'exchange_key_already_exists',
+        'exchange_key_in_use',
+        'order_size_too_small',
+        'order_size_too_large',
+        'bot_stopping_completed',
+        'success',
+        'strategy_disabled',
+        'bot_already_deleted',
+        'object_already_exists',
+        'invalid_exchange_key',
+        'hedge_mode_not_active',
+        'strategy_not_supporting_exchange',
+        'margin_mode_clash',
+        'order_price_invalid',
+        'insufficient_margin',
+        'insufficient_balance',
+        'exchange_invalid_parameter',
+        'exchange_invalid_signature',
+        'exchange_rate_limit',
+        'order_not_found',
+        'symbol_not_found',
+        'order_limit_exceeded',
+        'exchange_system_error',
+        'exchange_system_busy',
+        'rpc_timeout',
+        'position_not_found',
+        'leverage_exceeded',
+        'trading_suspended',
+        'exchange_maintenance',
+        'exchange_ip_restricted',
+        'post_only_rejected',
+        'content_type_error',
+        'exchange_http_error',
+        'orphan_close_order',
+        'cancelled_open_order',
+        'failed_open_order',
+        'orphan_open_order',
+        'trading_action_skipped_bot_stopping',
+        'trading_action_expired',
+        'black_swan',
       ],
-      title: "Status Code",
-      description: "API error identifier",
+      title: 'Status Code',
+      description: 'API error identifier',
     },
     filled_perc: {
-      type: "string",
-      title: "Filled Perc",
-      description: "Percentage of the order filled",
-      default: "0",
+      type: 'string',
+      title: 'Filled Perc',
+      description: 'Percentage of the order filled',
+      default: '0',
     },
     filled_qty: {
-      type: "string",
-      title: "Filled Qty",
+      type: 'string',
+      title: 'Filled Qty',
       description:
         "Quantity filled. Needed for pnl calculation. In the symbol's base currency.",
-      default: "0",
+      default: '0',
     },
     sent_qty: {
-      type: "string",
-      title: "Sent Qty",
+      type: 'string',
+      title: 'Sent Qty',
       description:
         "Quantity sent to the exchange. In the symbol's base currency.",
-      default: "0",
+      default: '0',
     },
     fee: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Fee",
-      description: "Fees for the order as a negative value",
+      title: 'Fee',
+      description: 'Fees for the order as a negative value',
     },
     leverage: {
       anyOf: [
         {
-          type: "integer",
+          type: 'integer',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Leverage",
-      description: "Leverage for the order",
+      title: 'Leverage',
+      description: 'Leverage for the order',
     },
     order_details: {
       additionalProperties: true,
-      type: "object",
-      title: "Order Details",
-      description: "Exchange specific details of the order",
+      type: 'object',
+      title: 'Order Details',
+      description: 'Exchange specific details of the order',
       default: {},
     },
     pnl: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Pnl",
-      description: "Profit and loss for the order",
+      title: 'Pnl',
+      description: 'Profit and loss for the order',
     },
     order_time: {
       anyOf: [
         {
-          type: "integer",
+          type: 'integer',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Order Time",
+      title: 'Order Time',
       description:
-        "Timestamp of order creation on the exchange in seconds since epoch. None if the order is not placed.",
+        'Timestamp of order creation on the exchange in seconds since epoch. None if the order is not placed.',
     },
     is_lost: {
       anyOf: [
         {
-          type: "boolean",
+          type: 'boolean',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Is Lost",
+      title: 'Is Lost',
       description:
-        "Whether the order is a lost order. These are orders that are not filled and recognizable by us.",
+        'Whether the order is a lost order. These are orders that are not filled and recognizable by us.',
     },
   },
-  type: "object",
+  type: 'object',
   required: [
-    "created_at",
-    "updated_at",
-    "id",
-    "exchange",
-    "symbol",
-    "action_type",
-    "status",
-    "market_type",
-    "price",
-    "status_code",
+    'created_at',
+    'updated_at',
+    'id',
+    'exchange',
+    'symbol',
+    'action_type',
+    'status',
+    'market_type',
+    'price',
+    'status_code',
   ],
-  title: "Order",
+  title: 'Order',
   description:
-    "Response model for orders. This is the model that is returned by the API and the database.",
+    'Response model for orders. This is the model that is returned by the API and the database.',
 } as const;
 
 export const PaginatedResponse_FuturesTradingAction_Schema = {
   properties: {
     data: {
       items: {
-        $ref: "#/components/schemas/FuturesTradingAction",
+        $ref: '#/components/schemas/FuturesTradingAction',
       },
-      type: "array",
-      title: "Data",
+      type: 'array',
+      title: 'Data',
     },
     total: {
-      type: "integer",
-      title: "Total",
-      description: "The total number of items",
+      type: 'integer',
+      title: 'Total',
+      description: 'The total number of items',
     },
     page: {
-      type: "integer",
-      title: "Page",
-      description: "The current page number",
+      type: 'integer',
+      title: 'Page',
+      description: 'The current page number',
     },
     page_size: {
-      type: "integer",
-      title: "Page Size",
-      description: "The number of items per page",
+      type: 'integer',
+      title: 'Page Size',
+      description: 'The number of items per page',
     },
     prev: {
       anyOf: [
         {
-          type: "integer",
+          type: 'integer',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Prev",
-      description: "The previous page number",
+      title: 'Prev',
+      description: 'The previous page number',
     },
     next: {
       anyOf: [
         {
-          type: "integer",
+          type: 'integer',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Next",
-      description: "The next page number",
+      title: 'Next',
+      description: 'The next page number',
     },
     last: {
       anyOf: [
         {
-          type: "integer",
+          type: 'integer',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Last",
-      description: "The last page number",
+      title: 'Last',
+      description: 'The last page number',
     },
   },
-  type: "object",
-  required: ["data", "total", "page", "page_size"],
-  title: "PaginatedResponse[FuturesTradingAction]",
+  type: 'object',
+  required: ['data', 'total', 'page', 'page_size'],
+  title: 'PaginatedResponse[FuturesTradingAction]',
 } as const;
 
 export const PaginatedResponse_Order_Schema = {
   properties: {
     data: {
       items: {
-        $ref: "#/components/schemas/Order",
+        $ref: '#/components/schemas/Order',
       },
-      type: "array",
-      title: "Data",
+      type: 'array',
+      title: 'Data',
     },
     total: {
-      type: "integer",
-      title: "Total",
-      description: "The total number of items",
+      type: 'integer',
+      title: 'Total',
+      description: 'The total number of items',
     },
     page: {
-      type: "integer",
-      title: "Page",
-      description: "The current page number",
+      type: 'integer',
+      title: 'Page',
+      description: 'The current page number',
     },
     page_size: {
-      type: "integer",
-      title: "Page Size",
-      description: "The number of items per page",
+      type: 'integer',
+      title: 'Page Size',
+      description: 'The number of items per page',
     },
     prev: {
       anyOf: [
         {
-          type: "integer",
+          type: 'integer',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Prev",
-      description: "The previous page number",
+      title: 'Prev',
+      description: 'The previous page number',
     },
     next: {
       anyOf: [
         {
-          type: "integer",
+          type: 'integer',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Next",
-      description: "The next page number",
+      title: 'Next',
+      description: 'The next page number',
     },
     last: {
       anyOf: [
         {
-          type: "integer",
+          type: 'integer',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Last",
-      description: "The last page number",
+      title: 'Last',
+      description: 'The last page number',
     },
   },
-  type: "object",
-  required: ["data", "total", "page", "page_size"],
-  title: "PaginatedResponse[Order]",
+  type: 'object',
+  required: ['data', 'total', 'page', 'page_size'],
+  title: 'PaginatedResponse[Order]',
 } as const;
 
 export const PnLSchema = {
   properties: {
     timestamp: {
-      type: "integer",
-      title: "Timestamp",
-      description: "Timestamp of the order",
+      type: 'integer',
+      title: 'Timestamp',
+      description: 'Timestamp of the order',
     },
     pnl: {
-      type: "number",
-      title: "Pnl",
+      type: 'number',
+      title: 'Pnl',
       description:
-        "The profit and loss, either absolute or relative depending on the request",
+        'The profit and loss, either absolute or relative depending on the request',
     },
     cum_pnl: {
-      type: "number",
-      title: "Cum Pnl",
+      type: 'number',
+      title: 'Cum Pnl',
       description:
-        "The cumulative profit and loss of the bot until the order (inclusive), either absolute or relative depending on the request",
+        'The cumulative profit and loss of the bot until the order (inclusive), either absolute or relative depending on the request',
     },
   },
-  type: "object",
-  required: ["timestamp", "pnl", "cum_pnl"],
-  title: "PnL",
+  type: 'object',
+  required: ['timestamp', 'pnl', 'cum_pnl'],
+  title: 'PnL',
   description:
-    "The profit and loss of a bot by timestamp. In the case of sampling, the PnL is the sum of the PnLs between the prior timestamp and the current timestamp.",
+    'The profit and loss of a bot by timestamp. In the case of sampling, the PnL is the sum of the PnLs between the prior timestamp and the current timestamp.',
 } as const;
 
 export const PostFuturesActionSchema = {
   properties: {
     id: {
-      type: "string",
-      title: "Id",
-      description: "Action ID.",
+      type: 'string',
+      title: 'Id',
+      description: 'Action ID.',
     },
     execution_ids: {
-      $ref: "#/components/schemas/ExecutionIds",
-      description: "Execution IDs for the action.",
+      $ref: '#/components/schemas/ExecutionIds',
+      description: 'Execution IDs for the action.',
     },
   },
-  type: "object",
-  required: ["id", "execution_ids"],
-  title: "PostFuturesAction",
-  description: "The response when posting a futures action",
+  type: 'object',
+  required: ['id', 'execution_ids'],
+  title: 'PostFuturesAction',
+  description: 'The response when posting a futures action',
 } as const;
 
 export const SpotBalanceSchema = {
   properties: {
     asset: {
-      type: "string",
-      title: "Asset",
-      description: "Asset/Currency code",
+      type: 'string',
+      title: 'Asset',
+      description: 'Asset/Currency code',
     },
     balance: {
-      type: "number",
-      title: "Balance",
-      description: "Balance of the asset",
+      type: 'number',
+      title: 'Balance',
+      description: 'Balance of the asset',
     },
     available: {
-      type: "number",
-      title: "Available",
-      description: "Available balance for trading/withdrawal",
+      type: 'number',
+      title: 'Available',
+      description: 'Available balance for trading/withdrawal',
     },
     frozen: {
-      type: "number",
-      title: "Frozen",
-      description: "Frozen funds not available for use",
+      type: 'number',
+      title: 'Frozen',
+      description: 'Frozen funds not available for use',
     },
     allocated: {
       anyOf: [
         {
-          type: "number",
+          type: 'number',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Allocated",
-      description: "Allocated balance for bots. Added on runtime.",
+      title: 'Allocated',
+      description: 'Allocated balance for bots. Added on runtime.',
     },
   },
-  type: "object",
-  required: ["asset", "balance", "available", "frozen"],
-  title: "SpotBalance",
-  description: "Model for spot balance",
+  type: 'object',
+  required: ['asset', 'balance', 'available', 'frozen'],
+  title: 'SpotBalance',
+  description: 'Model for spot balance',
 } as const;
 
 export const SpotTradingActionCreateSchema = {
@@ -1180,67 +1180,67 @@ export const SpotTradingActionCreateSchema = {
     execution_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Execution Id",
+      title: 'Execution Id',
       description:
-        "UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.",
+        'UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.',
     },
     open_order_execution_id: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Open Order Execution Id",
+      title: 'Open Order Execution Id',
       description:
-        "UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.",
+        'UID for the order to close. Leave empty for open actions. Required on close actions. The main execution ID of the opening order.',
     },
     action_type: {
-      $ref: "#/components/schemas/TradingActionType",
-      description: "The type of action.",
+      $ref: '#/components/schemas/TradingActionType',
+      description: 'The type of action.',
     },
     market_type: {
-      type: "string",
-      enum: ["spot", "futures"],
-      title: "Market Type",
-      description: "The type of market the action is for. Must be set to spot.",
-      default: "spot",
+      type: 'string',
+      enum: ['spot', 'futures'],
+      title: 'Market Type',
+      description: 'The type of market the action is for. Must be set to spot.',
+      default: 'spot',
     },
     strategy_id: {
-      type: "string",
-      title: "Strategy Id",
-      description: "UID for the strategy.",
+      type: 'string',
+      title: 'Strategy Id',
+      description: 'UID for the strategy.',
     },
     symbol: {
-      type: "string",
-      title: "Symbol",
+      type: 'string',
+      title: 'Symbol',
       description:
         "Trading symbol or asset pair in format: 'symbol/quote_currency' (see market service for valid symbols)",
     },
     limit_price: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Limit Price",
+      title: 'Limit Price',
       description:
-        "The limit price for limit orders. If not set, the market price will be used.",
+        'The limit price for limit orders. If not set, the market price will be used.',
     },
     allocation: {
-      type: "string",
-      title: "Allocation",
+      type: 'string',
+      title: 'Allocation',
       description:
         "How much of bot's balance to use for the order (for open actions). How much of the reference open order (open_order_execution_id) to close (for close actions). 0=0%, 1=100%.",
     },
@@ -1248,218 +1248,218 @@ export const SpotTradingActionCreateSchema = {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TPSLCreate",
+            $ref: '#/components/schemas/TPSLCreate',
           },
-          type: "array",
+          type: 'array',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Take Profit",
+      title: 'Take Profit',
       description:
-        "Take profit targets. Can be set for open actions only. Multiple can be set.",
+        'Take profit targets. Can be set for open actions only. Multiple can be set.',
     },
     stop_loss: {
       anyOf: [
         {
           items: {
-            $ref: "#/components/schemas/TPSLCreate",
+            $ref: '#/components/schemas/TPSLCreate',
           },
-          type: "array",
+          type: 'array',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Stop Loss",
+      title: 'Stop Loss',
       description:
-        "Stop loss values. Can be set for open actions only. Multiple can be set.",
+        'Stop loss values. Can be set for open actions only. Multiple can be set.',
     },
     expiry_timestamp: {
       anyOf: [
         {
-          type: "integer",
+          type: 'integer',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Expiry Timestamp",
+      title: 'Expiry Timestamp',
       description:
-        "Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.",
+        'Timestamp of when the order will expire. If not set, the order will not expire. Applied on each bot individually.',
     },
   },
-  type: "object",
-  required: ["action_type", "strategy_id", "symbol", "allocation"],
-  title: "SpotTradingActionCreate",
-  description: "Model for sending spot trading actions to the API",
+  type: 'object',
+  required: ['action_type', 'strategy_id', 'symbol', 'allocation'],
+  title: 'SpotTradingActionCreate',
+  description: 'Model for sending spot trading actions to the API',
 } as const;
 
 export const StrategySchema = {
   properties: {
     created_at: {
-      type: "integer",
-      title: "Created At",
-      description: "Timestamp of creation",
+      type: 'integer',
+      title: 'Created At',
+      description: 'Timestamp of creation',
     },
     updated_at: {
-      type: "integer",
-      title: "Updated At",
-      description: "Timestamp of last update",
+      type: 'integer',
+      title: 'Updated At',
+      description: 'Timestamp of last update',
     },
     id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
+      type: 'string',
+      title: 'Id',
+      description: 'Unique identifier for the resource',
     },
     name: {
-      type: "string",
-      title: "Name",
-      description: "Name of the strategy",
+      type: 'string',
+      title: 'Name',
+      description: 'Name of the strategy',
     },
     description: {
-      type: "string",
-      title: "Description",
-      description: "Description of the strategy",
+      type: 'string',
+      title: 'Description',
+      description: 'Description of the strategy',
     },
     exchanges: {
       items: {
-        type: "string",
-        const: "hyperliquid",
+        type: 'string',
+        const: 'hyperliquid',
       },
-      type: "array",
-      title: "Exchanges",
-      description: "Exchanges supported by the strategy.",
+      type: 'array',
+      title: 'Exchanges',
+      description: 'Exchanges supported by the strategy.',
     },
     enabled: {
-      type: "boolean",
-      title: "Enabled",
+      type: 'boolean',
+      title: 'Enabled',
       description:
-        "Whether the strategy is enabled. If false, no bots will be created or updated for this strategy, open trades will be rejected. Existing bots will be marked as stopping.",
+        'Whether the strategy is enabled. If false, no bots will be created or updated for this strategy, open trades will be rejected. Existing bots will be marked as stopping.',
     },
     identifier: {
-      type: "string",
-      title: "Identifier",
+      type: 'string',
+      title: 'Identifier',
       description:
         "Unique human readable identifier for the strategy e.g. 'daily_trend_momentum'",
     },
     margin_mode: {
       anyOf: [
         {
-          type: "string",
-          enum: ["isolated", "cross"],
+          type: 'string',
+          enum: ['isolated', 'cross'],
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Margin Mode",
+      title: 'Margin Mode',
       description:
-        "Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.",
+        'Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.',
     },
     leverage: {
-      type: "integer",
+      type: 'integer',
       minimum: 1,
-      title: "Leverage",
-      description: "Leverage for the strategy",
+      title: 'Leverage',
+      description: 'Leverage for the strategy',
     },
     market_type: {
-      type: "string",
-      enum: ["spot", "futures"],
-      title: "Market Type",
-      description: "Market of operation of the strategy",
+      type: 'string',
+      enum: ['spot', 'futures'],
+      title: 'Market Type',
+      description: 'Market of operation of the strategy',
     },
   },
-  type: "object",
+  type: 'object',
   required: [
-    "created_at",
-    "updated_at",
-    "id",
-    "name",
-    "description",
-    "exchanges",
-    "enabled",
-    "identifier",
-    "leverage",
-    "market_type",
+    'created_at',
+    'updated_at',
+    'id',
+    'name',
+    'description',
+    'exchanges',
+    'enabled',
+    'identifier',
+    'leverage',
+    'market_type',
   ],
-  title: "Strategy",
-  description: "Strategy model for read operations.",
+  title: 'Strategy',
+  description: 'Strategy model for read operations.',
 } as const;
 
 export const StrategyCreateSchema = {
   properties: {
     name: {
-      type: "string",
-      title: "Name",
-      description: "Name of the strategy",
+      type: 'string',
+      title: 'Name',
+      description: 'Name of the strategy',
     },
     description: {
-      type: "string",
-      title: "Description",
-      description: "Description of the strategy",
+      type: 'string',
+      title: 'Description',
+      description: 'Description of the strategy',
     },
     exchanges: {
       items: {
-        type: "string",
-        const: "hyperliquid",
+        type: 'string',
+        const: 'hyperliquid',
       },
-      type: "array",
-      title: "Exchanges",
-      description: "Exchanges supported by the strategy.",
+      type: 'array',
+      title: 'Exchanges',
+      description: 'Exchanges supported by the strategy.',
     },
     enabled: {
-      type: "boolean",
-      title: "Enabled",
+      type: 'boolean',
+      title: 'Enabled',
       description:
-        "Whether the strategy is enabled. If false, no bots will be created or updated for this strategy, open trades will be rejected. Existing bots will be marked as stopping.",
+        'Whether the strategy is enabled. If false, no bots will be created or updated for this strategy, open trades will be rejected. Existing bots will be marked as stopping.',
     },
     identifier: {
-      type: "string",
-      title: "Identifier",
+      type: 'string',
+      title: 'Identifier',
       description:
         "Unique human readable identifier for the strategy e.g. 'daily_trend_momentum'",
     },
     margin_mode: {
       anyOf: [
         {
-          type: "string",
-          enum: ["isolated", "cross"],
+          type: 'string',
+          enum: ['isolated', 'cross'],
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Margin Mode",
+      title: 'Margin Mode',
       description:
-        "Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.",
+        'Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.',
     },
     leverage: {
-      type: "integer",
+      type: 'integer',
       minimum: 1,
-      title: "Leverage",
-      description: "Leverage for the strategy",
+      title: 'Leverage',
+      description: 'Leverage for the strategy',
     },
     market_type: {
-      type: "string",
-      enum: ["spot", "futures"],
-      title: "Market Type",
-      description: "Market of operation of the strategy",
+      type: 'string',
+      enum: ['spot', 'futures'],
+      title: 'Market Type',
+      description: 'Market of operation of the strategy',
     },
   },
-  type: "object",
+  type: 'object',
   required: [
-    "name",
-    "description",
-    "exchanges",
-    "enabled",
-    "identifier",
-    "leverage",
-    "market_type",
+    'name',
+    'description',
+    'exchanges',
+    'enabled',
+    'identifier',
+    'leverage',
+    'market_type',
   ],
-  title: "StrategyCreate",
-  description: "Strategy model for API create operations.",
+  title: 'StrategyCreate',
+  description: 'Strategy model for API create operations.',
 } as const;
 
 export const StrategyUpdateSchema = {
@@ -1467,75 +1467,75 @@ export const StrategyUpdateSchema = {
     name: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Name",
-      description: "Name of the strategy",
+      title: 'Name',
+      description: 'Name of the strategy',
     },
     description: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Description",
-      description: "Description of the strategy",
+      title: 'Description',
+      description: 'Description of the strategy',
     },
     exchanges: {
       anyOf: [
         {
           items: {
-            type: "string",
-            const: "hyperliquid",
+            type: 'string',
+            const: 'hyperliquid',
           },
-          type: "array",
+          type: 'array',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Exchanges",
-      description: "Exchanges supported by the strategy.",
+      title: 'Exchanges',
+      description: 'Exchanges supported by the strategy.',
     },
     enabled: {
       anyOf: [
         {
-          type: "boolean",
+          type: 'boolean',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Enabled",
+      title: 'Enabled',
       description:
-        "Whether the strategy is enabled. If false, no bots will be created or updated for this strategy, open trades will be rejected. Existing bots will be marked as stopping.",
+        'Whether the strategy is enabled. If false, no bots will be created or updated for this strategy, open trades will be rejected. Existing bots will be marked as stopping.',
     },
     performance_fee: {
       anyOf: [
         {
-          type: "number",
+          type: 'number',
           maximum: 1,
           minimum: 0,
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Performance Fee",
-      description: "Performance fee for the strategy",
+      title: 'Performance Fee',
+      description: 'Performance fee for the strategy',
     },
   },
-  type: "object",
-  title: "StrategyUpdate",
+  type: 'object',
+  title: 'StrategyUpdate',
   description:
-    "Strategy model for API update operations. Fields cannot be unset.",
+    'Strategy model for API update operations. Fields cannot be unset.',
 } as const;
 
 export const TPSLSchema = {
@@ -1543,45 +1543,45 @@ export const TPSLSchema = {
     price_delta: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Price Delta",
+      title: 'Price Delta',
       description:
-        "The price delta to calculate the limit price from the current market price, e.g. 1.01 for a TP of 1% on long",
+        'The price delta to calculate the limit price from the current market price, e.g. 1.01 for a TP of 1% on long',
     },
     price: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Price",
+      title: 'Price',
       description:
-        "The absolute price to set the take profit or stop loss order at.",
+        'The absolute price to set the take profit or stop loss order at.',
     },
     allocation: {
-      type: "string",
-      title: "Allocation",
+      type: 'string',
+      title: 'Allocation',
       description:
-        "Percentage of the open order to sell. All allocations must sum up to 1. Use this allocation again when closing the order.",
+        'Percentage of the open order to sell. All allocations must sum up to 1. Use this allocation again when closing the order.',
     },
     execution_id: {
-      type: "string",
-      title: "Execution Id",
-      description: "Execution ID of the order.",
+      type: 'string',
+      title: 'Execution Id',
+      description: 'Execution ID of the order.',
     },
   },
-  type: "object",
-  required: ["allocation"],
-  title: "TPSL",
-  description: "Runtime fields for take profit and stop loss",
+  type: 'object',
+  required: ['allocation'],
+  title: 'TPSL',
+  description: 'Runtime fields for take profit and stop loss',
 } as const;
 
 export const TPSLCreateSchema = {
@@ -1589,186 +1589,186 @@ export const TPSLCreateSchema = {
     price_delta: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Price Delta",
+      title: 'Price Delta',
       description:
-        "The price delta to calculate the limit price from the current market price, e.g. 1.01 for a TP of 1% on long",
+        'The price delta to calculate the limit price from the current market price, e.g. 1.01 for a TP of 1% on long',
     },
     price: {
       anyOf: [
         {
-          type: "string",
+          type: 'string',
         },
         {
-          type: "null",
+          type: 'null',
         },
       ],
-      title: "Price",
+      title: 'Price',
       description:
-        "The absolute price to set the take profit or stop loss order at.",
+        'The absolute price to set the take profit or stop loss order at.',
     },
     allocation: {
-      type: "string",
-      title: "Allocation",
+      type: 'string',
+      title: 'Allocation',
       description:
-        "Percentage of the open order to sell. All allocations must sum up to 1. Use this allocation again when closing the order.",
+        'Percentage of the open order to sell. All allocations must sum up to 1. Use this allocation again when closing the order.',
     },
   },
-  type: "object",
-  required: ["allocation"],
-  title: "TPSLCreate",
-  description: "Model for take profit and stop loss",
+  type: 'object',
+  required: ['allocation'],
+  title: 'TPSLCreate',
+  description: 'Model for take profit and stop loss',
 } as const;
 
 export const TradingActionTypeSchema = {
-  type: "string",
-  enum: ["open_long", "open_short", "close_long", "close_short"],
-  title: "TradingActionType",
-  description: "Type of trading action",
+  type: 'string',
+  enum: ['open_long', 'open_short', 'close_long', 'close_short'],
+  title: 'TradingActionType',
+  description: 'Type of trading action',
 } as const;
 
 export const VaultBotSchema = {
   properties: {
     created_at: {
-      type: "integer",
-      title: "Created At",
-      description: "Timestamp of creation",
+      type: 'integer',
+      title: 'Created At',
+      description: 'Timestamp of creation',
     },
     updated_at: {
-      type: "integer",
-      title: "Updated At",
-      description: "Timestamp of last update",
+      type: 'integer',
+      title: 'Updated At',
+      description: 'Timestamp of last update',
     },
     id: {
-      type: "string",
-      title: "Id",
-      description: "Unique identifier for the resource",
+      type: 'string',
+      title: 'Id',
+      description: 'Unique identifier for the resource',
     },
     status: {
-      type: "string",
-      enum: ["running", "stopping", "stopped", "deleted"],
-      title: "Status",
-      description: "Status of the bot",
+      type: 'string',
+      enum: ['running', 'stopping', 'stopped', 'deleted'],
+      title: 'Status',
+      description: 'Status of the bot',
     },
     strategy_id: {
-      type: "string",
-      title: "Strategy Id",
-      description: "UID for the trading strategy used by the bot",
+      type: 'string',
+      title: 'Strategy Id',
+      description: 'UID for the trading strategy used by the bot',
     },
     api_key_id: {
-      type: "string",
-      title: "Api Key Id",
-      description: "UID for the API key",
+      type: 'string',
+      title: 'Api Key Id',
+      description: 'UID for the API key',
     },
     exchange: {
-      type: "string",
-      const: "hyperliquid",
-      title: "Exchange",
-      description: "Exchange name",
+      type: 'string',
+      const: 'hyperliquid',
+      title: 'Exchange',
+      description: 'Exchange name',
     },
     vault_details: {
-      $ref: "#/components/schemas/VaultDetails",
-      description: "Vault details",
+      $ref: '#/components/schemas/VaultDetails',
+      description: 'Vault details',
     },
   },
-  type: "object",
+  type: 'object',
   required: [
-    "created_at",
-    "updated_at",
-    "id",
-    "status",
-    "strategy_id",
-    "api_key_id",
-    "exchange",
-    "vault_details",
+    'created_at',
+    'updated_at',
+    'id',
+    'status',
+    'strategy_id',
+    'api_key_id',
+    'exchange',
+    'vault_details',
   ],
-  title: "VaultBot",
-  description: "Bot model including vault details",
+  title: 'VaultBot',
+  description: 'Bot model including vault details',
 } as const;
 
 export const VaultDetailsSchema = {
   properties: {
     name: {
-      type: "string",
-      title: "Name",
-      description: "Vault name",
+      type: 'string',
+      title: 'Name',
+      description: 'Vault name',
     },
     vault_address: {
-      type: "string",
-      title: "Vault Address",
-      description: "Vault address",
+      type: 'string',
+      title: 'Vault Address',
+      description: 'Vault address',
     },
     leader: {
-      type: "string",
-      title: "Leader",
-      description: "Vault leader address",
+      type: 'string',
+      title: 'Leader',
+      description: 'Vault leader address',
     },
     description: {
-      type: "string",
-      title: "Description",
-      description: "Vault description",
+      type: 'string',
+      title: 'Description',
+      description: 'Vault description',
     },
     apr: {
-      type: "number",
-      title: "Apr",
-      description: "Annual percentage rate",
+      type: 'number',
+      title: 'Apr',
+      description: 'Annual percentage rate',
     },
     leader_fraction: {
-      type: "number",
-      title: "Leader Fraction",
-      description: "Leader fraction",
+      type: 'number',
+      title: 'Leader Fraction',
+      description: 'Leader fraction',
     },
     leader_commission: {
-      type: "number",
-      title: "Leader Commission",
-      description: "Leader commission",
+      type: 'number',
+      title: 'Leader Commission',
+      description: 'Leader commission',
     },
     max_distributable: {
-      type: "number",
-      title: "Max Distributable",
-      description: "Maximum distributable amount",
+      type: 'number',
+      title: 'Max Distributable',
+      description: 'Maximum distributable amount',
     },
     max_withdrawable: {
-      type: "number",
-      title: "Max Withdrawable",
-      description: "Maximum withdrawable amount",
+      type: 'number',
+      title: 'Max Withdrawable',
+      description: 'Maximum withdrawable amount',
     },
     is_closed: {
-      type: "boolean",
-      title: "Is Closed",
-      description: "Whether the vault is closed",
+      type: 'boolean',
+      title: 'Is Closed',
+      description: 'Whether the vault is closed',
     },
     allow_deposits: {
-      type: "boolean",
-      title: "Allow Deposits",
-      description: "Whether deposits are allowed",
+      type: 'boolean',
+      title: 'Allow Deposits',
+      description: 'Whether deposits are allowed',
     },
     tvl: {
-      type: "number",
-      title: "Tvl",
-      description: "Current TVL of the vault",
+      type: 'number',
+      title: 'Tvl',
+      description: 'Current TVL of the vault',
     },
   },
-  type: "object",
+  type: 'object',
   required: [
-    "name",
-    "vault_address",
-    "leader",
-    "description",
-    "apr",
-    "leader_fraction",
-    "leader_commission",
-    "max_distributable",
-    "max_withdrawable",
-    "is_closed",
-    "allow_deposits",
-    "tvl",
+    'name',
+    'vault_address',
+    'leader',
+    'description',
+    'apr',
+    'leader_fraction',
+    'leader_commission',
+    'max_distributable',
+    'max_withdrawable',
+    'is_closed',
+    'allow_deposits',
+    'tvl',
   ],
-  title: "VaultDetails",
-  description: "Model for vault details",
+  title: 'VaultDetails',
+  description: 'Model for vault details',
 } as const;

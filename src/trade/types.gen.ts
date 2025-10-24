@@ -19,7 +19,7 @@ export type Bot = {
   /**
    * Status of the bot
    */
-  status: "running" | "stopping" | "stopped" | "deleted";
+  status: 'running' | 'stopping' | 'stopped' | 'deleted';
   /**
    * UID for the trading strategy used by the bot
    */
@@ -33,7 +33,7 @@ export type Bot = {
 /**
  * Status of the bot
  */
-export type status = "running" | "stopping" | "stopped" | "deleted";
+export type status = 'running' | 'stopping' | 'stopped' | 'deleted';
 
 /**
  * Trading bot model for API create operations.
@@ -56,7 +56,7 @@ export type BotUpdate = {
   /**
    * Status of the bot
    */
-  status?: "running" | "stopping" | "stopped" | "deleted" | null;
+  status?: 'running' | 'stopping' | 'stopped' | 'deleted' | null;
 };
 
 /**
@@ -93,7 +93,7 @@ export type ExchangeKey = {
   /**
    * The exchange the API key is for.
    */
-  exchange: "hyperliquid";
+  exchange: 'hyperliquid';
   /**
    * Whether the API key has been deleted.
    */
@@ -101,13 +101,13 @@ export type ExchangeKey = {
   /**
    * The type of the API key.
    */
-  type: "user" | "vault";
+  type: 'user' | 'vault';
 };
 
 /**
  * The type of the API key.
  */
-export type type = "user" | "vault";
+export type type = 'user' | 'vault';
 
 /**
  * Balance information for an exchange API key including futures and spot balances.
@@ -146,11 +146,11 @@ export type ExchangeKeyCreate = {
   /**
    * The exchange the API key is for.
    */
-  exchange: "hyperliquid";
+  exchange: 'hyperliquid';
   /**
    * The type of the API key.
    */
-  type: "user" | "vault";
+  type: 'user' | 'vault';
 };
 
 /**
@@ -246,7 +246,7 @@ export type FuturesTradingAction = {
   /**
    * Margin mode for futures trades. Default is isolated.
    */
-  margin_mode?: "isolated" | "cross";
+  margin_mode?: 'isolated' | 'cross';
   /**
    * UID for the execution of the order. A specific TP/SL execution ID of the opening order.
    */
@@ -262,7 +262,7 @@ export type FuturesTradingAction = {
   /**
    * The type of market the action is for.
    */
-  market_type: "spot" | "futures";
+  market_type: 'spot' | 'futures';
   /**
    * UID for the strategy.
    */
@@ -296,12 +296,12 @@ export type FuturesTradingAction = {
 /**
  * Margin mode for futures trades. Default is isolated.
  */
-export type margin_mode = "isolated" | "cross";
+export type margin_mode = 'isolated' | 'cross';
 
 /**
  * The type of market the action is for.
  */
-export type market_type = "spot" | "futures";
+export type market_type = 'spot' | 'futures';
 
 /**
  * Model for sending futures trading actions to the API
@@ -314,7 +314,7 @@ export type FuturesTradingActionCreate = {
   /**
    * Margin mode for futures trades. Default is isolated.
    */
-  margin_mode?: "isolated" | "cross";
+  margin_mode?: 'isolated' | 'cross';
   /**
    * UID for the execution of the order. Leave empty for open actions. Required on close actions if you have placed a TP/SL before. A specific TP/SL execution ID of the opening order. The allocation should match the TP/SL allocation you set.
    */
@@ -330,7 +330,7 @@ export type FuturesTradingActionCreate = {
   /**
    * The type of market the action is for. Must be set to futures.
    */
-  market_type?: "spot" | "futures";
+  market_type?: 'spot' | 'futures';
   /**
    * UID for the strategy.
    */
@@ -380,7 +380,7 @@ export type Order = {
   /**
    * Exchange name. Of type Exchange
    */
-  exchange: "hyperliquid";
+  exchange: 'hyperliquid';
   /**
    * Trading symbol on exchange
    */
@@ -392,11 +392,11 @@ export type Order = {
   /**
    * Trade status of the order. Of type OrderStatus
    */
-  status: "new" | "filled" | "partially_filled" | "cancelled" | "failed";
+  status: 'new' | 'filled' | 'partially_filled' | 'cancelled' | 'failed';
   /**
    * Market type of the order. Of type MarketType
    */
-  market_type: "spot" | "futures";
+  market_type: 'spot' | 'futures';
   /**
    * UID for the trading action that placed the order
    */
@@ -436,55 +436,55 @@ export type Order = {
   /**
    * Margin mode of the order
    */
-  margin_mode?: "isolated" | "cross" | null;
+  margin_mode?: 'isolated' | 'cross' | null;
   /**
    * API error identifier
    */
   status_code:
-    | "unknown_error"
-    | "invalid_data_request"
-    | "object_not_found"
-    | "forbidden"
-    | "exchange_key_already_exists"
-    | "exchange_key_in_use"
-    | "order_size_too_small"
-    | "order_size_too_large"
-    | "bot_stopping_completed"
-    | "success"
-    | "strategy_disabled"
-    | "bot_already_deleted"
-    | "object_already_exists"
-    | "invalid_exchange_key"
-    | "hedge_mode_not_active"
-    | "strategy_not_supporting_exchange"
-    | "margin_mode_clash"
-    | "order_price_invalid"
-    | "insufficient_margin"
-    | "insufficient_balance"
-    | "exchange_invalid_parameter"
-    | "exchange_invalid_signature"
-    | "exchange_rate_limit"
-    | "order_not_found"
-    | "symbol_not_found"
-    | "order_limit_exceeded"
-    | "exchange_system_error"
-    | "exchange_system_busy"
-    | "rpc_timeout"
-    | "position_not_found"
-    | "leverage_exceeded"
-    | "trading_suspended"
-    | "exchange_maintenance"
-    | "exchange_ip_restricted"
-    | "post_only_rejected"
-    | "content_type_error"
-    | "exchange_http_error"
-    | "orphan_close_order"
-    | "cancelled_open_order"
-    | "failed_open_order"
-    | "orphan_open_order"
-    | "trading_action_skipped_bot_stopping"
-    | "trading_action_expired"
-    | "black_swan";
+    | 'unknown_error'
+    | 'invalid_data_request'
+    | 'object_not_found'
+    | 'forbidden'
+    | 'exchange_key_already_exists'
+    | 'exchange_key_in_use'
+    | 'order_size_too_small'
+    | 'order_size_too_large'
+    | 'bot_stopping_completed'
+    | 'success'
+    | 'strategy_disabled'
+    | 'bot_already_deleted'
+    | 'object_already_exists'
+    | 'invalid_exchange_key'
+    | 'hedge_mode_not_active'
+    | 'strategy_not_supporting_exchange'
+    | 'margin_mode_clash'
+    | 'order_price_invalid'
+    | 'insufficient_margin'
+    | 'insufficient_balance'
+    | 'exchange_invalid_parameter'
+    | 'exchange_invalid_signature'
+    | 'exchange_rate_limit'
+    | 'order_not_found'
+    | 'symbol_not_found'
+    | 'order_limit_exceeded'
+    | 'exchange_system_error'
+    | 'exchange_system_busy'
+    | 'rpc_timeout'
+    | 'position_not_found'
+    | 'leverage_exceeded'
+    | 'trading_suspended'
+    | 'exchange_maintenance'
+    | 'exchange_ip_restricted'
+    | 'post_only_rejected'
+    | 'content_type_error'
+    | 'exchange_http_error'
+    | 'orphan_close_order'
+    | 'cancelled_open_order'
+    | 'failed_open_order'
+    | 'orphan_open_order'
+    | 'trading_action_skipped_bot_stopping'
+    | 'trading_action_expired'
+    | 'black_swan';
   /**
    * Percentage of the order filled
    */
@@ -529,60 +529,60 @@ export type Order = {
  * Trade status of the order. Of type OrderStatus
  */
 export type status2 =
-  | "new"
-  | "filled"
-  | "partially_filled"
-  | "cancelled"
-  | "failed";
+  | 'new'
+  | 'filled'
+  | 'partially_filled'
+  | 'cancelled'
+  | 'failed';
 
 /**
  * API error identifier
  */
 export type status_code =
-  | "unknown_error"
-  | "invalid_data_request"
-  | "object_not_found"
-  | "forbidden"
-  | "exchange_key_already_exists"
-  | "exchange_key_in_use"
-  | "order_size_too_small"
-  | "order_size_too_large"
-  | "bot_stopping_completed"
-  | "success"
-  | "strategy_disabled"
-  | "bot_already_deleted"
-  | "object_already_exists"
-  | "invalid_exchange_key"
-  | "hedge_mode_not_active"
-  | "strategy_not_supporting_exchange"
-  | "margin_mode_clash"
-  | "order_price_invalid"
-  | "insufficient_margin"
-  | "insufficient_balance"
-  | "exchange_invalid_parameter"
-  | "exchange_invalid_signature"
-  | "exchange_rate_limit"
-  | "order_not_found"
-  | "symbol_not_found"
-  | "order_limit_exceeded"
-  | "exchange_system_error"
-  | "exchange_system_busy"
-  | "rpc_timeout"
-  | "position_not_found"
-  | "leverage_exceeded"
-  | "trading_suspended"
-  | "exchange_maintenance"
-  | "exchange_ip_restricted"
-  | "post_only_rejected"
-  | "content_type_error"
-  | "exchange_http_error"
-  | "orphan_close_order"
-  | "cancelled_open_order"
-  | "failed_open_order"
-  | "orphan_open_order"
-  | "trading_action_skipped_bot_stopping"
-  | "trading_action_expired"
-  | "black_swan";
+  | 'unknown_error'
+  | 'invalid_data_request'
+  | 'object_not_found'
+  | 'forbidden'
+  | 'exchange_key_already_exists'
+  | 'exchange_key_in_use'
+  | 'order_size_too_small'
+  | 'order_size_too_large'
+  | 'bot_stopping_completed'
+  | 'success'
+  | 'strategy_disabled'
+  | 'bot_already_deleted'
+  | 'object_already_exists'
+  | 'invalid_exchange_key'
+  | 'hedge_mode_not_active'
+  | 'strategy_not_supporting_exchange'
+  | 'margin_mode_clash'
+  | 'order_price_invalid'
+  | 'insufficient_margin'
+  | 'insufficient_balance'
+  | 'exchange_invalid_parameter'
+  | 'exchange_invalid_signature'
+  | 'exchange_rate_limit'
+  | 'order_not_found'
+  | 'symbol_not_found'
+  | 'order_limit_exceeded'
+  | 'exchange_system_error'
+  | 'exchange_system_busy'
+  | 'rpc_timeout'
+  | 'position_not_found'
+  | 'leverage_exceeded'
+  | 'trading_suspended'
+  | 'exchange_maintenance'
+  | 'exchange_ip_restricted'
+  | 'post_only_rejected'
+  | 'content_type_error'
+  | 'exchange_http_error'
+  | 'orphan_close_order'
+  | 'cancelled_open_order'
+  | 'failed_open_order'
+  | 'orphan_open_order'
+  | 'trading_action_skipped_bot_stopping'
+  | 'trading_action_expired'
+  | 'black_swan';
 
 export type PaginatedResponse_FuturesTradingAction_ = {
   data: Array<FuturesTradingAction>;
@@ -717,7 +717,7 @@ export type SpotTradingActionCreate = {
   /**
    * The type of market the action is for. Must be set to spot.
    */
-  market_type?: "spot" | "futures";
+  market_type?: 'spot' | 'futures';
   /**
    * UID for the strategy.
    */
@@ -775,7 +775,7 @@ export type Strategy = {
   /**
    * Exchanges supported by the strategy.
    */
-  exchanges: Array<"hyperliquid">;
+  exchanges: Array<'hyperliquid'>;
   /**
    * Whether the strategy is enabled. If false, no bots will be created or updated for this strategy, open trades will be rejected. Existing bots will be marked as stopping.
    */
@@ -787,7 +787,7 @@ export type Strategy = {
   /**
    * Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.
    */
-  margin_mode?: "isolated" | "cross" | null;
+  margin_mode?: 'isolated' | 'cross' | null;
   /**
    * Leverage for the strategy
    */
@@ -795,7 +795,7 @@ export type Strategy = {
   /**
    * Market of operation of the strategy
    */
-  market_type: "spot" | "futures";
+  market_type: 'spot' | 'futures';
 };
 
 /**
@@ -813,7 +813,7 @@ export type StrategyCreate = {
   /**
    * Exchanges supported by the strategy.
    */
-  exchanges: Array<"hyperliquid">;
+  exchanges: Array<'hyperliquid'>;
   /**
    * Whether the strategy is enabled. If false, no bots will be created or updated for this strategy, open trades will be rejected. Existing bots will be marked as stopping.
    */
@@ -825,7 +825,7 @@ export type StrategyCreate = {
   /**
    * Margin mode to use for the strategy. Not allowed for spot strategies. Must be set for futures strategies.
    */
-  margin_mode?: "isolated" | "cross" | null;
+  margin_mode?: 'isolated' | 'cross' | null;
   /**
    * Leverage for the strategy
    */
@@ -833,7 +833,7 @@ export type StrategyCreate = {
   /**
    * Market of operation of the strategy
    */
-  market_type: "spot" | "futures";
+  market_type: 'spot' | 'futures';
 };
 
 /**
@@ -851,7 +851,7 @@ export type StrategyUpdate = {
   /**
    * Exchanges supported by the strategy.
    */
-  exchanges?: Array<"hyperliquid"> | null;
+  exchanges?: Array<'hyperliquid'> | null;
   /**
    * Whether the strategy is enabled. If false, no bots will be created or updated for this strategy, open trades will be rejected. Existing bots will be marked as stopping.
    */
@@ -906,10 +906,10 @@ export type TPSLCreate = {
  * Type of trading action
  */
 export type TradingActionType =
-  | "open_long"
-  | "open_short"
-  | "close_long"
-  | "close_short";
+  | 'open_long'
+  | 'open_short'
+  | 'close_long'
+  | 'close_short';
 
 /**
  * Bot model including vault details
@@ -930,7 +930,7 @@ export type VaultBot = {
   /**
    * Status of the bot
    */
-  status: "running" | "stopping" | "stopped" | "deleted";
+  status: 'running' | 'stopping' | 'stopped' | 'deleted';
   /**
    * UID for the trading strategy used by the bot
    */
@@ -942,7 +942,7 @@ export type VaultBot = {
   /**
    * Exchange name
    */
-  exchange: "hyperliquid";
+  exchange: 'hyperliquid';
   /**
    * Vault details
    */
@@ -1020,15 +1020,15 @@ export type GetBotsPnlData = {
     /**
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
     /**
      * The type of PnL to return. Defaults to relative.
      */
-    type?: "absolute" | "relative";
+    type?: 'absolute' | 'relative';
     /**
      * Time window for PnL. Defaults to full (all time), or use period (last X days), month, quarter, or year for values since the start of that range.
      */
-    window?: "period" | "month" | "quarter" | "year" | "full";
+    window?: 'period' | 'month' | 'quarter' | 'year' | 'full';
   };
 };
 
@@ -1069,7 +1069,7 @@ export type GetBotOrdersData = {
     /**
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
   };
 };
 
@@ -1108,7 +1108,7 @@ export type GetBotActionsData = {
     /**
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
   };
 };
 
@@ -1137,7 +1137,7 @@ export type GetBotsData = {
     /**
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
   };
 };
 
@@ -1197,7 +1197,7 @@ export type GetExchangeKeysData = {
     /**
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
   };
 };
 

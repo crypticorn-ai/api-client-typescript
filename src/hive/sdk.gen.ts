@@ -2,7 +2,7 @@ import {
   createClient as createNativeClient,
   createConfig,
   type OptionsLegacyParser,
-} from "@hey-api/client-fetch";
+} from '@hey-api/client-fetch';
 
 import type {
   CreateModelData,
@@ -35,7 +35,7 @@ import type {
   PingResponse,
   GetMetricsError,
   GetMetricsResponse,
-} from "./types.gen";
+} from './types.gen';
 
 export function createClient(
   baseUrl: string,
@@ -65,7 +65,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/models/creation",
+      url: '/models/creation',
     });
   };
 
@@ -82,7 +82,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/models/evaluation/{id}",
+      url: '/models/evaluation/{id}',
     });
   };
 
@@ -99,7 +99,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/models/{id}",
+      url: '/models/{id}',
     });
   };
 
@@ -116,7 +116,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/models/{id}",
+      url: '/models/{id}',
     });
   };
 
@@ -133,7 +133,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/models/{id}",
+      url: '/models/{id}',
     });
   };
 
@@ -150,7 +150,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/models/by-name/{name}",
+      url: '/models/by-name/{name}',
     });
   };
 
@@ -167,7 +167,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/models",
+      url: '/models',
     });
   };
 
@@ -184,7 +184,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/data",
+      url: '/data',
     });
   };
 
@@ -201,7 +201,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/data/info",
+      url: '/data/info',
     });
   };
 
@@ -218,7 +218,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/",
+      url: '/',
     });
   };
 
@@ -235,7 +235,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/metrics",
+      url: '/metrics',
     });
   };
 

@@ -270,7 +270,7 @@ export type GetSignalsData = {
     /**
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
   };
 };
 

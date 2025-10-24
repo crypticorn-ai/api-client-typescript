@@ -2,7 +2,7 @@ import {
   createClient as createNativeClient,
   createConfig,
   type OptionsLegacyParser,
-} from "@hey-api/client-fetch";
+} from '@hey-api/client-fetch';
 
 import type {
   SendNotificationData,
@@ -47,7 +47,7 @@ import type {
   PingResponse,
   GetMetricsError,
   GetMetricsResponse,
-} from "./types.gen";
+} from './types.gen';
 
 export function createClient(
   baseUrl: string,
@@ -77,7 +77,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/notifications",
+      url: '/notifications',
     });
   };
 
@@ -94,7 +94,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/notifications",
+      url: '/notifications',
     });
   };
 
@@ -111,7 +111,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/notifications",
+      url: '/notifications',
     });
   };
 
@@ -128,7 +128,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/notifications",
+      url: '/notifications',
     });
   };
 
@@ -145,7 +145,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/notifications/{id}",
+      url: '/notifications/{id}',
     });
   };
 
@@ -162,7 +162,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/notifications/{id}",
+      url: '/notifications/{id}',
     });
   };
 
@@ -179,7 +179,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/settings/user",
+      url: '/settings/user',
     });
   };
 
@@ -196,7 +196,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/settings/user",
+      url: '/settings/user',
     });
   };
 
@@ -213,7 +213,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/settings/user",
+      url: '/settings/user',
     });
   };
 
@@ -230,7 +230,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/settings/broadcast",
+      url: '/settings/broadcast',
     });
   };
 
@@ -247,7 +247,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/settings/broadcast",
+      url: '/settings/broadcast',
     });
   };
 
@@ -264,7 +264,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/settings/broadcast/{id}",
+      url: '/settings/broadcast/{id}',
     });
   };
 
@@ -281,7 +281,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/templates",
+      url: '/templates',
     });
   };
 
@@ -298,7 +298,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/templates/{identifier}",
+      url: '/templates/{identifier}',
     });
   };
 
@@ -315,7 +315,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/",
+      url: '/',
     });
   };
 
@@ -332,7 +332,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/metrics",
+      url: '/metrics',
     });
   };
 

@@ -2,7 +2,7 @@ import {
   createClient as createNativeClient,
   createConfig,
   type OptionsLegacyParser,
-} from "@hey-api/client-fetch";
+} from '@hey-api/client-fetch';
 
 import type {
   PingError,
@@ -52,7 +52,7 @@ import type {
   GetMetricsErrorLogsData,
   GetMetricsErrorLogsError,
   GetMetricsErrorLogsResponse,
-} from "./types.gen";
+} from './types.gen';
 
 export function createClient(
   baseUrl: string,
@@ -82,7 +82,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/",
+      url: '/',
     });
   };
 
@@ -99,7 +99,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/metrics",
+      url: '/metrics',
     });
   };
 
@@ -116,7 +116,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/marketcap/current",
+      url: '/marketcap/current',
     });
   };
 
@@ -133,7 +133,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/marketcap/symbols",
+      url: '/marketcap/symbols',
     });
   };
 
@@ -153,7 +153,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/marketcap/symbols/ohlcv",
+      url: '/marketcap/symbols/ohlcv',
     });
   };
 
@@ -173,7 +173,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/marketcap",
+      url: '/marketcap',
     });
   };
 
@@ -190,7 +190,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/indicators/ker",
+      url: '/indicators/ker',
     });
   };
 
@@ -207,7 +207,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/indicators/sma",
+      url: '/indicators/sma',
     });
   };
 
@@ -224,7 +224,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/exchanges/available",
+      url: '/exchanges/available',
     });
   };
 
@@ -241,7 +241,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/exchanges/mappings",
+      url: '/exchanges/mappings',
     });
   };
 
@@ -261,7 +261,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/exchanges/list",
+      url: '/exchanges/list',
     });
   };
 
@@ -280,7 +280,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/exchanges/pair-mappings",
+      url: '/exchanges/pair-mappings',
     });
   };
 
@@ -297,7 +297,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/tokens/stables",
+      url: '/tokens/stables',
     });
   };
 
@@ -314,7 +314,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/tokens/wrapped",
+      url: '/tokens/wrapped',
     });
   };
 
@@ -331,7 +331,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/quote-currencies",
+      url: '/quote-currencies',
     });
   };
 
@@ -351,7 +351,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/markets",
+      url: '/markets',
     });
   };
 
@@ -368,7 +368,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/error_logs",
+      url: '/error_logs',
     });
   };
 

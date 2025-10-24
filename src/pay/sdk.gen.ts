@@ -2,7 +2,7 @@ import {
   createClient as createNativeClient,
   createConfig,
   type OptionsLegacyParser,
-} from "@hey-api/client-fetch";
+} from '@hey-api/client-fetch';
 
 import type {
   GetProductsCaptchaAuthData,
@@ -76,7 +76,7 @@ import type {
   PingResponse,
   GetMetricsError,
   GetMetricsResponse,
-} from "./types.gen";
+} from './types.gen';
 
 export function createClient(
   baseUrl: string,
@@ -107,7 +107,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/products/captcha",
+      url: '/products/captcha',
     });
   };
 
@@ -125,7 +125,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/products",
+      url: '/products',
     });
   };
 
@@ -143,7 +143,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/products",
+      url: '/products',
     });
   };
 
@@ -161,7 +161,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/products/usage",
+      url: '/products/usage',
     });
   };
 
@@ -179,7 +179,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/products/{id}",
+      url: '/products/{id}',
     });
   };
 
@@ -197,7 +197,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/payments/history",
+      url: '/payments/history',
     });
   };
 
@@ -215,7 +215,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/payments/subscriptions",
+      url: '/payments/subscriptions',
     });
   };
 
@@ -233,7 +233,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/payments/by-invoice/{id}",
+      url: '/payments/by-invoice/{id}',
     });
   };
 
@@ -251,7 +251,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/coupons/by-code/captcha",
+      url: '/coupons/by-code/captcha',
     });
   };
 
@@ -269,7 +269,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/coupons/by-code",
+      url: '/coupons/by-code',
     });
   };
 
@@ -287,7 +287,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/coupons",
+      url: '/coupons',
     });
   };
 
@@ -305,7 +305,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/coupons",
+      url: '/coupons',
     });
   };
 
@@ -323,7 +323,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/coupons/{id}",
+      url: '/coupons/{id}',
     });
   };
 
@@ -341,7 +341,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/coupons/{id}",
+      url: '/coupons/{id}',
     });
   };
 
@@ -359,7 +359,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/now/status",
+      url: '/now/status',
     });
   };
 
@@ -378,7 +378,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/now/webhook",
+      url: '/now/webhook',
     });
   };
 
@@ -396,7 +396,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/invoices",
+      url: '/invoices',
     });
   };
 
@@ -414,7 +414,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/invoices/{id}",
+      url: '/invoices/{id}',
     });
   };
 
@@ -431,7 +431,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/stripe/webhook",
+      url: '/stripe/webhook',
     });
   };
 
@@ -448,7 +448,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/token/price",
+      url: '/token/price',
     });
   };
 
@@ -465,7 +465,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/token/balances",
+      url: '/token/balances',
     });
   };
 
@@ -484,7 +484,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/access/balances",
+      url: '/access/balances',
     });
   };
 
@@ -504,7 +504,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/access/scopes/info",
+      url: '/access/scopes/info',
     });
   };
 
@@ -522,7 +522,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/access/thresholds",
+      url: '/access/thresholds',
     });
   };
 
@@ -539,7 +539,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/",
+      url: '/',
     });
   };
 
@@ -556,7 +556,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/metrics",
+      url: '/metrics',
     });
   };
 

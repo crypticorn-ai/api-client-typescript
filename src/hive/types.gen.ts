@@ -37,31 +37,31 @@ export type CoinInfo = {
   /**
    * The identifier of the coin. Obfuscated for public use.
    */
-  identifier: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  identifier: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
   /**
    * The data version the coin got introduced in
    */
-  version_added: "1.0";
+  version_added: '1.0';
   /**
    * The data version the coin got removed in. If None, the coin is still available.
    */
-  version_removed?: "1.0" | null;
+  version_removed?: '1.0' | null;
 };
 
 /**
  * The identifier of the coin. Obfuscated for public use.
  */
 export type identifier =
-  | "1"
-  | "2"
-  | "3"
-  | "4"
-  | "5"
-  | "6"
-  | "7"
-  | "8"
-  | "9"
-  | "10";
+  | '1'
+  | '2'
+  | '3'
+  | '4'
+  | '5'
+  | '6'
+  | '7'
+  | '8'
+  | '9'
+  | '10';
 
 /**
  * Pydantic model for continuous evaluation
@@ -100,15 +100,15 @@ export type DataDownloadResponse = {
   /**
    * The coin the data is for
    */
-  coin: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  coin: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
   /**
    * The feature size the data is for
    */
-  feature_size: "small" | "medium" | "large";
+  feature_size: 'small' | 'medium' | 'large';
   /**
    * The version of the data
    */
-  version: "1.0";
+  version: '1.0';
   /**
    * The target of the data
    */
@@ -122,12 +122,12 @@ export type DataDownloadResponse = {
 /**
  * The coin the data is for
  */
-export type coin = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+export type coin = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
 
 /**
  * The feature size the data is for
  */
-export type feature_size = "small" | "medium" | "large";
+export type feature_size = 'small' | 'medium' | 'large';
 
 /**
  * Comprehensive data catalog including all available datasets, versions, and metadata.
@@ -148,7 +148,7 @@ export type DataInfo = {
   /**
    * The feature sizes available for all data versions.
    */
-  feature_sizes: Array<"small" | "medium" | "large">;
+  feature_sizes: Array<'small' | 'medium' | 'large'>;
   /**
    * The targets available for all data versions.
    */
@@ -174,7 +174,7 @@ export type DataOptions = {
   /**
    * The feature sizes available on the latest data version.
    */
-  feature_sizes: Array<"small" | "medium" | "large">;
+  feature_sizes: Array<'small' | 'medium' | 'large'>;
 };
 
 /**
@@ -184,7 +184,7 @@ export type DataVersionInfo = {
   /**
    * Data version
    */
-  version: "1.0";
+  version: '1.0';
   /**
    * Release date of the data version in unix timestamp
    */
@@ -253,7 +253,7 @@ export type ModelCreate = {
   /**
    * Coin ID for the model
    */
-  coin_id: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  coin_id: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
   /**
    * Target variable for the model
    */
@@ -268,16 +268,16 @@ export type ModelCreate = {
  * Coin ID for the model
  */
 export type coin_id =
-  | "1"
-  | "2"
-  | "3"
-  | "4"
-  | "5"
-  | "6"
-  | "7"
-  | "8"
-  | "9"
-  | "10";
+  | '1'
+  | '2'
+  | '3'
+  | '4'
+  | '5'
+  | '6'
+  | '7'
+  | '8'
+  | '9'
+  | '10';
 
 /**
  * Pydantic model for model response
@@ -294,7 +294,7 @@ export type ModelRead = {
   /**
    * Coin ID
    */
-  coin_id: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
+  coin_id: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10';
   /**
    * Target variable
    */
@@ -306,7 +306,7 @@ export type ModelRead = {
   /**
    * Target type
    */
-  target_type: "continuous" | "binary";
+  target_type: 'continuous' | 'binary';
   /**
    * Model evaluations
    */
@@ -328,12 +328,12 @@ export type ModelRead = {
 /**
  * Target type
  */
-export type target_type = "continuous" | "binary";
+export type target_type = 'continuous' | 'binary';
 
 /**
  * Enum for model status
  */
-export type ModelStatus = "created" | "evaluated";
+export type ModelStatus = 'created' | 'evaluated';
 
 /**
  * Pydantic model for model update
@@ -348,7 +348,7 @@ export type ModelUpdate = {
 /**
  * AI model prediction targets with obfuscated names for public API access.
  */
-export type Target = "Tatooine" | "Alderaan" | "Hoth";
+export type Target = 'Tatooine' | 'Alderaan' | 'Hoth';
 
 /**
  * Metadata about an AI prediction target including type and version availability.
@@ -361,21 +361,21 @@ export type TargetInfo = {
   /**
    * The type of the target.
    */
-  type: "continuous" | "binary";
+  type: 'continuous' | 'binary';
   /**
    * The data version the target got introduced in.
    */
-  version_added: "1.0";
+  version_added: '1.0';
   /**
    * The data version the target got removed in. If None, the target is still available.
    */
-  version_removed?: "1.0" | null;
+  version_removed?: '1.0' | null;
 };
 
 /**
  * The type of the target.
  */
-export type type = "continuous" | "binary";
+export type type = 'continuous' | 'binary';
 
 export type CreateModelData = {
   body: ModelCreate;
@@ -397,7 +397,7 @@ export type EvaluateModelData = {
     /**
      * Data version for evaluation. Defaults to latest public version. Using older versions won't affect leaderboard rankings but can be useful for additional model testing.
      */
-    version?: "1.0" | null;
+    version?: '1.0' | null;
   };
 };
 
@@ -480,7 +480,7 @@ export type DownloadDataData = {
     /**
      * The number of features in the data. Default is `LARGE`.
      */
-    feature_size?: "small" | "medium" | "large" | null;
+    feature_size?: 'small' | 'medium' | 'large' | null;
     /**
      * The ID of the model to download data for.
      */
@@ -488,7 +488,7 @@ export type DownloadDataData = {
     /**
      * The version of the data to download. Default is the latest public version.
      */
-    version?: "1.0" | null;
+    version?: '1.0' | null;
   };
 };
 

@@ -22,18 +22,18 @@ export type Broadcast = {
   template_preferences: Array<
     [
       (
-        | "subscription_predictions_welcome"
-        | "subscription_dex_signals_welcome"
-        | "subscription_combo_welcome"
-        | "new_member"
-        | "exchange_api_key_expiring"
-        | "test"
-        | "new_dex_ai_call"
-        | "new_dex_ai_call_incognito"
-        | "order_completion"
-        | "otp_code"
-        | "subscription_expiring"
-        | "subscription_expired"
+        | 'subscription_predictions_welcome'
+        | 'subscription_dex_signals_welcome'
+        | 'subscription_combo_welcome'
+        | 'new_member'
+        | 'exchange_api_key_expiring'
+        | 'test'
+        | 'new_dex_ai_call'
+        | 'new_dex_ai_call_incognito'
+        | 'order_completion'
+        | 'otp_code'
+        | 'subscription_expiring'
+        | 'subscription_expired'
       ),
       boolean,
     ]
@@ -54,18 +54,18 @@ export type BroadcastCreate = {
   template_preferences: Array<
     [
       (
-        | "subscription_predictions_welcome"
-        | "subscription_dex_signals_welcome"
-        | "subscription_combo_welcome"
-        | "new_member"
-        | "exchange_api_key_expiring"
-        | "test"
-        | "new_dex_ai_call"
-        | "new_dex_ai_call_incognito"
-        | "order_completion"
-        | "otp_code"
-        | "subscription_expiring"
-        | "subscription_expired"
+        | 'subscription_predictions_welcome'
+        | 'subscription_dex_signals_welcome'
+        | 'subscription_combo_welcome'
+        | 'new_member'
+        | 'exchange_api_key_expiring'
+        | 'test'
+        | 'new_dex_ai_call'
+        | 'new_dex_ai_call_incognito'
+        | 'order_completion'
+        | 'otp_code'
+        | 'subscription_expiring'
+        | 'subscription_expired'
       ),
       boolean,
     ]
@@ -83,7 +83,7 @@ export type BroadcastRecipient = {
   /**
    * Service type for the broadcast
    */
-  service: "discord" | "telegram";
+  service: 'discord' | 'telegram';
   /**
    * Webhook URL or chat ID for the service
    */
@@ -97,7 +97,7 @@ export type BroadcastRecipient = {
 /**
  * Service type for the broadcast
  */
-export type service = "discord" | "telegram";
+export type service = 'discord' | 'telegram';
 
 /**
  * Update a broadcast
@@ -109,18 +109,18 @@ export type BroadcastUpdate = {
   template_preferences?: Array<
     [
       (
-        | "subscription_predictions_welcome"
-        | "subscription_dex_signals_welcome"
-        | "subscription_combo_welcome"
-        | "new_member"
-        | "exchange_api_key_expiring"
-        | "test"
-        | "new_dex_ai_call"
-        | "new_dex_ai_call_incognito"
-        | "order_completion"
-        | "otp_code"
-        | "subscription_expiring"
-        | "subscription_expired"
+        | 'subscription_predictions_welcome'
+        | 'subscription_dex_signals_welcome'
+        | 'subscription_combo_welcome'
+        | 'new_member'
+        | 'exchange_api_key_expiring'
+        | 'test'
+        | 'new_dex_ai_call'
+        | 'new_dex_ai_call_incognito'
+        | 'order_completion'
+        | 'otp_code'
+        | 'subscription_expiring'
+        | 'subscription_expired'
       ),
       boolean,
     ]
@@ -139,7 +139,7 @@ export type DashboardActionButton = {
   /**
    * The type of action.
    */
-  action: "link" | "route";
+  action: 'link' | 'route';
   /**
    * The value of the action.
    */
@@ -149,7 +149,7 @@ export type DashboardActionButton = {
 /**
  * The type of action.
  */
-export type action = "link" | "route";
+export type action = 'link' | 'route';
 
 export type DashboardField = {
   /**
@@ -179,18 +179,18 @@ export type DashboardNotification = {
    * Template ID of the notification
    */
   template_id:
-    | "subscription_predictions_welcome"
-    | "subscription_dex_signals_welcome"
-    | "subscription_combo_welcome"
-    | "new_member"
-    | "exchange_api_key_expiring"
-    | "test"
-    | "new_dex_ai_call"
-    | "new_dex_ai_call_incognito"
-    | "order_completion"
-    | "otp_code"
-    | "subscription_expiring"
-    | "subscription_expired";
+    | 'subscription_predictions_welcome'
+    | 'subscription_dex_signals_welcome'
+    | 'subscription_combo_welcome'
+    | 'new_member'
+    | 'exchange_api_key_expiring'
+    | 'test'
+    | 'new_dex_ai_call'
+    | 'new_dex_ai_call_incognito'
+    | 'order_completion'
+    | 'otp_code'
+    | 'subscription_expiring'
+    | 'subscription_expired';
   /**
    * Whether the notification has been marked as seen
    */
@@ -215,18 +215,18 @@ export type DashboardNotification = {
  * Template ID of the notification
  */
 export type template_id =
-  | "subscription_predictions_welcome"
-  | "subscription_dex_signals_welcome"
-  | "subscription_combo_welcome"
-  | "new_member"
-  | "exchange_api_key_expiring"
-  | "test"
-  | "new_dex_ai_call"
-  | "new_dex_ai_call_incognito"
-  | "order_completion"
-  | "otp_code"
-  | "subscription_expiring"
-  | "subscription_expired";
+  | 'subscription_predictions_welcome'
+  | 'subscription_dex_signals_welcome'
+  | 'subscription_combo_welcome'
+  | 'new_member'
+  | 'exchange_api_key_expiring'
+  | 'test'
+  | 'new_dex_ai_call'
+  | 'new_dex_ai_call_incognito'
+  | 'order_completion'
+  | 'otp_code'
+  | 'subscription_expiring'
+  | 'subscription_expired';
 
 export type DashboardNotificationUpdate = {
   /**
@@ -247,18 +247,18 @@ export type NotificationCreate = {
    * Template ID
    */
   template:
-    | "subscription_predictions_welcome"
-    | "subscription_dex_signals_welcome"
-    | "subscription_combo_welcome"
-    | "new_member"
-    | "exchange_api_key_expiring"
-    | "test"
-    | "new_dex_ai_call"
-    | "new_dex_ai_call_incognito"
-    | "order_completion"
-    | "otp_code"
-    | "subscription_expiring"
-    | "subscription_expired";
+    | 'subscription_predictions_welcome'
+    | 'subscription_dex_signals_welcome'
+    | 'subscription_combo_welcome'
+    | 'new_member'
+    | 'exchange_api_key_expiring'
+    | 'test'
+    | 'new_dex_ai_call'
+    | 'new_dex_ai_call_incognito'
+    | 'order_completion'
+    | 'otp_code'
+    | 'subscription_expiring'
+    | 'subscription_expired';
   /**
    * Variables for the template
    */
@@ -275,18 +275,18 @@ export type NotificationCreate = {
  * Template ID
  */
 export type template =
-  | "subscription_predictions_welcome"
-  | "subscription_dex_signals_welcome"
-  | "subscription_combo_welcome"
-  | "new_member"
-  | "exchange_api_key_expiring"
-  | "test"
-  | "new_dex_ai_call"
-  | "new_dex_ai_call_incognito"
-  | "order_completion"
-  | "otp_code"
-  | "subscription_expiring"
-  | "subscription_expired";
+  | 'subscription_predictions_welcome'
+  | 'subscription_dex_signals_welcome'
+  | 'subscription_combo_welcome'
+  | 'new_member'
+  | 'exchange_api_key_expiring'
+  | 'test'
+  | 'new_dex_ai_call'
+  | 'new_dex_ai_call_incognito'
+  | 'order_completion'
+  | 'otp_code'
+  | 'subscription_expiring'
+  | 'subscription_expired';
 
 export type PaginatedResponse_DashboardNotification_ = {
   data: Array<DashboardNotification>;
@@ -321,18 +321,18 @@ export type Template = {
    * Identifier of the template
    */
   identifier:
-    | "subscription_predictions_welcome"
-    | "subscription_dex_signals_welcome"
-    | "subscription_combo_welcome"
-    | "new_member"
-    | "exchange_api_key_expiring"
-    | "test"
-    | "new_dex_ai_call"
-    | "new_dex_ai_call_incognito"
-    | "order_completion"
-    | "otp_code"
-    | "subscription_expiring"
-    | "subscription_expired";
+    | 'subscription_predictions_welcome'
+    | 'subscription_dex_signals_welcome'
+    | 'subscription_combo_welcome'
+    | 'new_member'
+    | 'exchange_api_key_expiring'
+    | 'test'
+    | 'new_dex_ai_call'
+    | 'new_dex_ai_call_incognito'
+    | 'order_completion'
+    | 'otp_code'
+    | 'subscription_expiring'
+    | 'subscription_expired';
   /**
    * Name of the template
    */
@@ -346,7 +346,7 @@ export type Template = {
   /**
    * Channels to send the notification to for this template
    */
-  channels: Array<"email" | "telegram" | "discord" | "websocket" | "ui">;
+  channels: Array<'email' | 'telegram' | 'discord' | 'websocket' | 'ui'>;
   /**
    * Whether the user can enable/disable this notification template in their settings
    */
@@ -357,18 +357,18 @@ export type Template = {
  * Identifier of the template
  */
 export type identifier =
-  | "subscription_predictions_welcome"
-  | "subscription_dex_signals_welcome"
-  | "subscription_combo_welcome"
-  | "new_member"
-  | "exchange_api_key_expiring"
-  | "test"
-  | "new_dex_ai_call"
-  | "new_dex_ai_call_incognito"
-  | "order_completion"
-  | "otp_code"
-  | "subscription_expiring"
-  | "subscription_expired";
+  | 'subscription_predictions_welcome'
+  | 'subscription_dex_signals_welcome'
+  | 'subscription_combo_welcome'
+  | 'new_member'
+  | 'exchange_api_key_expiring'
+  | 'test'
+  | 'new_dex_ai_call'
+  | 'new_dex_ai_call_incognito'
+  | 'order_completion'
+  | 'otp_code'
+  | 'subscription_expiring'
+  | 'subscription_expired';
 
 export type UITemplate = {
   /**
@@ -419,18 +419,18 @@ export type UserSetting = {
   template_preferences: Array<
     [
       (
-        | "subscription_predictions_welcome"
-        | "subscription_dex_signals_welcome"
-        | "subscription_combo_welcome"
-        | "new_member"
-        | "exchange_api_key_expiring"
-        | "test"
-        | "new_dex_ai_call"
-        | "new_dex_ai_call_incognito"
-        | "order_completion"
-        | "otp_code"
-        | "subscription_expiring"
-        | "subscription_expired"
+        | 'subscription_predictions_welcome'
+        | 'subscription_dex_signals_welcome'
+        | 'subscription_combo_welcome'
+        | 'new_member'
+        | 'exchange_api_key_expiring'
+        | 'test'
+        | 'new_dex_ai_call'
+        | 'new_dex_ai_call_incognito'
+        | 'order_completion'
+        | 'otp_code'
+        | 'subscription_expiring'
+        | 'subscription_expired'
       ),
       boolean,
     ]
@@ -451,18 +451,18 @@ export type UserSettingCreate = {
   template_preferences: Array<
     [
       (
-        | "subscription_predictions_welcome"
-        | "subscription_dex_signals_welcome"
-        | "subscription_combo_welcome"
-        | "new_member"
-        | "exchange_api_key_expiring"
-        | "test"
-        | "new_dex_ai_call"
-        | "new_dex_ai_call_incognito"
-        | "order_completion"
-        | "otp_code"
-        | "subscription_expiring"
-        | "subscription_expired"
+        | 'subscription_predictions_welcome'
+        | 'subscription_dex_signals_welcome'
+        | 'subscription_combo_welcome'
+        | 'new_member'
+        | 'exchange_api_key_expiring'
+        | 'test'
+        | 'new_dex_ai_call'
+        | 'new_dex_ai_call_incognito'
+        | 'order_completion'
+        | 'otp_code'
+        | 'subscription_expiring'
+        | 'subscription_expired'
       ),
       boolean,
     ]
@@ -479,18 +479,18 @@ export type UserSettingUpdate = {
   template_preferences?: Array<
     [
       (
-        | "subscription_predictions_welcome"
-        | "subscription_dex_signals_welcome"
-        | "subscription_combo_welcome"
-        | "new_member"
-        | "exchange_api_key_expiring"
-        | "test"
-        | "new_dex_ai_call"
-        | "new_dex_ai_call_incognito"
-        | "order_completion"
-        | "otp_code"
-        | "subscription_expiring"
-        | "subscription_expired"
+        | 'subscription_predictions_welcome'
+        | 'subscription_dex_signals_welcome'
+        | 'subscription_combo_welcome'
+        | 'new_member'
+        | 'exchange_api_key_expiring'
+        | 'test'
+        | 'new_dex_ai_call'
+        | 'new_dex_ai_call_incognito'
+        | 'order_completion'
+        | 'otp_code'
+        | 'subscription_expiring'
+        | 'subscription_expired'
       ),
       boolean,
     ]
@@ -530,7 +530,7 @@ export type GetNotificationsData = {
     /**
      * The order to sort by
      */
-    sort_order?: "asc" | "desc" | null;
+    sort_order?: 'asc' | 'desc' | null;
   };
 };
 
@@ -621,18 +621,18 @@ export type GetTemplatesError = ErrorResponse;
 export type GetTemplateData = {
   path: {
     identifier:
-      | "subscription_predictions_welcome"
-      | "subscription_dex_signals_welcome"
-      | "subscription_combo_welcome"
-      | "new_member"
-      | "exchange_api_key_expiring"
-      | "test"
-      | "new_dex_ai_call"
-      | "new_dex_ai_call_incognito"
-      | "order_completion"
-      | "otp_code"
-      | "subscription_expiring"
-      | "subscription_expired";
+      | 'subscription_predictions_welcome'
+      | 'subscription_dex_signals_welcome'
+      | 'subscription_combo_welcome'
+      | 'new_member'
+      | 'exchange_api_key_expiring'
+      | 'test'
+      | 'new_dex_ai_call'
+      | 'new_dex_ai_call_incognito'
+      | 'order_completion'
+      | 'otp_code'
+      | 'subscription_expiring'
+      | 'subscription_expired';
   };
 };
 

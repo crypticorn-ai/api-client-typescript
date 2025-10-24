@@ -2,7 +2,7 @@ import {
   createClient as createNativeClient,
   createConfig,
   type OptionsLegacyParser,
-} from "@hey-api/client-fetch";
+} from '@hey-api/client-fetch';
 
 import type {
   GetBotsPnlData,
@@ -58,7 +58,7 @@ import type {
   PingResponse,
   GetMetricsError,
   GetMetricsResponse,
-} from "./types.gen";
+} from './types.gen';
 
 export function createClient(
   baseUrl: string,
@@ -93,7 +93,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/bots/orders/pnl",
+      url: '/bots/orders/pnl',
     });
   };
 
@@ -110,7 +110,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/bots/{id}/orders",
+      url: '/bots/{id}/orders',
     });
   };
 
@@ -127,7 +127,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/bots/{id}/actions",
+      url: '/bots/{id}/actions',
     });
   };
 
@@ -144,7 +144,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/bots",
+      url: '/bots',
     });
   };
 
@@ -161,7 +161,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/bots",
+      url: '/bots',
     });
   };
 
@@ -178,7 +178,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/bots/{id}",
+      url: '/bots/{id}',
     });
   };
 
@@ -195,7 +195,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/bots/{id}",
+      url: '/bots/{id}',
     });
   };
 
@@ -212,7 +212,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/api-keys",
+      url: '/api-keys',
     });
   };
 
@@ -229,7 +229,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/api-keys",
+      url: '/api-keys',
     });
   };
 
@@ -246,7 +246,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/api-keys/{id}",
+      url: '/api-keys/{id}',
     });
   };
 
@@ -263,7 +263,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/api-keys/{id}",
+      url: '/api-keys/{id}',
     });
   };
 
@@ -280,7 +280,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/api-keys/balances",
+      url: '/api-keys/balances',
     });
   };
 
@@ -297,7 +297,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/actions/futures",
+      url: '/actions/futures',
     });
   };
 
@@ -313,7 +313,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/actions/spot",
+      url: '/actions/spot',
     });
   };
 
@@ -330,7 +330,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/strategies",
+      url: '/strategies',
     });
   };
 
@@ -347,7 +347,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/strategies",
+      url: '/strategies',
     });
   };
 
@@ -364,7 +364,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/strategies/{id}",
+      url: '/strategies/{id}',
     });
   };
 
@@ -381,7 +381,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/",
+      url: '/',
     });
   };
 
@@ -398,7 +398,7 @@ export function createClient(
       ThrowOnError
     >({
       ...options,
-      url: "/metrics",
+      url: '/metrics',
     });
   };
 
