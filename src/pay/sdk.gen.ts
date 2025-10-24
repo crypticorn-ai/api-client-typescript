@@ -64,6 +64,9 @@ import type {
   GetBalancesData,
   GetBalancesError,
   GetBalancesResponse,
+  UnstakeTokensData,
+  UnstakeTokensError,
+  UnstakeTokensResponse,
   GetBalances1Data,
   GetBalances1Error,
   GetBalances1Response,
@@ -470,10 +473,27 @@ export function createClient(
   };
 
   /**
+   * Unstake Tokens
+   * Unstake tokens for a address and pool.
+   */
+  const unstakeTokens = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<UnstakeTokensData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).post<
+      UnstakeTokensResponse,
+      UnstakeTokensError,
+      ThrowOnError
+    >({
+      ...options,
+      url: '/token/unstake',
+    });
+  };
+
+  /**
    * @deprecated
    * Get Balances
    * Get user's AIC balance and staking information for each connected wallet.
-   * Deprecated: Use the `/token/balances` endpoint instead.
+   * Deprecated: Use the `/token/balances` endpoint instead. Client calls to .get_balances will be calling the new endpoint already.
    */
   const getBalances1 = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<GetBalances1Data, ThrowOnError>,
@@ -581,6 +601,7 @@ export function createClient(
     getInvoice,
     stripeWebhookStripeWebhookPost,
     getAicPrice,
+    unstakeTokens,
     getBalances,
     getScopesInfo,
     getThresholds,
