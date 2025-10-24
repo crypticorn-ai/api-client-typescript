@@ -5,7 +5,7 @@ pnpm = "10"
 [tasks.pre-commit]
 run = "uvx pre-commit run --all-files"
 alias = "pc"
-description = "Run all pre-commit hooks"
+description = "Run all pre-commit hooks (alias: 'pc')"
 
 [tasks.test]
 run = "pnpm run test"
@@ -45,3 +45,7 @@ run = "pnpm run generate --service {{arg(name='service')}} --env {{flag(name='en
 [tasks.clean]
 run = "rm -rf dist/ node_modules/.cache/ coverage/"
 description = "Clean build artifacts and cache files"
+
+[tasks."link:auth"]
+run = "pnpm link ../../auth-service/packages/api"
+description = "Link the auth-service API client"
