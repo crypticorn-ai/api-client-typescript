@@ -1,8 +1,6 @@
 // Main client exports
 export { AsyncClient } from './api';
 
-// Export types that users might need
-export * from './types';
 // trade
 import * as TradeSchemas from './trade/schemas.gen';
 import * as TradeTypes from './trade/types.gen';
@@ -31,3 +29,7 @@ export { DexSchemas, DexTypes };
 import * as NotificationSchemas from './notification/schemas.gen';
 import * as NotificationTypes from './notification/types.gen';
 export { NotificationSchemas, NotificationTypes };
+// indicator
+import * as IndicatorSchemas from './indicator/schemas.gen';
+import * as IndicatorTypes from './indicator/types.gen';
+export { IndicatorSchemas, IndicatorTypes };

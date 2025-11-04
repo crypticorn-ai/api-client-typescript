@@ -5,6 +5,7 @@ import { createClient as createPayClient } from './pay';
 import { createClient as createMetricsClient } from './metrics';
 import { createClient as createDexClient } from './dex';
 import { createClient as createNotificationClient } from './notification';
+import { createClient as createIndicatorClient } from './indicator';
 import { EconomicsNewsData, Kline, Prediction, Trend } from './types';
 
 // Internal types
@@ -15,7 +16,8 @@ type ServiceName =
   | 'metrics'
   | 'auth'
   | 'dex'
-  | 'notification';
+  | 'notification'
+  | 'indicator';
 
 /**
  * Configuration options for the Crypticorn API client.
@@ -71,7 +73,8 @@ type ServiceClient =
   | ReturnType<typeof createPayClient>
   | ReturnType<typeof createMetricsClient>
   | ReturnType<typeof createDexClient>
-  | ReturnType<typeof createNotificationClient>;
+  | ReturnType<typeof createNotificationClient>
+  | ReturnType<typeof createIndicatorClient>;
 
 type ServiceClientFactory = (
   host: string,
@@ -85,9 +88,10 @@ interface ServiceDefinition {
 }
 
 /**
- * Base class for Crypticorn API clients containing shared functionality.
+ * The official async TypeScript client for interacting with the Crypticorn API.
+ * It consists of multiple microservices covering the whole stack of the Crypticorn project.
  */
-class BaseClient {
+class AsyncClient {
   protected _baseUrl: string;
   protected _apiKey?: string;
   protected _jwt?: string;
@@ -106,6 +110,10 @@ class BaseClient {
       notification: {
         factory: createNotificationClient,
         path: 'v1/notification',
+      },
+      indicator: {
+        factory: createIndicatorClient,
+        path: 'v1/indicator',
       },
     };
 
@@ -207,6 +215,10 @@ class BaseClient {
     >;
   }
 
+  get indicator(): ReturnType<typeof createIndicatorClient> {
+    return this._services.indicator as ReturnType<typeof createIndicatorClient>;
+  }
+
   /**
    * Configure a specific service with custom settings.
    * Useful for testing against local servers or different environments.
@@ -235,105 +247,6 @@ class BaseClient {
       headers,
       this._fetch,
     );
-  }
-}
-
-/**
- * The official async TypeScript client for interacting with the Crypticorn API.
- * It consists of multiple microservices covering the whole stack of the Crypticorn project.
- */
-class AsyncClient extends BaseClient {
-  public readonly api: {
-    getLatestPredictions: (params?: {
-      version?: string;
-      klines?: number;
-    }) => Promise<{
-      predictions: Prediction[];
-      klines: Record<string, Kline[]>;
-    }>;
-    getLatestTrends: () => Promise<Trend[]>;
-    getEconomicsNewsData: (params?: {
-      entries?: number;
-      reverse?: boolean;
-    }) => Promise<EconomicsNewsData>;
-  };
-
-  constructor(config: ClientConfig = {}) {
-    super(config);
-
-    // Create the api namespace with the required methods
-    this.api = {
-      getLatestPredictions: async ({
-        version = 'v1',
-        klines = 20,
-      }: {
-        version?: string;
-        klines?: number;
-      } = {}) => {
-        const headers = this._getHeaders();
-        const response = await (this._fetch || globalThis.fetch)(
-          `${this._baseUrl}/v1/predictions/latest?version=${version}&klines=${klines}`,
-          { headers },
-        );
-        return response.json() as Promise<{
-          predictions: Prediction[];
-          klines: Record<string, Kline[]>;
-        }>;
-      },
-
-      getLatestTrends: async () => {
-        const headers = this._getHeaders();
-        const response = await (this._fetch || globalThis.fetch)(
-          `${this._baseUrl}/v1/trends/`,
-          { headers },
-        );
-        return response.json() as Promise<Trend[]>;
-      },
-
-      getEconomicsNewsData: async ({
-        entries = 100,
-        reverse = false,
-      }: {
-        entries?: number;
-        reverse?: boolean;
-      } = {}): Promise<EconomicsNewsData> => {
-        const headers = this._getHeaders();
-        const response = await (this._fetch || globalThis.fetch)(
-          `${this._baseUrl}/v1/miners/ec?entries=${entries}&reverse=${reverse}`,
-          { headers },
-        );
-        const res = (await response.json()) as { data: any[] };
-
-        // Cast the data array to the actual type
-        const data = res.data.map((item) => {
-          const [
-            timestamp,
-            country,
-            event,
-            currency,
-            previous,
-            estimate,
-            actual,
-            change,
-            impact,
-            changePercentage,
-          ] = item;
-          return {
-            timestamp,
-            country,
-            event,
-            currency,
-            previous,
-            estimate,
-            actual,
-            change,
-            impact,
-            changePercentage,
-          };
-        });
-        return { data };
-      },
-    };
   }
 }
 
