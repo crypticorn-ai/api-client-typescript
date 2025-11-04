@@ -6,7 +6,6 @@ import { createClient as createMetricsClient } from './metrics';
 import { createClient as createDexClient } from './dex';
 import { createClient as createNotificationClient } from './notification';
 import { createClient as createIndicatorClient } from './indicator';
-import { EconomicsNewsData, Kline, Prediction, Trend } from './types';
 
 // Internal types
 type ServiceName =
