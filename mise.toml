@@ -5,8 +5,7 @@ uv = "0.9.9"
 
 [tasks.lint]
 run = "uvx pre-commit run --all-files"
-alias = "pc"
-description = "Run all pre-commit hooks (alias: 'pc')"
+description = "Run all pre-commit hooks"
 
 [tasks.test]
 run = "pnpm run test"
