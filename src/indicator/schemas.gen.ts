@@ -113,7 +113,8 @@ export const EconomicNewsEntrySchema = {
   type: 'object',
   required: ['timestamp', 'event'],
   title: 'EconomicNewsEntry',
-  description: 'Economic Calendar News Entry Pydantic Model',
+  description:
+    'Economic Calendar News Entry Pydantic Model. Aliases are used to match the database table columns.',
 } as const;
 
 export const ErrorResponseSchema = {
@@ -212,6 +213,38 @@ export const PaginatedResponse_EconomicNewsEntry_Schema = {
   type: 'object',
   required: ['data', 'total', 'page', 'page_size'],
   title: 'PaginatedResponse[EconomicNewsEntry]',
+} as const;
+
+export const PolymarketPredictionSchema = {
+  properties: {
+    symbol: {
+      type: 'string',
+      title: 'Symbol',
+      description: 'The symbol of the prediction',
+    },
+    value: {
+      type: 'number',
+      maximum: 10,
+      minimum: -10,
+      title: 'Value',
+      description: 'The prediction value, constrained between -10 and 10',
+    },
+    timestamp: {
+      type: 'integer',
+      title: 'Timestamp',
+      description: 'The timestamp of the prediction in seconds since epoch',
+    },
+    interval: {
+      type: 'string',
+      enum: ['15min', '1h', '4h'],
+      title: 'Interval',
+      description: 'The prediction interval',
+    },
+  },
+  type: 'object',
+  required: ['symbol', 'value', 'timestamp', 'interval'],
+  title: 'PolymarketPrediction',
+  description: 'Polymarket Prediction model',
 } as const;
 
 export const PredictionSchema = {

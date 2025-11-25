@@ -1,9 +1,9 @@
 [tools]
 node = "24"
 pnpm = "10"
-uv = "0.9.4"
+uv = "0.9.9"
 
-[tasks.pre-commit]
+[tasks.lint]
 run = "uvx pre-commit run --all-files"
 alias = "pc"
 description = "Run all pre-commit hooks (alias: 'pc')"

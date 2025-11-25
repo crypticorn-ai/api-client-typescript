@@ -8,9 +8,14 @@ import type {
   PostPredictionData,
   PostPredictionError,
   PostPredictionResponse,
+  PostPolymarketPredictionData,
+  PostPolymarketPredictionError,
+  PostPolymarketPredictionResponse,
   GetLatestPredictionsData,
   GetLatestPredictionsError,
   GetLatestPredictionsResponse,
+  GetLatestPolymarketPredictionsError,
+  GetLatestPolymarketPredictionsResponse,
   GetLatestPredictionData,
   GetLatestPredictionError,
   GetLatestPredictionResponse,
@@ -59,6 +64,25 @@ export function createClient(
   };
 
   /**
+   * Post Polymarket Prediction
+   * Post a new Polymarket prediction.
+   *
+   * The prediction is stored in the background and a 202 response is returned.
+   */
+  const postPolymarketPrediction = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<PostPolymarketPredictionData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).post<
+      PostPolymarketPredictionResponse,
+      PostPolymarketPredictionError,
+      ThrowOnError
+    >({
+      ...options,
+      url: '/predictions/polymarket',
+    });
+  };
+
+  /**
    * Get Latest Predictions
    * Get the latest predictions for a given version for all symbols. If no version is provided, the latest AI model version is used.
    */
@@ -72,6 +96,25 @@ export function createClient(
     >({
       ...options,
       url: '/predictions/latest',
+    });
+  };
+
+  /**
+   * Get Latest Polymarket Predictions
+   * Get the latest Polymarket predictions for all symbols and intervals.
+   *
+   * The response contains one latest prediction per (symbol, interval) pair.
+   */
+  const getLatestPolymarketPredictions = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetLatestPolymarketPredictionsResponse,
+      GetLatestPolymarketPredictionsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: '/predictions/polymarket/latest',
     });
   };
 
@@ -162,7 +205,9 @@ export function createClient(
 
   return {
     postPrediction,
+    postPolymarketPrediction,
     getLatestPredictions,
+    getLatestPolymarketPredictions,
     getLatestPrediction,
     getEconomicNews,
     getFearGreed,
