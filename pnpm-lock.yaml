@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@crypticorn-ai/auth-service':
-        specifier: ^1.14.1
-        version: 1.14.1
+        specifier: ^1.14.2
+        version: 1.14.2
       '@hey-api/client-fetch':
         specifier: ^0.5.0
         version: 0.5.7
@@ -103,8 +103,8 @@ packages:
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
 
-  '@crypticorn-ai/auth-service@1.14.1':
-    resolution: {integrity: sha512-P3VRjqXjUh/IDtKmY6vW9bNVkas/Lqx21g88yn9sF5USKlri8pLbRIMLfnuMYIb5JD+TNo/vsd5PNS+uQ5IrxQ==, tarball: https://npm.pkg.github.com/download/@crypticorn-ai/auth-service/1.14.1/f8ca701f2d0209613f9621731bc92f54ab89eda3}
+  '@crypticorn-ai/auth-service@1.14.2':
+    resolution: {integrity: sha512-3WRubxue7xESDZmiay6ZrpLpslatmL9nGza1Xit0uMsWnu03RPUANQod438vtLZ+wfe27UhU2kmBWh4jTPL2GQ==, tarball: https://npm.pkg.github.com/download/@crypticorn-ai/auth-service/1.14.2/378902e1effef07b5895fbeab2670961f7168afe}
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -2230,7 +2230,7 @@ snapshots:
   '@colors/colors@1.5.0':
     optional: true
 
-  '@crypticorn-ai/auth-service@1.14.1': {}
+  '@crypticorn-ai/auth-service@1.14.2': {}
 
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
