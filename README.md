@@ -1,4 +1,4 @@
-![Crypticorn Logo](https://crypticorn-public.s3.eu-west-1.amazonaws.com/logo-full.svg)
+![Crypticorn Logo](https://www.crypticorn.com/wp-content/uploads/2024/05/Logo-horizontal_blue.svg)
 
 ## What is Crypticorn?
 
