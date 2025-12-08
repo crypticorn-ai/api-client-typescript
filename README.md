@@ -43,6 +43,7 @@ The SDK major version tracks the highest supported API version. A new API major 
 | ----------- | ---- | ----- | ------ | ------- | ---- | --- | --- | ------------ |
 | v2.x        | v1   | v1    | v1     | v1      | v1   | v1  | v1  | v1           |
 | v3.x        | v1   | v2    | -      | v1      | v1   | v1  | v1  | v1           |
+| v4.x        | v1 (refactored)   | v2    | -      | v1      | v1   | v1  | v1  | v1           |
 
 
 ## Authentication
