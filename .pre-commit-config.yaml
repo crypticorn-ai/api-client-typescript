@@ -4,4 +4,20 @@ repos:
     hooks:
     -   id: biome-format
         additional_dependencies: ["@biomejs/biome@2.2.6"]
+-   repo: local
+    hooks:
+    -   id: build
+        name: Build project
+        entry: pnpm build
+        language: node
+        additional_dependencies: ["pnpm@10"]
+        pass_filenames: false
+        always_run: false
+    -   id: test
+        name: Run tests
+        entry: pnpm test
+        language: node
+        additional_dependencies: ["pnpm@10"]
+        pass_filenames: false
+        always_run: false
 
