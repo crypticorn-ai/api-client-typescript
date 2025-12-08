@@ -17,10 +17,6 @@ export { MetricsSchemas, MetricsTypes };
 import * as HiveSchemas from './hive/schemas.gen';
 import * as HiveTypes from './hive/types.gen';
 export { HiveSchemas, HiveTypes };
-// auth
-import * as AuthSchemas from '@crypticorn-ai/auth-service';
-import * as AuthTypes from '@crypticorn-ai/auth-service';
-export { AuthSchemas, AuthTypes };
 // dex
 import * as DexSchemas from './dex/schemas.gen';
 import * as DexTypes from './dex/types.gen';
@@ -33,3 +29,7 @@ export { NotificationSchemas, NotificationTypes };
 import * as IndicatorSchemas from './indicator/schemas.gen';
 import * as IndicatorTypes from './indicator/types.gen';
 export { IndicatorSchemas, IndicatorTypes };
+// auth
+import * as AuthSchemas from './auth/schemas.gen';
+import * as AuthTypes from './auth/types.gen';
+export { AuthSchemas, AuthTypes };

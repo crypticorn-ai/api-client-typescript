@@ -38,7 +38,7 @@ vi.mock('../src/notification/client.gen', () => ({
   },
 }));
 
-vi.mock('@crypticorn-ai/auth-service', () => ({
+vi.mock('../src/auth/client.gen', () => ({
   createClient: vi.fn(() => ({
     setConfig: vi.fn(),
   })),

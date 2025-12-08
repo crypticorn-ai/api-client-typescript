@@ -1,4 +1,4 @@
-import { createClient as createAuthClient } from '@crypticorn-ai/auth-service';
+import { createClient as createAuthClient } from './auth';
 import { createClient as createHiveClient } from './hive';
 import { createClient as createTradeClient } from './trade';
 import { createClient as createPayClient } from './pay';

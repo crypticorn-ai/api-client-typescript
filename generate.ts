@@ -8,7 +8,7 @@ const service = args['service'];
 const services = [
   'trade',
   'pay',
-  // "auth", npm package
+  'auth',
   'metrics',
   'hive',
   'dex',
