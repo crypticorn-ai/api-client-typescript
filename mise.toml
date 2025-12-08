@@ -45,7 +45,3 @@ run = "pnpm run generate --service {{arg(name='service')}} --env {{flag(name='en
 [tasks.clean]
 run = "rm -rf dist/ node_modules/.cache/ coverage/"
 description = "Clean build artifacts and cache files"
-
-[tasks."link:auth"]
-run = "pnpm link ../../auth-service/packages/api"
-description = "Link the auth-service API client"
