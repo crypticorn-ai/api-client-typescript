@@ -34,6 +34,9 @@ export type Broadcast = {
         | 'otp_code'
         | 'subscription_expiring'
         | 'subscription_expired'
+        | 'development_update'
+        | 'verify_email'
+        | 'reset_password'
       ),
       boolean,
     ]
@@ -66,6 +69,9 @@ export type BroadcastCreate = {
         | 'otp_code'
         | 'subscription_expiring'
         | 'subscription_expired'
+        | 'development_update'
+        | 'verify_email'
+        | 'reset_password'
       ),
       boolean,
     ]
@@ -121,6 +127,9 @@ export type BroadcastUpdate = {
         | 'otp_code'
         | 'subscription_expiring'
         | 'subscription_expired'
+        | 'development_update'
+        | 'verify_email'
+        | 'reset_password'
       ),
       boolean,
     ]
@@ -190,7 +199,10 @@ export type DashboardNotification = {
     | 'order_completion'
     | 'otp_code'
     | 'subscription_expiring'
-    | 'subscription_expired';
+    | 'subscription_expired'
+    | 'development_update'
+    | 'verify_email'
+    | 'reset_password';
   /**
    * Whether the notification has been marked as seen
    */
@@ -226,7 +238,10 @@ export type template_id =
   | 'order_completion'
   | 'otp_code'
   | 'subscription_expiring'
-  | 'subscription_expired';
+  | 'subscription_expired'
+  | 'development_update'
+  | 'verify_email'
+  | 'reset_password';
 
 export type DashboardNotificationUpdate = {
   /**
@@ -258,12 +273,15 @@ export type NotificationCreate = {
     | 'order_completion'
     | 'otp_code'
     | 'subscription_expiring'
-    | 'subscription_expired';
+    | 'subscription_expired'
+    | 'development_update'
+    | 'verify_email'
+    | 'reset_password';
   /**
    * Variables for the template
    */
   variables: {
-    [key: string]: unknown;
+    [key: string]: string;
   };
   /**
    * User IDs to send the notification to. If not provided, will use all users subscribed to the template
@@ -286,7 +304,10 @@ export type template =
   | 'order_completion'
   | 'otp_code'
   | 'subscription_expiring'
-  | 'subscription_expired';
+  | 'subscription_expired'
+  | 'development_update'
+  | 'verify_email'
+  | 'reset_password';
 
 export type PaginatedResponse_DashboardNotification_ = {
   data: Array<DashboardNotification>;
@@ -332,7 +353,10 @@ export type Template = {
     | 'order_completion'
     | 'otp_code'
     | 'subscription_expiring'
-    | 'subscription_expired';
+    | 'subscription_expired'
+    | 'development_update'
+    | 'verify_email'
+    | 'reset_password';
   /**
    * Name of the template
    */
@@ -368,7 +392,10 @@ export type identifier =
   | 'order_completion'
   | 'otp_code'
   | 'subscription_expiring'
-  | 'subscription_expired';
+  | 'subscription_expired'
+  | 'development_update'
+  | 'verify_email'
+  | 'reset_password';
 
 export type UITemplate = {
   /**
@@ -431,6 +458,9 @@ export type UserSetting = {
         | 'otp_code'
         | 'subscription_expiring'
         | 'subscription_expired'
+        | 'development_update'
+        | 'verify_email'
+        | 'reset_password'
       ),
       boolean,
     ]
@@ -463,6 +493,9 @@ export type UserSettingCreate = {
         | 'otp_code'
         | 'subscription_expiring'
         | 'subscription_expired'
+        | 'development_update'
+        | 'verify_email'
+        | 'reset_password'
       ),
       boolean,
     ]
@@ -491,6 +524,9 @@ export type UserSettingUpdate = {
         | 'otp_code'
         | 'subscription_expiring'
         | 'subscription_expired'
+        | 'development_update'
+        | 'verify_email'
+        | 'reset_password'
       ),
       boolean,
     ]
@@ -632,7 +668,10 @@ export type GetTemplateData = {
       | 'order_completion'
       | 'otp_code'
       | 'subscription_expiring'
-      | 'subscription_expired';
+      | 'subscription_expired'
+      | 'development_update'
+      | 'verify_email'
+      | 'reset_password';
   };
 };
 

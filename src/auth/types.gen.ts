@@ -1020,6 +1020,7 @@ export type GetApiKeysResponse = Array<{
     | 'write:notifications:user-settings'
     | 'read:notifications:notifications'
     | 'write:notifications:notifications'
+    | 'send:notifications:notifications'
     | 'read:prometheus:metrics'
     | 'read:dex:signals'
   >;
@@ -1097,6 +1098,7 @@ export type CreateApiKeyData = {
       | 'write:notifications:user-settings'
       | 'read:notifications:notifications'
       | 'write:notifications:notifications'
+      | 'send:notifications:notifications'
       | 'read:prometheus:metrics'
       | 'read:dex:signals'
     >;
@@ -1178,6 +1180,7 @@ export type GetUserScopesResponse = Array<
   | 'write:notifications:user-settings'
   | 'read:notifications:notifications'
   | 'write:notifications:notifications'
+  | 'send:notifications:notifications'
   | 'read:prometheus:metrics'
   | 'read:dex:signals'
 >;
@@ -1235,6 +1238,7 @@ export type GetScopesByUserIdResponse = Array<
   | 'write:notifications:user-settings'
   | 'read:notifications:notifications'
   | 'write:notifications:notifications'
+  | 'send:notifications:notifications'
   | 'read:prometheus:metrics'
   | 'read:dex:signals'
 >;
