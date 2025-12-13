@@ -22,6 +22,9 @@ import type {
   DeleteNotificationData,
   DeleteNotificationError,
   DeleteNotificationResponse,
+  GetNotificationResultsData,
+  GetNotificationResultsError,
+  GetNotificationResultsResponse,
   GetUserSettingsError,
   GetUserSettingsResponse,
   UpdateUserSettingsData,
@@ -163,6 +166,24 @@ export function createClient(
     >({
       ...options,
       url: '/notifications/{id}',
+    });
+  };
+
+  /**
+   * Get Notification Results
+   * Get notification results. These are the single notifications sent via the different channels to a specific recipient.
+   * Default sort is `created_at` and default order is `desc`. To get results for a specific notification initiated via sendNotification, use the action_id filter with the ID returned by sendNotification.
+   */
+  const getNotificationResults = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetNotificationResultsData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetNotificationResultsResponse,
+      GetNotificationResultsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: '/notifications/results',
     });
   };
 
@@ -343,6 +364,7 @@ export function createClient(
     deleteNotifications,
     updateNotification,
     deleteNotification,
+    getNotificationResults,
     getUserSettings,
     updateUserSettings,
     createUserSettings,

@@ -28,8 +28,8 @@ export type Broadcast = {
         | 'new_member'
         | 'exchange_api_key_expiring'
         | 'test'
-        | 'new_dex_ai_call'
-        | 'new_dex_ai_call_incognito'
+        | 'dex_first_call'
+        | 'dex_profit_call'
         | 'order_completion'
         | 'otp_code'
         | 'subscription_expiring'
@@ -63,8 +63,8 @@ export type BroadcastCreate = {
         | 'new_member'
         | 'exchange_api_key_expiring'
         | 'test'
-        | 'new_dex_ai_call'
-        | 'new_dex_ai_call_incognito'
+        | 'dex_first_call'
+        | 'dex_profit_call'
         | 'order_completion'
         | 'otp_code'
         | 'subscription_expiring'
@@ -121,8 +121,8 @@ export type BroadcastUpdate = {
         | 'new_member'
         | 'exchange_api_key_expiring'
         | 'test'
-        | 'new_dex_ai_call'
-        | 'new_dex_ai_call_incognito'
+        | 'dex_first_call'
+        | 'dex_profit_call'
         | 'order_completion'
         | 'otp_code'
         | 'subscription_expiring'
@@ -194,8 +194,8 @@ export type DashboardNotification = {
     | 'new_member'
     | 'exchange_api_key_expiring'
     | 'test'
-    | 'new_dex_ai_call'
-    | 'new_dex_ai_call_incognito'
+    | 'dex_first_call'
+    | 'dex_profit_call'
     | 'order_completion'
     | 'otp_code'
     | 'subscription_expiring'
@@ -233,8 +233,8 @@ export type template_id =
   | 'new_member'
   | 'exchange_api_key_expiring'
   | 'test'
-  | 'new_dex_ai_call'
-  | 'new_dex_ai_call_incognito'
+  | 'dex_first_call'
+  | 'dex_profit_call'
   | 'order_completion'
   | 'otp_code'
   | 'subscription_expiring'
@@ -257,7 +257,19 @@ export type ErrorResponse = {
   detail: string;
 };
 
-export type NotificationCreate = {
+export type Notification = {
+  /**
+   * Unique identifier for the resource
+   */
+  id: string;
+  /**
+   * Timestamp of creation
+   */
+  created_at: number;
+  /**
+   * Timestamp of last update
+   */
+  updated_at: number;
   /**
    * Template ID
    */
@@ -268,8 +280,8 @@ export type NotificationCreate = {
     | 'new_member'
     | 'exchange_api_key_expiring'
     | 'test'
-    | 'new_dex_ai_call'
-    | 'new_dex_ai_call_incognito'
+    | 'dex_first_call'
+    | 'dex_profit_call'
     | 'order_completion'
     | 'otp_code'
     | 'subscription_expiring'
@@ -299,8 +311,8 @@ export type template =
   | 'new_member'
   | 'exchange_api_key_expiring'
   | 'test'
-  | 'new_dex_ai_call'
-  | 'new_dex_ai_call_incognito'
+  | 'dex_first_call'
+  | 'dex_profit_call'
   | 'order_completion'
   | 'otp_code'
   | 'subscription_expiring'
@@ -309,8 +321,127 @@ export type template =
   | 'verify_email'
   | 'reset_password';
 
+export type NotificationCreate = {
+  /**
+   * Template ID
+   */
+  template:
+    | 'subscription_predictions_welcome'
+    | 'subscription_dex_signals_welcome'
+    | 'subscription_combo_welcome'
+    | 'new_member'
+    | 'exchange_api_key_expiring'
+    | 'test'
+    | 'dex_first_call'
+    | 'dex_profit_call'
+    | 'order_completion'
+    | 'otp_code'
+    | 'subscription_expiring'
+    | 'subscription_expired'
+    | 'development_update'
+    | 'verify_email'
+    | 'reset_password';
+  /**
+   * Variables for the template
+   */
+  variables: {
+    [key: string]: string;
+  };
+  /**
+   * User IDs to send the notification to. If not provided, will use all users subscribed to the template
+   */
+  user_ids?: Array<string> | null;
+};
+
+/**
+ * Result for a single notification sent via a specific channel to a specific recipient.
+ */
+export type NotificationResult = {
+  /**
+   * Status of the notification
+   */
+  status: 'success' | 'error';
+  /**
+   * Recipient of the notification, email address if channel is email, hash + broadcast ID if channel is discord or telegram, or user ID if channel is dashboard
+   */
+  recipient: string;
+  /**
+   * Template ID
+   */
+  template:
+    | 'subscription_predictions_welcome'
+    | 'subscription_dex_signals_welcome'
+    | 'subscription_combo_welcome'
+    | 'new_member'
+    | 'exchange_api_key_expiring'
+    | 'test'
+    | 'dex_first_call'
+    | 'dex_profit_call'
+    | 'order_completion'
+    | 'otp_code'
+    | 'subscription_expiring'
+    | 'subscription_expired'
+    | 'development_update'
+    | 'verify_email'
+    | 'reset_password';
+  /**
+   * Error message if the notification failed
+   */
+  error?: string | null;
+  /**
+   * Channel of the notification
+   */
+  channel: 'email' | 'telegram' | 'discord' | 'websocket' | 'ui';
+  /**
+   * ID of the notification returned by the service in format <channel_id>/<message_id> for discord, <chat_id>/<message_id> for telegram, postmark's MessageID for email and mongo's _id value for dashboard notifications. Can be used to build a link to the notification. None if status is error.
+   */
+  message_id?: string | null;
+  /**
+   * ID of the action that triggered the notification. This matches the respective _id field in the notification_actions collection.
+   */
+  action_id: string;
+};
+
+/**
+ * Status of the notification
+ */
+export type status = 'success' | 'error';
+
+/**
+ * Channel of the notification
+ */
+export type channel = 'email' | 'telegram' | 'discord' | 'websocket' | 'ui';
+
 export type PaginatedResponse_DashboardNotification_ = {
   data: Array<DashboardNotification>;
+  /**
+   * The total number of items
+   */
+  total: number;
+  /**
+   * The current page number
+   */
+  page: number;
+  /**
+   * The number of items per page
+   */
+  page_size: number;
+  /**
+   * The previous page number
+   */
+  prev?: number | null;
+  /**
+   * The next page number
+   */
+  next?: number | null;
+  /**
+   * The last page number
+   */
+  last?: number | null;
+};
+
+export type PaginatedResponse_NotificationResult_ = {
+  data: Array<NotificationResult>;
   /**
    * The total number of items
    */
@@ -348,8 +479,8 @@ export type Template = {
     | 'new_member'
     | 'exchange_api_key_expiring'
     | 'test'
-    | 'new_dex_ai_call'
-    | 'new_dex_ai_call_incognito'
+    | 'dex_first_call'
+    | 'dex_profit_call'
     | 'order_completion'
     | 'otp_code'
     | 'subscription_expiring'
@@ -387,8 +518,8 @@ export type identifier =
   | 'new_member'
   | 'exchange_api_key_expiring'
   | 'test'
-  | 'new_dex_ai_call'
-  | 'new_dex_ai_call_incognito'
+  | 'dex_first_call'
+  | 'dex_profit_call'
   | 'order_completion'
   | 'otp_code'
   | 'subscription_expiring'
@@ -452,8 +583,8 @@ export type UserSetting = {
         | 'new_member'
         | 'exchange_api_key_expiring'
         | 'test'
-        | 'new_dex_ai_call'
-        | 'new_dex_ai_call_incognito'
+        | 'dex_first_call'
+        | 'dex_profit_call'
         | 'order_completion'
         | 'otp_code'
         | 'subscription_expiring'
@@ -487,8 +618,8 @@ export type UserSettingCreate = {
         | 'new_member'
         | 'exchange_api_key_expiring'
         | 'test'
-        | 'new_dex_ai_call'
-        | 'new_dex_ai_call_incognito'
+        | 'dex_first_call'
+        | 'dex_profit_call'
         | 'order_completion'
         | 'otp_code'
         | 'subscription_expiring'
@@ -518,8 +649,8 @@ export type UserSettingUpdate = {
         | 'new_member'
         | 'exchange_api_key_expiring'
         | 'test'
-        | 'new_dex_ai_call'
-        | 'new_dex_ai_call_incognito'
+        | 'dex_first_call'
+        | 'dex_profit_call'
         | 'order_completion'
         | 'otp_code'
         | 'subscription_expiring'
@@ -537,7 +668,7 @@ export type SendNotificationData = {
   body: NotificationCreate;
 };
 
-export type SendNotificationResponse = unknown;
+export type SendNotificationResponse = Notification;
 
 export type SendNotificationError = ErrorResponse;
 
@@ -607,6 +738,40 @@ export type DeleteNotificationResponse = void;
 
 export type DeleteNotificationError = ErrorResponse;
 
+export type GetNotificationResultsData = {
+  query?: {
+    /**
+     * The field to filter by
+     */
+    filter_by?: string | null;
+    /**
+     * The value to filter with
+     */
+    filter_value?: string | null;
+    /**
+     * The current page number
+     */
+    page?: number;
+    /**
+     * The number of items per page. Default is 100, max is 1000.
+     */
+    page_size?: number;
+    /**
+     * The field to sort by
+     */
+    sort_by?: string | null;
+    /**
+     * The order to sort by
+     */
+    sort_order?: 'asc' | 'desc' | null;
+  };
+};
+
+export type GetNotificationResultsResponse =
+  PaginatedResponse_NotificationResult_;
+
+export type GetNotificationResultsError = ErrorResponse;
+
 export type GetUserSettingsResponse = UserSetting;
 
 export type GetUserSettingsError = ErrorResponse;
@@ -663,8 +828,8 @@ export type GetTemplateData = {
       | 'new_member'
       | 'exchange_api_key_expiring'
       | 'test'
-      | 'new_dex_ai_call'
-      | 'new_dex_ai_call_incognito'
+      | 'dex_first_call'
+      | 'dex_profit_call'
       | 'order_completion'
       | 'otp_code'
       | 'subscription_expiring'

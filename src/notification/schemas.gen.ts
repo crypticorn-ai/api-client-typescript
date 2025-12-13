@@ -29,8 +29,8 @@ export const BroadcastSchema = {
               'new_member',
               'exchange_api_key_expiring',
               'test',
-              'new_dex_ai_call',
-              'new_dex_ai_call_incognito',
+              'dex_first_call',
+              'dex_profit_call',
               'order_completion',
               'otp_code',
               'subscription_expiring',
@@ -88,8 +88,8 @@ export const BroadcastCreateSchema = {
               'new_member',
               'exchange_api_key_expiring',
               'test',
-              'new_dex_ai_call',
-              'new_dex_ai_call_incognito',
+              'dex_first_call',
+              'dex_profit_call',
               'order_completion',
               'otp_code',
               'subscription_expiring',
@@ -175,8 +175,8 @@ export const BroadcastUpdateSchema = {
                   'new_member',
                   'exchange_api_key_expiring',
                   'test',
-                  'new_dex_ai_call',
-                  'new_dex_ai_call_incognito',
+                  'dex_first_call',
+                  'dex_profit_call',
                   'order_completion',
                   'otp_code',
                   'subscription_expiring',
@@ -293,8 +293,8 @@ export const DashboardNotificationSchema = {
         'new_member',
         'exchange_api_key_expiring',
         'test',
-        'new_dex_ai_call',
-        'new_dex_ai_call_incognito',
+        'dex_first_call',
+        'dex_profit_call',
         'order_completion',
         'otp_code',
         'subscription_expiring',
@@ -373,6 +373,75 @@ export const ErrorResponseSchema = {
   description: 'Error response schema.',
 } as const;
 
+export const NotificationSchema = {
+  properties: {
+    id: {
+      type: 'string',
+      title: 'Id',
+      description: 'Unique identifier for the resource',
+    },
+    created_at: {
+      type: 'integer',
+      title: 'Created At',
+      description: 'Timestamp of creation',
+    },
+    updated_at: {
+      type: 'integer',
+      title: 'Updated At',
+      description: 'Timestamp of last update',
+    },
+    template: {
+      type: 'string',
+      enum: [
+        'subscription_predictions_welcome',
+        'subscription_dex_signals_welcome',
+        'subscription_combo_welcome',
+        'new_member',
+        'exchange_api_key_expiring',
+        'test',
+        'dex_first_call',
+        'dex_profit_call',
+        'order_completion',
+        'otp_code',
+        'subscription_expiring',
+        'subscription_expired',
+        'development_update',
+        'verify_email',
+        'reset_password',
+      ],
+      title: 'Template',
+      description: 'Template ID',
+    },
+    variables: {
+      additionalProperties: {
+        type: 'string',
+      },
+      type: 'object',
+      title: 'Variables',
+      description: 'Variables for the template',
+    },
+    user_ids: {
+      anyOf: [
+        {
+          items: {
+            type: 'string',
+          },
+          type: 'array',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'User Ids',
+      description:
+        'User IDs to send the notification to. If not provided, will use all users subscribed to the template',
+    },
+  },
+  type: 'object',
+  required: ['id', 'created_at', 'updated_at', 'template', 'variables'],
+  title: 'Notification',
+} as const;
+
 export const NotificationCreateSchema = {
   properties: {
     template: {
@@ -384,8 +453,8 @@ export const NotificationCreateSchema = {
         'new_member',
         'exchange_api_key_expiring',
         'test',
-        'new_dex_ai_call',
-        'new_dex_ai_call_incognito',
+        'dex_first_call',
+        'dex_profit_call',
         'order_completion',
         'otp_code',
         'subscription_expiring',
@@ -425,6 +494,87 @@ export const NotificationCreateSchema = {
   type: 'object',
   required: ['template', 'variables'],
   title: 'NotificationCreate',
+} as const;
+
+export const NotificationResultSchema = {
+  properties: {
+    status: {
+      type: 'string',
+      enum: ['success', 'error'],
+      title: 'Status',
+      description: 'Status of the notification',
+    },
+    recipient: {
+      type: 'string',
+      title: 'Recipient',
+      description:
+        'Recipient of the notification, email address if channel is email, hash + broadcast ID if channel is discord or telegram, or user ID if channel is dashboard',
+    },
+    template: {
+      type: 'string',
+      enum: [
+        'subscription_predictions_welcome',
+        'subscription_dex_signals_welcome',
+        'subscription_combo_welcome',
+        'new_member',
+        'exchange_api_key_expiring',
+        'test',
+        'dex_first_call',
+        'dex_profit_call',
+        'order_completion',
+        'otp_code',
+        'subscription_expiring',
+        'subscription_expired',
+        'development_update',
+        'verify_email',
+        'reset_password',
+      ],
+      title: 'Template',
+      description: 'Template ID',
+    },
+    error: {
+      anyOf: [
+        {
+          type: 'string',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Error',
+      description: 'Error message if the notification failed',
+    },
+    channel: {
+      type: 'string',
+      enum: ['email', 'telegram', 'discord', 'websocket', 'ui'],
+      title: 'Channel',
+      description: 'Channel of the notification',
+    },
+    message_id: {
+      anyOf: [
+        {
+          type: 'string',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Message Id',
+      description:
+        "ID of the notification returned by the service in format <channel_id>/<message_id> for discord, <chat_id>/<message_id> for telegram, postmark's MessageID for email and mongo's _id value for dashboard notifications. Can be used to build a link to the notification. None if status is error.",
+    },
+    action_id: {
+      type: 'string',
+      title: 'Action Id',
+      description:
+        'ID of the action that triggered the notification. This matches the respective _id field in the notification_actions collection.',
+    },
+  },
+  type: 'object',
+  required: ['status', 'recipient', 'template', 'channel', 'action_id'],
+  title: 'NotificationResult',
+  description:
+    'Result for a single notification sent via a specific channel to a specific recipient.',
 } as const;
 
 export const PaginatedResponse_DashboardNotification_Schema = {
@@ -493,6 +643,72 @@ export const PaginatedResponse_DashboardNotification_Schema = {
   title: 'PaginatedResponse[DashboardNotification]',
 } as const;
 
+export const PaginatedResponse_NotificationResult_Schema = {
+  properties: {
+    data: {
+      items: {
+        $ref: '#/components/schemas/NotificationResult',
+      },
+      type: 'array',
+      title: 'Data',
+    },
+    total: {
+      type: 'integer',
+      title: 'Total',
+      description: 'The total number of items',
+    },
+    page: {
+      type: 'integer',
+      title: 'Page',
+      description: 'The current page number',
+    },
+    page_size: {
+      type: 'integer',
+      title: 'Page Size',
+      description: 'The number of items per page',
+    },
+    prev: {
+      anyOf: [
+        {
+          type: 'integer',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Prev',
+      description: 'The previous page number',
+    },
+    next: {
+      anyOf: [
+        {
+          type: 'integer',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Next',
+      description: 'The next page number',
+    },
+    last: {
+      anyOf: [
+        {
+          type: 'integer',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Last',
+      description: 'The last page number',
+    },
+  },
+  type: 'object',
+  required: ['data', 'total', 'page', 'page_size'],
+  title: 'PaginatedResponse[NotificationResult]',
+} as const;
+
 export const TemplateSchema = {
   properties: {
     identifier: {
@@ -504,8 +720,8 @@ export const TemplateSchema = {
         'new_member',
         'exchange_api_key_expiring',
         'test',
-        'new_dex_ai_call',
-        'new_dex_ai_call_incognito',
+        'dex_first_call',
+        'dex_profit_call',
         'order_completion',
         'otp_code',
         'subscription_expiring',
@@ -656,8 +872,8 @@ export const UserSettingSchema = {
               'new_member',
               'exchange_api_key_expiring',
               'test',
-              'new_dex_ai_call',
-              'new_dex_ai_call_incognito',
+              'dex_first_call',
+              'dex_profit_call',
               'order_completion',
               'otp_code',
               'subscription_expiring',
@@ -712,8 +928,8 @@ export const UserSettingCreateSchema = {
               'new_member',
               'exchange_api_key_expiring',
               'test',
-              'new_dex_ai_call',
-              'new_dex_ai_call_incognito',
+              'dex_first_call',
+              'dex_profit_call',
               'order_completion',
               'otp_code',
               'subscription_expiring',
@@ -759,8 +975,8 @@ export const UserSettingUpdateSchema = {
                   'new_member',
                   'exchange_api_key_expiring',
                   'test',
-                  'new_dex_ai_call',
-                  'new_dex_ai_call_incognito',
+                  'dex_first_call',
+                  'dex_profit_call',
                   'order_completion',
                   'otp_code',
                   'subscription_expiring',
