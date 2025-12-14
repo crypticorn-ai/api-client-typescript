@@ -232,9 +232,21 @@ export const SignalWithTokenSchema = {
       ],
       description: 'The token info',
     },
+    performance: {
+      anyOf: [
+        {
+          type: 'number',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Performance',
+      readOnly: true,
+    },
   },
   type: 'object',
-  required: ['stage', 'address', 'chain', 'called_at'],
+  required: ['stage', 'address', 'chain', 'called_at', 'performance'],
   title: 'SignalWithToken',
   description:
     'Trading signal enriched with comprehensive token metadata and information.',
@@ -336,13 +348,11 @@ export const TokenDataSchema = {
     'txns',
     'volume',
     'price_change',
-    'liquidity',
     'fdv',
     'market_cap',
     'pair_created_at',
   ],
   title: 'TokenData',
-  description: 'Main model for complete token data',
 } as const;
 
 export const _InfoSchema = {

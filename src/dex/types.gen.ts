@@ -246,6 +246,7 @@ export type SignalWithToken = {
    * The token info
    */
   data?: TokenData | null;
+  readonly performance: number | null;
 };
 
 /**
@@ -260,9 +261,6 @@ export type chain =
   | 'polygon'
   | 'avalanche';
 
-/**
- * Main model for complete token data
- */
 export type TokenData = {
   /**
    * Blockchain identifier
@@ -311,7 +309,7 @@ export type TokenData = {
   /**
    * Liquidity breakdown for the pair
    */
-  liquidity: _Liquidity;
+  liquidity?: _Liquidity;
   /**
    * Fully diluted valuation in USD
    */
