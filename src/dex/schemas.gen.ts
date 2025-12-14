@@ -79,25 +79,6 @@ export const PaginatedResponse_SignalWithToken_Schema = {
   title: 'PaginatedResponse[SignalWithToken]',
 } as const;
 
-export const RiskSchema = {
-  properties: {
-    rugged: {
-      type: 'boolean',
-      title: 'Rugged',
-      description: 'Is token rugged',
-    },
-    score: {
-      type: 'integer',
-      title: 'Score',
-      description: 'Overall risk score',
-    },
-  },
-  type: 'object',
-  required: ['rugged', 'score'],
-  title: 'Risk',
-  description: 'Model for risk assessment',
-} as const;
-
 export const SignalOverviewStatsSchema = {
   properties: {
     timestamp: {
@@ -115,17 +96,26 @@ export const SignalOverviewStatsSchema = {
       title: 'Win Rate',
       description: 'Overall win rate as a percentage',
     },
-    avg_performance: {
-      type: 'number',
-      title: 'Avg Performance',
-      description: 'Average performance as a percentage',
+  },
+  type: 'object',
+  required: ['timestamp', 'total', 'win_rate'],
+  title: 'SignalOverviewStats',
+  description: 'Model for signal statistics response',
+} as const;
+
+export const SignalWithTokenSchema = {
+  properties: {
+    stage: {
+      type: 'string',
+      title: 'Stage',
+      description: 'Lifecycle stage',
     },
-    median_performance: {
-      type: 'number',
-      title: 'Median Performance',
-      description: 'Median performance as a percentage',
+    address: {
+      type: 'string',
+      title: 'Address',
+      description: 'Token contract address',
     },
-    best_risk_category: {
+    pair_address: {
       anyOf: [
         {
           type: 'string',
@@ -134,10 +124,37 @@ export const SignalOverviewStatsSchema = {
           type: 'null',
         },
       ],
-      title: 'Best Risk Category',
-      description: 'Best performing risk category',
+      title: 'Pair Address',
+      description: 'Pair address',
     },
-    best_month: {
+    chain: {
+      type: 'string',
+      enum: [
+        'solana',
+        'ethereum',
+        'bsc',
+        'base',
+        'arbitrum',
+        'polygon',
+        'avalanche',
+      ],
+      title: 'Chain',
+      description: 'Chain',
+    },
+    first_call_time: {
+      anyOf: [
+        {
+          type: 'string',
+          format: 'date-time',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'First Call Time',
+      description: 'First call time (tracker entry)',
+    },
+    mc_at_call: {
       anyOf: [
         {
           type: 'string',
@@ -146,10 +163,10 @@ export const SignalOverviewStatsSchema = {
           type: 'null',
         },
       ],
-      title: 'Best Month',
-      description: 'Best performing month',
+      title: 'Mc At Call',
+      description: 'Baseline MC for X calculations',
     },
-    best_holding_period: {
+    ath_mc: {
       anyOf: [
         {
           type: 'string',
@@ -158,10 +175,10 @@ export const SignalOverviewStatsSchema = {
           type: 'null',
         },
       ],
-      title: 'Best Holding Period',
-      description: 'Best holding period',
+      title: 'Ath Mc',
+      description: 'All-time-high MC',
     },
-    best_launch_hour: {
+    last_x: {
       anyOf: [
         {
           type: 'integer',
@@ -170,10 +187,10 @@ export const SignalOverviewStatsSchema = {
           type: 'null',
         },
       ],
-      title: 'Best Launch Hour',
-      description: 'Best launch hour (UTC)',
+      title: 'Last X',
+      description: 'Last milestone announced',
     },
-    best_launch_day: {
+    call_id: {
       anyOf: [
         {
           type: 'string',
@@ -182,143 +199,42 @@ export const SignalOverviewStatsSchema = {
           type: 'null',
         },
       ],
-      title: 'Best Launch Day',
-      description: 'Best launch day of the week',
-    },
-  },
-  type: 'object',
-  required: [
-    'timestamp',
-    'total',
-    'win_rate',
-    'avg_performance',
-    'median_performance',
-  ],
-  title: 'SignalOverviewStats',
-  description: 'Model for signal statistics response',
-} as const;
-
-export const SignalVolumeSchema = {
-  properties: {
-    day: {
-      type: 'string',
-      title: 'Day',
-      description: '24-hour trading volume',
-    },
-    hour: {
-      type: 'string',
-      title: 'Hour',
-      description: '1-hour trading volume',
-    },
-  },
-  type: 'object',
-  required: ['day', 'hour'],
-  title: 'SignalVolume',
-  description: 'Trading volume data for a signal over different time periods.',
-} as const;
-
-export const SignalWithTokenSchema = {
-  properties: {
-    ca: {
-      type: 'string',
-      title: 'Ca',
-      description: 'The contract address of the token',
-    },
-    name: {
-      type: 'string',
-      title: 'Name',
-      description: 'The name of the token',
-    },
-    type: {
-      type: 'string',
-      title: 'Type',
-      description: 'The type of the signal',
-    },
-    risk: {
-      anyOf: [
-        {
-          type: 'string',
-        },
-        {
-          type: 'null',
-        },
-      ],
-      title: 'Risk',
-      description: 'The risk level of the signal',
-    },
-    performance: {
-      type: 'string',
-      title: 'Performance',
-      description: 'The performance in percent as a string. e.g. +100%',
-    },
-    price: {
-      type: 'string',
-      title: 'Price',
-      description: 'The price of the signal',
-    },
-    volume: {
-      $ref: '#/components/schemas/SignalVolume',
-      description: 'The volume of the signal',
-    },
-    liquidity: {
-      type: 'string',
-      title: 'Liquidity',
-      description: 'The liquidity of the signal',
-    },
-    mcap: {
-      type: 'string',
-      title: 'Mcap',
-      description: 'The market cap of the signal',
+      title: 'Call Id',
+      description: 'The ID of the call message from the notification service',
     },
     called_at: {
-      type: 'integer',
+      type: 'string',
+      format: 'date-time',
       title: 'Called At',
-      description: 'The timestamp of the call',
+      description: 'Time of the first call',
     },
     updated_at: {
-      type: 'integer',
-      title: 'Updated At',
-      description: 'The timestamp of the last update',
-    },
-    tg_id: {
       anyOf: [
         {
           type: 'string',
+          format: 'date-time',
         },
         {
           type: 'null',
         },
       ],
-      title: 'Tg Id',
-      description: 'The telegram id of the signal',
+      title: 'Updated At',
+      description: 'Last update time',
     },
     data: {
-      $ref: '#/components/schemas/TokenData',
+      anyOf: [
+        {
+          $ref: '#/components/schemas/TokenData',
+        },
+        {
+          type: 'null',
+        },
+      ],
       description: 'The token info',
-    },
-    performance_float: {
-      type: 'number',
-      title: 'Performance Float',
-      description: 'The performance in float. e.g. +100% -> 2.0',
-      readOnly: true,
     },
   },
   type: 'object',
-  required: [
-    'ca',
-    'name',
-    'type',
-    'performance',
-    'price',
-    'volume',
-    'liquidity',
-    'mcap',
-    'called_at',
-    'updated_at',
-    'tg_id',
-    'data',
-    'performance_float',
-  ],
+  required: ['stage', 'address', 'chain', 'called_at'],
   title: 'SignalWithToken',
   description:
     'Trading signal enriched with comprehensive token metadata and information.',
@@ -326,68 +242,241 @@ export const SignalWithTokenSchema = {
 
 export const TokenDataSchema = {
   properties: {
-    token: {
-      $ref: '#/components/schemas/TokenDetail',
-      description: 'Token details',
-    },
-    mcap: {
+    chain_id: {
       type: 'string',
-      title: 'Mcap',
-      description: 'Market cap',
+      title: 'Chain Id',
+      description: 'Blockchain identifier',
     },
-    price: {
+    dex_id: {
       type: 'string',
-      title: 'Price',
-      description: 'Price',
+      title: 'Dex Id',
+      description: 'DEX identifier',
     },
-    liquidity: {
+    url: {
       type: 'string',
-      title: 'Liquidity',
-      description: 'The liquidity of the token in USD',
+      title: 'Url',
+      description: 'DexScreener pair URL',
     },
-    risk: {
-      $ref: '#/components/schemas/Risk',
-      description: 'Risk assessment',
+    pair_address: {
+      type: 'string',
+      title: 'Pair Address',
+      description: 'Pair/pool address',
     },
-    buys: {
-      type: 'integer',
-      title: 'Buys',
-      description: 'Number of buys',
+    base_token: {
+      $ref: '#/components/schemas/_Token',
+      description: 'Base token metadata',
     },
-    sells: {
-      type: 'integer',
-      title: 'Sells',
-      description: 'Number of sells',
+    quote_token: {
+      $ref: '#/components/schemas/_Token',
+      description: 'Quote token metadata',
+    },
+    price_native: {
+      type: 'number',
+      title: 'Price Native',
+      description: 'Token price in native chain currency',
+    },
+    price_usd: {
+      type: 'number',
+      title: 'Price Usd',
+      description: 'Token price in USD',
     },
     txns: {
-      type: 'integer',
-      title: 'Txns',
-      description: 'Total transactions',
+      $ref: '#/components/schemas/_Txns',
+      description: 'Buy/sell transaction counts over multiple time windows',
     },
-    holders: {
+    volume: {
+      $ref: '#/components/schemas/_Volume',
+      description: 'Trading volume over multiple time windows',
+    },
+    price_change: {
+      $ref: '#/components/schemas/_PriceChange',
+      description: 'Price change percentages over multiple time windows',
+    },
+    liquidity: {
+      $ref: '#/components/schemas/_Liquidity',
+      description: 'Liquidity breakdown for the pair',
+    },
+    fdv: {
+      type: 'number',
+      title: 'Fdv',
+      description: 'Fully diluted valuation in USD',
+    },
+    market_cap: {
+      type: 'number',
+      title: 'Market Cap',
+      description: 'Market capitalization in USD',
+    },
+    pair_created_at: {
       type: 'integer',
-      title: 'Holders',
-      description: 'Number of holders',
+      title: 'Pair Created At',
+      description: 'Pair creation timestamp (milliseconds since epoch)',
+    },
+    info: {
+      anyOf: [
+        {
+          $ref: '#/components/schemas/_Info',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      description: 'Additional token and pair metadata',
     },
   },
   type: 'object',
   required: [
-    'token',
-    'mcap',
-    'price',
-    'liquidity',
-    'risk',
-    'buys',
-    'sells',
+    'chain_id',
+    'dex_id',
+    'url',
+    'pair_address',
+    'base_token',
+    'quote_token',
+    'price_native',
+    'price_usd',
     'txns',
-    'holders',
+    'volume',
+    'price_change',
+    'liquidity',
+    'fdv',
+    'market_cap',
+    'pair_created_at',
   ],
   title: 'TokenData',
   description: 'Main model for complete token data',
 } as const;
 
-export const TokenDetailSchema = {
+export const _InfoSchema = {
   properties: {
+    image_url: {
+      anyOf: [
+        {
+          type: 'string',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Image Url',
+      description: 'Token image URL',
+    },
+    header: {
+      anyOf: [
+        {
+          type: 'string',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Header',
+      description: 'Header image URL',
+    },
+    open_graph: {
+      anyOf: [
+        {
+          type: 'string',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Open Graph',
+      description: 'OpenGraph image URL',
+    },
+    websites: {
+      items: {
+        $ref: '#/components/schemas/_Website',
+      },
+      type: 'array',
+      title: 'Websites',
+      description: 'List of related websites',
+    },
+  },
+  type: 'object',
+  title: '_Info',
+} as const;
+
+export const _LiquiditySchema = {
+  properties: {
+    usd: {
+      type: 'number',
+      title: 'Usd',
+      description: 'Liquidity in USD',
+      default: 0,
+    },
+    base: {
+      type: 'number',
+      title: 'Base',
+      description: 'Amount of base token in the pool',
+      default: 0,
+    },
+    quote: {
+      type: 'number',
+      title: 'Quote',
+      description: 'Amount of quote token in the pool',
+      default: 0,
+    },
+  },
+  type: 'object',
+  title: '_Liquidity',
+} as const;
+
+export const _PriceChangeSchema = {
+  properties: {
+    h24: {
+      type: 'number',
+      title: 'H24',
+      description: '24-hour price change percentage',
+      default: 0,
+    },
+    h6: {
+      anyOf: [
+        {
+          type: 'number',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'H6',
+      description: '6-hour price change percentage',
+    },
+    h1: {
+      anyOf: [
+        {
+          type: 'number',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'H1',
+      description: '1-hour price change percentage',
+    },
+    m5: {
+      anyOf: [
+        {
+          type: 'number',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'M5',
+      description: '5-minute price change percentage',
+    },
+  },
+  type: 'object',
+  title: '_PriceChange',
+} as const;
+
+export const _TokenSchema = {
+  properties: {
+    address: {
+      type: 'string',
+      title: 'Address',
+      description: 'Token contract address',
+    },
     name: {
       type: 'string',
       title: 'Name',
@@ -398,45 +487,109 @@ export const TokenDetailSchema = {
       title: 'Symbol',
       description: 'Token symbol',
     },
-    mint: {
-      type: 'string',
-      title: 'Mint',
-      description: 'Token mint address (aka contract address)',
+  },
+  type: 'object',
+  required: ['address', 'name', 'symbol'],
+  title: '_Token',
+} as const;
+
+export const _TxnCountsSchema = {
+  properties: {
+    buys: {
+      type: 'integer',
+      title: 'Buys',
+      description: 'Number of buy transactions in this window',
+      default: 0,
     },
-    description: {
-      anyOf: [
-        {
-          type: 'string',
-        },
-        {
-          type: 'null',
-        },
-      ],
-      title: 'Description',
-      description: 'Token description',
+    sells: {
+      type: 'integer',
+      title: 'Sells',
+      description: 'Number of sell transactions in this window',
+      default: 0,
     },
-    image: {
-      anyOf: [
-        {
-          type: 'string',
-        },
-        {
-          type: 'null',
-        },
-      ],
-      title: 'Image',
-      description: 'Token image URL',
-    },
-    strictSocials: {
-      additionalProperties: true,
-      type: 'object',
-      title: 'Strictsocials',
-      description: 'Social media links',
-      default: {},
+    ratio: {
+      type: 'number',
+      title: 'Ratio',
+      description: `Buy/sell ratio (BSR) where:
+- ratio = buys / (buys + sells)
+- 0.5 = neutral when there are no transactions.`,
+      readOnly: true,
     },
   },
   type: 'object',
-  required: ['name', 'symbol', 'mint'],
-  title: 'TokenDetail',
-  description: 'Model for detailed token information',
+  required: ['ratio'],
+  title: '_TxnCounts',
+} as const;
+
+export const _TxnsSchema = {
+  properties: {
+    m5: {
+      $ref: '#/components/schemas/_TxnCounts',
+      description: 'Buy/sell transaction counts over the last 5 minutes',
+    },
+    h1: {
+      $ref: '#/components/schemas/_TxnCounts',
+      description: 'Buy/sell transaction counts over the last hour',
+    },
+    h6: {
+      $ref: '#/components/schemas/_TxnCounts',
+      description: 'Buy/sell transaction counts over the last 6 hours',
+    },
+    h24: {
+      $ref: '#/components/schemas/_TxnCounts',
+      description: 'Buy/sell transaction counts over the last 24 hours',
+    },
+  },
+  type: 'object',
+  required: ['m5', 'h1', 'h6', 'h24'],
+  title: '_Txns',
+} as const;
+
+export const _VolumeSchema = {
+  properties: {
+    h24: {
+      type: 'number',
+      title: 'H24',
+      description: '24-hour trading volume',
+      default: 0,
+    },
+    h6: {
+      type: 'number',
+      title: 'H6',
+      description: '6-hour trading volume',
+      default: 0,
+    },
+    h1: {
+      type: 'number',
+      title: 'H1',
+      description: '1-hour trading volume',
+      default: 0,
+    },
+    m5: {
+      type: 'number',
+      title: 'M5',
+      description: '5-minute trading volume',
+      default: 0,
+    },
+  },
+  type: 'object',
+  title: '_Volume',
+} as const;
+
+export const _WebsiteSchema = {
+  properties: {
+    url: {
+      type: 'string',
+      title: 'Url',
+      description: 'Website URL',
+    },
+    label: {
+      type: 'string',
+      title: 'Label',
+      description: 'Website label or type',
+    },
+  },
+  type: 'object',
+  required: ['url', 'label'],
+  title: '_Website',
 } as const;
