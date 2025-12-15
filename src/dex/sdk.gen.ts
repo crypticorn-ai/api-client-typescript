@@ -75,9 +75,7 @@ export function createClient(
 
   /**
    * Get Stats
-   * Retrieve comprehensive statistics and analytics for all trading signals.
-   *
-   * Returns hourly-updated aggregated metrics including performance summaries and trading volumes.
+   * Retrieve comprehensive statistics and analytics for all trading signals. Returns hourly-updated aggregated metrics.
    */
   const getSignalStats = <ThrowOnError extends boolean = false>(
     options?: OptionsLegacyParser<unknown, ThrowOnError>,

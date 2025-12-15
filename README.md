@@ -11,7 +11,7 @@ crypto market - and programmatically interact with the entire Crypticorn ecosyst
 
 You need Node.js 18+ installed to be able to use this library.
 
-You can install the latest stable version from npm:
+You can install the latest stable version from Github Packages:
 ```bash
 npm install @crypticorn-ai/api-client
 ```
@@ -19,6 +19,13 @@ npm install @crypticorn-ai/api-client
 If you want the latest beta version, run:
 ```bash
 npm install @crypticorn-ai/api-client@beta
+```
+
+_Note: We currently only support Github Packages for authenticated users. If you are not authenticated, you can [create a personal access token](https://github.com/settings/tokens) and use it to authenticate in your .npmrc file._
+
+```bash
+@crypticorn-ai:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=<YOUR_TOKEN>
 ```
 
 ## Structure
@@ -33,7 +40,7 @@ import { AsyncClient } from '@crypticorn-ai/api-client'
 
 The client serves as the central interface for API operations and provides access to multiple API wrappers corresponding to our micro services.
 
-You can either explore each API by clicking through the library or checkout the [API Documentation](https://docs.crypticorn.com/api).
+You can either explore each API by clicking through the library or checkout the [API Documentation](https://api.crypticorn.dev/docs).
 
 ## Versioning
 
@@ -43,7 +50,8 @@ The SDK major version tracks the highest supported API version. A new API major 
 | ----------- | ---- | ----- | ------ | ------- | ---- | --- | --- | ------------ |
 | v2.x        | v1   | v1    | v1     | v1      | v1   | v1  | v1  | v1           |
 | v3.x        | v1   | v2    | -      | v1      | v1   | v1  | v1  | v1           |
-| v4.x        | v1 (refactored)   | v2    | -      | v1      | v1   | v1  | v1  | v1           |
+| v4.x        | v1 (refactored) | v2 | -      | v1      | v1   | v1  | v1  | v1           |
+| v5.x        | v1   | v2    | -      | v1      | v1   | v2  | v1  | v1           |
 
 
 ## Authentication

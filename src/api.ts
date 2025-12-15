@@ -105,7 +105,7 @@ class AsyncClient {
       pay: { factory: createPayClient, path: 'v1/pay' },
       metrics: { factory: createMetricsClient, path: 'v1/metrics' },
       auth: { factory: createAuthClient, path: 'v1/auth' },
-      dex: { factory: createDexClient, path: 'v1/dex' },
+      dex: { factory: createDexClient, path: 'v2/dex' },
       notification: {
         factory: createNotificationClient,
         path: 'v1/notification',
