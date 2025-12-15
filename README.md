@@ -11,7 +11,7 @@ crypto market - and programmatically interact with the entire Crypticorn ecosyst
 
 You need Node.js 18+ installed to be able to use this library.
 
-You can install the latest stable version from npm:
+You can install the latest stable version from Github Packages:
 ```bash
 npm install @crypticorn-ai/api-client
 ```
@@ -19,6 +19,13 @@ npm install @crypticorn-ai/api-client
 If you want the latest beta version, run:
 ```bash
 npm install @crypticorn-ai/api-client@beta
+```
+
+_Note: We currently only support Github Packages for authenticated users. If you are not authenticated, you can [create a personal access token](https://github.com/settings/tokens) and use it to authenticate in your .npmrc file._
+
+```bash
+@crypticorn-ai:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=<YOUR_TOKEN>
 ```
 
 ## Structure
