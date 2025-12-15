@@ -94,7 +94,7 @@ export const SignalOverviewStatsSchema = {
     win_rate: {
       type: 'number',
       title: 'Win Rate',
-      description: 'Overall win rate as a percentage',
+      description: 'Overall win rate as a decimal',
     },
   },
   type: 'object',

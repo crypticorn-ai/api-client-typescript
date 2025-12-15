@@ -182,7 +182,7 @@ export type SignalOverviewStats = {
    */
   total: number;
   /**
-   * Overall win rate as a percentage
+   * Overall win rate as a decimal
    */
   win_rate: number;
 };
