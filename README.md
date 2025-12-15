@@ -33,7 +33,7 @@ import { AsyncClient } from '@crypticorn-ai/api-client'
 
 The client serves as the central interface for API operations and provides access to multiple API wrappers corresponding to our micro services.
 
-You can either explore each API by clicking through the library or checkout the [API Documentation](https://docs.crypticorn.com/api).
+You can either explore each API by clicking through the library or checkout the [API Documentation](https://api.crypticorn.dev/docs).
 
 ## Versioning
 
