@@ -53,6 +53,29 @@ export type _PriceChange = {
   m5?: number | null;
 };
 
+export type _Risk = {
+  /**
+   * Risk description
+   */
+  description: string;
+  /**
+   * Risk level
+   */
+  level: string;
+  /**
+   * Human-readable risk name
+   */
+  name: string;
+  /**
+   * Risk score
+   */
+  score: number;
+  /**
+   * Risk value
+   */
+  value: string;
+};
+
 export type _Token = {
   /**
    * Token contract address
@@ -169,6 +192,25 @@ export type PaginatedResponse_SignalWithToken_ = {
   last?: number | null;
 };
 
+export type RugCheckReport = {
+  /**
+   * Percentage of LP locked
+   */
+  lp_locked_pct: number;
+  /**
+   * Risk items reported by RugCheck
+   */
+  risks?: Array<_Risk>;
+  /**
+   * RugCheck overall security score
+   */
+  score: number;
+  /**
+   * Normalised security score
+   */
+  score_normalised: number;
+};
+
 /**
  * Model for signal statistics response
  */
@@ -246,6 +288,10 @@ export type SignalWithToken = {
    * The token info
    */
   data?: TokenData | null;
+  /**
+   * The security report
+   */
+  security?: RugCheckReport | null;
   readonly performance: number | null;
 };
 
@@ -313,11 +359,11 @@ export type TokenData = {
   /**
    * Fully diluted valuation in USD
    */
-  fdv: number;
+  fdv?: number | null;
   /**
    * Market capitalization in USD
    */
-  market_cap: number;
+  market_cap?: number | null;
   /**
    * Pair creation timestamp (milliseconds since epoch)
    */
