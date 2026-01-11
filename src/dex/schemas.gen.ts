@@ -79,37 +79,6 @@ export const PaginatedResponse_SignalWithToken_Schema = {
   title: 'PaginatedResponse[SignalWithToken]',
 } as const;
 
-export const RugCheckReportSchema = {
-  properties: {
-    lp_locked_pct: {
-      type: 'number',
-      title: 'Lp Locked Pct',
-      description: 'Percentage of LP locked',
-    },
-    risks: {
-      items: {
-        $ref: '#/components/schemas/_Risk',
-      },
-      type: 'array',
-      title: 'Risks',
-      description: 'Risk items reported by RugCheck',
-    },
-    score: {
-      type: 'integer',
-      title: 'Score',
-      description: 'RugCheck overall security score',
-    },
-    score_normalised: {
-      type: 'integer',
-      title: 'Score Normalised',
-      description: 'Normalised security score',
-    },
-  },
-  type: 'object',
-  required: ['lp_locked_pct', 'score', 'score_normalised'],
-  title: 'RugCheckReport',
-} as const;
-
 export const SignalOverviewStatsSchema = {
   properties: {
     timestamp: {
@@ -263,17 +232,6 @@ export const SignalWithTokenSchema = {
       ],
       description: 'The token info',
     },
-    security: {
-      anyOf: [
-        {
-          $ref: '#/components/schemas/RugCheckReport',
-        },
-        {
-          type: 'null',
-        },
-      ],
-      description: 'The security report',
-    },
     performance: {
       anyOf: [
         {
@@ -351,26 +309,12 @@ export const TokenDataSchema = {
       description: 'Liquidity breakdown for the pair',
     },
     fdv: {
-      anyOf: [
-        {
-          type: 'number',
-        },
-        {
-          type: 'null',
-        },
-      ],
+      type: 'number',
       title: 'Fdv',
       description: 'Fully diluted valuation in USD',
     },
     market_cap: {
-      anyOf: [
-        {
-          type: 'number',
-        },
-        {
-          type: 'null',
-        },
-      ],
+      type: 'number',
       title: 'Market Cap',
       description: 'Market capitalization in USD',
     },
@@ -404,6 +348,8 @@ export const TokenDataSchema = {
     'txns',
     'volume',
     'price_change',
+    'fdv',
+    'market_cap',
     'pair_created_at',
   ],
   title: 'TokenData',
@@ -532,39 +478,6 @@ export const _PriceChangeSchema = {
   },
   type: 'object',
   title: '_PriceChange',
-} as const;
-
-export const _RiskSchema = {
-  properties: {
-    description: {
-      type: 'string',
-      title: 'Description',
-      description: 'Risk description',
-    },
-    level: {
-      type: 'string',
-      title: 'Level',
-      description: 'Risk level',
-    },
-    name: {
-      type: 'string',
-      title: 'Name',
-      description: 'Human-readable risk name',
-    },
-    score: {
-      type: 'integer',
-      title: 'Score',
-      description: 'Risk score',
-    },
-    value: {
-      type: 'string',
-      title: 'Value',
-      description: 'Risk value',
-    },
-  },
-  type: 'object',
-  required: ['description', 'level', 'name', 'score', 'value'],
-  title: '_Risk',
 } as const;
 
 export const _TokenSchema = {
