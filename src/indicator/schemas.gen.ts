@@ -149,6 +149,146 @@ export const FnGEntrySchema = {
   description: 'Fear and Greed Index Data Point Pydantic Model',
 } as const;
 
+export const HistogramBinDataSchema = {
+  properties: {
+    bin_centers: {
+      items: {
+        type: 'number',
+      },
+      type: 'array',
+      title: 'Bin Centers',
+      description: 'Center values for histogram bins',
+    },
+    bin_edges: {
+      items: {
+        type: 'number',
+      },
+      type: 'array',
+      title: 'Bin Edges',
+      description: 'Edge values defining histogram bins',
+    },
+    counts: {
+      items: {
+        type: 'integer',
+      },
+      type: 'array',
+      title: 'Counts',
+      description: 'Count of occurrences in each bin',
+    },
+    density: {
+      items: {
+        type: 'number',
+      },
+      type: 'array',
+      title: 'Density',
+      description: 'Probability density for each bin',
+    },
+  },
+  type: 'object',
+  required: ['bin_centers', 'bin_edges', 'counts', 'density'],
+  title: 'HistogramBinData',
+  description: 'Histogram bin data for a specific metric (close/high/low)',
+} as const;
+
+export const HistogramData_InputSchema = {
+  properties: {
+    query_info: {
+      $ref: '#/components/schemas/QueryInfo',
+      description: 'Query metadata',
+    },
+    horizons: {
+      additionalProperties: {
+        $ref: '#/components/schemas/HorizonHistogramData',
+      },
+      type: 'object',
+      title: 'Horizons',
+      description: 'Histogram data for each horizon (1-15)',
+    },
+  },
+  type: 'object',
+  required: ['query_info', 'horizons'],
+  title: 'HistogramData',
+  description: 'Complete histogram data structure',
+} as const;
+
+export const HistogramData_OutputSchema = {
+  properties: {
+    query_info: {
+      $ref: '#/components/schemas/QueryInfo',
+      description: 'Query metadata',
+    },
+    horizons: {
+      additionalProperties: {
+        $ref: '#/components/schemas/HorizonHistogramData',
+      },
+      type: 'object',
+      title: 'Horizons',
+      description: 'Histogram data for each horizon (1-15)',
+    },
+  },
+  type: 'object',
+  required: ['query_info', 'horizons'],
+  title: 'HistogramData',
+  description: 'Complete histogram data structure',
+} as const;
+
+export const HistogramProbabilitiesSchema = {
+  properties: {
+    up: {
+      type: 'number',
+      title: 'Up',
+      description: 'Probability of upward movement',
+    },
+    down: {
+      type: 'number',
+      title: 'Down',
+      description: 'Probability of downward movement',
+    },
+    mean: {
+      type: 'number',
+      title: 'Mean',
+      description: 'Mean relative change',
+    },
+    quantiles: {
+      additionalProperties: {
+        type: 'number',
+      },
+      type: 'object',
+      title: 'Quantiles',
+      description: 'Quantile values (q05, q50, q95)',
+    },
+  },
+  type: 'object',
+  required: ['up', 'down', 'mean', 'quantiles'],
+  title: 'HistogramProbabilities',
+  description: 'Probability data for close price movements',
+} as const;
+
+export const HorizonHistogramDataSchema = {
+  properties: {
+    close: {
+      $ref: '#/components/schemas/HistogramBinData',
+      description: 'Close price histogram',
+    },
+    high: {
+      $ref: '#/components/schemas/HistogramBinData',
+      description: 'High price histogram',
+    },
+    low: {
+      $ref: '#/components/schemas/HistogramBinData',
+      description: 'Low price histogram',
+    },
+    probabilities: {
+      $ref: '#/components/schemas/HistogramProbabilities',
+      description: 'Probability analysis for close prices',
+    },
+  },
+  type: 'object',
+  required: ['close', 'high', 'low', 'probabilities'],
+  title: 'HorizonHistogramData',
+  description: 'Histogram data for a single horizon',
+} as const;
+
 export const PaginatedResponse_EconomicNewsEntry_Schema = {
   properties: {
     data: {
@@ -213,6 +353,82 @@ export const PaginatedResponse_EconomicNewsEntry_Schema = {
   type: 'object',
   required: ['data', 'total', 'page', 'page_size'],
   title: 'PaginatedResponse[EconomicNewsEntry]',
+} as const;
+
+export const PolymarketHistogramSchema = {
+  properties: {
+    id: {
+      type: 'integer',
+      title: 'Id',
+      description: 'The database ID of the histogram',
+    },
+    symbol: {
+      type: 'string',
+      title: 'Symbol',
+      description: 'The symbol',
+    },
+    interval: {
+      type: 'string',
+      title: 'Interval',
+      description: 'The interval',
+    },
+    timestamp: {
+      type: 'integer',
+      title: 'Timestamp',
+      description: 'The timestamp of the histogram',
+    },
+    histogram: {
+      $ref: '#/components/schemas/HistogramData-Output',
+      description: 'The histogram data',
+    },
+    created_at: {
+      type: 'integer',
+      title: 'Created At',
+      description: 'When the histogram was stored',
+    },
+  },
+  type: 'object',
+  required: [
+    'id',
+    'symbol',
+    'interval',
+    'timestamp',
+    'histogram',
+    'created_at',
+  ],
+  title: 'PolymarketHistogram',
+  description: 'Polymarket Histogram response model',
+} as const;
+
+export const PolymarketHistogramUpdateSchema = {
+  properties: {
+    symbol: {
+      type: 'string',
+      title: 'Symbol',
+      description: 'The symbol (e.g., BTC, ETH, XRP, SOL)',
+      examples: ['BTC'],
+    },
+    interval: {
+      type: 'string',
+      enum: ['15min', '1h', '4h'],
+      title: 'Interval',
+      description: 'The interval for the histogram',
+      examples: ['15min'],
+    },
+    timestamp: {
+      type: 'integer',
+      title: 'Timestamp',
+      description: 'The timestamp when histogram was generated',
+    },
+    histogram: {
+      $ref: '#/components/schemas/HistogramData-Input',
+      description: 'The complete histogram data',
+    },
+  },
+  type: 'object',
+  required: ['symbol', 'interval', 'timestamp', 'histogram'],
+  title: 'PolymarketHistogramUpdate',
+  description: 'Polymarket Histogram Update model for receiving histogram data',
 } as const;
 
 export const PolymarketPredictionSchema = {
@@ -422,4 +638,50 @@ export const PredictionCreateSchema = {
   ],
   title: 'PredictionCreate',
   description: 'Prediction create model',
+} as const;
+
+export const QueryInfoSchema = {
+  properties: {
+    query_end: {
+      type: 'integer',
+      title: 'Query End',
+      description: 'Query end timestamp (candle open)',
+    },
+    baseline_close: {
+      type: 'number',
+      title: 'Baseline Close',
+      description: 'Baseline close price',
+    },
+    window_start: {
+      type: 'integer',
+      title: 'Window Start',
+      description: 'Window start timestamp',
+    },
+    window_end: {
+      type: 'integer',
+      title: 'Window End',
+      description: 'Window end timestamp',
+    },
+    selected_horizon: {
+      type: 'integer',
+      title: 'Selected Horizon',
+      description: 'Selected horizon for analysis',
+    },
+    matches_count: {
+      type: 'integer',
+      title: 'Matches Count',
+      description: 'Number of matching patterns found',
+    },
+  },
+  type: 'object',
+  required: [
+    'query_end',
+    'baseline_close',
+    'window_start',
+    'window_end',
+    'selected_horizon',
+    'matches_count',
+  ],
+  title: 'QueryInfo',
+  description: 'Query information for histogram generation',
 } as const;

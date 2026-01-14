@@ -25,6 +25,17 @@ import type {
   GetFearGreedData,
   GetFearGreedError,
   GetFearGreedResponse,
+  PostPolymarketHistogramData,
+  PostPolymarketHistogramError,
+  PostPolymarketHistogramResponse,
+  GetPolymarketHistogramsData,
+  GetPolymarketHistogramsError,
+  GetPolymarketHistogramsResponse,
+  GetLatestPolymarketHistogramsError,
+  GetLatestPolymarketHistogramsResponse,
+  GetLatestPolymarketHistogramData,
+  GetLatestPolymarketHistogramError,
+  GetLatestPolymarketHistogramResponse,
   PingError,
   PingResponse,
   GetMetricsError,
@@ -170,6 +181,88 @@ export function createClient(
   };
 
   /**
+   * Post Polymarket Histogram
+   * Post a new Polymarket histogram.
+   *
+   * The histogram is stored in the background and a 202 response is returned.
+   * This endpoint is called by the histogram generation service to store
+   * pattern-matching histogram data for price predictions.
+   */
+  const postPolymarketHistogram = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<PostPolymarketHistogramData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).post<
+      PostPolymarketHistogramResponse,
+      PostPolymarketHistogramError,
+      ThrowOnError
+    >({
+      ...options,
+      url: '/histogram',
+    });
+  };
+
+  /**
+   * Get Polymarket Histograms
+   * Get Polymarket histograms with optional filtering.
+   *
+   * Returns histograms ordered by timestamp (newest first), optionally filtered
+   * by symbol and/or interval.
+   */
+  const getPolymarketHistograms = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<GetPolymarketHistogramsData, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetPolymarketHistogramsResponse,
+      GetPolymarketHistogramsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: '/histogram',
+    });
+  };
+
+  /**
+   * Get Latest Polymarket Histograms
+   * Get the latest Polymarket histograms for all symbols and intervals.
+   *
+   * The response contains one latest histogram per (symbol, interval) pair.
+   */
+  const getLatestPolymarketHistograms = <ThrowOnError extends boolean = false>(
+    options?: OptionsLegacyParser<unknown, ThrowOnError>,
+  ) => {
+    return (options?.client ?? client).get<
+      GetLatestPolymarketHistogramsResponse,
+      GetLatestPolymarketHistogramsError,
+      ThrowOnError
+    >({
+      ...options,
+      url: '/histogram/latest',
+    });
+  };
+
+  /**
+   * Get Latest Polymarket Histogram
+   * Get the latest Polymarket histogram for a specific symbol and interval.
+   *
+   * Returns the most recent histogram data for pattern-matching based predictions.
+   */
+  const getLatestPolymarketHistogram = <ThrowOnError extends boolean = false>(
+    options: OptionsLegacyParser<
+      GetLatestPolymarketHistogramData,
+      ThrowOnError
+    >,
+  ) => {
+    return (options?.client ?? client).get<
+      GetLatestPolymarketHistogramResponse,
+      GetLatestPolymarketHistogramError,
+      ThrowOnError
+    >({
+      ...options,
+      url: '/histogram/latest/{symbol}/{interval}',
+    });
+  };
+
+  /**
    * Ping
    * Returns 'OK' if the API is running.
    */
@@ -211,6 +304,10 @@ export function createClient(
     getLatestPrediction,
     getEconomicNews,
     getFearGreed,
+    postPolymarketHistogram,
+    getPolymarketHistograms,
+    getLatestPolymarketHistograms,
+    getLatestPolymarketHistogram,
     ping,
     getMetrics,
   };

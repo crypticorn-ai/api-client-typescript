@@ -67,6 +67,106 @@ export type FnGEntry = {
   timestamp: number;
 };
 
+/**
+ * Histogram bin data for a specific metric (close/high/low)
+ */
+export type HistogramBinData = {
+  /**
+   * Center values for histogram bins
+   */
+  bin_centers: Array<number>;
+  /**
+   * Edge values defining histogram bins
+   */
+  bin_edges: Array<number>;
+  /**
+   * Count of occurrences in each bin
+   */
+  counts: Array<number>;
+  /**
+   * Probability density for each bin
+   */
+  density: Array<number>;
+};
+
+/**
+ * Complete histogram data structure
+ */
+export type HistogramData_Input = {
+  /**
+   * Query metadata
+   */
+  query_info: QueryInfo;
+  /**
+   * Histogram data for each horizon (1-15)
+   */
+  horizons: {
+    [key: string]: HorizonHistogramData;
+  };
+};
+
+/**
+ * Complete histogram data structure
+ */
+export type HistogramData_Output = {
+  /**
+   * Query metadata
+   */
+  query_info: QueryInfo;
+  /**
+   * Histogram data for each horizon (1-15)
+   */
+  horizons: {
+    [key: string]: HorizonHistogramData;
+  };
+};
+
+/**
+ * Probability data for close price movements
+ */
+export type HistogramProbabilities = {
+  /**
+   * Probability of upward movement
+   */
+  up: number;
+  /**
+   * Probability of downward movement
+   */
+  down: number;
+  /**
+   * Mean relative change
+   */
+  mean: number;
+  /**
+   * Quantile values (q05, q50, q95)
+   */
+  quantiles: {
+    [key: string]: number;
+  };
+};
+
+/**
+ * Histogram data for a single horizon
+ */
+export type HorizonHistogramData = {
+  /**
+   * Close price histogram
+   */
+  close: HistogramBinData;
+  /**
+   * High price histogram
+   */
+  high: HistogramBinData;
+  /**
+   * Low price histogram
+   */
+  low: HistogramBinData;
+  /**
+   * Probability analysis for close prices
+   */
+  probabilities: HistogramProbabilities;
+};
+
 export type PaginatedResponse_EconomicNewsEntry_ = {
   data: Array<EconomicNewsEntry>;
   /**
@@ -96,6 +196,63 @@ export type PaginatedResponse_EconomicNewsEntry_ = {
 };
 
 /**
+ * Polymarket Histogram response model
+ */
+export type PolymarketHistogram = {
+  /**
+   * The database ID of the histogram
+   */
+  id: number;
+  /**
+   * The symbol
+   */
+  symbol: string;
+  /**
+   * The interval
+   */
+  interval: string;
+  /**
+   * The timestamp of the histogram
+   */
+  timestamp: number;
+  /**
+   * The histogram data
+   */
+  histogram: HistogramData_Output;
+  /**
+   * When the histogram was stored
+   */
+  created_at: number;
+};
+
+/**
+ * Polymarket Histogram Update model for receiving histogram data
+ */
+export type PolymarketHistogramUpdate = {
+  /**
+   * The symbol (e.g., BTC, ETH, XRP, SOL)
+   */
+  symbol: string;
+  /**
+   * The interval for the histogram
+   */
+  interval: '15min' | '1h' | '4h';
+  /**
+   * The timestamp when histogram was generated
+   */
+  timestamp: number;
+  /**
+   * The complete histogram data
+   */
+  histogram: HistogramData_Input;
+};
+
+/**
+ * The interval for the histogram
+ */
+export type interval = '15min' | '1h' | '4h';
+
+/**
  * Polymarket Prediction model
  */
 export type PolymarketPrediction = {
@@ -116,11 +273,6 @@ export type PolymarketPrediction = {
    */
   interval: '15min' | '1h' | '4h';
 };
-
-/**
- * The prediction interval
- */
-export type interval = '15min' | '1h' | '4h';
 
 /**
  * Prediction model
@@ -213,6 +365,36 @@ export type PredictionCreate = {
    * The 90th percentile of the prediction. List of 24 values in 15 minutes intervals.
    */
   p90: Array<number>;
+};
+
+/**
+ * Query information for histogram generation
+ */
+export type QueryInfo = {
+  /**
+   * Query end timestamp (candle open)
+   */
+  query_end: number;
+  /**
+   * Baseline close price
+   */
+  baseline_close: number;
+  /**
+   * Window start timestamp
+   */
+  window_start: number;
+  /**
+   * Window end timestamp
+   */
+  window_end: number;
+  /**
+   * Selected horizon for analysis
+   */
+  selected_horizon: number;
+  /**
+   * Number of matching patterns found
+   */
+  matches_count: number;
 };
 
 export type PostPredictionData = {
@@ -329,6 +511,56 @@ export type GetFearGreedData = {
 export type GetFearGreedResponse = Array<FnGEntry>;
 
 export type GetFearGreedError = ErrorResponse;
+
+export type PostPolymarketHistogramData = {
+  body: PolymarketHistogramUpdate;
+};
+
+export type PostPolymarketHistogramResponse = unknown;
+
+export type PostPolymarketHistogramError = ErrorResponse;
+
+export type GetPolymarketHistogramsData = {
+  query?: {
+    /**
+     * Filter by interval (e.g., 15min)
+     */
+    interval?: '15min' | '1h' | '4h' | null;
+    /**
+     * Number of results to return
+     */
+    limit?: number;
+    /**
+     * Filter by symbol (e.g., BTC)
+     */
+    symbol?: string | null;
+  };
+};
+
+export type GetPolymarketHistogramsResponse = Array<PolymarketHistogram>;
+
+export type GetPolymarketHistogramsError = ErrorResponse;
+
+export type GetLatestPolymarketHistogramsResponse = Array<PolymarketHistogram>;
+
+export type GetLatestPolymarketHistogramsError = ErrorResponse;
+
+export type GetLatestPolymarketHistogramData = {
+  path: {
+    /**
+     * The interval (e.g., 15min, 1h)
+     */
+    interval: '15min' | '1h' | '4h';
+    /**
+     * The symbol (e.g., BTC, ETH)
+     */
+    symbol: string;
+  };
+};
+
+export type GetLatestPolymarketHistogramResponse = PolymarketHistogram;
+
+export type GetLatestPolymarketHistogramError = ErrorResponse;
 
 export type PingResponse = string;
 
