@@ -3,7 +3,7 @@
 /**
  * Access scopes
  */
-export type AccessScope = 'read:predictions' | 'read:dex:signals';
+export type AccessScope = 'read:predictions' | 'read:dex:signals' | 'read:histograms';
 
 /**
  * Model for an access threshold for lifetime access
