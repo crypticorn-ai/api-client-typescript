@@ -2,7 +2,7 @@
 
 export const AccessScopeSchema = {
   type: 'string',
-  enum: ['read:predictions', 'read:dex:signals'],
+  enum: ['read:predictions', 'read:dex:signals', 'read:histograms'],
   title: 'AccessScope',
   description: 'Access scopes',
 } as const;
