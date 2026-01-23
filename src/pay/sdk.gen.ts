@@ -474,7 +474,7 @@ export function createClient(
 
   /**
    * Unstake Tokens
-   * Unstake tokens for a address and pool.
+   * Unstake tokens for an address and pool.
    */
   const unstakeTokens = <ThrowOnError extends boolean = false>(
     options: OptionsLegacyParser<UnstakeTokensData, ThrowOnError>,
