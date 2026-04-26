@@ -44,6 +44,30 @@ vi.mock('../src/auth/client.gen', () => ({
   })),
 }));
 
+vi.mock('../src/indicator', () => ({
+  createClient: vi.fn(() => ({})),
+}));
+
+vi.mock('../src/news', () => ({
+  createClient: vi.fn(() => ({})),
+}));
+
+vi.mock('../src/social', () => ({
+  createClient: vi.fn(() => ({})),
+}));
+
+vi.mock('../src/sentiment', () => ({
+  createClient: vi.fn(() => ({})),
+}));
+
+vi.mock('../src/defi', () => ({
+  createClient: vi.fn(() => ({})),
+}));
+
+vi.mock('../src/derivatives', () => ({
+  createClient: vi.fn(() => ({})),
+}));
+
 describe('Service Access', () => {
   let client: AsyncClient;
 
@@ -61,11 +85,15 @@ describe('Service Access', () => {
       expect(client.auth).toBeDefined();
       expect(client.dex).toBeDefined();
       expect(client.notification).toBeDefined();
+      expect(client.indicator).toBeDefined();
+      expect(client.news).toBeDefined();
+      expect(client.social).toBeDefined();
+      expect(client.sentiment).toBeDefined();
+      expect(client.defi).toBeDefined();
+      expect(client.derivatives).toBeDefined();
     });
 
     it('should configure services with correct base URLs', () => {
-      // The services should be configured with the correct base URLs
-      // This is tested indirectly through the service access
       expect(client.hive).toBeDefined();
       expect(client.trade).toBeDefined();
       expect(client.pay).toBeDefined();
@@ -73,6 +101,12 @@ describe('Service Access', () => {
       expect(client.auth).toBeDefined();
       expect(client.dex).toBeDefined();
       expect(client.notification).toBeDefined();
+      expect(client.indicator).toBeDefined();
+      expect(client.news).toBeDefined();
+      expect(client.social).toBeDefined();
+      expect(client.sentiment).toBeDefined();
+      expect(client.defi).toBeDefined();
+      expect(client.derivatives).toBeDefined();
     });
   });
 
@@ -156,7 +190,7 @@ describe('Service Access', () => {
     it('should throw error for empty service name', () => {
       expect(() => {
         client.configure('' as any, { host: 'https://test.com' });
-      }).toThrow('Invalid service: . Must be one of hive, trade, pay, metrics, auth, dex, notification');
+      }).toThrow('Invalid service: . Must be one of hive, trade, pay, metrics, auth, dex, notification, indicator, news, social, sentiment, defi, derivatives');
     });
 
     it('should throw error for null service name', () => {
