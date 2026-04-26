@@ -33,3 +33,23 @@ export { IndicatorSchemas, IndicatorTypes };
 import * as AuthSchemas from './auth/schemas.gen';
 import * as AuthTypes from './auth/types.gen';
 export { AuthSchemas, AuthTypes };
+// news
+import * as NewsSchemas from './news/schemas.gen';
+import * as NewsTypes from './news/types.gen';
+export { NewsSchemas, NewsTypes };
+// social
+import * as SocialSchemas from './social/schemas.gen';
+import * as SocialTypes from './social/types.gen';
+export { SocialSchemas, SocialTypes };
+// sentiment
+import * as SentimentSchemas from './sentiment/schemas.gen';
+import * as SentimentTypes from './sentiment/types.gen';
+export { SentimentSchemas, SentimentTypes };
+// defi
+import * as DefiSchemas from './defi/schemas.gen';
+import * as DefiTypes from './defi/types.gen';
+export { DefiSchemas, DefiTypes };
+// derivatives
+import * as DerivativesSchemas from './derivatives/schemas.gen';
+import * as DerivativesTypes from './derivatives/types.gen';
+export { DerivativesSchemas, DerivativesTypes };

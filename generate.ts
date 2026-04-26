@@ -14,6 +14,11 @@ const services = [
   'dex',
   'notification',
   'indicator',
+  'news',
+  'social',
+  'sentiment',
+  'defi',
+  'derivatives',
 ];
 if (!service || !services.includes(service)) {
   console.error(`Invalid service: ${service}`);

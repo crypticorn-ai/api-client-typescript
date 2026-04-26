@@ -6,6 +6,11 @@ import { createClient as createMetricsClient } from './metrics';
 import { createClient as createDexClient } from './dex';
 import { createClient as createNotificationClient } from './notification';
 import { createClient as createIndicatorClient } from './indicator';
+import { createClient as createNewsClient } from './news';
+import { createClient as createSocialClient } from './social';
+import { createClient as createSentimentClient } from './sentiment';
+import { createClient as createDefiClient } from './defi';
+import { createClient as createDerivativesClient } from './derivatives';
 
 // Internal types
 type ServiceName =
@@ -16,7 +21,12 @@ type ServiceName =
   | 'auth'
   | 'dex'
   | 'notification'
-  | 'indicator';
+  | 'indicator'
+  | 'news'
+  | 'social'
+  | 'sentiment'
+  | 'defi'
+  | 'derivatives';
 
 /**
  * Configuration options for the Crypticorn API client.
@@ -73,7 +83,12 @@ type ServiceClient =
   | ReturnType<typeof createMetricsClient>
   | ReturnType<typeof createDexClient>
   | ReturnType<typeof createNotificationClient>
-  | ReturnType<typeof createIndicatorClient>;
+  | ReturnType<typeof createIndicatorClient>
+  | ReturnType<typeof createNewsClient>
+  | ReturnType<typeof createSocialClient>
+  | ReturnType<typeof createSentimentClient>
+  | ReturnType<typeof createDefiClient>
+  | ReturnType<typeof createDerivativesClient>;
 
 type ServiceClientFactory = (
   host: string,
@@ -113,6 +128,26 @@ class AsyncClient {
       indicator: {
         factory: createIndicatorClient,
         path: 'v1/indicator',
+      },
+      news: {
+        factory: createNewsClient,
+        path: 'v1/news',
+      },
+      social: {
+        factory: createSocialClient,
+        path: 'v1/social',
+      },
+      sentiment: {
+        factory: createSentimentClient,
+        path: 'v1/sentiment',
+      },
+      defi: {
+        factory: createDefiClient,
+        path: 'v1/defi',
+      },
+      derivatives: {
+        factory: createDerivativesClient,
+        path: 'v1/derivatives',
       },
     };
 
@@ -216,6 +251,26 @@ class AsyncClient {
 
   get indicator(): ReturnType<typeof createIndicatorClient> {
     return this._services.indicator as ReturnType<typeof createIndicatorClient>;
+  }
+
+  get news(): ReturnType<typeof createNewsClient> {
+    return this._services.news as ReturnType<typeof createNewsClient>;
+  }
+
+  get social(): ReturnType<typeof createSocialClient> {
+    return this._services.social as ReturnType<typeof createSocialClient>;
+  }
+
+  get sentiment(): ReturnType<typeof createSentimentClient> {
+    return this._services.sentiment as ReturnType<typeof createSentimentClient>;
+  }
+
+  get defi(): ReturnType<typeof createDefiClient> {
+    return this._services.defi as ReturnType<typeof createDefiClient>;
+  }
+
+  get derivatives(): ReturnType<typeof createDerivativesClient> {
+    return this._services.derivatives as ReturnType<typeof createDerivativesClient>;
   }
 
   /**
